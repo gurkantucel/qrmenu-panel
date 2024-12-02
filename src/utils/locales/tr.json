@@ -1,0 +1,10 @@
+{
+    "home" : "Ana Sayfa",
+    "appointments": "Randevular",
+    "patients" : "Danışanlar",
+    "files" : "Dosyalar",
+    "payments" : "Ödemeler",
+    "sms-transactions" : "SMS İşlemleri",
+    "settings" : "Ayarlar",
+    "faq" : "Sıkça Sorulan Sorular"
+}
