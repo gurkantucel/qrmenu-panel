@@ -41,7 +41,7 @@ export default function AuthForgotPassword() {
       },)
       if (forgetPasswordResponse?.status == true) {
         setTimeout(() => {
-          router.push("/app/login")
+          router.push("/app/auth/login")
         }, 1000)
       }
     }

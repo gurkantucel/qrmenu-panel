@@ -44,7 +44,7 @@ export default function AuthResetPassword() {
       },)
       if (resetPasswordResponse?.status == true) {
         setTimeout(() => {
-          router.push("/app/login")
+          router.push("/app/auth/login")
         }, 1000)
       }
     }

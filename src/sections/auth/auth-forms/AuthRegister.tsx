@@ -57,7 +57,7 @@ export default function AuthRegister() {
       },)
       if (registerResponse?.status == true) {
         setTimeout(() => {
-          router.push("/app/login")
+          router.push("/app/auth/login")
         }, 2000)
       }
     }

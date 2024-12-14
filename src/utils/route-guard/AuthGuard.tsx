@@ -25,7 +25,7 @@ export default function AuthGuard({ children }: GuardProps) {
     setTimeout(() => {
       if (value == undefined) {
         setToken(AUTHGUARD.UNAUTH);
-        router.push('/app/login')
+        router.push('/app/auth/login')
       } else {
         setToken(AUTHGUARD.AUTH);
         router.push('/app/home')

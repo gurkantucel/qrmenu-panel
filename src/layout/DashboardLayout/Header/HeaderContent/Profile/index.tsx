@@ -74,7 +74,7 @@ export default function ProfilePage() {
   const handleLogout = () => {
     deleteCookie("token");
     deleteCookie("refreshToken");
-    router.push('/app/login');
+    router.push('/app/auth/login');
   };
 
   const anchorRef = useRef<any>(null);

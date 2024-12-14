@@ -60,7 +60,7 @@ export default function UserList() {
   const handleLogout = () => {
     deleteCookie("token");
     deleteCookie("refreshToken");
-    router.push('/app/login');
+    router.push('/app/auth/login');
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
