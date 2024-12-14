@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 // material-ui
 import { Theme } from '@mui/material/styles';
@@ -12,9 +12,7 @@ import Box from '@mui/material/Box';
 
 // third-party
 import FullCalendar from '@fullcalendar/react';
-import { EventInput } from '@fullcalendar/common';
-import { DateSelectArg, EventClickArg, EventDropArg, EventSourceInput } from '@fullcalendar/core';
-import interactionPlugin, { EventResizeDoneArg } from '@fullcalendar/interaction';
+import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -23,10 +21,6 @@ import timelinePlugin from '@fullcalendar/timeline';
 // project-imports
 import { PopupTransition } from 'components/@extended/Transitions';
 import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
-import Toolbar from 'sections/apps/calendar/Toolbar';
-import AddEventForm from 'sections/apps/calendar/AddEventForm';
-
-import { useGetEvents, updateEvent } from 'api/calender';
 
 // types
 import { Add } from 'iconsax-react';
@@ -37,25 +31,11 @@ export default function Calendar() {
   const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventInput | null>();
-  const [calendarView, setCalendarView] = useState<string>();
-  const [date, setDate] = useState(new Date());
-  const [selectedRange, setSelectedRange] = useState<null | { start: Date; end: Date }>(null);
   const calendarRef = useRef<FullCalendar>(null);
 
-  const modalCallback = (openModal: boolean) => {
-    // open/close modal based on dialog state
-    if (!isModalOpen) {
-      setSelectedEvent(null);
-    }
-    setModalOpen(openModal);
-  };
 
   const handleModal = () => {
-    if (isModalOpen) {
-      setSelectedEvent(undefined);
-    }
-    setModalOpen(!isModalOpen);
+    setModalOpen(false);
   };
 
   return (
@@ -69,8 +49,8 @@ export default function Calendar() {
           selectable
           ref={calendarRef}
           rerenderDelay={10}
-          initialDate={date}
-          initialView={calendarView}
+          //initialDate={date}
+          //initialView={calendarView}
           dayMaxEventRows={3}
           eventDisplay="block"
           headerToolbar={false}
@@ -90,7 +70,6 @@ export default function Calendar() {
         open={isModalOpen}
         sx={{ '& .MuiDialog-paper': { p: 0, bgcolor: 'secondary.lighter' } }}
       >
-        <AddEventForm modalCallback={modalCallback} event={selectedEvent} range={selectedRange} onCancel={handleModal} />
       </Dialog>
       <Tooltip title="Add New Event">
         <SpeedDial

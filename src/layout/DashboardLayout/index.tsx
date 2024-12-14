@@ -7,9 +7,6 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Links from '@mui/material/Link';
 import Box from '@mui/material/Box';
 
 // project-imports
@@ -24,17 +21,7 @@ import useConfig from 'hooks/useConfig';
 import { DRAWER_WIDTH, MenuOrientation } from 'config';
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
-// assets
-import { ShoppingCart } from 'iconsax-react';
-
 // ==============================|| MAIN LAYOUT ||============================== //
-
-let value: string = window.location.search;
-const params = new URLSearchParams(value);
-const ispValue = params.get('isp');
-const ispValueAvailable = ispValue !== null && parseInt(ispValue) === 1;
-
-const url = ispValueAvailable ? 'https://1.envato.market/jrEAbP' : 'https://1.envato.market/zNkqj6';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const theme = useTheme();

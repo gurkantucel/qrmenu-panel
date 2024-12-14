@@ -31,7 +31,7 @@ import { ThemeMode } from 'config';
 // assets
 const avatar1 = '/assets/images/users/avatar-6.png';
 import { Setting2, Profile, Logout } from 'iconsax-react';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { deleteCookie} from 'cookies-next';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -70,8 +70,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const user = useUser();
 
-  const session ={user: {email: "", image: "", name: "Gürkan"},provider:"",image: ""} 
-  const provider = session?.provider;
 
   const handleLogout = () => {
     deleteCookie("token");

@@ -19,7 +19,7 @@ import { Form, Formik } from 'formik';
 // project-imports
 import AnimateButton from 'components/@extended/AnimateButton';
 import AuthDivider from '../AuthDivider';
-import { Checkbox, CircularProgress, MenuItem, Select, TextField } from '@mui/material';
+import { Checkbox, MenuItem, Select, TextField } from '@mui/material';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import { useGetBranchDropdownQuery, useGetCountryDropdownQuery, useGetPackagesDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery } from 'reduxt/features/definition/definition-api';
 import { registerValidationSchema } from 'utils/schemas/auth-validation-schema';
@@ -45,7 +45,7 @@ export default function AuthRegister() {
   }] = useLazyGetDistrictDropdownQuery();
   const { data: getBranchListData, isLoading: getBranchLoading } = useGetBranchDropdownQuery();
 
-  const [register, { isLoading: registerIsLoading, data: registerResponse, error: registerError, isError }] = useRegisterMutation();
+  const [register, { isLoading: registerIsLoading, data: registerResponse, error: registerError}] = useRegisterMutation();
 
   useEffect(() => {
     if (registerResponse) {

@@ -2,7 +2,6 @@ import { useState, MouseEvent } from 'react';
 
 // next
 import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 // material-ui
@@ -23,7 +22,7 @@ import { useGetMenuMaster } from 'api/menu';
 
 // assets
 import { ArrowRight2 } from 'iconsax-react';
-import { deleteCookie, setCookie } from 'cookies-next';
+import { deleteCookie } from 'cookies-next';
 
 const avatar1 = '/assets/images/users/avatar-6.png';
 
@@ -57,9 +56,6 @@ export default function UserList() {
 
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
-
-  const session ={user: {email: "", image: "", name: "Gürkan"},provider:"",image: ""} 
-  const provider = session?.provider;
 
   const handleLogout = () => {
     deleteCookie("token");

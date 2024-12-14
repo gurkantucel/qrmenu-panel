@@ -10,7 +10,7 @@ import Loader from 'components/Loader';
 
 // types
 import { GuardProps } from 'types/auth';
-import { CookieValueTypes, getCookie } from 'cookies-next';
+import { getCookie } from 'cookies-next';
 
 // ==============================|| GUEST GUARD ||============================== //
 

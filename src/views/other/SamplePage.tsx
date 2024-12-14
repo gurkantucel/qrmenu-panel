@@ -1,8 +1,4 @@
 'use client';
-
-// material-ui
-import Typography from '@mui/material/Typography';
-
 // project-imports
 import MainCard from 'components/MainCard';
 import Calendar from 'views/apps/Calendar';
