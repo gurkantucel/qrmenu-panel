@@ -1,36 +1,39 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // next
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 // project-imports
 import Loader from 'components/Loader';
 
 // types
 import { GuardProps } from 'types/auth';
+import { CookieValueTypes, getCookie } from 'cookies-next';
 
 // ==============================|| GUEST GUARD ||============================== //
 
+enum AUTHGUARD { AUTH, UNAUTH }
+
 export default function GuestGuard({ children }: GuardProps) {
-  const { data: session, status } = useSession();
   const router = useRouter();
+  const [token, setToken] = useState<AUTHGUARD | undefined>(undefined);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const res: any = await fetch('/api/auth/protected');
-      const json = await res?.json();
-      if (json?.protected) {
-        router.push('/sample-page');
+    const value = getCookie("token");
+    setTimeout(() => {
+      if (value != undefined) {
+        setToken(AUTHGUARD.AUTH);
+        router.push('/app/home')
+      }else{
+        setToken(AUTHGUARD.UNAUTH)
       }
-    };
-    fetchData();
-
+    }, 2000);
     // eslint-disable-next-line
-  }, [session]);
+  }, []);
 
-  if (status === 'loading' || session?.user) return <Loader />;
+  if (token == undefined) return <Loader />;
 
   return <>{children}</>;
 }

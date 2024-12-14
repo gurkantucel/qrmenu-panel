@@ -1,3 +1,4 @@
+import { FormHelperText } from '@mui/material'
 import { Field } from 'formik'
 import Select, { ActionMeta, GroupBase, OptionsOrGroups, StylesConfig } from 'react-select'
 
@@ -53,9 +54,9 @@ const CustomFormikSelect = (props: Props) => {
                         value={props.value}
                     />
                     {(props.isErrorText ?? true) && meta.touched &&
-                        meta.error && <div className="invalid-feedback">
-                            {meta.error}
-                        </div>}
+                        meta.error &&  <FormHelperText error id={`helper-text-${name}`}>
+                        {meta.error}
+                      </FormHelperText>}
                 </>
             )}
         </Field>

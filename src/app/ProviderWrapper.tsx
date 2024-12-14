@@ -2,9 +2,6 @@
 
 import { ReactElement } from 'react';
 
-// next
-import { SessionProvider } from 'next-auth/react';
-
 // project-imports
 import ThemeCustomization from 'themes';
 import { ConfigProvider } from 'contexts/ConfigContext';
@@ -24,12 +21,10 @@ export default function ProviderWrapper({ children }: { children: ReactElement }
         <RTLLayout>
           <Locales>
             <ScrollTop>
-              <SessionProvider refetchInterval={0}>
-                <Notistack>
-                  <Snackbar />
-                  {children}
-                </Notistack>
-              </SessionProvider>
+              <Notistack>
+                <Snackbar />
+                {children}
+              </Notistack>
             </ScrollTop>
           </Locales>
         </RTLLayout>

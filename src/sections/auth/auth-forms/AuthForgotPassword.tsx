@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import InputLabel from '@mui/material/InputLabel';
-import Typography from '@mui/material/Typography';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 
@@ -17,52 +16,56 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project-imports
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'components/@extended/AnimateButton';
-import { openSnackbar } from 'api/snackbar';
-import useUser from 'hooks/useUser';
 
 // types
-import { SnackbarProps } from 'types/snackbar';
+import { useForgetPasswordMutation } from 'reduxt/features/auth/auth-api';
+import { useEffect } from 'react';
+import { enqueueSnackbar } from 'notistack';
+import { PuffLoader } from 'react-spinners';
 
 // ============================|| FIREBASE - FORGOT PASSWORD ||============================ //
 
 export default function AuthForgotPassword() {
-  const scriptedRef = useScriptRef();
   const router = useRouter();
-  const user = useUser();
+
+  const [forgetPassword, { isLoading: forgetPasswordIsLoading, data: forgetPasswordResponse, error: forgetPasswordError }] = useForgetPasswordMutation();
+
+  useEffect(() => {
+    if (forgetPasswordResponse) {
+      enqueueSnackbar(forgetPasswordResponse.message, {
+        variant: forgetPasswordResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        }
+      },)
+      if (forgetPasswordResponse?.status == true) {
+        setTimeout(() => {
+          router.push("/app/login")
+        }, 1000)
+      }
+    }
+    if (forgetPasswordError) {
+      var error = forgetPasswordError as any;
+      enqueueSnackbar(error.data?.message ?? "Hata", {
+        variant: 'error', anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right'
+        }
+      },)
+    }
+  }, [forgetPasswordResponse, forgetPasswordError])
 
   return (
     <Formik
       initialValues={{
-        email: '',
-        submit: null
+        username: '',
       }}
       validationSchema={Yup.object().shape({
-        email: Yup.string().email('Must be a valid email').max(255).required('Email is required')
+        username: Yup.string().email('E-Posta girin.').max(255).required('E-Posta girin.')
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-        try {
-          setStatus({ success: true });
-          setSubmitting(false);
-          openSnackbar({
-            open: true,
-            message: 'Check mail for reset password link',
-            variant: 'alert',
-            alert: {
-              color: 'success'
-            }
-          } as SnackbarProps);
-          setTimeout(() => {
-            router.push(user ? '/auth/check-mail' : '/check-mail');
-          }, 1500);
-        } catch (err: any) {
-          if (scriptedRef.current) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
-          }
-        }
+        forgetPassword(values);
       }}
     >
       {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -70,38 +73,31 @@ export default function AuthForgotPassword() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Stack spacing={1}>
-                <InputLabel htmlFor="email-forgot">Email Address</InputLabel>
+                <InputLabel htmlFor="email-forgot">E-Posta</InputLabel>
                 <OutlinedInput
                   fullWidth
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.username && errors.username)}
                   id="email-forgot"
                   type="email"
-                  value={values.email}
-                  name="email"
+                  value={values.username}
+                  name="username"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Enter email address"
+                  placeholder="E-Posta"
                   inputProps={{}}
                 />
               </Stack>
-              {touched.email && errors.email && (
+              {touched.username && errors.username && (
                 <FormHelperText error id="helper-text-email-forgot">
-                  {errors.email}
+                  {errors.username}
                 </FormHelperText>
               )}
             </Grid>
-            {errors.submit && (
-              <Grid item xs={12}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
-              </Grid>
-            )}
-            <Grid item xs={12} sx={{ mb: -2 }}>
-              <Typography variant="caption">Do not forgot to check SPAM box.</Typography>
-            </Grid>
             <Grid item xs={12}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                  Send Password Reset Email
+                <Button disableElevation disabled={isSubmitting || forgetPasswordIsLoading} fullWidth size="large" type="submit" variant="contained" color="primary">
+                {forgetPasswordIsLoading && <PuffLoader size={20} color='white' />}
+                {forgetPasswordIsLoading == false && "Şifre Sıfırlama Bağlantısı Gönder"}
                 </Button>
               </AnimateButton>
             </Grid>

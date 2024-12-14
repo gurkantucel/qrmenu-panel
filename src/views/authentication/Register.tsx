@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 // project-imports
 import AuthWrapper from 'sections/auth/AuthWrapper';
-import FirebaseRegister from 'sections/auth/auth-forms/AuthRegister';
+import RegisterForm from 'sections/auth/auth-forms/AuthRegister';
 
 // ================================|| REGISTER ||================================ //
 
@@ -22,13 +22,13 @@ export default function Register() {
           </Grid>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Typography variant="h3">Kayıt Ol</Typography>
-            <Typography component={Link} href={'/login'} variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+            <Typography component={Link} href={'/app/login'} variant="body1" sx={{ textDecoration: 'none' }} color="primary">
               {"Zaten üye misiniz? Giriş Yap"}
             </Typography>
           </Stack>
         </Grid>
         <Grid item xs={12}>
-          <FirebaseRegister />
+          <RegisterForm />
         </Grid>
       </Grid>
     </AuthWrapper>

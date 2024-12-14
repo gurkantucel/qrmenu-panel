@@ -2,7 +2,6 @@ import { useRef, useState, ReactNode, SyntheticEvent } from 'react';
 
 // next
 import { useRouter } from 'next/navigation';
-import { signOut, useSession } from 'next-auth/react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -32,6 +31,7 @@ import { ThemeMode } from 'config';
 // assets
 const avatar1 = '/assets/images/users/avatar-6.png';
 import { Setting2, Profile, Logout } from 'iconsax-react';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -70,22 +70,13 @@ export default function ProfilePage() {
   const router = useRouter();
   const user = useUser();
 
-  const { data: session } = useSession();
+  const session ={user: {email: "", image: "", name: "Gürkan"},provider:"",image: ""} 
   const provider = session?.provider;
 
   const handleLogout = () => {
-    switch (provider) {
-      case 'auth0':
-        signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/api/auth/logout/auth0` });
-        break;
-      case 'cognito':
-        signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/api/auth/logout/cognito` });
-        break;
-      default:
-        signOut({ redirect: false });
-    }
-
-    router.push('/login');
+    deleteCookie("token");
+    deleteCookie("refreshToken");
+    router.push('/app/login');
   };
 
   const anchorRef = useRef<any>(null);

@@ -23,6 +23,7 @@ import { useGetMenuMaster } from 'api/menu';
 
 // assets
 import { ArrowRight2 } from 'iconsax-react';
+import { deleteCookie, setCookie } from 'cookies-next';
 
 const avatar1 = '/assets/images/users/avatar-6.png';
 
@@ -57,22 +58,13 @@ export default function UserList() {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
-  const { data: session } = useSession();
+  const session ={user: {email: "", image: "", name: "Gürkan"},provider:"",image: ""} 
   const provider = session?.provider;
 
   const handleLogout = () => {
-    switch (provider) {
-      case 'auth0':
-        signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/api/auth/logout/auth0` });
-        break;
-      case 'cognito':
-        signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/api/auth/logout/cognito` });
-        break;
-      default:
-        signOut({ redirect: false });
-    }
-
-    router.push('/login');
+    deleteCookie("token");
+    deleteCookie("refreshToken");
+    router.push('/app/login');
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

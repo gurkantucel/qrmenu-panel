@@ -4,17 +4,20 @@ import './globals.css';
 
 // project-imports
 import ProviderWrapper from './ProviderWrapper';
+import ReduxWrapper from '../reduxt/ReduxWrapper';
 
 export const metadata: Metadata = {
-  title: 'Able Pro Material UI React Dashboard Template',
-  description: 'Able Pro Material UI React Dashboard Template'
+  title: 'Klinik Ease',
+  description: 'Klinik Ease'
 };
 
 export default function RootLayout({ children }: { children: React.ReactElement }) {
   return (
     <html lang="en">
       <body>
-        <ProviderWrapper>{children}</ProviderWrapper>
+        <ReduxWrapper>
+          <ProviderWrapper>{children}</ProviderWrapper>
+        </ReduxWrapper>
       </body>
     </html>
   );

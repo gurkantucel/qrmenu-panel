@@ -1,5 +1,3 @@
-import { useSession } from 'next-auth/react';
-
 interface UserProps {
   name: string;
   email: string;
@@ -9,7 +7,7 @@ interface UserProps {
 }
 
 export default function useUser() {
-  const { data: session } = useSession();
+  const session ={user: {email: "", image: "", name: "Gürkan"},provider:"",image: ""} 
   if (session) {
     const user = session?.user;
     const provider = session?.provider;
