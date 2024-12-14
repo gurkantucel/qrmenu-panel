@@ -22,7 +22,7 @@ export default function Register() {
           </Grid>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Typography variant="h3">Kayıt Ol</Typography>
-            <Typography component={Link} href={'/app/login'} variant="body1" sx={{ textDecoration: 'none' }} color="primary">
+            <Typography component={Link} href={'/app/auth/login'} variant="body1" sx={{ textDecoration: 'none' }} color="primary">
               {"Zaten üye misiniz? Giriş Yap"}
             </Typography>
           </Stack>

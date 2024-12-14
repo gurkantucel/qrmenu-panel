@@ -144,7 +144,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
               </Grid>
               <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="end" alignItems="center" spacing={2}>
-                  <Typography component={Link} href={'/app/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
+                  <Typography component={Link} href={'/app/auth/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
                     {"Şifremi unuttum?"}
                   </Typography>
                 </Stack>

@@ -19,7 +19,7 @@ export default function Login() {
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Typography variant="h3">Üye Girişi</Typography>
-            <Typography component={Link} href={'/app/register'} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
+            <Typography component={Link} href={'/app/auth/register'} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
             {"Hesabınız yok mu? Kayıt Olun"}
             </Typography>
           </Stack>
