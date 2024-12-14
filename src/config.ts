@@ -42,7 +42,6 @@ export enum NavActionType {
   FUNCTION = 'function',
   LINK = 'link'
 }
-
 // ==============================|| THEME CONFIG ||============================== //
 
 const config: DefaultConfigProps = {
