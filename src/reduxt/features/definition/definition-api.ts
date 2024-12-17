@@ -1,24 +1,27 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import { CompanyTypeListResultModel } from "./models/company-type-model";
 import { CountryListResultModel } from './models/country-type-model';
 import { CityListResultModel } from './models/city-type-model';
 import { DistrictListResultModel } from './models/district-type-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 import { QueryStringParamsType } from 'utils/models/query-string-params-type';
+import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 
 const definitionApi = createApi({
     reducerPath: "definitionApi",
     tagTypes: ["definitions"],
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true"
-        },
-    }),
+        baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getPackagesDropdown: builder.query<DropdownListModel, void>({
             query: () => `definition/packages/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getPersonTypeDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/person-type/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getModuleDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/module/dropDown`,
             providesTags: ["definitions"]
         }),
         getCompanyTypeList: builder.query<CompanyTypeListResultModel, void>({
@@ -122,11 +125,14 @@ const definitionApi = createApi({
 
 export const {
     useGetPackagesDropdownQuery,
+    useLazyGetPersonTypeDropdownQuery,
+    useLazyGetModuleDropdownQuery,
     useGetCompanyTypeListQuery,
     useGetCompanyTypeDropdownQuery,
     useLazyGetCompanyTypeDropdownQuery,
     useGetCountryListQuery,
     useGetCountryDropdownQuery,
+    useLazyGetCountryDropdownQuery,
     useGetBranchDropdownQuery,
     useLazyGetCityListQuery,
     useLazyGetCityDropdownQuery,

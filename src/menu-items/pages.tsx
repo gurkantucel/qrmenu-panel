@@ -41,7 +41,14 @@ const pages: NavItemType = {
       id: 'patients',
       title: <FormattedMessage id="patients" />,
       type: 'item',
-      url: '/app/patients',
+      url: '/app/patient',
+      icon: icons.samplePage
+    },
+    {
+      id: 'person',
+      title: <FormattedMessage id="person" />,
+      type: 'item',
+      url: '/app/person',
       icon: icons.samplePage
     },
     {

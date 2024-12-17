@@ -28,7 +28,6 @@ export default function AuthGuard({ children }: GuardProps) {
         router.push('/app/auth/login')
       } else {
         setToken(AUTHGUARD.AUTH);
-        router.push('/app/home')
       }
     }, 2000);
     // eslint-disable-next-line

@@ -14,6 +14,7 @@ type Props = {
     isClearable?: boolean
     isDisabled?: boolean
     zIndex?: number
+    isMulti?: boolean | undefined
 }
 
 const CustomFormikSelect = (props: Props) => {
@@ -22,6 +23,7 @@ const CustomFormikSelect = (props: Props) => {
             {({ field, form, meta }: any) => (
                 <>
                     <Select
+                        isMulti={props.isMulti}
                         id={props.name}
                         instanceId={props.name}
                         placeholder={props.placeholder ?? "Seçim yapınız..."}
