@@ -34,16 +34,9 @@ import { useLazyGetPatientListQuery } from 'reduxt/features/patient/patient-api'
 import { PatientListData } from 'reduxt/features/patient/models/patient-list-model';
 import DeletePatientModal from './DeletePatientModal';
 
-declare module '@tanstack/react-table' {
-  //allows us to define custom properties for our columns
-  interface ColumnMeta {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2'
-  }
-}
-
 const columnHelper = createColumnHelper<PatientListData>()
 
-const PersonTable = () => {
+const PatientTable = () => {
 
   const intl = useIntl()
 
@@ -260,4 +253,4 @@ const PersonTable = () => {
   )
 }
 
-export default PersonTable
+export default PatientTable

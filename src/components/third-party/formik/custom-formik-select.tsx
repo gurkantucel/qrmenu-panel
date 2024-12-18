@@ -14,7 +14,7 @@ type Props = {
     isClearable?: boolean
     isDisabled?: boolean
     zIndex?: number
-    isMulti?: boolean | undefined
+    isMulti?: any
 }
 
 const CustomFormikSelect = (props: Props) => {

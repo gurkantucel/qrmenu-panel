@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
-import { useUpdatePersonMutation } from "reduxt/features/person/person-api";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
 import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery } from "reduxt/features/definition/definition-api";

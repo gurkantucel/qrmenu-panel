@@ -377,7 +377,7 @@ const AuthorizationsInput = () => {
                 <CustomFormikSelect
                     name='authorizations'
                     placeholder="Seçim yapınız..."
-                    isMulti
+                    isMulti={true}
                     isLoading={getModuleLoading}
                     zIndex={9998}
                     value={getModuleData?.data.filter((item) => values.authorizations?.includes(item.value))}

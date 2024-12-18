@@ -19,6 +19,7 @@ import {
   getCoreRowModel,
   HeaderGroup,
   PaginationState,
+  RowData,
   useReactTable,
 } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react';
@@ -34,9 +35,8 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import ViewPersonModal from './ViewPersonModal';
 
-declare module '@tanstack/react-table' {
-  //allows us to define custom properties for our columns
-  interface ColumnMeta {
+declare module '@tanstack/table-core' {
+  interface ColumnMeta<TData extends RowData, TValue> {
     filterVariant?: 'text' | 'range' | 'select' | 'select2'
   }
 }
