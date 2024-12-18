@@ -19,6 +19,7 @@ import { PatientCreateBodyModel } from "reduxt/features/patient/models/patient-l
 import CustomFormikPhone from "components/third-party/formik/custom-formik-phone";
 import { useCreatePatientMutation, useLazyGetPatientListQuery, useLazyReadPatientQuery, useUpdatePatientMutation } from "reduxt/features/patient/patient-api";
 import { newPatientValidationSchema } from "utils/schemas/patient-validation-schema copy";
+import dayjs from 'dayjs';
 
 const AddPatientModal = () => {
 
@@ -95,6 +96,8 @@ const AddPatientModal = () => {
                 emergency_phone_number: readPatientData.data.emergency_phone_number,
                 status: readPatientData.data.status
             }
+            getCityList({ country_id: readPatientData.data.country_id });
+            getDistrictList({ city_id: readPatientData.data.city_id })
             setInitialData(model);
         }
     }, [readPatientData])
@@ -332,15 +335,15 @@ const AddPatientModal = () => {
                                             <InputLabel htmlFor="birthdate">{intl.formatMessage({ id: "birthdate" })}</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
-                                                error={Boolean(touched.email && errors.email)}
+                                                error={Boolean(touched.birthdate && errors.birthdate)}
                                                 id="birthdate"
                                                 type="date"
-                                                value={values.email}
+                                                value={values.birthdate}
                                                 name="birthdate"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "birthdate" })}
-                                                inputProps={{}}
+                                                inputProps={{max: dayjs().format('YYYY-MM-DD')}}
                                             />
                                         </Stack>
                                         {touched.birthdate && errors.birthdate && (

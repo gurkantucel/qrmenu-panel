@@ -354,7 +354,7 @@ const AddPersonModal = () => {
 export default AddPersonModal
 
 const AuthorizationsInput = () => {
-    const { data: { open, modalType } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType,id } } = useAppSelector((state: RootState) => state.modal);
     const { values, setFieldValue } = useFormikContext<any>();
 
     const [getModule, { data: getModuleData, isLoading: getModuleLoading }] = useLazyGetModuleDropdownQuery();
@@ -367,7 +367,9 @@ const AuthorizationsInput = () => {
 
     useEffect(() => {
         if (getModuleData?.status && getModuleData.data != null && getModuleData.data.length > 0) {
-            setFieldValue("authorizations", getModuleData.data.map((item) => item.value));
+            if(id == null){
+                setFieldValue("authorizations", getModuleData.data.map((item) => item.value));
+            }
         }
     }, [getModuleData])
     return (
