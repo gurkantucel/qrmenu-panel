@@ -94,10 +94,11 @@ const PatientTable = () => {
               color="secondary"
               onClick={(e: any) => {
                 e.stopPropagation();
-                dispatch(setModal({
+                /*dispatch(setModal({
                   open: true, modalType: ModalEnum.viewPerson,
                   id: info.row.original.patient_id,
-                }))
+                }))*/
+               alert("Çok Yakında :)")
               }}
             >
               <Eye />

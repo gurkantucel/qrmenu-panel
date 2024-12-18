@@ -33,7 +33,7 @@ type ConfigProviderProps = {
 };
 
 function ConfigProvider({ children }: ConfigProviderProps) {
-  const [config, setConfig] = useLocalStorage('able-pro-material-next-ts-config', initialState);
+  const [config, setConfig] = useLocalStorage('klinik-ease-config', initialState);
 
   const onChangeContainer = (container: string) => {
     let containerValue: boolean;

@@ -17,8 +17,8 @@ export default function Register() {
     <AuthWrapper>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Grid container xs={12} marginBottom={3} justifyContent={"center"}>
-            <Image src={"/assets/images/logo7.png"} width={300} height={92} alt='Logo' quality={100} />
+          <Grid container xs={12} marginBottom={5} justifyContent={"center"}>
+            <Image src={"/assets/images/klinik_ease_logo.png"} width={300} height={62} alt='Logo' quality={100} />
           </Grid>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Typography variant="h3">Kayıt Ol</Typography>

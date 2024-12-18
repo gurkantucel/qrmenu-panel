@@ -44,6 +44,7 @@
     "age" : "Yaş",
     "newPatient" : "Yeni Danışan",
     "addPatient" : "Danışan Ekle",
+    "updatePatient" : "Danışan Düzenle",
     "gender" : "Cinsiyet",
     "identityNumber": "T.C. Kimlik Numarası",
     "additionalNearbyContactInformation" : "Yakın Ek İletişim Bilgisi",

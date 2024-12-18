@@ -46,7 +46,7 @@ export enum NavActionType {
 
 const config: DefaultConfigProps = {
   fontFamily: roboto.style.fontFamily,
-  i18n: 'en',
+  i18n: 'tr',
   menuOrientation: MenuOrientation.VERTICAL,
   menuCaption: true,
   miniDrawer: false,
