@@ -14,7 +14,7 @@ import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definiti
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { newPatientMedicineHistorySchema } from "utils/schemas/patient-validation-schema copy";
-import { useCreatePatientMedicineHistoryMutation, useLazyGetPatientMedicineHistoryListQuery, useUpdatePatientMedicineHistoryMutation } from "reduxt/features/patient/medicine-history-api";
+import { useCreatePatientMedicineHistoryMutation, useUpdatePatientMedicineHistoryMutation } from "reduxt/features/patient/medicine-history-api";
 import { PatientMedicineHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-medicine-history-model";
 
 const AddPatientMedicineHistoryModal = () => {

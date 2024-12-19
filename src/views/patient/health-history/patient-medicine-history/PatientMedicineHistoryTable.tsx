@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Button, Chip, IconButton, Paper, Stack, Tooltip } from '@mui/material';
+import { Button, IconButton, Paper, Stack, Tooltip } from '@mui/material';
 import MainCard from 'components/MainCard'
-import { Add, Edit, Eye, Trash } from 'iconsax-react';
+import { Add, Edit, Trash } from 'iconsax-react';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { useIntl } from 'react-intl';
@@ -34,7 +34,7 @@ const columnHelper = createColumnHelper<PatientMedicineHistoryListData>()
 
 const PatientMedicineHistoryTable = ({ params }: { params: { slug: string } }) => {
     const dispatch = useAppDispatch();
-    const { data: { selectTab, id } } = useAppSelector((state: RootState) => state.patientTab);
+    const { data: { selectTab } } = useAppSelector((state: RootState) => state.patientTab);
     const intl = useIntl()
 
     const [getPatientMedicineHistoryList, {

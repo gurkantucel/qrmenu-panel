@@ -1,5 +1,4 @@
 // material-ui
-import { useTheme } from '@mui/material/styles';
 import Image from 'next/image';
 
 /**
@@ -13,7 +12,6 @@ import Image from 'next/image';
 // ==============================|| LOGO SVG ||============================== //
 
 export default function LogoMain({ reverse }: { reverse?: boolean }) {
-  const theme = useTheme();
   return (
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
