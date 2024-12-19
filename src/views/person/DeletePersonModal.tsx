@@ -4,7 +4,7 @@ import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
-import { useDeletePersonMutation, useLazyGetPersonListQuery } from "reduxt/features/person/person-api";
+import { useDeletePersonMutation } from "reduxt/features/person/person-api";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 
@@ -19,7 +19,7 @@ const DeletePersonModal = () => {
         dispatch(closeModal())
     };
 
-    const [getPersonList] = useLazyGetPersonListQuery();
+    //const [getPersonList] = useLazyGetPersonListQuery();
 
     useEffect(() => {
         if (deletePersonResponse) {
@@ -31,7 +31,7 @@ const DeletePersonModal = () => {
             },)
             if (deletePersonResponse?.status == true) {
                 handleClose();
-                getPersonList({});
+                //getPersonList({});
             }
         }
         if (deletePersonError) {

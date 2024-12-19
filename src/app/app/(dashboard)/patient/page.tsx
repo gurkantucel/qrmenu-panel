@@ -5,6 +5,6 @@ import PatientTable from "views/patient/PatientTable";
 
 // ==============================|| REACT TABLE - FILTERING ||============================== //
 
-export default function PersonPage() {
+export default function PatientPage() {
   return <PatientTable />;
 }

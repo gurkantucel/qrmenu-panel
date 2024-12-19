@@ -7,7 +7,11 @@ export enum ModalEnum {
     viewPerson,
     newPatient,
     deletePatient,
-    viewPatient
+    viewPatient,
+    newPatientDiseaseHistory,
+    deletePatientDiseaseHistory,
+    newPatientMedicineHistory,
+    deletePatientMedicineHistory
 }
 
 type Model = {

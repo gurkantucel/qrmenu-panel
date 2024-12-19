@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { Form, Formik, useFormikContext } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
-import { useCreatePersonMutation, useLazyGetPersonListQuery, useLazyReadPersonQuery, useUpdatePersonMutation } from "reduxt/features/person/person-api";
+import { useCreatePersonMutation, useLazyReadPersonQuery, useUpdatePersonMutation } from "reduxt/features/person/person-api";
 import { PuffLoader } from "react-spinners";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { useLazyGetModuleDropdownQuery, useLazyGetPersonTypeDropdownQuery } from "reduxt/features/definition/definition-api";
@@ -43,7 +43,7 @@ const AddPersonModal = () => {
         setInitialData(undefined);
     };
 
-    const [getPersonList] = useLazyGetPersonListQuery();
+    //const [getPersonList] = useLazyGetPersonListQuery();
 
     const [getPersonType, { data: getPersonTypeData, isLoading: getPersonTypeLoading }] = useLazyGetPersonTypeDropdownQuery();
 
@@ -94,7 +94,7 @@ const AddPersonModal = () => {
             },)
             if (createPersonResponse?.status == true) {
                 handleClose();
-                getPersonList({});
+                //getPersonList({});
             }
         }
         if (createPersonError) {
@@ -118,7 +118,7 @@ const AddPersonModal = () => {
             },)
             if (updatePersonResponse?.status == true) {
                 handleClose();
-                getPersonList({});
+                //getPersonList({});
             }
         }
         if (updatePersonError) {
@@ -244,6 +244,7 @@ const AddPersonModal = () => {
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
                                                     placeholder={intl.formatMessage({ id: "phone" })}
+                                                    inputProps={{maxLength: 10}}
                                                 />
                                             </Stack>
                                         </Stack>

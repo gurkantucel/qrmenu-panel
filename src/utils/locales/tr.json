@@ -48,5 +48,21 @@
     "gender" : "Cinsiyet",
     "identityNumber": "T.C. Kimlik Numarası",
     "additionalNearbyContactInformation" : "Yakın Ek İletişim Bilgisi",
-    "birthdate" : "Doğum Tarihi"
+    "birthdate" : "Doğum Tarihi",
+    "add" : "Ekle",
+    "diseaseHistory" : "Hastalık Geçmişi",
+    "addDiseaseHistory" : "Hastalık Geçmişi Ekle",
+    "updateDiseaseHistory" : "Hastalık Geçmişi Düzenle",
+    "diseaseName" : "Hastalık Adı",
+    "diseaseStatus": "Hastalık Durumu",
+    "startDate": "Başlangıç Tarihi",
+    "endDate": "Bitiş Tarihi",
+    "drugName" : "İlaç Adı",
+    "dosage": "Dozu",
+    "usePeriod": "Kullanım Süresi",
+    "appointment" : "Randevu",
+    "treatment": "Tedavi",
+    "medicineHistory" : "İlaç Geçmişi",
+    "treatmentMethodName" : "Tedavi Yöntemi Adı",
+    "usagePeriod" : "Kullanım Süresi"
 }

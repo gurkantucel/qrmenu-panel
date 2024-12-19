@@ -34,6 +34,7 @@ import DeletePersonModal from './DeletePersonModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import ViewPersonModal from './ViewPersonModal';
+import CustomScaleLoader from 'components/CustomScaleLoader';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -51,7 +52,8 @@ const PersonTable = () => {
 
   const [getPersonList, {
     data: getPersonListData,
-    isFetching: isPersonFetching
+    isFetching: isPersonFetching,
+    isLoading: isPersonLoading
   }] = useLazyGetPersonListQuery();
 
   const columns = useMemo<ColumnDef<PersonListData, any>[]>(() => [
@@ -164,7 +166,7 @@ const PersonTable = () => {
   })
 
   useEffect(() => {
-    if (getPersonListData !=null) {
+    if (getPersonListData != null) {
       getPersonList({
         page: table.getState().pagination.pageIndex + 1,
         pageSize: table.getState().pagination.pageSize,
@@ -224,23 +226,29 @@ const PersonTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+              {isPersonFetching || isPersonLoading ? <TableRow>
+                <TableCell colSpan={table.getAllColumns().length}>
+                  <CustomScaleLoader />
+                </TableCell>
+              </TableRow> :
+                table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={table.getAllColumns().length}>
+                      <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
+                    </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={table.getAllColumns().length}>
-                    <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
-                  </TableCell>
-                </TableRow>
-              )}
+                )
+              }
             </TableBody>
           </Table>
         </TableContainer>

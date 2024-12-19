@@ -50,6 +50,7 @@ const CustomFormikPhone = (props:Props) => {
                         onBlur={props.handleBlur}
                         onChange={props.handleChange}
                         placeholder={props.placeHolder}
+                        inputProps={{maxLength: 10}}
                     />
                 </Stack>
             </Stack>

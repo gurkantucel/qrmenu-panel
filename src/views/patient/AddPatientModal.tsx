@@ -17,7 +17,7 @@ import { enqueueSnackbar } from "notistack";
 import CustomScaleLoader from "components/CustomScaleLoader";
 import { PatientCreateBodyModel } from "reduxt/features/patient/models/patient-list-model";
 import CustomFormikPhone from "components/third-party/formik/custom-formik-phone";
-import { useCreatePatientMutation, useLazyGetPatientListQuery, useLazyReadPatientQuery, useUpdatePatientMutation } from "reduxt/features/patient/patient-api";
+import { useCreatePatientMutation, useLazyReadPatientQuery, useUpdatePatientMutation } from "reduxt/features/patient/patient-api";
 import { newPatientValidationSchema } from "utils/schemas/patient-validation-schema copy";
 import dayjs from 'dayjs';
 
@@ -34,7 +34,7 @@ const AddPatientModal = () => {
         setInitialData(undefined);
     };
 
-    const [getPatientList] = useLazyGetPatientListQuery();
+    //const [getPatientList] = useLazyGetPatientListQuery();
 
     const [getGenderList, {
         data: getGenderListData,
@@ -112,7 +112,7 @@ const AddPatientModal = () => {
             },)
             if (createPatientResponse?.status == true) {
                 handleClose();
-                getPatientList({});
+                //getPatientList({});
             }
         }
         if (createPatientError) {
@@ -136,7 +136,7 @@ const AddPatientModal = () => {
             },)
             if (updatePatientResponse?.status == true) {
                 handleClose();
-                getPatientList({});
+                //getPatientList({});
             }
         }
         if (updatePatientError) {
@@ -175,7 +175,7 @@ const AddPatientModal = () => {
                         district_id: null,
                         address: null,
                         emergency_full_name: null,
-                        emergency_phone_code: null,
+                        emergency_phone_code: '+90',
                         emergency_phone_number: null,
                         status: true
                     }}
@@ -288,7 +288,7 @@ const AddPatientModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "identityNumber" })}
-                                                inputProps={{}}
+                                                inputProps={{maxLength: 11}}
                                             />
                                         </Stack>
                                         {touched.identity_number && errors.identity_number && (

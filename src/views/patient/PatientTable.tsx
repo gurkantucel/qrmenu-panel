@@ -22,35 +22,40 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Box, Divider, Link, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPatientModal from './AddPatientModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import ViewPersonModal from './ViewPersonModal';
 import { useLazyGetPatientListQuery } from 'reduxt/features/patient/patient-api';
 import { PatientListData } from 'reduxt/features/patient/models/patient-list-model';
 import DeletePatientModal from './DeletePatientModal';
+import CustomScaleLoader from 'components/CustomScaleLoader';
+import { useRouter } from 'next/navigation';
 
 const columnHelper = createColumnHelper<PatientListData>()
 
 const PatientTable = () => {
 
+  const router = useRouter()
   const intl = useIntl()
 
   const dispatch = useAppDispatch();
 
   const [getPatientList, {
     data: getPatientListData,
-    isFetching: isPatientFetching
+    isFetching: isPatientFetching,
+    isLoading: isPatientLoading
   }] = useLazyGetPatientListQuery();
 
   const columns = useMemo<ColumnDef<PatientListData, any>[]>(() => [
     columnHelper.accessor('full_name', {
       header: intl.formatMessage({ id: "nameSurname" }),
-      cell: info => info.renderValue(),
+      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`}>
+        {`${info.renderValue()}`}
+      </Link>,
       footer: info => info.column.id,
     }),
     columnHelper.accessor('gender_name', {
@@ -77,7 +82,7 @@ const PatientTable = () => {
     }),
     columnHelper.accessor('status', {
       header: intl.formatMessage({ id: "status" }),
-      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? <FormattedMessage id='active' /> : <FormattedMessage id='passive' />} size="small" variant="light" />,
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
       footer: info => info.column.id,
       meta: {
         filterVariant: 'select',
@@ -94,11 +99,7 @@ const PatientTable = () => {
               color="secondary"
               onClick={(e: any) => {
                 e.stopPropagation();
-                /*dispatch(setModal({
-                  open: true, modalType: ModalEnum.viewPerson,
-                  id: info.row.original.patient_id,
-                }))*/
-               alert("Çok Yakında :)")
+                router.push(`patient/${info.row.original.patient_id}`)
               }}
             >
               <Eye />
@@ -188,7 +189,6 @@ const PatientTable = () => {
       <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
         <AddPatientModal />
         <DeletePatientModal />
-        <ViewPersonModal />
       </Stack>
       <ScrollX>
         <TableContainer component={Paper}>
@@ -216,23 +216,29 @@ const PatientTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+              {isPatientFetching || isPatientLoading ? <TableRow>
+                <TableCell colSpan={table.getAllColumns().length}>
+                  <CustomScaleLoader />
+                </TableCell>
+              </TableRow> :
+                table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={table.getAllColumns().length}>
+                      <EmptyTable msg={isPatientFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                    </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={table.getAllColumns().length}>
-                    <EmptyTable msg={isPatientFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
-                  </TableCell>
-                </TableRow>
-              )}
+                )
+              }
             </TableBody>
           </Table>
         </TableContainer>

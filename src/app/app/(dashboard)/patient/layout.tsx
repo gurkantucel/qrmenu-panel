@@ -1,10 +1,16 @@
-import { Metadata } from "next";
-import Page from "./page";
+// project-imports
+import type { Metadata } from "next";
+
+// ==============================|| DASHBOARD LAYOUT ||============================== //
 
 export const metadata: Metadata = {
-    title: 'Danışanlar',
-    description:
-        "Danışanları listeler.",
+  title: 'Danışanlar',
+  description:
+      "Danışanları listeler.",
 };
 
-export default Page;
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+   <>{children}</>
+  );
+}

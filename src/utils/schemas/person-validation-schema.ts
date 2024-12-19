@@ -12,8 +12,8 @@ const newPersonValidationSchema = Yup.object({
         .min(2, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
-    phone_number: Yup.string().min(10).max(10)
-        .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
+    phone_number: Yup.string().min(10,"Telefon numarası girin.").max(10,"Telefon numarası girin.")
+            .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
     email: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
     password: Yup.string()
         .matches(/^\S+(?: \S+)*$/, { message: "Boşluklar içermemelidir." })

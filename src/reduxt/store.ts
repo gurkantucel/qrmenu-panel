@@ -4,20 +4,28 @@ import authApi from './features/auth/auth-api'
 import personApi from './features/person/person-api'
 import modalSlice from './features/definition/modalSlice'
 import patientApi from './features/patient/patient-api'
+import patientTabSlice from './features/definition/patientTabSlice'
+import diseaseHistoryApi from './features/patient/disease-history-api'
+import medicineHistoryApi from './features/patient/medicine-history-api'
 
 export const store = configureStore({
   reducer: {
     modal: modalSlice,
+    patientTab: patientTabSlice,
     [definitionApi.reducerPath]: definitionApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [personApi.reducerPath]: personApi.reducer,
-    [patientApi.reducerPath]: patientApi.reducer
+    [patientApi.reducerPath]: patientApi.reducer,
+    [diseaseHistoryApi.reducerPath]: diseaseHistoryApi.reducer,
+    [medicineHistoryApi.reducerPath]: medicineHistoryApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
     authApi.middleware,
     personApi.middleware,
-    patientApi.middleware
+    patientApi.middleware,
+    diseaseHistoryApi.middleware,
+    medicineHistoryApi.middleware
   ]),
 })
 

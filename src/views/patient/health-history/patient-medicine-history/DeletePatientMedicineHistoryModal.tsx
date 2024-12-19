@@ -4,38 +4,38 @@ import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
-import { useDeletePatientMutation } from "reduxt/features/patient/patient-api";
+import { useDeletePatientMedicineHistoryMutation, useLazyGetPatientMedicineHistoryListQuery } from "reduxt/features/patient/medicine-history-api";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 
-const DeletePatientModal = () => {
+const DeletePatientMedicineHistoryModal = () => {
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, title, id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, title, id, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
-    const [deletePatient, { isLoading: deletePatientIsLoading, data: deletePatientResponse, error: deletePatientError }] = useDeletePatientMutation();
+    const [deletePatientMedicineHistory, { isLoading: deletePatientMedicineHistoryIsLoading, data: deletePatientMedicineHistoryResponse, error: deletePatientMedicineHistoryError }] = useDeletePatientMedicineHistoryMutation();
 
     const handleClose = () => {
         dispatch(closeModal())
     };
 
-    //const [getPatientList] = useLazyGetPatientListQuery();
+    const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
     useEffect(() => {
-        if (deletePatientResponse) {
-            enqueueSnackbar(deletePatientResponse.message, {
-                variant: deletePatientResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        if (deletePatientMedicineHistoryResponse) {
+            enqueueSnackbar(deletePatientMedicineHistoryResponse.message, {
+                variant: deletePatientMedicineHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
                     vertical: 'bottom',
                     horizontal: 'right'
                 }
             },)
-            if (deletePatientResponse?.status == true) {
+            if (deletePatientMedicineHistoryResponse?.status == true) {
                 handleClose();
-                //getPatientList({});
+                getPatientMedicineHistoryList({ patient_id: id });
             }
         }
-        if (deletePatientError) {
-            var error = deletePatientError as any;
+        if (deletePatientMedicineHistoryError) {
+            var error = deletePatientMedicineHistoryError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -43,10 +43,10 @@ const DeletePatientModal = () => {
                 }
             },)
         }
-    }, [deletePatientResponse, deletePatientError])
+    }, [deletePatientMedicineHistoryResponse, deletePatientMedicineHistoryError])
 
     return (
-        <Dialog open={open && modalType == ModalEnum.deletePatient} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+        <Dialog open={open && modalType == ModalEnum.deletePatientMedicineHistory} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
             <Box sx={{ p: 1, py: 1.5 }}>
                 <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
                 <DialogContent>
@@ -59,14 +59,14 @@ const DeletePatientModal = () => {
                         {intl.formatMessage({ id: "close" })}
                     </Button>
                     <CustomLoadingButton title={intl.formatMessage({ id: "delete" })}
-                        disabled={deletePatientIsLoading}
+                        disabled={deletePatientMedicineHistoryIsLoading}
                         onClick={() => {
-                            deletePatient({ patient_id: id ?? 0 })
-                        }} autoFocus={true} isLoading={deletePatientIsLoading} />
+                            deletePatientMedicineHistory({ patient_medicine_history_id: data.patient_medicine_history_id, patient_id: id ?? 0 })
+                        }} autoFocus={true} isLoading={deletePatientMedicineHistoryIsLoading} />
                 </DialogActions>
             </Box>
         </Dialog>
     )
 }
 
-export default DeletePatientModal
+export default DeletePatientMedicineHistoryModal
