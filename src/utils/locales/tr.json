@@ -64,5 +64,7 @@
     "treatment": "Tedavi",
     "medicineHistory" : "İlaç Geçmişi",
     "treatmentMethodName" : "Tedavi Yöntemi Adı",
-    "usagePeriod" : "Kullanım Süresi"
+    "usagePeriod" : "Kullanım Süresi",
+    "addMedicineHistory" : "İlaç Geçmişi Ekle",
+    "updateMedicineHistory" : "İlaç Geçmişi Düzenle"
 }

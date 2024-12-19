@@ -72,7 +72,7 @@ const AddPatientDiseaseHistoryModal = () => {
             },)
             if (createPatientDiseaseHistoryResponse?.status == true) {
                 handleClose();
-                getPatientDiseaseHistoryList({patient_id: id});
+                getPatientDiseaseHistoryList({ patient_id: id });
             }
         }
         if (createPatientDiseaseHistoryError) {
@@ -96,7 +96,7 @@ const AddPatientDiseaseHistoryModal = () => {
             },)
             if (updatePatientDiseaseHistoryResponse?.status == true) {
                 handleClose();
-                getPatientDiseaseHistoryList({patient_id: id});
+                getPatientDiseaseHistoryList({ patient_id: id });
             }
         }
         if (updatePatientDiseaseHistoryError) {
@@ -183,7 +183,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                                 name="disease_status_id"
                                                 value={values.disease_status_id}
                                                 onChange={handleChange}>
-                                                {getDiseaseStatusData?.data?.map((item) => (<MenuItem value={item.value}>{item.label}</MenuItem>))}
+                                                {getDiseaseStatusData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
                                             </Select>
                                         </Stack>
                                         {touched.disease_status_id && errors.disease_status_id && (
@@ -205,7 +205,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "startDate" })}
-                                                //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
+                                            //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
                                             />
                                         </Stack>
                                         {touched.start_date && errors.start_date && (
@@ -227,7 +227,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "endDate" })}
-                                                //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
+                                            //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
                                             />
                                         </Stack>
                                         {touched.end_date && errors.end_date && (
