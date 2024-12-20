@@ -34,5 +34,15 @@ const newPatientMedicineHistorySchema = Yup.object({
         .required("Bu alan zorunlu"),
 })
 
+const newPatientFamilyDiseaseSchema = Yup.object({
+    patient_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    kinship_degree_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    disease_status_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    name: Yup.string()
+        .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
+        .min(2, "Çok Kısa")
+        .max(100, "Çok Uzun")
+        .required("Bu alan zorunlu"),
+})
 
-export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema }
+export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema }

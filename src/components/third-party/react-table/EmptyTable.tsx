@@ -11,7 +11,7 @@ import { ThemeMode } from 'config';
 // ==============================|| EMPTY TABLE - NO DATA ||============================== //
 
 const StyledGridOverlay = styled(Stack)(({ theme }) => ({
-  height: '400px',
+  height: '200px',
   '& .ant-empty-img-1': { fill: theme.palette.mode === ThemeMode.DARK ? theme.palette.secondary[200] : theme.palette.secondary[400] },
   '& .ant-empty-img-2': { fill: theme.palette.secondary.light },
   '& .ant-empty-img-3': { fill: theme.palette.mode === ThemeMode.DARK ? theme.palette.secondary[400] : theme.palette.secondary[200] },
@@ -19,7 +19,7 @@ const StyledGridOverlay = styled(Stack)(({ theme }) => ({
   '& .ant-empty-img-5': { fill: theme.palette.mode === ThemeMode.DARK ? theme.palette.secondary.darker : theme.palette.secondary.light }
 }));
 
-export default function EmptyTable({ msg }: { msg: string | any }) {
+export default function EmptyTable({ msg }: { msg: string | any}) {
   return (
     <StyledGridOverlay alignItems="center" justifyContent="center" spacing={1}>
       <svg width="120" height="100" viewBox="0 0 184 152" aria-hidden focusable="false">

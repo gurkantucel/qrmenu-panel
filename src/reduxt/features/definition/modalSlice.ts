@@ -11,7 +11,9 @@ export enum ModalEnum {
     newPatientDiseaseHistory,
     deletePatientDiseaseHistory,
     newPatientMedicineHistory,
-    deletePatientMedicineHistory
+    deletePatientMedicineHistory,
+    newPatientFamilyDiseaseHistory,
+    deletePatientFamilyDiseaseHistory
 }
 
 type Model = {

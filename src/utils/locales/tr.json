@@ -66,5 +66,9 @@
     "treatmentMethodName" : "Tedavi Yöntemi Adı",
     "usagePeriod" : "Kullanım Süresi",
     "addMedicineHistory" : "İlaç Geçmişi Ekle",
-    "updateMedicineHistory" : "İlaç Geçmişi Düzenle"
+    "updateMedicineHistory" : "İlaç Geçmişi Düzenle",
+    "familyDiseaseHistory" : "Aile Hastalık Geçmişi",
+    "kinshipDegree" : "Yakınlık Derecesi",
+    "addFamilyDiseaseHistory" : "Aile Hastalık Geçmişi Ekle",
+    "updateFamilyDiseaseHistory" : "Aile Hastalık Geçmişi Düzenle"
 }

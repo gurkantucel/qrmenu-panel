@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -10,20 +10,20 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetDiseaseStatusDropdownQuery, useLazyGetKinshipDegreeDropdownQuery} from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
-import { newPatientMedicineHistorySchema } from "utils/schemas/patient-validation-schema copy";
-import { useCreatePatientMedicineHistoryMutation, useUpdatePatientMedicineHistoryMutation } from "reduxt/features/patient/medicine-history-api";
-import { PatientMedicineHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-medicine-history-model";
+import { newPatientFamilyDiseaseSchema } from "utils/schemas/patient-validation-schema copy";
+import { PatientFamilyDiseaseHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-family-disease-history-model";
+import { useCreatePatientFamilyDiseaseHistoryMutation, useUpdatePatientFamilyDiseaseHistoryMutation } from "reduxt/features/patient/family-disease-history-api";
 
-const AddPatientMedicineHistoryModal = () => {
+const AddPatientFamilyDiseaseHistoryModal = () => {
 
     const dispatch = useAppDispatch();
     const { data: { open, modalType, data, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
-    const [initialData, setInitialData] = useState<PatientMedicineHistoryCreateBodyModel>();
+    const [initialData, setInitialData] = useState<PatientFamilyDiseaseHistoryCreateBodyModel>();
 
     const handleClose = () => {
         dispatch(closeModal())
@@ -32,31 +32,33 @@ const AddPatientMedicineHistoryModal = () => {
 
     //const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
-    const [getTreatmentMethod, {
-        data: getTreatmentMethodData,
-    }] = useLazyGetTreatmentMethodDropdownQuery();
+    const [getKinshipDegree, {
+        data: getKinshipDegreeData,
+    }] = useLazyGetKinshipDegreeDropdownQuery();
 
-    const [createPatientMedicineHistory, { isLoading: createPatientMedicineHistoryIsLoading, data: createPatientMedicineHistoryResponse, error: createPatientMedicineHistoryError }] = useCreatePatientMedicineHistoryMutation();
+    const [getDiseaseStatus, {
+        data: getDiseaseStatusData,
+    }] = useLazyGetDiseaseStatusDropdownQuery();
 
-    const [updatePatientMedicineHistory, { isLoading: updatePatientMedicineHistoryIsLoading, data: updatePatientMedicineHistoryResponse, error: updatePatientMedicineHistoryError }] = useUpdatePatientMedicineHistoryMutation();
+    const [createPatientFamilyDiseaseHistory, { isLoading: createPatientFamilyDiseaseHistoryIsLoading, data: createPatientFamilyDiseaseHistoryResponse, error: createPatientFamilyDiseaseHistoryError }] = useCreatePatientFamilyDiseaseHistoryMutation();
+
+    const [updateFamilyDiseaseHistory, { isLoading: updateFamilyDiseaseHistoryIsLoading, data: updateFamilyDiseaseHistoryResponse, error: updateFamilyDiseaseHistoryError }] = useUpdatePatientFamilyDiseaseHistoryMutation();
 
     useEffect(() => {
-        if (open == true && modalType == ModalEnum.newPatientMedicineHistory) {
-            getTreatmentMethod();
+        if (open == true && modalType == ModalEnum.newPatientFamilyDiseaseHistory) {
+            getKinshipDegree();
+            getDiseaseStatus();
         }
     }, [open, id])
 
     useEffect(() => {
         if (data != null) {
-            const model: PatientMedicineHistoryCreateBodyModel = {
-                patient_medicine_history_id: data.patient_medicine_history_id,
+            const model: PatientFamilyDiseaseHistoryCreateBodyModel = {
+                patient_family_disease_history_id: data.patient_family_disease_history_id,
                 patient_id: data.patient_id,
-                patient_disease_history_id: data.patient_disease_history_id,
-                appointment_id: data.appointment_id,
-                treatment_method_id: data.treatment_method_id,
+                kinship_degree_id: data.kinship_degree_id,
+                disease_status_id: data.disease_status_id,
                 name: data.name,
-                dosage: data.dosage,
-                usage_period: data.usage_period,
                 start_date: data.start_date,
                 end_date: data.end_date,
                 status: data.status
@@ -66,20 +68,20 @@ const AddPatientMedicineHistoryModal = () => {
     }, [data])
 
     useEffect(() => {
-        if (createPatientMedicineHistoryResponse) {
-            enqueueSnackbar(createPatientMedicineHistoryResponse.message, {
-                variant: createPatientMedicineHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        if (createPatientFamilyDiseaseHistoryResponse) {
+            enqueueSnackbar(createPatientFamilyDiseaseHistoryResponse.message, {
+                variant: createPatientFamilyDiseaseHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
                     vertical: 'bottom',
                     horizontal: 'right'
                 }
             },)
-            if (createPatientMedicineHistoryResponse?.status == true) {
+            if (createPatientFamilyDiseaseHistoryResponse?.status == true) {
                 handleClose();
                 //getPatientMedicineHistoryList({ patient_id: id });
             }
         }
-        if (createPatientMedicineHistoryError) {
-            var error = createPatientMedicineHistoryError as any;
+        if (createPatientFamilyDiseaseHistoryError) {
+            var error = createPatientFamilyDiseaseHistoryError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -87,23 +89,23 @@ const AddPatientMedicineHistoryModal = () => {
                 }
             },)
         }
-    }, [createPatientMedicineHistoryResponse, createPatientMedicineHistoryError])
+    }, [createPatientFamilyDiseaseHistoryResponse, createPatientFamilyDiseaseHistoryError])
 
     useEffect(() => {
-        if (updatePatientMedicineHistoryResponse) {
-            enqueueSnackbar(updatePatientMedicineHistoryResponse.message, {
-                variant: updatePatientMedicineHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        if (updateFamilyDiseaseHistoryResponse) {
+            enqueueSnackbar(updateFamilyDiseaseHistoryResponse.message, {
+                variant: updateFamilyDiseaseHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
                     vertical: 'bottom',
                     horizontal: 'right'
                 }
             },)
-            if (updatePatientMedicineHistoryResponse?.status == true) {
+            if (updateFamilyDiseaseHistoryResponse?.status == true) {
                 handleClose();
                 //getPatientMedicineHistoryList({ patient_id: id });
             }
         }
-        if (updatePatientMedicineHistoryError) {
-            var error = updatePatientMedicineHistoryError as any;
+        if (updateFamilyDiseaseHistoryError) {
+            var error = updateFamilyDiseaseHistoryError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -111,32 +113,29 @@ const AddPatientMedicineHistoryModal = () => {
                 }
             },)
         }
-    }, [updatePatientMedicineHistoryResponse, updatePatientMedicineHistoryError])
+    }, [updateFamilyDiseaseHistoryResponse, updateFamilyDiseaseHistoryError])
 
     return (
         <>
-            <Dialog open={open && modalType == ModalEnum.newPatientMedicineHistory} onClose={handleClose}>
+            <Dialog open={open && modalType == ModalEnum.newPatientFamilyDiseaseHistory} onClose={handleClose}>
                 {<Formik
                     initialValues={initialData ?? {
-                        patient_medicine_history_id: null,
+                        patient_family_disease_history_id: null,
                         patient_id: id,
-                        patient_disease_history_id: null,
-                        appointment_id: null,
-                        treatment_method_id: null,
+                        kinship_degree_id: null,
+                        disease_status_id: null,
                         name: '',
-                        dosage: null,
-                        usage_period: null,
                         start_date: null,
                         end_date: null,
                         status: true
                     }}
                     enableReinitialize
-                    validationSchema={newPatientMedicineHistorySchema}
+                    validationSchema={newPatientFamilyDiseaseSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.patient_medicine_history_id != null) {
-                            updatePatientMedicineHistory(values);
+                        if (values.patient_family_disease_history_id != null) {
+                            updateFamilyDiseaseHistory(values);
                         } else {
-                            createPatientMedicineHistory(values);
+                            createPatientFamilyDiseaseHistory(values);
                         }
                     }}
                 >
@@ -151,7 +150,7 @@ const AddPatientMedicineHistoryModal = () => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_medicine_history_id != null ? "updateMedicineHistory" : "addMedicineHistory" })}</Typography>
+                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_disease_history_id != null ? "updateFamilyDiseaseHistory" : "addFamilyDiseaseHistory" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -174,7 +173,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
-                                                inputProps={{maxLength: 100}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -183,68 +182,41 @@ const AddPatientMedicineHistoryModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="dosage">{intl.formatMessage({ id: "dosage" })}</InputLabel>
-                                            <OutlinedInput
-                                                id="dosage"
-                                                type="firstname"
-                                                value={values.dosage}
-                                                name="dosage"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "dosage" })}
+                                            <InputLabel htmlFor="kinship_degree_id">{intl.formatMessage({ id: "kinshipDegree" })}{"*"}</InputLabel>
+                                            <Autocomplete
                                                 fullWidth
-                                                error={Boolean(touched.dosage && errors.dosage)}
-                                                inputProps={{maxLength: 50}}
+                                                disablePortal
+                                                value={getKinshipDegreeData?.data.find((item)=> item.value == values.kinship_degree_id)}
+                                                onChange={(event,newValue)=>{
+                                                    setFieldValue("kinship_degree_id",newValue?.value)
+                                                }}
+                                                id="kinship_degree_id"
+                                                options={getKinshipDegreeData?.data ?? []}
+                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "kinshipDegree" })} />}
                                             />
                                         </Stack>
-                                        {touched.dosage && errors.dosage && (
-                                            <FormHelperText error id="helper-text-firstname-signup">
-                                                {errors.dosage}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="usage_period">{intl.formatMessage({ id: "usagePeriod" })}</InputLabel>
-                                            <OutlinedInput
-                                                id="usage_period"
-                                                type="firstname"
-                                                value={values.usage_period}
-                                                name="usage_period" 
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "usagePeriod" })}
-                                                fullWidth
-                                                error={Boolean(touched.usage_period && errors.usage_period)}
-                                                inputProps={{maxLength: 50}}
-                                            />
-                                        </Stack>
-                                        {touched.usage_period && errors.usage_period && (
-                                            <FormHelperText error id="helper-text-firstname-signup">
-                                                {errors.usage_period}
+                                        {touched.kinship_degree_id && errors.kinship_degree_id && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.kinship_degree_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="treatment_method_id">{intl.formatMessage({ id: "treatmentMethodName" })}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getTreatmentMethodData?.data.find((item)=> item.value == values.treatment_method_id)}
-                                                onChange={(event,newValue)=>{
-                                                    setFieldValue("treatment_method_id",newValue?.value)
-                                                }}
-                                                id="treatment_method_id"
-                                                options={getTreatmentMethodData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({id: "treatmentMethodName"})} />}
-                                            />
+                                            <InputLabel htmlFor="disease_status">{intl.formatMessage({ id: "diseaseStatus" })}{"*"}</InputLabel>
+                                            <Select id="disease_status_id"
+                                                placeholder="Hastalık Durumu"
+                                                name="disease_status_id"
+                                                value={values.disease_status_id}
+                                                onChange={handleChange}>
+                                                {getDiseaseStatusData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
+                                            </Select>
                                         </Stack>
-                                        {touched.treatment_method_id && errors.treatment_method_id && (
+                                        {touched.disease_status_id && errors.disease_status_id && (
                                             <FormHelperText error id="helper-text-email-signup">
-                                                {errors.treatment_method_id}
+                                                {errors.disease_status_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>
@@ -298,9 +270,9 @@ const AddPatientMedicineHistoryModal = () => {
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation disabled={isSubmitting || createPatientMedicineHistoryIsLoading || updatePatientMedicineHistoryIsLoading} type="submit" variant="contained" color="primary">
-                                            {(createPatientMedicineHistoryIsLoading || updatePatientMedicineHistoryIsLoading) && <PuffLoader size={20} color='white' />}
-                                            {(createPatientMedicineHistoryIsLoading == false || updatePatientMedicineHistoryIsLoading == false) && intl.formatMessage({ id: "save" })}
+                                        <Button disableElevation disabled={isSubmitting || createPatientFamilyDiseaseHistoryIsLoading || updateFamilyDiseaseHistoryIsLoading} type="submit" variant="contained" color="primary">
+                                            {(createPatientFamilyDiseaseHistoryIsLoading || updateFamilyDiseaseHistoryIsLoading) && <PuffLoader size={20} color='white' />}
+                                            {(createPatientFamilyDiseaseHistoryIsLoading == false || updateFamilyDiseaseHistoryIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
                                     </AnimateButton>
                                 </DialogActions>
@@ -313,4 +285,4 @@ const AddPatientMedicineHistoryModal = () => {
     )
 }
 
-export default AddPatientMedicineHistoryModal
+export default AddPatientFamilyDiseaseHistoryModal

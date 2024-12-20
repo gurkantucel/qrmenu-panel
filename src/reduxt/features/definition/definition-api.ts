@@ -128,6 +128,10 @@ const definitionApi = createApi({
             query: () => `definition/treatment-method/dropDown`,
             providesTags: ["definitions"]
         }),
+        getKinshipDegreeDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/kinship-degree/dropDown`,
+            providesTags: ["definitions"]
+        }),
     })
 })
 
@@ -156,7 +160,8 @@ export const {
     useLazyGetBankDropdownQuery,
     useLazyGetCurrencyDropdownQuery,
     useLazyGetDiseaseStatusDropdownQuery,
-    useLazyGetTreatmentMethodDropdownQuery
+    useLazyGetTreatmentMethodDropdownQuery,
+    useLazyGetKinshipDegreeDropdownQuery
 } = definitionApi
 
 export default definitionApi;
