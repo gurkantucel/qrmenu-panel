@@ -70,5 +70,12 @@
     "familyDiseaseHistory" : "Aile Hastalık Geçmişi",
     "kinshipDegree" : "Yakınlık Derecesi",
     "addFamilyDiseaseHistory" : "Aile Hastalık Geçmişi Ekle",
-    "updateFamilyDiseaseHistory" : "Aile Hastalık Geçmişi Düzenle"
+    "updateFamilyDiseaseHistory" : "Aile Hastalık Geçmişi Düzenle",
+    "treatmentName" : "Tedavi Adı",
+    "surgeryDate" : "Ameliyat Tarihi",
+    "complications" : "Komplikasyonlar",
+    "appointmentDate" : "Randevu Tarihi",
+    "surgeryHistory" : "Ameliyat Geçmişi",
+    "addPatientSurgeryHistory" : "Ameliyat Geçmişi Ekle",
+    "updatePatientSurgeryHistory" : "Ameliyat Geçmişi Düzenle"
 }

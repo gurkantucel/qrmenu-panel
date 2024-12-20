@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { PatientDiseaseHistoryCreateBodyModel, PatientDiseaseHistoryListModel } from './models/patient-disease-history-model';
+import { DropdownListModel } from 'utils/models/dropdown-list-model';
 
 
 const diseaseHistoryApi = createApi({
@@ -48,6 +49,15 @@ const diseaseHistoryApi = createApi({
             },
             invalidatesTags: ["diseaseHistory"]
         }),
+        getDiseaseHistoryDropdown: builder.query<DropdownListModel, {patient_id?: number | string}>({
+            query: (args?: { patient_id?: number | string }) => {
+                return {
+                    url: `app/patient-disease-history/dropDown`,
+                    params: args
+                }
+            },
+            providesTags: ["diseaseHistory"]
+        }),
     })
 })
 
@@ -56,6 +66,7 @@ export const {
     useCreatePatientDiseaseHistoryMutation,
     useUpdatePatientDiseaseHistoryMutation,
     useDeletePatientDiseaseHistoryMutation,
+    useLazyGetDiseaseHistoryDropdownQuery,
 } = diseaseHistoryApi
 
 export default diseaseHistoryApi;

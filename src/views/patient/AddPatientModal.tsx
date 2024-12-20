@@ -18,7 +18,7 @@ import CustomScaleLoader from "components/CustomScaleLoader";
 import { PatientCreateBodyModel } from "reduxt/features/patient/models/patient-list-model";
 import CustomFormikPhone from "components/third-party/formik/custom-formik-phone";
 import { useCreatePatientMutation, useLazyReadPatientQuery, useUpdatePatientMutation } from "reduxt/features/patient/patient-api";
-import { newPatientValidationSchema } from "utils/schemas/patient-validation-schema copy";
+import { newPatientValidationSchema } from "utils/schemas/patient-validation-schema";
 import dayjs from 'dayjs';
 
 const AddPatientModal = () => {

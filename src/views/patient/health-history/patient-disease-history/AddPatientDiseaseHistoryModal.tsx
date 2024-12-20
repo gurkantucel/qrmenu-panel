@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { useLazyGetDiseaseStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
-import { newPatientDiseaseHistorySchema } from "utils/schemas/patient-validation-schema copy";
+import { newPatientDiseaseHistorySchema } from "utils/schemas/patient-validation-schema";
 import { PatientDiseaseHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-disease-history-model";
 import { useCreatePatientDiseaseHistoryMutation, useLazyGetPatientDiseaseHistoryListQuery, useUpdatePatientDiseaseHistoryMutation } from "reduxt/features/patient/disease-history-api";
 

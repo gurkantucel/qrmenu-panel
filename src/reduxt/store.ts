@@ -8,6 +8,7 @@ import patientTabSlice from './features/definition/patientTabSlice'
 import diseaseHistoryApi from './features/patient/disease-history-api'
 import medicineHistoryApi from './features/patient/medicine-history-api'
 import familyDiseaseHistoryApi from './features/patient/family-disease-history-api'
+import surgeryHistoryApi from './features/patient/surgery-history-api'
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     [diseaseHistoryApi.reducerPath]: diseaseHistoryApi.reducer,
     [medicineHistoryApi.reducerPath]: medicineHistoryApi.reducer,
     [familyDiseaseHistoryApi.reducerPath]: familyDiseaseHistoryApi.reducer,
+    [surgeryHistoryApi.reducerPath] : surgeryHistoryApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -28,7 +30,8 @@ export const store = configureStore({
     patientApi.middleware,
     diseaseHistoryApi.middleware,
     medicineHistoryApi.middleware,
-    familyDiseaseHistoryApi.middleware
+    familyDiseaseHistoryApi.middleware,
+    surgeryHistoryApi.middleware
   ]),
 })
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Form, Formik } from 'formik';
 import { useLazyReadPatientQuery, useUpdatePatientMutation } from 'reduxt/features/patient/patient-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
-import { newPatientValidationSchema } from 'utils/schemas/patient-validation-schema copy';
+import { newPatientValidationSchema } from 'utils/schemas/patient-validation-schema';
 import { Box, Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
 import { useIntl } from 'react-intl';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';

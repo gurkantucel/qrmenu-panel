@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
+import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -10,20 +10,21 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
-import { newPatientMedicineHistorySchema } from "utils/schemas/patient-validation-schema";
-import { useCreatePatientMedicineHistoryMutation, useUpdatePatientMedicineHistoryMutation } from "reduxt/features/patient/medicine-history-api";
-import { PatientMedicineHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-medicine-history-model";
+import { newPatientSurgeryHistorySchema } from "utils/schemas/patient-validation-schema";
+import { PatientSurgeryHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-surgery-history-model";
+import { useCreatePatientSurgeryHistoryMutation, useUpdatePatientSurgeryHistoryMutation } from "reduxt/features/patient/surgery-history-api";
+import { useLazyGetDiseaseHistoryDropdownQuery } from "reduxt/features/patient/disease-history-api";
+import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 
-const AddPatientMedicineHistoryModal = () => {
+const AddPatientSurgeryHistoryModal = () => {
 
     const dispatch = useAppDispatch();
     const { data: { open, modalType, data, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
-    const [initialData, setInitialData] = useState<PatientMedicineHistoryCreateBodyModel>();
+    const [initialData, setInitialData] = useState<PatientSurgeryHistoryCreateBodyModel>();
 
     const handleClose = () => {
         dispatch(closeModal())
@@ -32,33 +33,36 @@ const AddPatientMedicineHistoryModal = () => {
 
     //const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
+    const [getDiseaseHistory, {
+        data: getDiseaseHistoryData,
+    }] = useLazyGetDiseaseHistoryDropdownQuery();
+
     const [getTreatmentMethod, {
         data: getTreatmentMethodData,
     }] = useLazyGetTreatmentMethodDropdownQuery();
 
-    const [createPatientMedicineHistory, { isLoading: createPatientMedicineHistoryIsLoading, data: createPatientMedicineHistoryResponse, error: createPatientMedicineHistoryError }] = useCreatePatientMedicineHistoryMutation();
+    const [createPatientSurgeryHistory, { isLoading: createPatientSurgeryHistoryIsLoading, data: createPatientSurgeryHistoryResponse, error: createPatientSurgeryHistoryError }] = useCreatePatientSurgeryHistoryMutation();
 
-    const [updatePatientMedicineHistory, { isLoading: updatePatientMedicineHistoryIsLoading, data: updatePatientMedicineHistoryResponse, error: updatePatientMedicineHistoryError }] = useUpdatePatientMedicineHistoryMutation();
+    const [updatePatientSurgeryHistory, { isLoading: updatePatientSurgeryHistoryIsLoading, data: updatePatientSurgeryHistoryResponse, error: updatePatientSurgeryHistoryError }] = useUpdatePatientSurgeryHistoryMutation();
 
     useEffect(() => {
-        if (open == true && modalType == ModalEnum.newPatientMedicineHistory) {
+        if (open == true && modalType == ModalEnum.newPatientSurgeryHistory) {
+            getDiseaseHistory({ patient_id: id });
             getTreatmentMethod();
         }
     }, [open, id])
 
     useEffect(() => {
         if (data != null) {
-            const model: PatientMedicineHistoryCreateBodyModel = {
-                patient_medicine_history_id: data.patient_medicine_history_id,
+            const model: PatientSurgeryHistoryCreateBodyModel = {
+                patient_surgery_history_id: data.patient_surgery_history_id,
                 patient_id: data.patient_id,
                 patient_disease_history_id: data.patient_disease_history_id,
                 appointment_id: data.appointment_id,
                 treatment_method_id: data.treatment_method_id,
                 name: data.name,
-                dosage: data.dosage,
-                usage_period: data.usage_period,
-                start_date: data.start_date,
-                end_date: data.end_date,
+                surgery_date: data.surgery_date,
+                complications: data.complications,
                 status: data.status
             }
             setInitialData(model);
@@ -66,20 +70,20 @@ const AddPatientMedicineHistoryModal = () => {
     }, [data])
 
     useEffect(() => {
-        if (createPatientMedicineHistoryResponse) {
-            enqueueSnackbar(createPatientMedicineHistoryResponse.message, {
-                variant: createPatientMedicineHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        if (createPatientSurgeryHistoryResponse) {
+            enqueueSnackbar(createPatientSurgeryHistoryResponse.message, {
+                variant: createPatientSurgeryHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
                     vertical: 'bottom',
                     horizontal: 'right'
                 }
             },)
-            if (createPatientMedicineHistoryResponse?.status == true) {
+            if (createPatientSurgeryHistoryResponse?.status == true) {
                 handleClose();
                 //getPatientMedicineHistoryList({ patient_id: id });
             }
         }
-        if (createPatientMedicineHistoryError) {
-            var error = createPatientMedicineHistoryError as any;
+        if (createPatientSurgeryHistoryError) {
+            var error = createPatientSurgeryHistoryError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -87,23 +91,23 @@ const AddPatientMedicineHistoryModal = () => {
                 }
             },)
         }
-    }, [createPatientMedicineHistoryResponse, createPatientMedicineHistoryError])
+    }, [createPatientSurgeryHistoryResponse, createPatientSurgeryHistoryError])
 
     useEffect(() => {
-        if (updatePatientMedicineHistoryResponse) {
-            enqueueSnackbar(updatePatientMedicineHistoryResponse.message, {
-                variant: updatePatientMedicineHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        if (updatePatientSurgeryHistoryResponse) {
+            enqueueSnackbar(updatePatientSurgeryHistoryResponse.message, {
+                variant: updatePatientSurgeryHistoryResponse?.status == true ? 'success' : 'error', anchorOrigin: {
                     vertical: 'bottom',
                     horizontal: 'right'
                 }
             },)
-            if (updatePatientMedicineHistoryResponse?.status == true) {
+            if (updatePatientSurgeryHistoryResponse?.status == true) {
                 handleClose();
                 //getPatientMedicineHistoryList({ patient_id: id });
             }
         }
-        if (updatePatientMedicineHistoryError) {
-            var error = updatePatientMedicineHistoryError as any;
+        if (updatePatientSurgeryHistoryError) {
+            var error = updatePatientSurgeryHistoryError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -111,32 +115,30 @@ const AddPatientMedicineHistoryModal = () => {
                 }
             },)
         }
-    }, [updatePatientMedicineHistoryResponse, updatePatientMedicineHistoryError])
+    }, [updatePatientSurgeryHistoryResponse, updatePatientSurgeryHistoryError])
 
     return (
         <>
-            <Dialog open={open && modalType == ModalEnum.newPatientMedicineHistory} onClose={handleClose}>
+            <Dialog open={open && modalType == ModalEnum.newPatientSurgeryHistory} onClose={handleClose}>
                 {<Formik
                     initialValues={initialData ?? {
-                        patient_medicine_history_id: null,
+                        patient_surgery_history_id: null,
                         patient_id: id,
                         patient_disease_history_id: null,
                         appointment_id: null,
                         treatment_method_id: null,
                         name: '',
-                        dosage: null,
-                        usage_period: null,
-                        start_date: null,
-                        end_date: null,
+                        surgery_date: null,
+                        complications: null,
                         status: true
                     }}
                     enableReinitialize
-                    validationSchema={newPatientMedicineHistorySchema}
+                    validationSchema={newPatientSurgeryHistorySchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.patient_medicine_history_id != null) {
-                            updatePatientMedicineHistory(values);
+                        if (values.patient_surgery_history_id != null) {
+                            updatePatientSurgeryHistory(values);
                         } else {
-                            createPatientMedicineHistory(values);
+                            createPatientSurgeryHistory(values);
                         }
                     }}
                 >
@@ -151,7 +153,7 @@ const AddPatientMedicineHistoryModal = () => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_medicine_history_id != null ? "updateMedicineHistory" : "addMedicineHistory" })}</Typography>
+                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_disease_history_id != null ? "updatePatientSurgeryHistory" : "addPatientSurgeryHistory" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -174,7 +176,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
-                                                inputProps={{maxLength: 100}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -183,47 +185,20 @@ const AddPatientMedicineHistoryModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="dosage">{intl.formatMessage({ id: "dosage" })}</InputLabel>
-                                            <OutlinedInput
-                                                id="dosage"
-                                                type="firstname"
-                                                value={values.dosage}
-                                                name="dosage"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "dosage" })}
-                                                fullWidth
-                                                error={Boolean(touched.dosage && errors.dosage)}
-                                                inputProps={{maxLength: 50}}
-                                            />
+                                            <InputLabel htmlFor="patient_disease_history">{intl.formatMessage({ id: "diseaseHistory" })}</InputLabel>
+                                            <Select id="patient_disease_history_id"
+                                                placeholder="Hastalık Geçmişi"
+                                                name="patient_disease_history_id"
+                                                value={values.patient_disease_history_id}
+                                                onChange={handleChange}>
+                                                {getDiseaseHistoryData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
+                                            </Select>
                                         </Stack>
-                                        {touched.dosage && errors.dosage && (
-                                            <FormHelperText error id="helper-text-firstname-signup">
-                                                {errors.dosage}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="usage_period">{intl.formatMessage({ id: "usagePeriod" })}</InputLabel>
-                                            <OutlinedInput
-                                                id="usage_period"
-                                                type="firstname"
-                                                value={values.usage_period}
-                                                name="usage_period" 
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "usagePeriod" })}
-                                                fullWidth
-                                                error={Boolean(touched.usage_period && errors.usage_period)}
-                                                inputProps={{maxLength: 50}}
-                                            />
-                                        </Stack>
-                                        {touched.usage_period && errors.usage_period && (
-                                            <FormHelperText error id="helper-text-firstname-signup">
-                                                {errors.usage_period}
+                                        {touched.patient_disease_history_id && errors.patient_disease_history_id && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.patient_disease_history_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>
@@ -233,13 +208,13 @@ const AddPatientMedicineHistoryModal = () => {
                                             <Autocomplete
                                                 fullWidth
                                                 disablePortal
-                                                value={getTreatmentMethodData?.data.find((item)=> item.value == values.treatment_method_id)}
-                                                onChange={(event,newValue)=>{
-                                                    setFieldValue("treatment_method_id",newValue?.value)
+                                                value={getTreatmentMethodData?.data.find((item) => item.value == values.treatment_method_id)}
+                                                onChange={(event, newValue) => {
+                                                    setFieldValue("treatment_method_id", newValue?.value)
                                                 }}
                                                 id="treatment_method_id"
                                                 options={getTreatmentMethodData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({id: "treatmentMethodName"})} />}
+                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "treatmentMethodName" })} />}
                                             />
                                         </Stack>
                                         {touched.treatment_method_id && errors.treatment_method_id && (
@@ -250,45 +225,46 @@ const AddPatientMedicineHistoryModal = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="start_date">{intl.formatMessage({ id: "startDate" })}</InputLabel>
+                                            <InputLabel htmlFor="surgery_date">{intl.formatMessage({ id: "surgeryDate" })}</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
-                                                error={Boolean(touched.start_date && errors.start_date)}
-                                                id="start_date"
+                                                error={Boolean(touched.surgery_date && errors.surgery_date)}
+                                                id="surgery_date"
                                                 type="date"
-                                                value={values.start_date}
-                                                name="start_date"
+                                                value={values.surgery_date}
+                                                name="surgery_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "startDate" })}
+                                                placeholder={intl.formatMessage({ id: "surgeryDate" })}
                                             //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
                                             />
                                         </Stack>
-                                        {touched.start_date && errors.start_date && (
+                                        {touched.surgery_date && errors.surgery_date && (
                                             <FormHelperText error id="helper-text-email-signup">
-                                                {errors.start_date}
+                                                {errors.surgery_date}
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} md={12}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="end_date">{intl.formatMessage({ id: "endDate" })}</InputLabel>
+                                            <InputLabel htmlFor="complications">{intl.formatMessage({ id: "complications" })}</InputLabel>
                                             <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.end_date && errors.end_date)}
-                                                id="end_date"
-                                                type="date"
-                                                value={values.end_date}
-                                                name="end_date"
+                                                id="complications"
+                                                type="firstname"
+                                                value={values.complications}
+                                                name="complications"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "endDate" })}
-                                            //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
+                                                placeholder={intl.formatMessage({ id: "complications" })}
+                                                fullWidth
+                                                rows={2}
+                                                error={Boolean(touched.complications && errors.complications)}
+                                                inputProps={{ maxLength: 500 }}
                                             />
                                         </Stack>
-                                        {touched.end_date && errors.end_date && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.end_date}
+                                        {touched.complications && errors.complications && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {errors.name}
                                             </FormHelperText>
                                         )}
                                     </Grid>
@@ -298,9 +274,9 @@ const AddPatientMedicineHistoryModal = () => {
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation disabled={isSubmitting || createPatientMedicineHistoryIsLoading || updatePatientMedicineHistoryIsLoading} type="submit" variant="contained" color="primary">
-                                            {(createPatientMedicineHistoryIsLoading || updatePatientMedicineHistoryIsLoading) && <PuffLoader size={20} color='white' />}
-                                            {(createPatientMedicineHistoryIsLoading == false || updatePatientMedicineHistoryIsLoading == false) && intl.formatMessage({ id: "save" })}
+                                        <Button disableElevation disabled={isSubmitting || createPatientSurgeryHistoryIsLoading || updatePatientSurgeryHistoryIsLoading} type="submit" variant="contained" color="primary">
+                                            {(createPatientSurgeryHistoryIsLoading || updatePatientSurgeryHistoryIsLoading) && <PuffLoader size={20} color='white' />}
+                                            {(createPatientSurgeryHistoryIsLoading == false || updatePatientSurgeryHistoryIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
                                     </AnimateButton>
                                 </DialogActions>
@@ -313,4 +289,4 @@ const AddPatientMedicineHistoryModal = () => {
     )
 }
 
-export default AddPatientMedicineHistoryModal
+export default AddPatientSurgeryHistoryModal
