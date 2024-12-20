@@ -26,15 +26,56 @@ export interface LoginResultModel {
 
 export interface LoginData {
   user: User
-  companies: any[]
+  person: Person
+  personAuthorizations: PersonAuthorization[]
+  currentAccount: CurrentAccount
   token: string
   refresh_token: string
 }
 
 export interface User {
-  id: number
+  user_id: number
   username: string
-  password: string
+  status: boolean
+}
+
+export interface Person {
+  person_id: number
+  name: string
+  surname: string
+  full_name: string
+  email: string
+  status: boolean
+}
+
+export interface PersonAuthorization {
+  module_id: number
+  code: string
+  name: string
+}
+
+export interface CurrentAccount {
+  current_account_id: number
+  name: string
+  description: any
+  phone_code: string
+  phone_number: string
+  tax_identification_number: any
+  mersis_number: any
+  sgk_number: any
+  package_id: number
+  package_name: string
+  membership_start_date: string
+  membership_end_date: string
+  country_id: number
+  country_name: string
+  city_id: number
+  city_name: string
+  district_id: number
+  district_name: string
+  zip_code: any
+  address: string
+  picture: any
   status: boolean
 }
 

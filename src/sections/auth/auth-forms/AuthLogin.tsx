@@ -55,6 +55,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
       if (loginResponse?.status == true) {
         setCookie("token", loginResponse.data.token)
         setCookie("refreshToken", loginResponse.data.refresh_token)
+        setCookie("person", loginResponse.data.person)
         setTimeout(() => {
           router.push("/app/home")
         }, 500)

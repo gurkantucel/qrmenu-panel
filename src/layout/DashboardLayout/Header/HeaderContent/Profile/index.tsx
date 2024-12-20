@@ -158,7 +158,7 @@ export default function ProfilePage() {
                           <Stack>
                             <Typography variant="subtitle1">{user ? user?.name : ''}</Typography>
                             <Typography variant="body2" color="secondary">
-                              UI/UX Designer
+                              {user ? user.role : '-'}
                             </Typography>
                           </Stack>
                         </Stack>

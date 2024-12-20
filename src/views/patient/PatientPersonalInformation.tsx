@@ -81,8 +81,12 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                 emergency_phone_number: readPatientData.data.emergency_phone_number,
                 status: readPatientData.data.status
             }
-            getCityList({ country_id: readPatientData.data.country_id });
-            getDistrictList({ city_id: readPatientData.data.city_id })
+            if (readPatientData.data.country_id != null) {
+                getCityList({ country_id: readPatientData.data.country_id });
+            }
+            if (readPatientData.data.city_id != null) {
+                getDistrictList({ city_id: readPatientData.data.city_id })
+            }
             setInitialData(model);
         }
     }, [readPatientData])
@@ -302,7 +306,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                             values.country_id ? { label: getCountryListData?.data?.find((item) => item.value == values.country_id)?.label ?? "", value: getCountryListData?.data?.find((item) => item.value == values.country_id)?.value ?? 0 } : null}
                                         onChange={(val: any) => {
                                             setFieldValue("country_id", val?.value ?? 0);
-                                            setFieldValue("city_id", 0);
+                                            setFieldValue("city_id", null);
                                             getCityList({ country_id: val?.value })
                                         }}
                                     />
@@ -412,12 +416,12 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                             </Grid>
                         </Grid>
                         <Grid container marginTop={2} justifyContent={"end"}>
-                        <AnimateButton>
-                            <Button disableElevation disabled={isSubmitting || updatePatientIsLoading} type="submit" variant="contained" color="primary">
-                                {(updatePatientIsLoading) && <PuffLoader size={20} color='white' />}
-                                {(updatePatientIsLoading == false) && intl.formatMessage({ id: "save" })}
-                            </Button>
-                        </AnimateButton>
+                            <AnimateButton>
+                                <Button disableElevation disabled={isSubmitting || updatePatientIsLoading} type="submit" variant="contained" color="primary">
+                                    {(updatePatientIsLoading) && <PuffLoader size={20} color='white' />}
+                                    {(updatePatientIsLoading == false) && intl.formatMessage({ id: "save" })}
+                                </Button>
+                            </AnimateButton>
                         </Grid>
                     </Box>
                 </Form>

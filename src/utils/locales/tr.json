@@ -77,5 +77,16 @@
     "appointmentDate" : "Randevu Tarihi",
     "surgeryHistory" : "Ameliyat Geçmişi",
     "addPatientSurgeryHistory" : "Ameliyat Geçmişi Ekle",
-    "updatePatientSurgeryHistory" : "Ameliyat Geçmişi Düzenle"
+    "updatePatientSurgeryHistory" : "Ameliyat Geçmişi Düzenle",
+    "addPatientTreatmentHistory" : "Tedavi Geçmişi Ekle",
+    "updatePatientTreatmentHistory" : "Tedavi Geçmişi Düzenle",
+    "treatmentHistory" : "Tedavi Geçmişi",
+    "treatmentDate" : "Tedavi Tarihi",
+    "injectionDate" : "Aşı Tarihi",
+    "injectionHistory" : "Aşı Geçmişi",
+    "injectionName" : "Aşı Adı",
+    "injectionType" : "Aşı Tipi",
+    "addPatientInjectionHistory" : "Aşı Geçmişi Ekle",
+    "updatePatientInjectionHistory" : "Aşı Geçmişi Düzenle",
+    "logout" : "Çıkış Yap"
 }

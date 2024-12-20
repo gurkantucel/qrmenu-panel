@@ -1,6 +1,3 @@
-// material-ui
-import Stack from '@mui/material/Stack';
-
 // third-party
 import { Column, RowData, Table } from '@tanstack/react-table';
 
@@ -8,53 +5,11 @@ import { Column, RowData, Table } from '@tanstack/react-table';
 import DebouncedInput from './DebouncedInput';
 
 // assets
-import { Minus } from 'iconsax-react';
 import { MenuItem, Select } from '@mui/material';
 import { useIntl } from 'react-intl';
 
-type NumberInputProps = {
-  columnFilterValue: [number, number];
-  getFacetedMinMaxValues: () => [number, number] | undefined;
-  setFilterValue: (updater: any) => void;
-};
 
 // ==============================|| FILTER - NUMBER FIELD ||============================== //
-
-function NumberInput({ columnFilterValue, getFacetedMinMaxValues, setFilterValue }: NumberInputProps) {
-  const minOpt = getFacetedMinMaxValues()?.[0];
-  const min = Number(minOpt ?? '');
-
-  const maxOpt = getFacetedMinMaxValues()?.[1];
-  const max = Number(maxOpt);
-
-  return (
-    <Stack direction="row" spacing={1} alignItems="center">
-      <DebouncedInput
-        type="number"
-        value={columnFilterValue?.[0] ?? ''}
-        onFilterChange={(value) => setFilterValue((old: [number, number]) => [value, old?.[1]])}
-        placeholder={`Min ${minOpt ? `(${min})` : ''}`}
-        fullWidth
-        inputProps={{ min: min, max: max }}
-        size="small"
-        startAdornment={false}
-      />
-      <>
-        <Minus size="32" color="#FF8A65" variant="Outline" />
-      </>
-      <DebouncedInput
-        type="number"
-        value={columnFilterValue?.[1] ?? ''}
-        onFilterChange={(value) => setFilterValue((old: [number, number]) => [old?.[0], value])}
-        placeholder={`Max ${maxOpt ? `(${max})` : ''}`}
-        fullWidth
-        inputProps={{ min: min, max: max }}
-        size="small"
-        startAdornment={false}
-      />
-    </Stack>
-  );
-}
 
 type TextInputProps = {
   columnId: string;
@@ -92,7 +47,7 @@ type Props<T extends RowData> = {
 
 export default function Filter<T extends RowData>({ column, table }: Props<T>) {
   const intl = useIntl()
-  const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
+  //const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
 
   const columnFilterValue = column.getFilterValue();
   const meta = column.columnDef?.meta?.filterVariant;
@@ -113,13 +68,7 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
     <MenuItem value="-">{intl.formatMessage({id: "all"})}</MenuItem>
     <MenuItem value="true">{intl.formatMessage({id: "active"})}</MenuItem>
     <MenuItem value="false">{intl.formatMessage({id: "passive"})}</MenuItem>
-  </Select> : typeof firstValue === 'number' ? (
-    <NumberInput
-      columnFilterValue={columnFilterValue as [number, number]}
-      getFacetedMinMaxValues={column.getFacetedMinMaxValues}
-      setFilterValue={column.setFilterValue}
-    />
-  ) : (
+  </Select> : (
     <TextInput
       columnId={column.id}
       columnFilterValue={columnFilterValue as string}

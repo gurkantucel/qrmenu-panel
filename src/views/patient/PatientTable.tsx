@@ -163,11 +163,11 @@ const PatientTable = () => {
     manualPagination: true,
     manualFiltering: false,
     onColumnFiltersChange: setColumnFilters,
-    columnResizeMode: "onChange"
   })
 
   useEffect(() => {
     if (getPatientListData != null) {
+      console.log("getPatientListData null değil")
       getPatientList({
         page: table.getState().pagination.pageIndex + 1,
         pageSize: table.getState().pagination.pageSize,
@@ -176,7 +176,9 @@ const PatientTable = () => {
   }, [pagination])
 
   useEffect(() => {
+    console.log(columnFilters);
     if (columnFilters.length > 0) {
+      console.log("columnFilter length > 0");
       var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
       getPatientList({ filterSearch: stringParams })
     } else {

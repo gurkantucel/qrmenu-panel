@@ -2,17 +2,26 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Book1, DocumentCode2, I24Support, MessageProgramming } from 'iconsax-react';
+import { Book1, Building, CalendarTick, DocumentCode2, DocumentDownload, HomeHashtag, I24Support, Information, MessageProgramming, Setting2, ShoppingBag, SmsTracking, UserTag } from 'iconsax-react';
 
 // types
 import { NavItemType } from 'types/menu';
 
 // icons
 const icons = {
+  home: HomeHashtag,
   page: Book1,
   maintenance: MessageProgramming,
   contactus: I24Support,
-  samplePage: DocumentCode2
+  samplePage: DocumentCode2,
+  patient: UserTag,
+  person: Building,
+  appointment: CalendarTick,
+  file: DocumentDownload,
+  payment: ShoppingBag,
+  sms: SmsTracking,
+  setting: Setting2,
+  faq: Information
 };
 
 // ==============================|| MENU ITEMS - PAGES ||============================== //
@@ -28,63 +37,63 @@ const pages: NavItemType = {
       title: <FormattedMessage id="home" />,
       type: 'item',
       url: '/sample-page',
-      icon: icons.samplePage
+      icon: icons.home
     },
     {
       id: 'appointments',
       title: <FormattedMessage id="appointments" />,
       type: 'item',
       url: '/app/appointments',
-      icon: icons.samplePage
+      icon: icons.appointment
     },
     {
       id: 'patients',
       title: <FormattedMessage id="patients" />,
       type: 'item',
       url: '/app/patient',
-      icon: icons.samplePage
+      icon: icons.patient
     },
     {
       id: 'person',
       title: <FormattedMessage id="person" />,
       type: 'item',
       url: '/app/person',
-      icon: icons.samplePage
+      icon: icons.person
     },
     {
       id: 'files',
       title: <FormattedMessage id="files" />,
       type: 'item',
       url: '/app/files',
-      icon: icons.samplePage
+      icon: icons.file
     },
     {
       id: 'payments',
       title: <FormattedMessage id="payments" />,
       type: 'item',
       url: '/app/payments',
-      icon: icons.samplePage
+      icon: icons.payment
     },
     {
       id: 'sms-transactions',
       title: <FormattedMessage id="sms-transactions" />,
       type: 'item',
       url: '/app/sms-transactions',
-      icon: icons.samplePage
+      icon: icons.sms
     },
     {
       id: 'settings',
       title: <FormattedMessage id="settings" />,
       type: 'item',
       url: '/app/settings',
-      icon: icons.samplePage
+      icon: icons.setting
     },
     {
       id: 'faq',
       title: <FormattedMessage id="faq" />,
       type: 'item',
       url: '/app/faq',
-      icon: icons.samplePage
+      icon: icons.faq
     }
   ]
 };

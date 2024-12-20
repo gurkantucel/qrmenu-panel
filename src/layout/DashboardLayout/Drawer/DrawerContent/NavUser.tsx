@@ -23,6 +23,7 @@ import { useGetMenuMaster } from 'api/menu';
 // assets
 import { ArrowRight2 } from 'iconsax-react';
 import { deleteCookie } from 'cookies-next';
+import { useIntl } from 'react-intl';
 
 const avatar1 = '/assets/images/users/avatar-6.png';
 
@@ -53,7 +54,7 @@ export default function UserList() {
   const theme = useTheme();
   const router = useRouter();
   const user = useUser();
-
+  const intl = useIntl()
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
@@ -102,7 +103,7 @@ export default function UserList() {
           <ListItemAvatar>
             <Avatar alt="Avatar" src={avatar1} sx={{ ...(drawerOpen && { width: 46, height: 46 }) }} />
           </ListItemAvatar>
-          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary="UI/UX Designer" />
+          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? user.role : '-'} />
         </ListItem>
       </List>
       <Menu
@@ -114,7 +115,7 @@ export default function UserList() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>{intl.formatMessage({id: "logout"})}</MenuItem>
         <MenuItem component={Link} href="#" onClick={handleClose}>
           Profile
         </MenuItem>
