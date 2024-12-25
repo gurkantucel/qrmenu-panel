@@ -1,21 +1,16 @@
 'use client';
 
 // next
-import Link from 'next/link';
 import Image from 'next/image';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-// project-imports
-import { APP_DEFAULT_PATH } from 'config';
 
 // assets
 const construction = '/assets/images/maintenance/img-cunstruct-1.svg';
@@ -47,14 +42,8 @@ export default function UnderConstructionPage() {
           <Grid item md={6}>
             <Stack spacing={2} justifyContent="center" alignItems="center">
               <Typography align="center" variant="h1">
-                Under Construction
-              </Typography>
-              <Typography color="text.secondary" align="center" sx={{ width: '85%' }}>
-                Hey! Please check out this site later. We are doing some maintenance on it right now.
-              </Typography>
-              <Button component={Link} href={APP_DEFAULT_PATH} variant="contained">
-                Back To Home
-              </Button>
+                Hazırlanıyoruz...
+              </Typography>              
             </Stack>
           </Grid>
           <Grid item md={6}>

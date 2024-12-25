@@ -17,16 +17,17 @@ type TextInputProps = {
   setFilterValue: (updater: any) => void;
   header?: string;
   searchText?: string
+  type?:string
 };
 
 // ==============================|| FILTER - TEXT FIELD ||============================== //
 
-function TextInput({ columnId, columnFilterValue, header, searchText, setFilterValue }: TextInputProps) {
+function TextInput({ columnId, columnFilterValue, header, searchText, setFilterValue, type }: TextInputProps) {
   const dataListId = columnId + 'list';
 
   return (
     <DebouncedInput
-      type="text"
+      type={type ?? "text"}
       fullWidth
       value={columnFilterValue ?? ''}
       onFilterChange={(value) => setFilterValue(value)}
@@ -65,15 +66,24 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
     onChange={(event) => {
       column.setFilterValue(event.target.value);
     }}>
-    <MenuItem value="-">{intl.formatMessage({id: "all"})}</MenuItem>
-    <MenuItem value="true">{intl.formatMessage({id: "active"})}</MenuItem>
-    <MenuItem value="false">{intl.formatMessage({id: "passive"})}</MenuItem>
-  </Select> : (
+    <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
+    <MenuItem value="true">{intl.formatMessage({ id: "active" })}</MenuItem>
+    <MenuItem value="false">{intl.formatMessage({ id: "passive" })}</MenuItem>
+  </Select> : meta == "date" ? (
+    <TextInput
+      type='date'
+      columnId={column.id}
+      columnFilterValue={columnFilterValue as string}
+      setFilterValue={column.setFilterValue}
+      searchText={intl.formatMessage({ id: "search" })}
+      header={column.columnDef.header as string}
+    />
+  ) : (
     <TextInput
       columnId={column.id}
       columnFilterValue={columnFilterValue as string}
       setFilterValue={column.setFilterValue}
-      searchText={intl.formatMessage({id: "search"})}
+      searchText={intl.formatMessage({ id: "search" })}
       header={column.columnDef.header as string}
     />
   );

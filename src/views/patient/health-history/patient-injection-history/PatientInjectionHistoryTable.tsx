@@ -63,6 +63,9 @@ const PatientInjectionHistoryTable = ({ params }: { params: { slug: string } }) 
             header: intl.formatMessage({ id: "injectionDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('complications', {
             header: intl.formatMessage({ id: "complications" }),
@@ -73,6 +76,9 @@ const PatientInjectionHistoryTable = ({ params }: { params: { slug: string } }) 
             header: intl.formatMessage({ id: "appointmentDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "actions" }),

@@ -45,6 +45,8 @@ export interface Person {
   surname: string
   full_name: string
   email: string
+  person_type_id: number
+  person_type_name: string
   status: boolean
 }
 

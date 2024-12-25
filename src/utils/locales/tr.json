@@ -88,5 +88,9 @@
     "injectionType" : "Aşı Tipi",
     "addPatientInjectionHistory" : "Aşı Geçmişi Ekle",
     "updatePatientInjectionHistory" : "Aşı Geçmişi Düzenle",
-    "logout" : "Çıkış Yap"
+    "logout" : "Çıkış Yap",
+    "bloodGroup" : "Kan Grubu",
+    "height" : "Boy",
+    "weight" : "Kilo",
+    "healthInformation" : "Sağlık Bilgileri"
 }

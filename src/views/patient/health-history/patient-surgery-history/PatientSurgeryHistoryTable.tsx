@@ -53,6 +53,9 @@ const PatientSurgeryHistoryTable = ({ params }: { params: { slug: string } }) =>
             header: intl.formatMessage({ id: "surgeryDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('complications', {
             header: intl.formatMessage({ id: "complications" }),
@@ -63,6 +66,9 @@ const PatientSurgeryHistoryTable = ({ params }: { params: { slug: string } }) =>
             header: intl.formatMessage({ id: "appointmentDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('treatment_method_name', {
             header: intl.formatMessage({ id: "treatment" }),

@@ -20,7 +20,7 @@ export default function useUser() {
       email: session.email,
       avatar: '/assets/images/users/avatar-1.png',
       thumb : '/assets/images/users/avatar-thumb-1.png',
-      role: 'Doktor'
+      role: session.person_type_name
     };
 
     return newUser;

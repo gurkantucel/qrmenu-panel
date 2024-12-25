@@ -1,5 +1,5 @@
 // next
-import { Roboto } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 
 // types
 import { DefaultConfigProps } from 'types/config';
@@ -15,7 +15,8 @@ export const HORIZONTAL_MAX_ITEM = 7;
 export const DRAWER_WIDTH = 280;
 export const MINI_DRAWER_WIDTH = 90;
 export const HEADER_HEIGHT = 74;
-const roboto = Roboto({
+
+const poppins = Poppins({
   subsets: ['latin'],
   fallback: ['sans-serif'],
   weight: ['300', '400', '500', '700'],
@@ -45,7 +46,7 @@ export enum NavActionType {
 // ==============================|| THEME CONFIG ||============================== //
 
 const config: DefaultConfigProps = {
-  fontFamily: roboto.style.fontFamily,
+  fontFamily: poppins.style.fontFamily,
   i18n: 'tr',
   menuOrientation: MenuOrientation.VERTICAL,
   menuCaption: true,

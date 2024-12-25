@@ -15,6 +15,8 @@ type Props = {
     isDisabled?: boolean
     zIndex?: number
     isMulti?: any
+    onMenuOpen?: (() => void) | undefined
+    onMenuClose?: (() => void) | undefined
 }
 
 const CustomFormikSelect = (props: Props) => {
@@ -31,6 +33,8 @@ const CustomFormikSelect = (props: Props) => {
                         isDisabled={props.isDisabled}
                         isClearable={props.isClearable}
                         noOptionsMessage={(label) => "Bulunamadı."}
+                        onMenuOpen={props.onMenuOpen}
+                        onMenuClose={props.onMenuClose}
                         styles={props.styles ?? {
                             container: (baseStyles: any) => ({
                                 ...baseStyles,

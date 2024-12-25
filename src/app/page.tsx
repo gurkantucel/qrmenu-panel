@@ -1,11 +1,10 @@
-// project-imports
-import GuestGuard from 'utils/route-guard/GuestGuard';
-import Login from 'views/authentication/Login';
+import React from 'react'
+import UnderConstructionPage from 'views/maintenance/UnderConstruction'
 
-export default function HomePage() {
+const Landing = () => {
   return (
-    <GuestGuard>
-      <Login />
-    </GuestGuard>
-  );
+    <UnderConstructionPage />
+  )
 }
+
+export default Landing

@@ -7,6 +7,7 @@ import { RootState } from 'reduxt/store';
 import { PatientTabEnum, setTab } from 'reduxt/features/definition/patientTabSlice';
 import PatientPersonalInformation from './PatientPersonalInformation';
 import { PatientHealthHistory } from './PatientHealthHistory';
+import HealthInformationView from './health-information/HealthInformationView';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -44,10 +45,13 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                     <Tab value={PatientTabEnum.randevular} label="Randevular" />
                 </Tabs>
                 <TabPanel value={selectTab} index={PatientTabEnum.kisisel_bilgiler}>
-                   <PatientPersonalInformation params={params} />
+                    <PatientPersonalInformation params={params} />
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.saglik_gecmisi}>
                     <PatientHealthHistory params={params} />
+                </TabPanel>
+                <TabPanel value={selectTab} index={PatientTabEnum.saglik_bilgileri}>
+                    <HealthInformationView params={params} />
                 </TabPanel>
             </Box>
         </MainCard>

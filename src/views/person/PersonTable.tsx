@@ -38,7 +38,7 @@ import CustomScaleLoader from 'components/CustomScaleLoader';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2'
+    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date'
   }
 }
 

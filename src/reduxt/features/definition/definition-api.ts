@@ -10,7 +10,7 @@ import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 const definitionApi = createApi({
     reducerPath: "definitionApi",
     tagTypes: ["definitions"],
-        baseQuery: baseQueryWithReauth,
+    baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getPackagesDropdown: builder.query<DropdownListModel, void>({
             query: () => `definition/packages/dropDown`,
@@ -136,6 +136,10 @@ const definitionApi = createApi({
             query: () => `definition/injection-type/dropDown`,
             providesTags: ["definitions"]
         }),
+        getBloodTypeDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/blood-type/dropDown`,
+            providesTags: ["definitions"]
+        }),
     })
 })
 
@@ -166,7 +170,8 @@ export const {
     useLazyGetDiseaseStatusDropdownQuery,
     useLazyGetTreatmentMethodDropdownQuery,
     useLazyGetKinshipDegreeDropdownQuery,
-    useLazyGetInjectionTypeDropdownQuery
+    useLazyGetInjectionTypeDropdownQuery,
+    useLazyGetBloodTypeDropdownQuery
 } = definitionApi
 
 export default definitionApi;

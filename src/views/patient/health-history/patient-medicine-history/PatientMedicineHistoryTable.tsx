@@ -73,11 +73,17 @@ const PatientMedicineHistoryTable = ({ params }: { params: { slug: string } }) =
             header: intl.formatMessage({ id: "startDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('end_date', {
             header: intl.formatMessage({ id: "endDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
             footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
         }),
         columnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "actions" }),

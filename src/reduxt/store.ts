@@ -11,6 +11,7 @@ import familyDiseaseHistoryApi from './features/patient/family-disease-history-a
 import surgeryHistoryApi from './features/patient/surgery-history-api'
 import treatmentHistoryApi from './features/patient/treatment-history-api'
 import injectionHistoryApi from './features/patient/injection-history-api'
+import healthInformationApi from './features/patient/health-information-api'
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +26,8 @@ export const store = configureStore({
     [familyDiseaseHistoryApi.reducerPath]: familyDiseaseHistoryApi.reducer,
     [surgeryHistoryApi.reducerPath] : surgeryHistoryApi.reducer,
     [treatmentHistoryApi.reducerPath] : treatmentHistoryApi.reducer,
-    [injectionHistoryApi.reducerPath] : injectionHistoryApi.reducer
+    [injectionHistoryApi.reducerPath] : injectionHistoryApi.reducer,
+    [healthInformationApi.reducerPath] : healthInformationApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -37,7 +39,8 @@ export const store = configureStore({
     familyDiseaseHistoryApi.middleware,
     surgeryHistoryApi.middleware,
     treatmentHistoryApi.middleware,
-    injectionHistoryApi.middleware
+    injectionHistoryApi.middleware,
+    healthInformationApi.middleware
   ]),
 })
 

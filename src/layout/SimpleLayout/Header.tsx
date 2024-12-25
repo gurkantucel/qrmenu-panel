@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, cloneElement, ReactElement, MouseEvent } from 'react';
+import { useState, cloneElement, ReactElement } from 'react';
 
 // next
 import Link from 'next/link';
@@ -10,22 +10,18 @@ import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Collapse from '@mui/material/Collapse';
 import Drawer from '@mui/material/Drawer';
 import Links from '@mui/material/Link';
 import List from '@mui/material/List';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
-import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
 
 // project-imports
@@ -36,7 +32,7 @@ import Logo from 'components/logo';
 import { ThemeDirection } from 'config';
 
 // assets
-import { ArrowDown2, ArrowUp2, DocumentDownload, ExportSquare, HambergerMenu, Minus } from 'iconsax-react';
+import { ArrowDown2, ArrowUp2, ExportSquare, HambergerMenu, Minus } from 'iconsax-react';
 const techBootstrap = '/assets/images/landing/tech-bootstrap.svg';
 const techReact = '/assets/images/landing/tech-react.svg';
 const techCodeigniter = '/assets/images/landing/tech-codeigniter.svg';
@@ -81,8 +77,6 @@ export default function Header() {
 
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerToggle, setDrawerToggle] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -94,9 +88,6 @@ export default function Header() {
     setDrawerToggle(open);
   };
 
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   let value: string = window.location.search;
   const params = new URLSearchParams(value);
@@ -217,32 +208,6 @@ export default function Header() {
     );
   });
 
-  const listItems = items.map((item, index) => {
-    const finalUrl = item.url !== '#!' && ispValueAvailable ? `${item.url}?isp=1` : item.url;
-
-    return (
-      <ListItemButton key={index} component="a" href={finalUrl} target={item.target}>
-        <Tooltip title={item.tooltipTitle} placement="bottom">
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <ListItemAvatar
-              sx={{
-                minWidth: 'auto',
-                marginRight: 1,
-                filter: item.tooltipTitle === 'Live Preview Not Available' ? 'grayscale(1)' : ''
-              }}
-            >
-              <CardMedia component="img" image={item.image} sx={{ width: '30px' }} />
-            </ListItemAvatar>
-            <ListItemText primary={item.label} />
-          </Box>
-        </Tooltip>
-      </ListItemButton>
-    );
-  });
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const linksSx = {
     textDecoration: 'none'
@@ -264,13 +229,6 @@ export default function Header() {
               <Box sx={{ display: 'inline-block' }}>
                 <Logo reverse to="/" />
               </Box>
-              <Chip
-                label={process.env.NEXT_APP_VERSION}
-                variant="outlined"
-                size="small"
-                color="secondary"
-                sx={{ mt: 0.5, ml: 1, fontSize: '0.725rem', height: 20, '& .MuiChip-label': { px: 0.5 } }}
-              />
             </Stack>
             <Stack
               direction="row"
@@ -290,10 +248,10 @@ export default function Header() {
                 target="_blank"
                 underline="none"
               >
-                Dashboard
+                Ana Sayfa
               </Links>
               <Links className="header-link" color="secondary.main" component={Link} href="/components-overview/buttons" underline="none">
-                Components
+                Hakkımızda
               </Links>
               <Links
                 className="header-link"
@@ -302,56 +260,25 @@ export default function Header() {
                 target="_blank"
                 underline="none"
               >
-                Documentation
+                Fiyatlar
               </Links>
               <Links
                 className="header-link"
                 color="secondary.main"
-                id="wallet-button"
-                href="#"
-                aria-controls={open ? 'wallet-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
+                href="https://phoenixcoded.gitbook.io/able-pro"
+                target="_blank"
                 underline="none"
-                sx={{ path: { strokeWidth: 2 }, svg: { marginBottom: '-3px' } }}
               >
-                Live Preview {open ? <ArrowUp2 size="16" /> : <ArrowDown2 size="16" />}
+                Tanıtım ve Özellikler
               </Links>
-              <Menu
-                id="wallet-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'wallet-button',
-                  sx: { p: 1.25, minWidth: 150 }
-                }}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right'
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right'
-                }}
-                sx={{ '.MuiModal-backdrop': { backgroundColor: 'unset' } }}
+              <Links
+                className="header-link"
+                color="secondary.main"
+                href="https://phoenixcoded.gitbook.io/able-pro"
+                target="_blank"
+                underline="none"
               >
-                {listItems}
-              </Menu>
-              <Links href="https://links.codedthemes.com/vYUWM" target="_blank" underline="none">
-                <IconButton
-                  size="large"
-                  shape="rounded"
-                  color="secondary"
-                  sx={{
-                    bgcolor: 'secondary.light',
-                    color: 'secondary.darker',
-                    '&:hover': { color: 'secondary.lighter', bgcolor: 'secondary.darker' }
-                  }}
-                >
-                  <DocumentDownload />
-                </IconButton>
+                Bize Ulaşın
               </Links>
               <Box sx={{ display: 'inline-block' }}>
                 <AnimateButton>
@@ -365,7 +292,7 @@ export default function Header() {
                     size="large"
                     variant="contained"
                   >
-                    Purchase Now
+                    {"Giriş Yap"}
                   </Button>
                 </AnimateButton>
               </Box>
@@ -404,7 +331,7 @@ export default function Header() {
                       </ListItemButton>
                     </Links>
                     <Links sx={linksSx} href="/components-overview/buttons" target="_blank">
-                      <ListItemButton>
+                      <ListItemButton>  
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
