@@ -45,7 +45,7 @@ const PatientSurgeryHistoryTable = ({ params }: { params: { slug: string } }) =>
 
     const columns = useMemo<ColumnDef<PatientSurgeryHistoryListData, any>[]>(() => [
         columnHelper.accessor('name', {
-            header: intl.formatMessage({ id: "treatmentName" }),
+            header: intl.formatMessage({ id: "surgeryName" }),
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),
@@ -59,24 +59,6 @@ const PatientSurgeryHistoryTable = ({ params }: { params: { slug: string } }) =>
         }),
         columnHelper.accessor('complications', {
             header: intl.formatMessage({ id: "complications" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-            footer: info => info.column.id,
-        }),
-        columnHelper.accessor('appointment_date', {
-            header: intl.formatMessage({ id: "appointmentDate" }),
-            cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
-            footer: info => info.column.id,
-            meta: {
-                filterVariant: 'date',
-            },
-        }),
-        columnHelper.accessor('treatment_method_name', {
-            header: intl.formatMessage({ id: "treatment" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-            footer: info => info.column.id,
-        }),
-        columnHelper.accessor('patient_disease_history_name', {
-            header: intl.formatMessage({ id: "diseaseName" }),
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),

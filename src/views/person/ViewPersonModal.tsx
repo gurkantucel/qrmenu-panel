@@ -66,6 +66,9 @@ const ViewPersonModal = () => {
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "authorities" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.person_authorizations.map((item)=> item.module_name).join(', ')}</Typography>} />
                 </ListItem>
                 <ListItem divider>
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "acceptingAppointment" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.accepting_appointment ? intl.formatMessage({ id: "yes" }) : intl.formatMessage({ id: "no" })}</Typography>} />
+                </ListItem>
+                <ListItem divider>
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "createdDate" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.created_at !=null ? dayjs(readPersonData?.data?.created_at ?? "").locale("tr").format("DD.MM.YYYY HH:mm") : "-"}</Typography>} />
                 </ListItem>
                 <ListItem divider>

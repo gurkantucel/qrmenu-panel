@@ -1,7 +1,7 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
-import { Add, CloseSquare } from "iconsax-react"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Tooltip, Typography } from "@mui/material"
+import { Add, CloseSquare, InfoCircle } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
@@ -10,7 +10,7 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
@@ -36,6 +36,11 @@ const AddPatientModal = () => {
 
     //const [getPatientList] = useLazyGetPatientListQuery();
 
+    const [getNationalityList, {
+        data: getNationalityListData,
+        isLoading: getNationalityListLoading
+    }] = useLazyGetNationalityDropdownQuery();
+
     const [getGenderList, {
         data: getGenderListData,
         isLoading: getGenderListLoading
@@ -55,6 +60,12 @@ const AddPatientModal = () => {
         isLoading: getDistrictListLoading
     }] = useLazyGetDistrictDropdownQuery();
 
+
+    const [getPatientReferenceList, {
+        data: getPatientReferenceListData,
+        isLoading: getPatientReferenceListLoading
+    }] = useLazyGetPatientReferenceDropdownQuery();
+
     const [createPatient, { isLoading: createPatientIsLoading, data: createPatientResponse, error: createPatientError }] = useCreatePatientMutation();
 
     const [updatePatient, { isLoading: updatePatientIsLoading, data: updatePatientResponse, error: updatePatientError }] = useUpdatePatientMutation();
@@ -67,8 +78,10 @@ const AddPatientModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatient) {
+            getNationalityList();
             getGenderList();
             getCountryList();
+            getPatientReferenceList();
             if (id != null) {
                 readPatient({ patient_id: id })
             }
@@ -80,6 +93,7 @@ const AddPatientModal = () => {
             const model: PatientCreateBodyModel = {
                 patient_id: readPatientData.data.patient_id,
                 gender_id: readPatientData.data.gender_id,
+                nationality_id: readPatientData.data.nationality_id,
                 name: readPatientData.data.name,
                 surname: readPatientData.data.surname,
                 identity_number: readPatientData.data.identity_number,
@@ -91,6 +105,7 @@ const AddPatientModal = () => {
                 city_id: readPatientData.data.city_id,
                 district_id: readPatientData.data.district_id,
                 address: readPatientData.data.address,
+                patient_reference_id: readPatientData.data.patient_reference_id,
                 emergency_full_name: readPatientData.data.emergency_full_name,
                 emergency_phone_code: readPatientData.data.emergency_phone_code,
                 emergency_phone_number: readPatientData.data.emergency_phone_number,
@@ -163,6 +178,7 @@ const AddPatientModal = () => {
                     initialValues={initialData ?? {
                         patient_id: undefined,
                         gender_id: null,
+                        nationality_id: null,
                         name: '',
                         surname: '',
                         identity_number: null,
@@ -174,6 +190,7 @@ const AddPatientModal = () => {
                         city_id: null,
                         district_id: null,
                         address: null,
+                        patient_reference_id: null,
                         emergency_full_name: null,
                         emergency_phone_code: '+90',
                         emergency_phone_number: null,
@@ -223,6 +240,7 @@ const AddPatientModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -244,7 +262,7 @@ const AddPatientModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "surname" })}
-                                                inputProps={{}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.surname && errors.surname && (
@@ -275,6 +293,28 @@ const AddPatientModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="nationality">{intl.formatMessage({ id: "nationality" })}</InputLabel>
+                                            <CustomFormikSelect
+                                                name='nationality_id'
+                                                placeholder="Uyruk Seçin"
+                                                isClearable={true}
+                                                isLoading={getNationalityListLoading}
+                                                zIndex={9999}
+                                                value={
+                                                    values.nationality_id ? { label: getNationalityListData?.data?.find((item) => item.value == values.nationality_id)?.label ?? "", value: getNationalityListData?.data?.find((item) => item.value == values.nationality_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("nationality_id", val?.value ?? 0);
+                                                }}
+
+                                                options={getNationalityListData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                            />
+                                        </Stack>
+                                    </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="lastname-signup">{intl.formatMessage({ id: "identityNumber" })}</InputLabel>
@@ -288,7 +328,7 @@ const AddPatientModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "identityNumber" })}
-                                                inputProps={{maxLength: 11}}
+                                                inputProps={{ maxLength: 11 }}
                                             />
                                         </Stack>
                                         {touched.identity_number && errors.identity_number && (
@@ -321,7 +361,7 @@ const AddPatientModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "email" })}
-                                                inputProps={{}}
+                                                inputProps={{ maxLength: 200 }}
                                             />
                                         </Stack>
                                         {touched.email && errors.email && (
@@ -343,7 +383,7 @@ const AddPatientModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "birthdate" })}
-                                                inputProps={{max: dayjs().format('YYYY-MM-DD')}}
+                                                inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
                                             />
                                         </Stack>
                                         {touched.birthdate && errors.birthdate && (
@@ -352,7 +392,7 @@ const AddPatientModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="company-signup">Ülke</InputLabel>
                                             <CustomFormikSelect
@@ -374,7 +414,7 @@ const AddPatientModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="company-signup">İl</InputLabel>
                                             <CustomFormikSelect
@@ -396,7 +436,7 @@ const AddPatientModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="company-signup">İlçe</InputLabel>
                                             <CustomFormikSelect
@@ -416,12 +456,10 @@ const AddPatientModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} sm={12}>
+                                    <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="personal-addrees1">Adres</InputLabel>
                                             <TextField
-                                                multiline
-                                                rows={1}
                                                 fullWidth
                                                 id="personal-addrees1"
                                                 value={values.address}
@@ -430,6 +468,7 @@ const AddPatientModal = () => {
                                                 onChange={handleChange}
                                                 placeholder="Adres"
                                                 error={Boolean(touched.address && errors.address)}
+                                                inputProps={{ maxLength: 500 }}
                                             />
                                         </Stack>
                                         {touched.address && errors.address && (
@@ -437,6 +476,29 @@ const AddPatientModal = () => {
                                                 {errors.address}
                                             </FormHelperText>
                                         )}
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="patient_reference_id">
+                                            <>Referans </>
+                                            <Tooltip title="Kliniği nereden duydun?"><InfoCircle size={14} /></Tooltip>
+                                            </InputLabel>
+                                            <CustomFormikSelect
+                                                name='patient_reference_id'
+                                                placeholder="Seçim yapınız..."
+                                                isLoading={getPatientReferenceListLoading}
+                                                zIndex={9993}
+                                                value={
+                                                    values.patient_reference_id ? { label: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("patient_reference_id", val?.value ?? 0);
+                                                }}
+                                                options={getPatientReferenceListData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                            />
+                                        </Stack>
                                     </Grid>
                                 </Grid>
                                 <Typography variant="h5" marginTop={"1.4rem"} marginBottom={"1.4rem"}>{intl.formatMessage({ id: "additionalNearbyContactInformation" })}</Typography>
@@ -454,6 +516,7 @@ const AddPatientModal = () => {
                                                 placeholder={intl.formatMessage({ id: "nameSurname" })}
                                                 fullWidth
                                                 error={Boolean(touched.emergency_full_name && errors.emergency_full_name)}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.emergency_full_name && errors.emergency_full_name && (

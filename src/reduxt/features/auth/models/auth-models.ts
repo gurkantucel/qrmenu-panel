@@ -1,6 +1,6 @@
 //REGISTER
 export interface RegisterBodyModel {
-  package_id: number
+  membership_package_id: number
   person_name: string
   person_surname: string
   person_phone_code: string

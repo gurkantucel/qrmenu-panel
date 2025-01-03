@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { PersonCreateBodyModel, PersonListModel, PersonReadResultModel } from './models/person-list-model';
 import { CreateResultModel } from 'utils/models/create-result-model';
+import { DropdownListModel } from 'utils/models/dropdown-list-model';
 
 
 const personApi = createApi({
@@ -37,7 +38,7 @@ const personApi = createApi({
             },
             invalidatesTags: ["person"]
         }),
-        deletePerson: builder.mutation<CreateResultModel, { person_id: number | string }>({
+        deletePerson: builder.mutation<CreateResultModel, { person_id: number | string }>({
             query: (args) => {
                 return {
                     url: `app/person/delete`,
@@ -47,10 +48,19 @@ const personApi = createApi({
             },
             invalidatesTags: ["person"]
         }),
-        readPerson: builder.query<PersonReadResultModel, { person_id?: number | string }>({
-            query: (args?: { person_id?: number | string }) => {
+        readPerson: builder.query<PersonReadResultModel, { person_id?: number | string }>({
+            query: (args?: { person_id?: number | string }) => {
                 return {
                     url: `app/person/read`,
+                    params: args
+                }
+            },
+            providesTags: ["person"]
+        }),
+        acceptingAppointmentDropDown: builder.query<DropdownListModel, { label?: string }>({
+            query: (args?: { label?: string }) => {
+                return {
+                    url: `app/person/acceptingAppointmentDropDown`,
                     params: args
                 }
             },
@@ -65,6 +75,7 @@ export const {
     useUpdatePersonMutation,
     useDeletePersonMutation,
     useLazyReadPersonQuery,
+    useLazyAcceptingAppointmentDropDownQuery
 } = personApi
 
 export default personApi;

@@ -8,3 +8,7 @@
 input[type='number']::-webkit-inner-spin-button {
   margin-left: 5px;
 }
+
+.css-lxfabf .fc-timegrid-event-harness-inset .fc-timegrid-event {
+  padding: 0px 4px !important;
+}

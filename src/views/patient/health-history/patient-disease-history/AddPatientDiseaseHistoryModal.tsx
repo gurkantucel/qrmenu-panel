@@ -143,7 +143,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: id != null ? "updateDiseaseHistory" : "addDiseaseHistory" })}</Typography>
+                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_disease_history_id != null ? "updateDiseaseHistory" : "addDiseaseHistory" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>

@@ -140,6 +140,26 @@ const definitionApi = createApi({
             query: () => `definition/blood-type/dropDown`,
             providesTags: ["definitions"]
         }),
+        getPatientReferenceDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/patient-reference/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getPatientProcessTypeDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/appointment-process-type/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getPaymentMethodDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/payment-method/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getAppointmentStatusDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/appointment-status/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getAppointmentProcessTypeDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/appointment-process-type/dropDown`,
+            providesTags: ["definitions"]
+        }),
     })
 })
 
@@ -171,7 +191,12 @@ export const {
     useLazyGetTreatmentMethodDropdownQuery,
     useLazyGetKinshipDegreeDropdownQuery,
     useLazyGetInjectionTypeDropdownQuery,
-    useLazyGetBloodTypeDropdownQuery
+    useLazyGetBloodTypeDropdownQuery,
+    useLazyGetPatientReferenceDropdownQuery,
+    useLazyGetPatientProcessTypeDropdownQuery,
+    useLazyGetPaymentMethodDropdownQuery,
+    useLazyGetAppointmentStatusDropdownQuery,
+    useLazyGetAppointmentProcessTypeDropdownQuery
 } = definitionApi
 
 export default definitionApi;

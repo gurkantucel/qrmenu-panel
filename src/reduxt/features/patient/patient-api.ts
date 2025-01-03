@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { PatientListResultModel, PatientCreateBodyModel, PatientReadResultModel } from './models/patient-list-model';
+import { DropdownListModel } from 'utils/models/dropdown-list-model';
 
 
 const patientApi = createApi({
@@ -37,7 +38,7 @@ const patientApi = createApi({
             },
             invalidatesTags: ["patient"]
         }),
-        deletePatient: builder.mutation<CreateResultModel, { patient_id: number | string }>({
+        deletePatient: builder.mutation<CreateResultModel, { patient_id: number | string }>({
             query: (args) => {
                 return {
                     url: `app/patient/delete`,
@@ -47,10 +48,19 @@ const patientApi = createApi({
             },
             invalidatesTags: ["patient"]
         }),
-        readPatient: builder.query<PatientReadResultModel, { patient_id?: number | string }>({
-            query: (args?: { patient_id?: number | string }) => {
+        readPatient: builder.query<PatientReadResultModel, { patient_id?: number | string }>({
+            query: (args?: { patient_id?: number | string }) => {
                 return {
                     url: `app/patient/read`,
+                    params: args
+                }
+            },
+            providesTags: ["patient"]
+        }),
+        getPatientDropdown: builder.query<DropdownListModel, { label?: string }>({
+            query: (args?: { label?: string }) => {
+                return {
+                    url: `app/patient/dropDown`,
                     params: args
                 }
             },
@@ -65,6 +75,7 @@ export const {
     useUpdatePatientMutation,
     useDeletePatientMutation,
     useLazyReadPatientQuery,
+    useLazyGetPatientDropdownQuery,
 } = patientApi
 
 export default patientApi;

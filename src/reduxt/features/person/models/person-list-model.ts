@@ -41,6 +41,7 @@ export interface PersonCreateBodyModel {
   email: string
   password: string
   authorizations: number[]
+  accepting_appointment: boolean
   status: boolean
 }
 
@@ -69,6 +70,7 @@ export interface PersonReadData {
   created_person: string
   updated_by: any
   updated_person: any
+  accepting_appointment: boolean
   status: boolean
 }
 

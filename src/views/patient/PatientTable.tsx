@@ -60,7 +60,7 @@ const PatientTable = () => {
     }),
     columnHelper.accessor('gender_name', {
       header: intl.formatMessage({ id: "gender" }),
-      cell: info => info.renderValue(),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
     columnHelper.accessor('phone_number', {
@@ -167,7 +167,6 @@ const PatientTable = () => {
 
   useEffect(() => {
     if (getPatientListData != null) {
-      console.log("getPatientListData null değil")
       getPatientList({
         page: table.getState().pagination.pageIndex + 1,
         pageSize: table.getState().pagination.pageSize,

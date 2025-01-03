@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -12,7 +12,6 @@ import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
-import { useLazyGetDiseaseHistoryDropdownQuery } from "reduxt/features/patient/disease-history-api";
 import { PatientTreatmentHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-treatment-history-model";
 import { useCreatePatientTreatmentHistoryMutation, useUpdatePatientTreatmentHistoryMutation } from "reduxt/features/patient/treatment-history-api";
 import { newPatientTreatmentHistorySchema } from "utils/schemas/patient-validation-schema";
@@ -32,17 +31,12 @@ const AddPatientTreatmentHistoryModal = () => {
 
     //const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
-    const [getDiseaseHistory, {
-        data: getDiseaseHistoryData,
-    }] = useLazyGetDiseaseHistoryDropdownQuery();
-
     const [createPatientTreatmentHistory, { isLoading: createPatientTreatmentHistoryIsLoading, data: createPatientTreatmentHistoryResponse, error: createPatientTreatmentHistoryError }] = useCreatePatientTreatmentHistoryMutation();
 
     const [updatePatientTreatmentHistory, { isLoading: updatePatientTreatmentHistoryIsLoading, data: updatePatientTreatmentHistoryResponse, error: updatePatientTreatmentHistoryError }] = useUpdatePatientTreatmentHistoryMutation();
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientTreatmentHistory) {
-            getDiseaseHistory({ patient_id: id });
         }
     }, [open, id])
 
@@ -51,8 +45,6 @@ const AddPatientTreatmentHistoryModal = () => {
             const model: PatientTreatmentHistoryCreateBodyModel = {
                 patient_treatment_history_id: data.patient_treatment_history_id,
                 patient_id: data.patient_id,
-                patient_disease_history_id: data.patient_disease_history_id,
-                appointment_id: data.appointment_id,
                 name: data.name,
                 treatment_date: data.treatment_date,
                 complications: data.complications,
@@ -174,23 +166,6 @@ const AddPatientTreatmentHistoryModal = () => {
                                         {touched.name && errors.name && (
                                             <FormHelperText error id="helper-text-firstname-signup">
                                                 {errors.name}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="patient_disease_history">{intl.formatMessage({ id: "diseaseHistory" })}</InputLabel>
-                                            <Select id="patient_disease_history_id"
-                                                placeholder={intl.formatMessage({ id: "diseaseHistory" })}
-                                                name="patient_disease_history_id"
-                                                value={values.patient_disease_history_id}
-                                                onChange={handleChange}>
-                                                {getDiseaseHistoryData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
-                                            </Select>
-                                        </Stack>
-                                        {touched.patient_disease_history_id && errors.patient_disease_history_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.patient_disease_history_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>

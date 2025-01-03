@@ -37,9 +37,7 @@ export interface PatientSurgeryHistoryListModel {
   export interface PatientSurgeryHistoryCreateBodyModel {
     patient_surgery_history_id?: number | null
     patient_id?: number | string
-    patient_disease_history_id: number | string | null
     appointment_id: number | string | null
-    treatment_method_id: number | string | null
     name: string
     surgery_date: string | null
     complications: string | null

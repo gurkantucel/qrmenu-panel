@@ -8,6 +8,8 @@ import { PatientTabEnum, setTab } from 'reduxt/features/definition/patientTabSli
 import PatientPersonalInformation from './PatientPersonalInformation';
 import { PatientHealthHistory } from './PatientHealthHistory';
 import HealthInformationView from './health-information/HealthInformationView';
+import PatientFileTable from './patient-file/PatientFileTable';
+import PatientPaymentHistoryTable from './payment-history/PatientPaymentHistoryTable';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -52,6 +54,12 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.saglik_bilgileri}>
                     <HealthInformationView params={params} />
+                </TabPanel>
+                <TabPanel value={selectTab} index={PatientTabEnum.dosyalar}>
+                    <PatientFileTable params={params} />
+                </TabPanel>
+                <TabPanel value={selectTab} index={PatientTabEnum.odemeler}>
+                    <PatientPaymentHistoryTable params={params} />
                 </TabPanel>
             </Box>
         </MainCard>

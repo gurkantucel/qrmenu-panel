@@ -6,12 +6,13 @@ type Props = {
     placeHolder?:string
     handleBlur: any
     handleChange: any
-    valuePhoneCode: string | null
-    valuePhoneNumber: string | null
+    valuePhoneCode?: string | null
+    valuePhoneNumber?: string | null
     touchedPhoneNumber?: boolean | undefined
     namePhoneCode?:string
     namePhoneNumber?:string
     errorPhoneNumber?: string | undefined
+    disabled?:boolean
 }
 
 const CustomFormikPhone = (props:Props) => {
@@ -25,6 +26,7 @@ const CustomFormikPhone = (props:Props) => {
                             style: { zIndex: 9999 }
                         }}
                         value={props.valuePhoneCode}
+                        disabled={props.disabled}
                         name={props.namePhoneCode ?? "phone_code"}
                         onBlur={props.handleBlur} onChange={props.handleChange}>
                         <MenuItem value="+90">+90</MenuItem>
@@ -47,6 +49,7 @@ const CustomFormikPhone = (props:Props) => {
                         error={Boolean(props.touchedPhoneNumber && props.errorPhoneNumber)}
                         value={props.valuePhoneNumber}
                         name={props.namePhoneNumber ?? "phone_number"}
+                        disabled={props.disabled}
                         onBlur={props.handleBlur}
                         onChange={props.handleChange}
                         placeholder={props.placeHolder}

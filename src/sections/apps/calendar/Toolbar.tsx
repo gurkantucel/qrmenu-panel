@@ -18,6 +18,8 @@ import IconButton from 'components/@extended/IconButton';
 
 // assets
 import { ArrowLeft2, ArrowRight2, Calendar1, Category, Grid6, TableDocument } from 'iconsax-react';
+import { tr } from 'date-fns/locale';
+import { useIntl } from 'react-intl';
 
 // constant
 const viewOptions = [
@@ -59,6 +61,8 @@ export default function Toolbar({ date, view, onClickNext, onClickPrev, onClickT
 
   const [viewFilter, setViewFilter] = useState(viewOptions);
 
+  const intl = useIntl()
+
   useEffect(() => {
     if (matchDownSM) {
       const filter = viewOptions.filter((item) => item.value !== 'dayGridMonth' && item.value !== 'timeGridWeek');
@@ -72,7 +76,7 @@ export default function Toolbar({ date, view, onClickNext, onClickPrev, onClickT
     <Grid alignItems="center" container justifyContent="space-between" spacing={matchDownSM ? 1 : 3} {...others} sx={{ pb: 3 }}>
       <Grid item>
         <Button variant="outlined" onClick={onClickToday} size={matchDownSM ? 'small' : 'medium'}>
-          Today
+          {intl.formatMessage({id: "today"})}
         </Button>
       </Grid>
       <Grid item>
@@ -81,7 +85,7 @@ export default function Toolbar({ date, view, onClickNext, onClickPrev, onClickT
             <ArrowLeft2 />
           </IconButton>
           <Typography variant={matchDownSM ? 'h5' : 'h3'} color="text.primary">
-            {format(date, 'MMMM yyyy')}
+            {format(date, 'MMMM yyyy',{locale: tr})}
           </Typography>
           <IconButton onClick={onClickNext} size={matchDownSM ? 'small' : 'large'}>
             <ArrowRight2 />

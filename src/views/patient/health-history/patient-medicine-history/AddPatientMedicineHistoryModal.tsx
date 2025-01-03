@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -10,7 +10,6 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { newPatientMedicineHistorySchema } from "utils/schemas/patient-validation-schema";
@@ -32,17 +31,13 @@ const AddPatientMedicineHistoryModal = () => {
 
     //const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
-    const [getTreatmentMethod, {
-        data: getTreatmentMethodData,
-    }] = useLazyGetTreatmentMethodDropdownQuery();
-
     const [createPatientMedicineHistory, { isLoading: createPatientMedicineHistoryIsLoading, data: createPatientMedicineHistoryResponse, error: createPatientMedicineHistoryError }] = useCreatePatientMedicineHistoryMutation();
 
     const [updatePatientMedicineHistory, { isLoading: updatePatientMedicineHistoryIsLoading, data: updatePatientMedicineHistoryResponse, error: updatePatientMedicineHistoryError }] = useUpdatePatientMedicineHistoryMutation();
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientMedicineHistory) {
-            getTreatmentMethod();
+            
         }
     }, [open, id])
 
@@ -53,7 +48,6 @@ const AddPatientMedicineHistoryModal = () => {
                 patient_id: data.patient_id,
                 patient_disease_history_id: data.patient_disease_history_id,
                 appointment_id: data.appointment_id,
-                treatment_method_id: data.treatment_method_id,
                 name: data.name,
                 dosage: data.dosage,
                 usage_period: data.usage_period,
@@ -122,7 +116,6 @@ const AddPatientMedicineHistoryModal = () => {
                         patient_id: id,
                         patient_disease_history_id: null,
                         appointment_id: null,
-                        treatment_method_id: null,
                         name: '',
                         dosage: null,
                         usage_period: null,
@@ -224,27 +217,6 @@ const AddPatientMedicineHistoryModal = () => {
                                         {touched.usage_period && errors.usage_period && (
                                             <FormHelperText error id="helper-text-firstname-signup">
                                                 {errors.usage_period}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="treatment_method_id">{intl.formatMessage({ id: "treatmentMethodName" })}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getTreatmentMethodData?.data.find((item)=> item.value == values.treatment_method_id)}
-                                                onChange={(event,newValue)=>{
-                                                    setFieldValue("treatment_method_id",newValue?.value)
-                                                }}
-                                                id="treatment_method_id"
-                                                options={getTreatmentMethodData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({id: "treatmentMethodName"})} />}
-                                            />
-                                        </Stack>
-                                        {touched.treatment_method_id && errors.treatment_method_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.treatment_method_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>

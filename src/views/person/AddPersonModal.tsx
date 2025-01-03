@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField, Typography } from "@mui/material"
 import { Add, Eye, EyeSlash } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
@@ -78,6 +78,7 @@ const AddPersonModal = () => {
                 email: readPersonData.data.email,
                 password: '',
                 authorizations: readPersonData.data.person_authorizations?.map((item) => item.module_id) ?? [],
+                accepting_appointment: readPersonData.data?.accepting_appointment,
                 status: true
             }
             setInitialData(model);
@@ -152,6 +153,7 @@ const AddPersonModal = () => {
                         email: '',
                         password: '',
                         authorizations: [0],
+                        accepting_appointment: true,
                         status: true
                     }}
                     enableReinitialize
@@ -182,6 +184,7 @@ const AddPersonModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -203,7 +206,7 @@ const AddPersonModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "surname" })}
-                                                inputProps={{}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.surname && errors.surname && (
@@ -244,7 +247,7 @@ const AddPersonModal = () => {
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
                                                     placeholder={intl.formatMessage({ id: "phone" })}
-                                                    inputProps={{maxLength: 10}}
+                                                    inputProps={{ maxLength: 10 }}
                                                 />
                                             </Stack>
                                         </Stack>
@@ -267,7 +270,7 @@ const AddPersonModal = () => {
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "email" })}
-                                                inputProps={{}}
+                                                inputProps={{ maxLength: 200 }}
                                             />
                                         </Stack>
                                         {touched.email && errors.email && (
@@ -301,6 +304,7 @@ const AddPersonModal = () => {
                                                         </IconButton>
                                                     </InputAdornment>
                                                 }
+                                                inputProps={{ maxLength: 20 }}
                                                 placeholder={intl.formatMessage({ id: "password" })}
                                             />
                                         </Stack>
@@ -331,13 +335,20 @@ const AddPersonModal = () => {
                                         </Stack>
                                     </Grid>
                                     <AuthorizationsInput />
+                                    <Grid item xs={12}>
+                                        <FormControlLabel control={<Switch 
+                                        checked={values.accepting_appointment}
+                                        value={values.accepting_appointment} onChange={(e,checked)=>{
+                                            setFieldValue("accepting_appointment",checked);
+                                        }} />} label={intl.formatMessage({ id: "acceptingAppointment" })} />
+                                    </Grid>
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>
                                     <Button color="info" onClick={handleClose}>
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation disabled={isSubmitting || createPersonIsLoading || updatePersonIsLoading} type="submit" variant="contained" color="primary">
+                                        <Button disableElevation disabled={isSubmitting || createPersonIsLoading || updatePersonIsLoading} type="submit" variant="contained" color="primary">
                                             {(createPersonIsLoading || updatePersonIsLoading) && <PuffLoader size={20} color='white' />}
                                             {(createPersonIsLoading == false || updatePersonIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
@@ -355,7 +366,7 @@ const AddPersonModal = () => {
 export default AddPersonModal
 
 const AuthorizationsInput = () => {
-    const { data: { open, modalType,id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
     const { values, setFieldValue } = useFormikContext<any>();
 
     const [getModule, { data: getModuleData, isLoading: getModuleLoading }] = useLazyGetModuleDropdownQuery();
@@ -368,7 +379,7 @@ const AuthorizationsInput = () => {
 
     useEffect(() => {
         if (getModuleData?.status && getModuleData.data != null && getModuleData.data.length > 0) {
-            if(id == null){
+            if (id == null) {
                 setFieldValue("authorizations", getModuleData.data.map((item) => item.value));
             }
         }

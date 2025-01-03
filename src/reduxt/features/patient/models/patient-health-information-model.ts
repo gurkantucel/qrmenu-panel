@@ -15,6 +15,8 @@ export interface PatientHealthInformationData {
     blood_type_name: string
     height: string
     weight: string
+    smoke: boolean | null
+    alcohol: boolean | null
     created_at: string
     updated_at: string
     deleted_at: any
@@ -31,6 +33,8 @@ export interface PatientHealtInformationUpdateBodyModel {
     blood_type_id: number | string | null
     height: number | string | null
     weight: number | string | null
+    smoke: boolean | null
+    alcohol: boolean | null
     status: boolean
   }
   

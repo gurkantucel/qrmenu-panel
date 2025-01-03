@@ -43,7 +43,7 @@ const pages: NavItemType = {
       id: 'appointments',
       title: <FormattedMessage id="appointments" />,
       type: 'item',
-      url: '/app/appointments',
+      url: '/app/appointment',
       icon: icons.appointment
     },
     {
@@ -84,9 +84,16 @@ const pages: NavItemType = {
     {
       id: 'settings',
       title: <FormattedMessage id="settings" />,
-      type: 'item',
-      url: '/app/settings',
-      icon: icons.setting
+      type: 'collapse',
+      icon: icons.setting,
+      children: [
+        {
+          id: 'appointment-process',
+          title: <FormattedMessage id="appointmentProcesses" />,
+          type: 'item',
+          url: '/app/settings/appointment-process',
+        }
+      ]
     },
     {
       id: 'faq',

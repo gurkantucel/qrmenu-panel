@@ -21,7 +21,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
 
     const [initialData, setInitialData] = useState<PatientHealtInformationUpdateBodyModel>();
 
-    const [boxHeight, setBoxHeight] = useState(350);
+    const [boxHeight, setBoxHeight] = useState(450);
 
     const [getPatientHealthInformation, {
         data: getPatientHealthInformationData,
@@ -48,6 +48,8 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                 patient_health_information_id: getPatientHealthInformationData?.data.person_health_information_id,
                 patient_id: getPatientHealthInformationData?.data.patient_id,
                 blood_type_id: getPatientHealthInformationData?.data.blood_type_id,
+                smoke: getPatientHealthInformationData?.data.smoke,
+                alcohol: getPatientHealthInformationData?.data.alcohol,
                 height: parseFloat(getPatientHealthInformationData?.data?.height),
                 weight: parseFloat(getPatientHealthInformationData?.data?.weight),
                 status: getPatientHealthInformationData?.data.status,
@@ -90,6 +92,8 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                     blood_type_id: null,
                     height: null,
                     weight: null,
+                    smoke: null,
+                    alcohol: null,
                     status: true
                 }}
                 enableReinitialize
@@ -108,11 +112,11 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                                         placeholder="Seçim yapınız..."
                                         isLoading={getBloodTypeListIsLoading}
                                         zIndex={9999}
-                                        onMenuOpen={()=>{
+                                        onMenuOpen={() => {
                                             setBoxHeight(520)
                                         }}
-                                        onMenuClose={()=>{
-                                            setBoxHeight(350)
+                                        onMenuClose={() => {
+                                            setBoxHeight(450)
                                         }}
                                         options={getBloodTypeListData?.data?.map((item) => ({
                                             value: item.value,
@@ -172,6 +176,61 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                                 {touched.weight && errors.weight && (
                                     <FormHelperText error id="helper-text-weight">
                                         {errors.weight}
+                                    </FormHelperText>
+                                )}
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="smoke">{intl.formatMessage({ id: "useSmoke" })}</InputLabel>
+                                    <CustomFormikSelect
+                                        name='smoke'
+                                        placeholder="Seçim yapınız..."
+                                        zIndex={9998}
+                                        onMenuOpen={() => {
+                                            setBoxHeight(520)
+                                        }}
+                                        onMenuClose={() => {
+                                            setBoxHeight(450)
+                                        }}
+                                        options={[{ label: "Evet", value: true }, { label: "Hayır", value: false }]}
+                                        value={
+                                            values.smoke !=null ? { label: values.smoke === true ? "Evet" : "Hayır", value: values.smoke } : null}
+                                        onChange={(val: any) => {
+                                            setFieldValue("smoke", val?.value ?? 0);
+                                        }}
+                                    />
+                                </Stack>
+                                {touched.smoke && errors.smoke && (
+                                    <FormHelperText error id="helper-text-blood_type_id">
+                                        {errors.smoke}
+                                    </FormHelperText>
+                                )}
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="alcohol">{intl.formatMessage({ id: "useAlcohol" })}</InputLabel>
+                                    <CustomFormikSelect
+                                        name='alcohol'
+                                        placeholder="Seçim yapınız..."
+                                        zIndex={9997}
+                                        onMenuOpen={() => {
+                                            setBoxHeight(520)
+                                        }}
+                                        onMenuClose={() => {
+                                            setBoxHeight(450)
+                                        }}
+                                        options={[{ label: "Evet", value: true }, { label: "Hayır", value: false }]}
+                                        value={
+                                            values.alcohol !=null ? { label: values.alcohol === true ? "Evet" : "Hayır", value: values.alcohol } : null}
+                                        onChange={(val: any) => {
+                                            console.log(val);
+                                            setFieldValue("alcohol", val?.value);
+                                        }}
+                                    />
+                                </Stack>
+                                {touched.alcohol && errors.alcohol && (
+                                    <FormHelperText error id="helper-text-blood_type_id">
+                                        {errors.alcohol}
                                     </FormHelperText>
                                 )}
                             </Grid>

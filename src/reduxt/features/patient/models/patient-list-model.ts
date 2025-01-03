@@ -47,6 +47,7 @@ export interface PatientListData {
 export interface PatientCreateBodyModel {
   patient_id?: number | null
   gender_id?: number | null
+  nationality_id?: number | null
   name: string
   surname: string
   identity_number: string | null
@@ -58,6 +59,7 @@ export interface PatientCreateBodyModel {
   city_id: number | null
   district_id: number | null
   address: string | null
+  patient_reference_id: number | null
   emergency_full_name: string | null
   emergency_phone_code: string | null
   emergency_phone_number: string | null
@@ -75,6 +77,7 @@ export interface PatientReadResultModel {
 export interface PatientReadData {
   patient_id: number
   gender_id: number
+  nationality_id: number
   gender_name: string
   name: string
   surname: string
@@ -90,6 +93,7 @@ export interface PatientReadData {
   district_id: number
   district_name: string
   address: string
+  patient_reference_id: number
   emergency_full_name: any
   emergency_phone_code: any
   emergency_phone_number: any

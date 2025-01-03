@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -15,8 +15,6 @@ import { enqueueSnackbar } from "notistack";
 import { newPatientSurgeryHistorySchema } from "utils/schemas/patient-validation-schema";
 import { PatientSurgeryHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-surgery-history-model";
 import { useCreatePatientSurgeryHistoryMutation, useUpdatePatientSurgeryHistoryMutation } from "reduxt/features/patient/surgery-history-api";
-import { useLazyGetDiseaseHistoryDropdownQuery } from "reduxt/features/patient/disease-history-api";
-import { useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 
 const AddPatientSurgeryHistoryModal = () => {
 
@@ -33,22 +31,12 @@ const AddPatientSurgeryHistoryModal = () => {
 
     //const [getPatientMedicineHistoryList] = useLazyGetPatientMedicineHistoryListQuery();
 
-    const [getDiseaseHistory, {
-        data: getDiseaseHistoryData,
-    }] = useLazyGetDiseaseHistoryDropdownQuery();
-
-    const [getTreatmentMethod, {
-        data: getTreatmentMethodData,
-    }] = useLazyGetTreatmentMethodDropdownQuery();
-
     const [createPatientSurgeryHistory, { isLoading: createPatientSurgeryHistoryIsLoading, data: createPatientSurgeryHistoryResponse, error: createPatientSurgeryHistoryError }] = useCreatePatientSurgeryHistoryMutation();
 
     const [updatePatientSurgeryHistory, { isLoading: updatePatientSurgeryHistoryIsLoading, data: updatePatientSurgeryHistoryResponse, error: updatePatientSurgeryHistoryError }] = useUpdatePatientSurgeryHistoryMutation();
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientSurgeryHistory) {
-            getDiseaseHistory({ patient_id: id });
-            getTreatmentMethod();
         }
     }, [open, id])
 
@@ -57,9 +45,7 @@ const AddPatientSurgeryHistoryModal = () => {
             const model: PatientSurgeryHistoryCreateBodyModel = {
                 patient_surgery_history_id: data.patient_surgery_history_id,
                 patient_id: data.patient_id,
-                patient_disease_history_id: data.patient_disease_history_id,
                 appointment_id: data.appointment_id,
-                treatment_method_id: data.treatment_method_id,
                 name: data.name,
                 surgery_date: data.surgery_date,
                 complications: data.complications,
@@ -124,9 +110,7 @@ const AddPatientSurgeryHistoryModal = () => {
                     initialValues={initialData ?? {
                         patient_surgery_history_id: null,
                         patient_id: id,
-                        patient_disease_history_id: null,
                         appointment_id: null,
-                        treatment_method_id: null,
                         name: '',
                         surgery_date: null,
                         complications: null,
@@ -153,7 +137,7 @@ const AddPatientSurgeryHistoryModal = () => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_disease_history_id != null ? "updatePatientSurgeryHistory" : "addPatientSurgeryHistory" })}</Typography>
+                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: data?.patient_surgery_history_id != null ? "updatePatientSurgeryHistory" : "addPatientSurgeryHistory" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -182,44 +166,6 @@ const AddPatientSurgeryHistoryModal = () => {
                                         {touched.name && errors.name && (
                                             <FormHelperText error id="helper-text-firstname-signup">
                                                 {errors.name}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="patient_disease_history">{intl.formatMessage({ id: "diseaseHistory" })}</InputLabel>
-                                            <Select id="patient_disease_history_id"
-                                                placeholder="Hastalık Geçmişi"
-                                                name="patient_disease_history_id"
-                                                value={values.patient_disease_history_id}
-                                                onChange={handleChange}>
-                                                {getDiseaseHistoryData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
-                                            </Select>
-                                        </Stack>
-                                        {touched.patient_disease_history_id && errors.patient_disease_history_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.patient_disease_history_id}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="treatment_method_id">{intl.formatMessage({ id: "treatmentMethodName" })}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getTreatmentMethodData?.data.find((item) => item.value == values.treatment_method_id)}
-                                                onChange={(event, newValue) => {
-                                                    setFieldValue("treatment_method_id", newValue?.value)
-                                                }}
-                                                id="treatment_method_id"
-                                                options={getTreatmentMethodData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "treatmentMethodName" })} />}
-                                            />
-                                        </Stack>
-                                        {touched.treatment_method_id && errors.treatment_method_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.treatment_method_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>

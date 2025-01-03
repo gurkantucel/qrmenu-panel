@@ -76,7 +76,7 @@ export default function AuthRegister() {
     <>
       <Formik
         initialValues={{
-          package_id: 1,
+          membership_package_id: 1,
           person_name: '',
           person_surname: '',
           person_phone_code: '+90',
@@ -96,7 +96,7 @@ export default function AuthRegister() {
         validationSchema={registerValidationSchema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           const model = {
-            package_id: values.package_id,
+            membership_package_id: values.membership_package_id,
             person_name: values.person_name,
             person_surname: values.person_surname,
             person_phone_code: values.person_phone_code,
@@ -120,7 +120,7 @@ export default function AuthRegister() {
                 <Stack spacing={1}>
                   <InputLabel htmlFor="company-signup">Paket</InputLabel>
                   <CustomFormikSelect
-                    name='package_id'
+                    name='membership_package_id'
                     placeholder="Seçim yapınız..."
                     isLoading={getPackagesLoading}
                     zIndex={9995}
@@ -129,9 +129,9 @@ export default function AuthRegister() {
                       label: item.label
                     }))}
                     value={
-                      values.package_id ? { label: getPackagesList?.data?.find((item) => item.value == values.package_id)?.label ?? "", value: getPackagesList?.data?.find((item) => item.value == values.package_id)?.value ?? 0 } : null}
+                      values.membership_package_id ? { label: getPackagesList?.data?.find((item) => item.value == values.membership_package_id)?.label ?? "", value: getPackagesList?.data?.find((item) => item.value == values.membership_package_id)?.value ?? 0 } : null}
                     onChange={(val: any) => {
-                      setFieldValue("package_id", val?.value ?? 0);
+                      setFieldValue("membership_package_id", val?.value ?? 0);
                     }}
                   />
                 </Stack>
@@ -154,6 +154,7 @@ export default function AuthRegister() {
                     placeholder="Yetkili Adı"
                     fullWidth
                     error={Boolean(touched.person_name && errors.person_name)}
+                    inputProps={{ maxLength: 50 }}
                   />
                 </Stack>
                 {touched.person_name && errors.person_name && (
@@ -175,7 +176,7 @@ export default function AuthRegister() {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="Yetkili Soyadı"
-                    inputProps={{}}
+                    inputProps={{ maxLength: 50 }}
                   />
                 </Stack>
                 {touched.person_surname && errors.person_surname && (
@@ -238,7 +239,7 @@ export default function AuthRegister() {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="Yetkili E-posta"
-                    inputProps={{}}
+                    inputProps={{ maxLength: 200 }}
                   />
                 </Stack>
                 {touched.person_email && errors.person_email && (
@@ -371,6 +372,7 @@ export default function AuthRegister() {
                     onChange={handleChange}
                     placeholder="Adres"
                     error={Boolean(touched.address && errors.address)}
+                    inputProps={{ maxLength: 500 }}
                   />
                 </Stack>
                 {touched.address && errors.address && (

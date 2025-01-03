@@ -60,7 +60,7 @@ const CustomFormikSelect = (props: Props) => {
                         value={props.value}
                     />
                     {(props.isErrorText ?? true) && meta.touched &&
-                        meta.error &&  <FormHelperText error id={`helper-text-${name}`}>
+                        meta.error &&  <FormHelperText error id={`helper-text-${props.name}`}>
                         {meta.error}
                       </FormHelperText>}
                 </>

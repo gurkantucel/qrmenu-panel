@@ -73,4 +73,12 @@ const newPatientInjectionHistorySchema = Yup.object({
         .required("Bu alan zorunlu"),
 })
 
-export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema,newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema}
+const newPatientPaymentHistorySchema = Yup.object({
+    patient_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    payment_kind_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    payment_method_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    currency_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    amount: Yup.number().required("Bu alan zorunlu"),
+})
+
+export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema }

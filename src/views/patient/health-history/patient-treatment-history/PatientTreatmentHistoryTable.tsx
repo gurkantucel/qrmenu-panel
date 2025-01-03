@@ -62,19 +62,6 @@ const PatientTreatmentHistoryTable = ({ params }: { params: { slug: string } }) 
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),
-        columnHelper.accessor('appointment_date', {
-            header: intl.formatMessage({ id: "appointmentDate" }),
-            cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
-            footer: info => info.column.id,
-            meta: {
-                filterVariant: 'date',
-            },
-        }),
-        columnHelper.accessor('patient_disease_history_name', {
-            header: intl.formatMessage({ id: "diseaseName" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-            footer: info => info.column.id,
-        }),
         columnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "actions" }),
             size: 10,

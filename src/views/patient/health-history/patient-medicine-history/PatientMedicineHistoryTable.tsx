@@ -59,16 +59,6 @@ const PatientMedicineHistoryTable = ({ params }: { params: { slug: string } }) =
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),
-        columnHelper.accessor('appointment_id', {
-            header: intl.formatMessage({ id: "appointment" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-            footer: info => info.column.id,
-        }),
-        columnHelper.accessor('treatment_method_name', {
-            header: intl.formatMessage({ id: "treatment" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-            footer: info => info.column.id,
-        }),
         columnHelper.accessor('start_date', {
             header: intl.formatMessage({ id: "startDate" }),
             cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),

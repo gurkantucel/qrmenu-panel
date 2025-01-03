@@ -35,8 +35,6 @@ export interface PatientTreatmentHistoryListData {
 export interface PatientTreatmentHistoryCreateBodyModel {
     patient_treatment_history_id?: number | null
     patient_id?: number | string
-    patient_disease_history_id: number| null
-    appointment_id: number | null
     name: string
     treatment_date: string | null
     complications: string | null

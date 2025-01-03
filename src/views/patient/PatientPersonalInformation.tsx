@@ -4,18 +4,19 @@ import { Form, Formik } from 'formik';
 import { useLazyReadPatientQuery, useUpdatePatientMutation } from 'reduxt/features/patient/patient-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { newPatientValidationSchema } from 'utils/schemas/patient-validation-schema';
-import { Box, Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Tooltip, Typography } from "@mui/material"
 import { useIntl } from 'react-intl';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import CustomFormikPhone from 'components/third-party/formik/custom-formik-phone';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { PuffLoader } from 'react-spinners';
-import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from 'reduxt/features/definition/definition-api';
 import { useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { PatientTabEnum } from 'reduxt/features/definition/patientTabSlice';
 import { PatientCreateBodyModel } from 'reduxt/features/patient/models/patient-list-model';
 import dayjs from 'dayjs';
+import { InfoCircle } from 'iconsax-react';
 
 const PatientPersonalInformation = ({ params }: { params: { slug: string } }) => {
 
@@ -23,6 +24,11 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
     const { data: { selectTab } } = useAppSelector((state: RootState) => state.patientTab);
 
     const [initialData, setInitialData] = useState<PatientCreateBodyModel>();
+
+    const [getNationalityList, {
+        data: getNationalityListData,
+        isLoading: getNationalityListLoading
+    }] = useLazyGetNationalityDropdownQuery();
 
     const [getGenderList, {
         data: getGenderListData,
@@ -43,6 +49,11 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
         isLoading: getDistrictListLoading
     }] = useLazyGetDistrictDropdownQuery();
 
+    const [getPatientReferenceList, {
+        data: getPatientReferenceListData,
+        isLoading: getPatientReferenceListLoading
+    }] = useLazyGetPatientReferenceDropdownQuery();
+
     const [readPatient, {
         data: readPatientData,
         isLoading: readPatientLoading,
@@ -54,8 +65,10 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
     useEffect(() => {
         if (selectTab == PatientTabEnum.kisisel_bilgiler && params.slug) {
             var patientId = params.slug
+            getNationalityList();
             getGenderList();
             getCountryList();
+            getPatientReferenceList();
             readPatient({ patient_id: patientId })
         }
     }, [params.slug])
@@ -65,6 +78,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
             const model: PatientCreateBodyModel = {
                 patient_id: readPatientData.data.patient_id,
                 gender_id: readPatientData.data.gender_id,
+                nationality_id: readPatientData.data.nationality_id,
                 name: readPatientData.data.name,
                 surname: readPatientData.data.surname,
                 identity_number: readPatientData.data.identity_number,
@@ -76,6 +90,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                 city_id: readPatientData.data.city_id,
                 district_id: readPatientData.data.district_id,
                 address: readPatientData.data.address,
+                patient_reference_id: readPatientData.data.patient_reference_id,
                 emergency_full_name: readPatientData.data.emergency_full_name,
                 emergency_phone_code: readPatientData.data.emergency_phone_code,
                 emergency_phone_number: readPatientData.data.emergency_phone_number,
@@ -119,6 +134,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
             initialValues={initialData ?? {
                 patient_id: undefined,
                 gender_id: null,
+                nationality_id: null,
                 name: '',
                 surname: '',
                 identity_number: null,
@@ -130,6 +146,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                 city_id: null,
                 district_id: null,
                 address: null,
+                patient_reference_id: null,
                 emergency_full_name: null,
                 emergency_phone_code: '+90',
                 emergency_phone_number: null,
@@ -213,6 +230,28 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                     />
                                 </Stack>
                             </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="nationality">{intl.formatMessage({ id: "nationality" })}</InputLabel>
+                                    <CustomFormikSelect
+                                        name='nationality_id'
+                                        placeholder="Uyruk Seçin"
+                                        isClearable={true}
+                                        isLoading={getNationalityListLoading}
+                                        zIndex={9999}
+                                        value={
+                                            values.nationality_id ? { label: getNationalityListData?.data?.find((item) => item.value == values.nationality_id)?.label ?? "", value: getNationalityListData?.data?.find((item) => item.value == values.nationality_id)?.value ?? 0 } : null}
+                                        onChange={(val: any) => {
+                                            setFieldValue("nationality_id", val?.value ?? 0);
+                                        }}
+
+                                        options={getNationalityListData?.data?.map((item) => ({
+                                            value: item.value,
+                                            label: item.label
+                                        }))}
+                                    />
+                                </Stack>
+                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="lastname-signup">{intl.formatMessage({ id: "identityNumber" })}</InputLabel>
@@ -290,7 +329,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                     </FormHelperText>
                                 )}
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={4}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="company-signup">Ülke</InputLabel>
                                     <CustomFormikSelect
@@ -312,7 +351,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={4}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="company-signup">İl</InputLabel>
                                     <CustomFormikSelect
@@ -334,7 +373,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12} sm={4}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="company-signup">İlçe</InputLabel>
                                     <CustomFormikSelect
@@ -354,7 +393,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                     />
                                 </Stack>
                             </Grid>
-                            <Grid item xs={12} sm={12}>
+                            <Grid item xs={12} sm={6}>
                                 <Stack spacing={1}>
                                     <InputLabel htmlFor="personal-addrees1">Adres</InputLabel>
                                     <TextField
@@ -375,6 +414,28 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                         {errors.address}
                                     </FormHelperText>
                                 )}
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Stack spacing={1}>
+                                    <InputLabel htmlFor="patient_reference_id">
+                                        <>Referans </>
+                                        <Tooltip title="Kliniği nereden duydun?"><InfoCircle size={14} /></Tooltip>
+                                    </InputLabel>
+                                    <CustomFormikSelect
+                                        name='patient_reference_id'
+                                        placeholder="Seçim yapınız..."
+                                        isLoading={getPatientReferenceListLoading}
+                                        value={
+                                            values.patient_reference_id ? { label: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
+                                        onChange={(val: any) => {
+                                            setFieldValue("patient_reference_id", val?.value ?? 0);
+                                        }}
+                                        options={getPatientReferenceListData?.data?.map((item) => ({
+                                            value: item.value,
+                                            label: item.label
+                                        }))}
+                                    />
+                                </Stack>
                             </Grid>
                         </Grid>
                         <Typography variant="h5" marginTop={"1.4rem"} marginBottom={"1.4rem"}>{intl.formatMessage({ id: "additionalNearbyContactInformation" })}</Typography>

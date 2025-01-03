@@ -15,8 +15,6 @@ export interface PatientMedicineHistoryListModel {
     patient_id: number
     appointment_id: any
     appointment_date: any
-    treatment_method_id: number
-    treatment_method_name: string
     patient_disease_history_id: any
     patient_disease_history_name: any
     patient_name: string
@@ -41,7 +39,6 @@ export interface PatientMedicineHistoryListModel {
     patient_id?: string | number | null
     patient_disease_history_id: number | null
     appointment_id: number | null
-    treatment_method_id: number | null
     name: string
     dosage: string | null
     usage_period: string | null

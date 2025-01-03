@@ -15,7 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { newPatientInjectionHistorySchema } from "utils/schemas/patient-validation-schema";
 import { PatientInjectionHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-injection-history-model";
 import { useCreatePatientInjectionHistoryMutation, useUpdatePatientInjectionHistoryMutation } from "reduxt/features/patient/injection-history-api";
-import { useLazyGetInjectionTypeDropdownQuery, useLazyGetTreatmentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetInjectionTypeDropdownQuery } from "reduxt/features/definition/definition-api";
 
 const AddPatientInjectionHistoryModal = () => {
 
@@ -30,10 +30,6 @@ const AddPatientInjectionHistoryModal = () => {
         setInitialData(undefined);
     };
 
-    const [getTreatmentMethod, {
-        data: getTreatmentMethodData,
-    }] = useLazyGetTreatmentMethodDropdownQuery();
-
     const [getInjectionType, {
         data: getInjectionTypeData,
     }] = useLazyGetInjectionTypeDropdownQuery();
@@ -45,7 +41,6 @@ const AddPatientInjectionHistoryModal = () => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientInjectionHistory) {
             getInjectionType();
-            getTreatmentMethod();
         }
     }, [open, id])
 
@@ -54,8 +49,6 @@ const AddPatientInjectionHistoryModal = () => {
             const model: PatientInjectionHistoryCreateBodyModel = {
                 patient_injection_history_id: data.patient_injection_history_id,
                 patient_id: data.patient_id,
-                appointment_id: data.appointment_id,
-                treatment_method_id: data.treatment_method_id,
                 injection_type_id: data.injection_type_id,
                 name: data.name,
                 dosage: data.dosage,
@@ -122,8 +115,6 @@ const AddPatientInjectionHistoryModal = () => {
                     initialValues={initialData ?? {
                         patient_injection_history_id: null,
                         patient_id: id,
-                        appointment_id: null,
-                        treatment_method_id: null,
                         injection_type_id: null,
                         name: '',
                         dosage: null,
@@ -203,27 +194,6 @@ const AddPatientInjectionHistoryModal = () => {
                                         {touched.dosage && errors.dosage && (
                                             <FormHelperText error id="helper-text-firstname-signup">
                                                 {errors.dosage}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="treatment_method_id">{intl.formatMessage({ id: "treatmentMethodName" })}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getTreatmentMethodData?.data.find((item) => item.value == values.treatment_method_id)}
-                                                onChange={(event, newValue) => {
-                                                    setFieldValue("treatment_method_id", newValue?.value)
-                                                }}
-                                                id="treatment_method_id"
-                                                options={getTreatmentMethodData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "treatmentMethodName" })} />}
-                                            />
-                                        </Stack>
-                                        {touched.treatment_method_id && errors.treatment_method_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.treatment_method_id}
                                             </FormHelperText>
                                         )}
                                     </Grid>
