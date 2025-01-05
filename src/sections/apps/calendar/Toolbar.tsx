@@ -24,22 +24,22 @@ import { useIntl } from 'react-intl';
 // constant
 const viewOptions = [
   {
-    label: 'Month',
+    label: 'Ay',
     value: 'dayGridMonth',
     icon: Category
   },
   {
-    label: 'Week',
+    label: 'Hafta',
     value: 'timeGridWeek',
     icon: Grid6
   },
   {
-    label: 'Day',
+    label: 'Gün',
     value: 'timeGridDay',
     icon: Calendar1
   },
   {
-    label: 'Agenda',
+    label: 'Gündem',
     value: 'listWeek',
     icon: TableDocument
   }

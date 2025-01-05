@@ -3,6 +3,7 @@ import definitionApi from './features/definition/definition-api'
 import authApi from './features/auth/auth-api'
 import personApi from './features/person/person-api'
 import modalSlice from './features/definition/modalSlice'
+import menuItemSlice from './features/auth/menuItemSlice'
 import patientApi from './features/patient/patient-api'
 import patientTabSlice from './features/definition/patientTabSlice'
 import diseaseHistoryApi from './features/patient/disease-history-api'
@@ -25,6 +26,7 @@ export const store = configureStore({
     modal: modalSlice,
     patientTab: patientTabSlice,
     appointmentCalendarModal: appointmentCalendarModalSlice,
+    menuItem: menuItemSlice,
     [definitionApi.reducerPath]: definitionApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [personApi.reducerPath]: personApi.reducer,

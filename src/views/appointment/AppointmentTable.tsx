@@ -20,17 +20,16 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Chip, Divider, Link, Stack, Tooltip } from '@mui/material';
+import { Box, Chip, Divider, Link, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, PenAdd, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import CustomScaleLoader from 'components/CustomScaleLoader';
 import { useRouter } from 'next/navigation';
 import AddAppointmentModal from './AddAppointmentModal';
-import { useLazyGetAppointmentListQuery } from 'reduxt/features/appointment/appointment-api';
+import { useGetAppointmentListQuery } from 'reduxt/features/appointment/appointment-api';
 import { AppointmentListData } from 'reduxt/features/appointment/models/appointment-list-model';
 import dayjs from 'dayjs';
 import UpdateAppointmentModal from './UpdateAppointmentModal';
@@ -46,11 +45,11 @@ const AppointmentTable = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getAppointmentList, {
+  /*const [getAppointmentList, {
     data: getAppointmentListData,
-    isFetching: isPatientFetching,
-    isLoading: isPatientLoading
-  }] = useLazyGetAppointmentListQuery();
+    isFetching: isAppointmentFetching,
+    isLoading: isAppointmentLoading
+  }] = useLazyGetAppointmentListQuery();*/
 
   const columns = useMemo<ColumnDef<AppointmentListData, any>[]>(() => [
     columnHelper.accessor('patient_full_name', {
@@ -69,7 +68,7 @@ const AppointmentTable = () => {
       header: intl.formatMessage({ id: "status" }),
       //cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       cell: (info) => {
-        return <Chip color={info.row.original.appointment_status_id == 1 ? "warning" : info.row.original.appointment_status_id == 2 ? "success" : info.row.original.appointment_status_id == 3 ? "error": "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
+        return <Chip color={info.row.original.appointment_status_id == 1 ? "warning" : info.row.original.appointment_status_id == 2 ? "success" : info.row.original.appointment_status_id == 3 ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
       },
       footer: info => info.column.id,
     }),
@@ -140,6 +139,7 @@ const AppointmentTable = () => {
           <Tooltip title={intl.formatMessage({ id: "delete" })}>
             <IconButton
               color="error"
+              disabled={info.row.original.appointment_status_id != 1}
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
@@ -164,12 +164,18 @@ const AppointmentTable = () => {
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
-  const tableData = useMemo(() => getAppointmentListData?.data ?? [], [getAppointmentListData?.data]);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+  })
+
+  const tableData = useMemo(() => getAppointmentListData?.data ?? [], [getAppointmentListData?.data]);
 
   const table = useReactTable({
     data: tableData,
@@ -179,29 +185,26 @@ const AppointmentTable = () => {
     rowCount: getAppointmentListData?.totalCount,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
-    manualFiltering: false,
+    manualFiltering: true,
     onColumnFiltersChange: setColumnFilters,
   })
 
-  useEffect(() => {
-    if (getAppointmentListData != null) {
-      getAppointmentList({
-        page: table.getState().pagination.pageIndex + 1,
-        pageSize: table.getState().pagination.pageSize,
-      })
-    }
-  }, [pagination])
 
-  useEffect(() => {
-    console.log(columnFilters);
+  /*useEffect(() => {
+    getAppointmentList({
+      page: table.getState().pagination.pageIndex + 1,
+      pageSize: table.getState().pagination.pageSize,
+    })
+  }, [pagination])*/
+
+  /*useEffect(() => {
     if (columnFilters.length > 0) {
-      console.log("columnFilter length > 0");
       var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
       getAppointmentList({ filterSearch: stringParams })
     } else {
       getAppointmentList({})
     }
-  }, [columnFilters])
+  }, [columnFilters])*/
 
   return (
     <MainCard content={false}>
@@ -237,11 +240,15 @@ const AppointmentTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isPatientFetching || isPatientLoading ? <TableRow>
-                <TableCell colSpan={table.getAllColumns().length}>
-                  <CustomScaleLoader />
-                </TableCell>
-              </TableRow> :
+              {isAppointmentFetching || isAppointmentLoading ? [0, 1, 2, 3, 4].map((item: number) => (
+                <TableRow key={item}>
+                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    <TableCell key={col}>
+                      <Skeleton animation="wave" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )) :
                 table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>
@@ -255,7 +262,7 @@ const AppointmentTable = () => {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={table.getAllColumns().length}>
-                      <EmptyTable msg={isPatientFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                      <EmptyTable msg={isAppointmentFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
                     </TableCell>
                   </TableRow>
                 )

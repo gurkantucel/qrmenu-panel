@@ -26,7 +26,11 @@ import { useCreateAppointmentMutation } from "reduxt/features/appointment/appoin
 import { newAppointmentSchema } from "utils/schemas/appointment-validation-schema";
 import { useLazyGetAppointmentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 
-const AddAppointmentModal = () => {
+type Props = {
+    page?: string
+}
+
+const AddAppointmentModal = (props: Props) => {
 
     const dispatch = useAppDispatch();
     const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
@@ -63,11 +67,10 @@ const AddAppointmentModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointment) {
-            getAcceptingAppointmentDropDownList({});
-            getAppointmentStatusDropdown();
-            if (id != null) {
-                //readPatient({ patient_id: id })
+            if (props.page != "home") {
+                getAcceptingAppointmentDropDownList({});
             }
+            getAppointmentStatusDropdown();
         }
     }, [open, id])
 
@@ -115,12 +118,12 @@ const AddAppointmentModal = () => {
 
     return (
         <>
-            <Button variant="dashed" startIcon={<Add />} onClick={() => {
+            {props.page != "home" && <Button variant="dashed" startIcon={<Add />} onClick={() => {
                 dispatch(setModal({
                     open: true,
                     modalType: ModalEnum.newAppointment
                 }))
-            }}>{intl.formatMessage({ id: "newAppointment" })}</Button>
+            }}>{intl.formatMessage({ id: "newAppointment" })}</Button>}
             <Dialog open={open && modalType == ModalEnum.newAppointment} onClose={handleClose} fullScreen>
                 <Formik
                     initialValues={initialData ?? {

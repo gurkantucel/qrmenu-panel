@@ -11,6 +11,7 @@ export interface AppointmentProcessTypeListResultModel {
 }
 
 export interface AppointmentProcessTypeData {
+    expander?:string
     appointment_history_id: number
     appointment_id: number
     patient_id: number
@@ -31,7 +32,7 @@ export interface AppointmentProcessTypeData {
     description: any
     amount: string
     vat: number
-    sub_appointment_process: any
+    sub_appointment_process?: SubAppointmentProcess[]
     created_at: string
     updated_at: string
     created_by: number
@@ -41,6 +42,36 @@ export interface AppointmentProcessTypeData {
     status: boolean
     islemler?: string
 }
+
+export interface SubAppointmentProcess {
+    appointment_history_id: number
+    appointment_id: number
+    patient_id: number
+    patient_name: string
+    patient_surname: string
+    patient_full_name: string
+    appointment_start: string
+    appointment_duration: number
+    appointment_end: string
+    currency_id: number
+    currency_code: string
+    currency_name: string
+    appointment_process_type_id: number
+    appointment_process_type_name: string
+    code: string
+    name: string
+    description: any
+    amount: number
+    vat: number
+    created_at: string
+    updated_at: string
+    created_by: number
+    created_person: string
+    updated_by: any
+    updated_person: any
+    status: boolean
+    islemler?: string
+  }
 
 export interface AppointmentProcessTypeCreateBodyModel {
     data: AppointmentProcessTypeCreateData[]

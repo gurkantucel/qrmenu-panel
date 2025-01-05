@@ -148,7 +148,7 @@ const AddPatientFileModal = () => {
                                                             <input {...getInputProps()} />
                                                             <Typography variant='h6' marginTop={2}>{intl.formatMessage({ id: "selectFilesDragginFiles" })}</Typography>
                                                         </Stack>
-                                                        {fileRejections.map(({ file, errors }) => <Typography variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
+                                                        {fileRejections.map(({ file, errors },index) => <Typography key={index} variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
                                                     </Box>
                                                 )}
                                             </Dropzone>
@@ -158,7 +158,7 @@ const AddPatientFileModal = () => {
                                                         border: "1px solid #eff2f7",
                                                         borderRadius: "6px",
                                                         padding: "4px"
-                                                    }}>
+                                                    }} key={i}>
                                                         <Stack direction="row" spacing={2}>
                                                             <Grid item>
                                                                 <Button onClick={() => {

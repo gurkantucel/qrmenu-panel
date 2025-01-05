@@ -10,7 +10,6 @@ import Box from '@mui/material/Box';
 // project-imports
 import NavItem from './NavItem';
 import NavGroup from './NavGroup';
-import menuItem from 'menu-items';
 
 import useConfig from 'hooks/useConfig';
 import { HORIZONTAL_MAX_ITEM, MenuOrientation } from 'config';
@@ -18,6 +17,9 @@ import { useGetMenuMaster } from 'api/menu';
 
 // types
 import { NavItemType } from 'types/menu';
+import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
+import { RootState } from 'reduxt/store';
+import { setMenuItem } from 'reduxt/features/auth/menuItemSlice';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
@@ -30,13 +32,22 @@ export default function Navigation() {
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
+  const dispatch = useAppDispatch();
+
   const [selectedID, setSelectedID] = useState<string | null>(menuMaster.openedHorizontalItem);
   const [selectedItems, setSelectedItems] = useState<string | undefined>('');
   const [selectedLevel, setSelectedLevel] = useState<number>(0);
   const [menuItems, setMenuItems] = useState<{ items: NavItemType[] }>({ items: [] });
 
+  const { data: menuItem } = useAppSelector((state: RootState) => state.menuItem);
+
   useLayoutEffect(() => {
-    setMenuItems(menuItem);
+    console.log("layout değişti");
+    if (menuItem.items.length == 0) {
+      dispatch(setMenuItem())
+    } else {
+      setMenuItems(menuItem);
+    }
     // eslint-disable-next-line
   }, [menuItem]);
 

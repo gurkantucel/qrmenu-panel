@@ -70,11 +70,13 @@ const personApi = createApi({
 })
 
 export const {
+    useGetPersonListQuery,
     useLazyGetPersonListQuery,
     useCreatePersonMutation,
     useUpdatePersonMutation,
     useDeletePersonMutation,
     useLazyReadPersonQuery,
+    useAcceptingAppointmentDropDownQuery,
     useLazyAcceptingAppointmentDropDownQuery
 } = personApi
 

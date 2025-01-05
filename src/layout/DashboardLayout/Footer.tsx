@@ -5,22 +5,25 @@ import Link from 'next/link';
 import Links from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useIntl } from 'react-intl';
 
 // ==============================|| MAIN LAYOUT - FOOTER ||============================== //
 
 export default function Footer() {
+   const intl = useIntl()
+   
   return (
     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ p: '24px 16px 0px', mt: 'auto' }}>
-      <Typography variant="caption">&copy; Able Pro ♥ crafted by Team Phoenixcoded</Typography>
+      <Typography variant="caption">&copy; KlinikEase ♥</Typography>
       <Stack spacing={1.5} direction="row" justifyContent="space-between" alignItems="center">
-        <Links component={Link} href="https://ableproadmin.com" target="_blank" variant="caption" color="text.primary">
-          Home
+        <Links component={Link} href="#" target="_blank" variant="caption" color="text.primary">
+          {intl.formatMessage({id: "home"})}
         </Links>
-        <Links component={Link} href="https://phoenixcoded.gitbook.io/able-pro" target="_blank" variant="caption" color="text.primary">
-          Documentation
+        <Links component={Link} href="#" target="_blank" variant="caption" color="text.primary">
+        {intl.formatMessage({id: "helpfulVideos"})}
         </Links>
-        <Links component={Link} href="https://phoenixcoded.authordesk.app/" target="_blank" variant="caption" color="text.primary">
-          Support
+        <Links component={Link} href="#" target="_blank" variant="caption" color="text.primary">
+        {intl.formatMessage({id: "contact"})}
         </Links>
       </Stack>
     </Stack>

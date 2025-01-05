@@ -21,18 +21,17 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Link, Stack, Tooltip } from '@mui/material';
+import { Box, Divider, Link, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPatientModal from './AddPatientModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import { useLazyGetPatientListQuery } from 'reduxt/features/patient/patient-api';
+import { useGetPatientListQuery } from 'reduxt/features/patient/patient-api';
 import { PatientListData } from 'reduxt/features/patient/models/patient-list-model';
 import DeletePatientModal from './DeletePatientModal';
-import CustomScaleLoader from 'components/CustomScaleLoader';
 import { useRouter } from 'next/navigation';
 
 const columnHelper = createColumnHelper<PatientListData>()
@@ -44,11 +43,11 @@ const PatientTable = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getPatientList, {
+  {/*const [getPatientList, {
     data: getPatientListData,
     isFetching: isPatientFetching,
     isLoading: isPatientLoading
-  }] = useLazyGetPatientListQuery();
+  }] = useLazyGetPatientListQuery();*/}
 
   const columns = useMemo<ColumnDef<PatientListData, any>[]>(() => [
     columnHelper.accessor('full_name', {
@@ -146,12 +145,18 @@ const PatientTable = () => {
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
-  const tableData = useMemo(() => getPatientListData?.data ?? [], [getPatientListData?.data]);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  const { data: getPatientListData, isLoading: isPatientLoading, isFetching: isPatientFetching } = useGetPatientListQuery({
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+  })
+
+  const tableData = useMemo(() => getPatientListData?.data ?? [], [getPatientListData?.data]);
 
   const table = useReactTable({
     data: tableData,
@@ -164,26 +169,6 @@ const PatientTable = () => {
     manualFiltering: false,
     onColumnFiltersChange: setColumnFilters,
   })
-
-  useEffect(() => {
-    if (getPatientListData != null) {
-      getPatientList({
-        page: table.getState().pagination.pageIndex + 1,
-        pageSize: table.getState().pagination.pageSize,
-      })
-    }
-  }, [pagination])
-
-  useEffect(() => {
-    console.log(columnFilters);
-    if (columnFilters.length > 0) {
-      console.log("columnFilter length > 0");
-      var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
-      getPatientList({ filterSearch: stringParams })
-    } else {
-      getPatientList({})
-    }
-  }, [columnFilters])
 
   return (
     <MainCard content={false}>
@@ -217,11 +202,15 @@ const PatientTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isPatientFetching || isPatientLoading ? <TableRow>
-                <TableCell colSpan={table.getAllColumns().length}>
-                  <CustomScaleLoader />
-                </TableCell>
-              </TableRow> :
+              {isPatientFetching || isPatientLoading ?[0, 1, 2, 3].map((item: number) => (
+                <TableRow key={item}>
+                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    <TableCell key={col}>
+                      <Skeleton animation="wave" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )) :
                 table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>

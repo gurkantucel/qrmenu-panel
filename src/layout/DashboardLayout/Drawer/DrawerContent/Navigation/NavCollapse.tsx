@@ -34,6 +34,7 @@ import { ArrowDown2, ArrowUp2, ArrowRight2, Copy } from 'iconsax-react';
 
 // types
 import { NavItemType } from 'types/menu';
+import { selectIcon } from 'menu-items/select-icon';
 
 type ListItemClick =
   | React.MouseEvent<HTMLButtonElement>
@@ -250,8 +251,9 @@ export default function NavCollapse({ menu, level, parentId, setSelectedItems, s
 
   const isSelected = selected === menu.id;
   const borderIcon = level === 1 ? <Copy variant="Bulk" size={drawerOpen ? 22 : 24} /> : false;
-  const Icon = menu.icon!;
-  const menuIcon = menu.icon ? <Icon variant="Bulk" size={drawerOpen ? 22 : 24} /> : borderIcon;
+  //const Icon = menu.icon!;
+  const Icon = selectIcon(menu.id ?? "");
+  const menuIcon = menu.icon !=null ? <Icon variant="Bulk" size={drawerOpen ? 22 : 24} /> : borderIcon;
   const textColor = theme.palette.mode === ThemeMode.DARK ? theme.palette.secondary[400] : theme.palette.secondary.main;
   const iconSelectedColor = theme.palette.mode === ThemeMode.DARK && drawerOpen ? theme.palette.text.primary : theme.palette.primary.main;
   const popperId = miniMenuOpened ? `collapse-pop-${menu.id}` : undefined;

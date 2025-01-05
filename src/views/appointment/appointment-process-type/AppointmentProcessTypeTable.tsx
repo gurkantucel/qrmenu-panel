@@ -1,14 +1,16 @@
+"use client"
 import { useSearchParams, useParams } from 'next/navigation'
-import React, { useEffect, useMemo } from 'react'
+import { alpha, useTheme } from '@mui/material/styles';
+import React, { Fragment, useEffect, useMemo } from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Button, Grid, IconButton, Paper, Stack, Tooltip } from '@mui/material';
+import { Box, Button, Grid, IconButton, Paper, Stack, Tooltip } from '@mui/material';
 import MainCard from 'components/MainCard'
-import { Add, Edit, Trash } from 'iconsax-react';
+import { Add, ArrowDown2, ArrowRight2, Edit, MinusCirlce, Trash } from 'iconsax-react';
 import { useAppDispatch } from 'reduxt/hooks';
 import { useIntl } from 'react-intl';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
@@ -17,20 +19,77 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
+    getExpandedRowModel,
     getFilteredRowModel,
     HeaderGroup,
     useReactTable,
 } from '@tanstack/react-table'
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { EmptyTable, Filter } from 'components/third-party/react-table';
-import dayjs from 'dayjs';
 import { useLazyGetAppointmentProcessTypeListQuery } from 'reduxt/features/appointment/appointment-process-type-api';
-import { AppointmentProcessTypeData } from 'reduxt/features/appointment/models/appointment-process-type-model';
+import { AppointmentProcessTypeData, SubAppointmentProcess } from 'reduxt/features/appointment/models/appointment-process-type-model';
 import AddAppointmentProcessTypeModal from './AddAppointmentProcessTypeModal';
 import UpdateAppointmentProcessTypeModal from './UpdateAppointmentProcessTypeModal';
 import DeleteAppointmentProcessTypeModal from './DeleteAppointmentProcessTypeModal';
-//import AddAppointmentProcessTypeModal from './AddAppointmentProcessTypeModal';
-//import DeleteAppointmentProcessTypeModal from './DeleteAppointmentProcessTypeModal';
+
+
+type SubTableProps = {
+    data?: SubAppointmentProcess[]
+}
+const subColumnHelper = createColumnHelper<SubAppointmentProcess>()
+
+const SubTable = (props: SubTableProps) => {
+
+    const theme = useTheme();
+
+    const intl = useIntl()
+
+    const columns = useMemo<ColumnDef<SubAppointmentProcess, any>[]>(() => [
+        subColumnHelper.accessor('appointment_process_type_name', {
+            header: intl.formatMessage({ id: "type" }),
+            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('name', {
+            header: intl.formatMessage({ id: "name" }),
+            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('amount', {
+            header: intl.formatMessage({ id: "amount" }),
+            cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('islemler', {
+            header: intl.formatMessage({ id: "name" }),
+            cell: info => "",
+            footer: info => info.column.id,
+        }),
+    ], [])
+
+    const table = useReactTable({
+        data: props.data ?? [],
+        columns,
+        getRowCanExpand: () => true,
+        getCoreRowModel: getCoreRowModel(),
+        getExpandedRowModel: getExpandedRowModel()
+    });
+
+    return (
+        <>
+            {table.getRowModel().rows.map((row, index) => (
+                <TableRow sx={{ bgcolor: alpha(theme.palette.primary.lighter, 0.35) }} key={index}>
+                    <TableCell />
+                    {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                    ))}
+                </TableRow>
+            ))}
+        </>
+    )
+}
 
 const columnHelper = createColumnHelper<AppointmentProcessTypeData>()
 
@@ -50,6 +109,26 @@ const AppointmentProcessTypeTable = () => {
     }] = useLazyGetAppointmentProcessTypeListQuery();
 
     const columns = useMemo<ColumnDef<AppointmentProcessTypeData, any>[]>(() => [
+        columnHelper.accessor('expander', {
+            header: () => null,
+            enableColumnFilter: false,
+            cell: info => {
+                return info.row.getCanExpand() && (info.row.original.sub_appointment_process?.length ?? 0) > 0 ? (
+                    <Box width={{ xl: 60 }}>
+                        <IconButton color={info.row.getIsExpanded() ? 'primary' : 'secondary'} onClick={info.row.getToggleExpandedHandler()} size="small">
+                            {info.row.getIsExpanded() ? <ArrowDown2 size="32" variant="Outline" /> : <ArrowRight2 size="32" variant="Outline" />}
+                        </IconButton>
+                    </Box>
+                ) : (
+                    <Box width={{ xl: 60 }}>
+                        <IconButton color="secondary" size="small" disabled>
+                            <MinusCirlce />
+                        </IconButton>
+                    </Box>
+                );
+            },
+            footer: info => info.column.id,
+        }),
         columnHelper.accessor('appointment_process_type_name', {
             header: intl.formatMessage({ id: "type" }),
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
@@ -64,14 +143,6 @@ const AppointmentProcessTypeTable = () => {
             header: intl.formatMessage({ id: "amount" }),
             cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
             footer: info => info.column.id,
-        }),
-        columnHelper.accessor('created_at', {
-            header: intl.formatMessage({ id: "date" }),
-            cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
-            footer: info => info.column.id,
-            meta: {
-                filterVariant: 'date',
-            },
         }),
         columnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "actions" }),
@@ -127,6 +198,7 @@ const AppointmentProcessTypeTable = () => {
     const table = useReactTable({
         data: tableData,
         columns,
+        getRowCanExpand: () => true,
         rowCount: getAppointmentProcessTypeListData?.totalCount,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -163,9 +235,9 @@ const AppointmentProcessTypeTable = () => {
                     <Table size='small'>
                         <TableHead>
                             {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                                <TableRow key={headerGroup.id}>
+                                <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 58 } }}>
                                     {headerGroup.headers.map((header) => (
-                                        <TableCell key={header.id} {...header.column.columnDef.meta} style={{ width: `${header.getSize()}px` }}>
+                                        <TableCell key={header.id} {...header.column.columnDef.meta}>
                                             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableCell>
                                     ))}
@@ -191,13 +263,16 @@ const AppointmentProcessTypeTable = () => {
                             </TableRow> :
                                 table.getRowModel().rows.length > 0 ? (
                                     table.getRowModel().rows.map((row) => (
-                                        <TableRow key={row.id}>
-                                            {row.getVisibleCells().map((cell) => (
-                                                <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
+                                        <Fragment key={row.id}>
+                                            <TableRow key={row.id}>
+                                                {row.getVisibleCells().map((cell) => (
+                                                    <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                    </TableCell>
+                                                ))}
+                                            </TableRow>
+                                            {row.getIsExpanded() && <SubTable data={row.original.sub_appointment_process} />}
+                                        </Fragment>
                                     ))
                                 ) : (
                                     <TableRow>

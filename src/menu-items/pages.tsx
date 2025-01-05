@@ -36,7 +36,7 @@ const pages: NavItemType = {
       id: 'home',
       title: <FormattedMessage id="home" />,
       type: 'item',
-      url: '/sample-page',
+      url: '/app/home',
       icon: icons.home
     },
     {

@@ -24,12 +24,11 @@ import {
 } from '@tanstack/react-table'
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Stack, Tooltip } from '@mui/material';
+import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import CustomScaleLoader from 'components/CustomScaleLoader';
 import dayjs from 'dayjs';
 import { AppointmentProcessListData, Detail } from 'reduxt/features/settings/models/appointment-process-model';
 import { useLazyGetAppointmentProcessListQuery } from 'reduxt/features/settings/appointment-process-api';
@@ -313,11 +312,15 @@ const AppointmentProcessTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isAppointmentProcessFetching || isAppointmentProcessLoading ? <TableRow>
-                <TableCell colSpan={table.getAllColumns().length}>
-                  <CustomScaleLoader />
-                </TableCell>
-              </TableRow> :
+              {isAppointmentProcessFetching || isAppointmentProcessLoading ? [0, 1, 2, 3, 4].map((item: number) => (
+                <TableRow key={item}>
+                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    <TableCell key={col}>
+                      <Skeleton animation="wave" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )) :
                 table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
                     <Fragment key={row.id}>

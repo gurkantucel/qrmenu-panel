@@ -24,6 +24,7 @@ import { NavActionType, MenuOrientation, ThemeMode } from 'config';
 
 // types
 import { LinkTarget, NavItemType } from 'types/menu';
+import { selectIcon } from 'menu-items/select-icon';
 
 // ==============================|| NAVIGATION - ITEM ||============================== //
 
@@ -50,8 +51,9 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
 
   const isSelected = openItem === item.id;
 
-  const Icon = item.icon!;
-  const itemIcon = item.icon ? (
+  //const Icon = item.icon!;
+  const Icon = selectIcon(item.id ?? "");
+  const itemIcon = item.icon != null ? (
     <Icon
       variant="Bulk"
       size={drawerOpen ? 20 : 22}
@@ -100,12 +102,12 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
               }),
               ...(drawerOpen &&
                 level === 1 && {
-                  mx: 1.25,
-                  my: 0.5,
-                  borderRadius: 1,
-                  '&:hover': { bgcolor: mode === ThemeMode.DARK ? 'divider' : 'secondary.200' },
-                  '&.Mui-selected': { color: iconSelectedColor, '&:hover': { color: iconSelectedColor } }
-                }),
+                mx: 1.25,
+                my: 0.5,
+                borderRadius: 1,
+                '&:hover': { bgcolor: mode === ThemeMode.DARK ? 'divider' : 'secondary.200' },
+                '&.Mui-selected': { color: iconSelectedColor, '&:hover': { color: iconSelectedColor } }
+              }),
               ...(!drawerOpen && {
                 px: 2.75,
                 justifyContent: 'center',
@@ -122,20 +124,20 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
                   color: isSelected ? iconSelectedColor : textColor,
                   ...(!drawerOpen &&
                     level === 1 && {
-                      borderRadius: 1,
-                      width: 46,
-                      height: 46,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      '&:hover': { bgcolor: mode === ThemeMode.DARK ? 'secondary.light' : 'secondary.200' }
-                    }),
+                    borderRadius: 1,
+                    width: 46,
+                    height: 46,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    '&:hover': { bgcolor: mode === ThemeMode.DARK ? 'secondary.light' : 'secondary.200' }
+                  }),
                   ...(!drawerOpen &&
                     isSelected && {
-                      bgcolor: mode === ThemeMode.DARK ? 'secondary.100' : 'primary.lighter',
-                      '&:hover': {
-                        bgcolor: mode === ThemeMode.DARK ? 'secondary.200' : 'primary.lighter'
-                      }
-                    })
+                    bgcolor: mode === ThemeMode.DARK ? 'secondary.100' : 'primary.lighter',
+                    '&:hover': {
+                      bgcolor: mode === ThemeMode.DARK ? 'secondary.200' : 'primary.lighter'
+                    }
+                  })
                 }}
               >
                 {itemIcon}
@@ -261,11 +263,11 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
                 }),
                 ...(!drawerOpen &&
                   isSelected && {
-                    bgcolor: 'transparent',
-                    '&:hover': {
-                      bgcolor: 'transparent'
-                    }
-                  })
+                  bgcolor: 'transparent',
+                  '&:hover': {
+                    bgcolor: 'transparent'
+                  }
+                })
               }}
             >
               {itemIcon}

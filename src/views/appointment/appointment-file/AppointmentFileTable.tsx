@@ -149,12 +149,12 @@ const AppointmentFileTable = () => {
         }),
     ], [])
 
-    const tableData = useMemo(() => getPatientFileListData?.data.files ?? [], [getPatientFileListData?.data.files]);
+    const tableData = useMemo(() => getPatientFileListData?.data?.files ?? [], [getPatientFileListData?.data?.files]);
 
     const table = useReactTable({
         data: tableData,
         columns,
-        rowCount: getPatientFileListData?.data.files.length,
+        rowCount: getPatientFileListData?.data?.files?.length,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         columnResizeMode: "onChange"

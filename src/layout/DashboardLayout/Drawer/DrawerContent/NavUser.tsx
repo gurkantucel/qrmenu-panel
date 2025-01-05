@@ -24,6 +24,8 @@ import { useGetMenuMaster } from 'api/menu';
 import { ArrowRight2 } from 'iconsax-react';
 import { deleteCookie } from 'cookies-next';
 import { useIntl } from 'react-intl';
+import { useAppDispatch } from 'reduxt/hooks';
+import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 
 const avatar1 = '/assets/images/users/avatar-6.png';
 
@@ -55,12 +57,15 @@ export default function UserList() {
   const router = useRouter();
   const user = useUser();
   const intl = useIntl()
+  const dispatch = useAppDispatch();
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
   const handleLogout = () => {
     deleteCookie("token");
     deleteCookie("refreshToken");
+    deleteCookie("personAuthorizations");
+    dispatch(resetMenuItemState());
     router.push('/app/auth/login');
   };
 
@@ -115,7 +120,7 @@ export default function UserList() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <MenuItem onClick={handleLogout}>{intl.formatMessage({id: "logout"})}</MenuItem>
+        <MenuItem onClick={handleLogout}>{intl.formatMessage({ id: "logout" })}</MenuItem>
         <MenuItem component={Link} href="#" onClick={handleClose}>
           Profile
         </MenuItem>

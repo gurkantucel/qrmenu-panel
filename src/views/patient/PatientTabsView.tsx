@@ -56,7 +56,7 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                     <HealthInformationView params={params} />
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.dosyalar}>
-                    <PatientFileTable params={params} />
+                    <PatientFileTable />
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.odemeler}>
                     <PatientPaymentHistoryTable params={params} />

@@ -22,11 +22,11 @@ import {
   RowData,
   useReactTable,
 } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PersonListData } from 'reduxt/features/person/models/person-list-model';
-import { useLazyGetPersonListQuery } from 'reduxt/features/person/person-api';
+import { useGetPersonListQuery } from 'reduxt/features/person/person-api';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Divider, Stack, Tooltip } from '@mui/material';
+import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPersonModal from './AddPersonModal';
@@ -34,11 +34,10 @@ import DeletePersonModal from './DeletePersonModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import ViewPersonModal from './ViewPersonModal';
-import CustomScaleLoader from 'components/CustomScaleLoader';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date'
+    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date'
   }
 }
 
@@ -50,11 +49,11 @@ const PersonTable = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getPersonList, {
+  /*const [getPersonList, {
     data: getPersonListData,
     isFetching: isPersonFetching,
     isLoading: isPersonLoading
-  }] = useLazyGetPersonListQuery();
+  }] = useLazyGetPersonListQuery();*/
 
   const columns = useMemo<ColumnDef<PersonListData, any>[]>(() => [
     columnHelper.accessor('name', {
@@ -146,12 +145,18 @@ const PersonTable = () => {
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
-  const tableData = useMemo(() => getPersonListData?.data ?? [], [getPersonListData?.data]);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  const { data: getPersonListData, isLoading: isPersonLoading, isFetching: isPersonFetching } = useGetPersonListQuery({
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+  })
+
+  const tableData = useMemo(() => getPersonListData?.data ?? [], [getPersonListData?.data]);
 
   const table = useReactTable({
     data: tableData,
@@ -164,34 +169,6 @@ const PersonTable = () => {
     manualFiltering: false,
     onColumnFiltersChange: setColumnFilters,
   })
-
-  useEffect(() => {
-    if (getPersonListData != null) {
-      getPersonList({
-        page: table.getState().pagination.pageIndex + 1,
-        pageSize: table.getState().pagination.pageSize,
-      })
-    }
-  }, [pagination])
-
-  useEffect(() => {
-    if (columnFilters.length > 0) {
-      var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
-      getPersonList({ filterSearch: stringParams })
-    } else {
-      getPersonList({})
-    }
-    /*if (columnFilters.length > 0) {
-        var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
-        setSearchParams(stringParams);
-        getPersonList({ filterSearch: searchParams })
-    } else {
-        setSearchParams((oldValue) => {
-            return "";
-        })
-        getPersonList({ filterSearch: "" })
-    }*/
-  }, [columnFilters])
 
   return (
     <MainCard content={false}>
@@ -226,11 +203,15 @@ const PersonTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isPersonFetching || isPersonLoading ? <TableRow>
-                <TableCell colSpan={table.getAllColumns().length}>
-                  <CustomScaleLoader />
-                </TableCell>
-              </TableRow> :
+              {isPersonFetching || isPersonLoading ?[0, 1, 2].map((item: number) => (
+                <TableRow key={item}>
+                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    <TableCell key={col}>
+                      <Skeleton animation="wave" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              )) :
                 table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow key={row.id}>

@@ -36,6 +36,7 @@ import { More2 } from 'iconsax-react';
 
 // types
 import { NavItemType } from 'types/menu';
+import { selectIcon } from 'menu-items/select-icon';
 
 // ==============================|| NAVIGATION - GROUP ||============================== //
 
@@ -161,7 +162,8 @@ export default function NavGroup({
 
   const isSelected = selectedID === currentItem.id;
 
-  const Icon = currentItem?.icon!;
+  //const Icon = currentItem?.icon!;
+  const Icon = selectIcon(item.id ?? "");
   const itemIcon = currentItem?.icon ? (
     <Icon variant="Bulk" size={22} color={isSelected ? theme.palette.primary.main : theme.palette.secondary.main} />
   ) : null;

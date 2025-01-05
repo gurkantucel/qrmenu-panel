@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Dialog, DialogActions, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, TextField, Typography } from '@mui/material'
+import { Badge, Box, Button, Dialog, DialogActions, Grid, IconButton, InputLabel, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
@@ -17,7 +17,7 @@ import { enqueueSnackbar } from 'notistack';
 const AddPatientFileModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, data, id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const [selectedFiles, setselectedFiles] = useState([]);
@@ -147,7 +147,7 @@ const AddPatientFileModal = () => {
                                                             <input {...getInputProps()} />
                                                             <Typography variant='h6' marginTop={2}>{intl.formatMessage({ id: "selectFilesDragginFiles" })}</Typography>
                                                         </Stack>
-                                                        {fileRejections.map(({ file, errors }) => <Typography variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
+                                                        {fileRejections.map(({ file, errors },index) => <Typography key={index} variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
                                                     </Box>
                                                 )}
                                             </Dropzone>
@@ -157,7 +157,9 @@ const AddPatientFileModal = () => {
                                                         border: "1px solid #eff2f7",
                                                         borderRadius: "6px",
                                                         padding: "4px"
-                                                    }}>
+                                                    }}
+                                                    key={i}
+                                                    >
                                                         <Stack direction="row" spacing={2}>
                                                             <Grid item>
                                                                 <Button onClick={() => {

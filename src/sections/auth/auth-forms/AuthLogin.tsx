@@ -26,12 +26,16 @@ import { useRouter } from 'next/navigation';
 import { loginValidationSchema } from 'utils/schemas/auth-validation-schema';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
+import { useAppDispatch } from 'reduxt/hooks';
+import { setMenuItem } from 'reduxt/features/auth/menuItemSlice';
 
 // ============================|| JWT - LOGIN ||============================ //
 
 export default function AuthLogin({ providers, csrfToken }: any) {
 
   const [login, { isLoading: loginIsLoading, data: loginResponse, error: loginError }] = useLoginMutation();
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -56,9 +60,11 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         setCookie("token", loginResponse.data.token)
         setCookie("refreshToken", loginResponse.data.refresh_token)
         setCookie("person", loginResponse.data.person)
+        setCookie("personAuthorizations", loginResponse.data.personAuthorizations);
+        dispatch(setMenuItem());
         setTimeout(() => {
           router.push("/app/home")
-        }, 500)
+        }, 200)
       }
     }
     if (loginError) {

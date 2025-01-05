@@ -32,6 +32,8 @@ import { ThemeMode } from 'config';
 const avatar1 = '/assets/images/users/avatar-6.png';
 import { Setting2, Profile, Logout } from 'iconsax-react';
 import { deleteCookie} from 'cookies-next';
+import { useAppDispatch } from 'reduxt/hooks';
+import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -69,11 +71,13 @@ export default function ProfilePage() {
   const theme = useTheme();
   const router = useRouter();
   const user = useUser();
-
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     deleteCookie("token");
     deleteCookie("refreshToken");
+    deleteCookie("personAuthorizations");
+    dispatch(resetMenuItemState());
     router.push('/app/auth/login');
   };
 

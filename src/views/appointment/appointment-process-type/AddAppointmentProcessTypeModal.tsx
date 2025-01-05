@@ -113,7 +113,7 @@ const AddAppointmentProcessTypeModal = () => {
                                         render={arrayHelpers => (
                                             <>
                                                 {values.data && values.data.length > 0 && values.data.map((item, index) => (
-                                                    <Grid container justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={3} marginBottom={3}>
+                                                    <Grid container justifyContent={"center"} alignContent={"center"} alignItems={"center"} spacing={3} marginBottom={3} key={index}>
                                                         <Grid item xs={2}>
                                                             <Grid container justifyContent={"center"} paddingTop={4}>
                                                                 <Grid marginRight={1}>

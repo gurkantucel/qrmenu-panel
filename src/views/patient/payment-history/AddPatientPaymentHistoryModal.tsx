@@ -1,9 +1,9 @@
 "use client"
 
 import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
-import { Add, CloseSquare } from "iconsax-react"
+import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
-import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
+import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { Form, Formik } from 'formik';

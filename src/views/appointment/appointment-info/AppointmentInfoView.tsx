@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams, useParams } from 'next/navigation'
-import { Grid, List, ListItem, Stack, Typography } from '@mui/material'
+import { Grid, Link, List, ListItem, Stack, Typography } from '@mui/material'
 import MainCard from 'components/MainCard'
 import { useEffect } from 'react'
 import { useLazyReadAppointmentQuery } from 'reduxt/features/appointment/appointment-api';
@@ -43,14 +43,14 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">Ad Soyad</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({id: "nameSurname"})}</Typography>
                                         <Typography>{getReadAppointmentData?.data?.patient_full_name ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">Kimlik Numarası</Typography>
-                                        <Typography>-</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({id: "identityNumber"})}</Typography>
+                                        <Typography>{getReadAppointmentData?.data?.identity_number ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
                             </Grid>
@@ -59,16 +59,16 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">Telefon</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({id: "phone"})}</Typography>
                                         <Typography>
-                                            (+1-876)
+                                        <Link href={`tel:${getReadAppointmentData?.data?.patient_full_phone}`}>{getReadAppointmentData?.data?.patient_full_phone ?? "-"}</Link>
                                         </Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">Doğum Tarihi</Typography>
-                                        <Typography>New York</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({id: "birthdate"})}</Typography>
+                                        <Typography>{getReadAppointmentData?.data?.birthdate ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
                             </Grid>

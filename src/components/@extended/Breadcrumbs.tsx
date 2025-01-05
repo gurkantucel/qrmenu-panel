@@ -24,6 +24,7 @@ import { ArrowRight2, Buildings2, Home3 } from 'iconsax-react';
 // types
 import { OverrideIcon } from 'types/root';
 import { NavItemType } from 'types/menu';
+import { FormattedMessage } from 'react-intl';
 
 interface BreadcrumbLinkProps {
   title: string;
@@ -84,7 +85,7 @@ export default function Breadcrumbs({
   };
 
   let customLocation = location;
-
+  
   // only used for component demo breadcrumbs
   if (customLocation.includes('/components-overview/breadcrumbs')) {
     customLocation = '/apps/customer/customer-card';
@@ -136,6 +137,10 @@ export default function Breadcrumbs({
   let CollapseIcon;
   let ItemIcon;
 
+  if(location == "/app/home"){
+    return (<></>)
+  }
+
   // collapse item
   if (!custom && main && main.type === 'collapse' && main.breadcrumbs === true) {
     CollapseIcon = main.icon ? main.icon : Buildings2;
@@ -168,7 +173,7 @@ export default function Breadcrumbs({
         >
           <Grid item>
             <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
-              <NextLink href="/" passHref legacyBehavior>
+              <NextLink href="/app/home" passHref legacyBehavior>
                 <Typography
                   variant="body1"
                   color="text.primary"
@@ -176,7 +181,7 @@ export default function Breadcrumbs({
                 >
                   {icons && <Home3 style={iconSX} />}
                   {icon && !icons && <Home3 variant="Bold" style={{ ...iconSX, marginRight: 0 }} />}
-                  {(!icon || icons) && 'Home'}
+                  {(!icon || icons) && <FormattedMessage id="home" />}
                 </Typography>
               </NextLink>
               {mainContent}
@@ -209,7 +214,7 @@ export default function Breadcrumbs({
 
     let tempContent = (
       <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
-        <NextLink href="/" passHref legacyBehavior>
+        <NextLink href="/app/home" passHref legacyBehavior>
           <Typography
             color="text.secondary"
             variant="h6"
@@ -217,7 +222,7 @@ export default function Breadcrumbs({
           >
             {icons && <Home3 style={iconSX} />}
             {icon && !icons && <Home3 variant="Bold" style={{ ...iconSX, marginRight: 0 }} />}
-            {(!icon || icons) && 'Home'}
+            {(!icon || icons) && <FormattedMessage id="home" />}
           </Typography>
         </NextLink>
         {mainContent}

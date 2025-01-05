@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Button, IconButton, Paper, Stack, Tooltip, Typography } from '@mui/material';
 import MainCard from 'components/MainCard'
-import { Add, Trash } from 'iconsax-react';
+import { Add, ArrowCircleLeft2, Trash } from 'iconsax-react';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { useIntl } from 'react-intl';
@@ -31,6 +31,8 @@ import Link from 'next/link';
 import { FileTypeBoxIcon } from 'utils/icons/file-type-box-icon';
 import AddPatientFileModal from './AddPatientFileModal';
 import DeletePatientFileModal from './DeletePatientFileModal';
+import FolderBoxIcon from 'utils/icons/folder-box-icon';
+import { useParams } from 'next/navigation';
 
 const columnHelper = createColumnHelper<PatientFile>()
 
@@ -46,7 +48,21 @@ function formatBytes(bytes: number, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
-const PatientFileTable = ({ params }: { params: { slug: string } }) => {
+type Props = {
+    page?: string,
+    patientId?: string
+}
+
+const folderName = (model: PatientFile) => {
+    if (model.appointment_process != null && model.appointment_process.length > 0) {
+        return `${dayjs().format("DD.MM.YYYY")}(${model.appointment_process.map((item) => item.appointment_process_history_name).join(', ')})`;
+    }
+    return `${dayjs().format("DD.MM.YYYY")}`;
+}
+
+const PatientFileTable = (props: Props) => {
+
+    const params = useParams<{ slug: string }>()
     const dispatch = useAppDispatch();
     const { data: { selectTab } } = useAppSelector((state: RootState) => state.patientTab);
     const intl = useIntl()
@@ -54,19 +70,27 @@ const PatientFileTable = ({ params }: { params: { slug: string } }) => {
     const [getPatientFileList, {
         data: getPatientFileListData,
         isFetching: isPatientFileFetching,
-        isLoading: isPatientFileLoading
+        isLoading: isPatientFileLoading,
+        originalArgs
     }] = useLazyGetPatientFileListQuery();
+
 
     const columns = useMemo<ColumnDef<PatientFile, any>[]>(() => [
         columnHelper.accessor('file_name', {
             header: intl.formatMessage({ id: "fileName" }),
             cell: info => {
                 return <Stack direction="row" spacing={1.5} alignItems="center">
-                    <Link href={info.row.original.url} target='_blank'>
+                    {info.row.original.type != "folder" ? <Link href={info.row.original.url} target='_blank'>
                         <FileTypeBoxIcon objectMime={info.row.original.object_mime} imageUrl={info.row.original.url} alt={info.renderValue()} />
-                    </Link>
+                    </Link> : <FolderBoxIcon />}
                     <Stack spacing={0}>
-                        <Typography variant="subtitle2">{info.renderValue()}</Typography>
+                        {info.row.original.type == "folder" ? <Button onClick={() => {
+                            if (props.page == "file") {
+                                getPatientFileList({ patient_id: props.patientId, appointment_id: info.row.original.appointment_id })
+                            } else {
+                                getPatientFileList({ patient_id: params.slug, appointment_id: info.row.original.appointment_id })
+                            }
+                        }}><Typography variant="subtitle2">{`${folderName(info.row.original)}`}</Typography></Button> : <Typography variant="subtitle2">{info.renderValue()}</Typography>}
                     </Stack>
                 </Stack>
             },
@@ -105,7 +129,7 @@ const PatientFileTable = ({ params }: { params: { slug: string } }) => {
                                 e.stopPropagation();
                                 dispatch(setModal({
                                     open: true, modalType: ModalEnum.deletePatientFile,
-                                    id: params.slug,
+                                    id: params.slug ?? props.patientId,
                                     title: info.row.original.file_name,
                                     data: info.row.original
                                 }))
@@ -121,14 +145,14 @@ const PatientFileTable = ({ params }: { params: { slug: string } }) => {
                 filterVariant: 'select',
             },
         }),
-    ], [])
+    ], [props.patientId])
 
-    const tableData = useMemo(() => getPatientFileListData?.data.files ?? [], [getPatientFileListData?.data.files]);
+    const tableData = useMemo(() => getPatientFileListData?.data?.files ?? [], [getPatientFileListData?.data?.files]);
 
     const table = useReactTable({
         data: tableData,
         columns,
-        rowCount: getPatientFileListData?.data.files.length,
+        rowCount: getPatientFileListData?.data?.files?.length,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         columnResizeMode: "onChange"
@@ -140,16 +164,32 @@ const PatientFileTable = ({ params }: { params: { slug: string } }) => {
         }
     }, [selectTab])
 
+    useEffect(() => {
+        console.log(props.page, props.patientId);
+        if (props.page == "file") {
+            if (props.patientId != null) {
+                getPatientFileList({ patient_id: props.patientId })
+            }
+        }
+    }, [props.page, props.patientId])
+
     return (
         <MainCard
             sx={{ marginBottom: 3 }}
-            title={intl.formatMessage({ id: "files" })}
+            //title={intl.formatMessage({ id: "files" })}
+            title={originalArgs?.appointment_id != null ? <Button variant="outlined" onClick={() => {
+                if (props.page == "file") {
+                    getPatientFileList({ patient_id: props.patientId })
+                } else {
+                    getPatientFileList({ patient_id: params.slug })
+                }
+            }} startIcon={<ArrowCircleLeft2 />}>{intl.formatMessage({ id: "back" })}</Button> : intl.formatMessage({ id: "files" })}
             secondary={
                 <Button variant="dashed" startIcon={<Add />} onClick={() => {
                     dispatch(setModal({
                         open: true,
                         modalType: ModalEnum.newPatientFile,
-                        id: params.slug
+                        id: params.slug ?? props.patientId
                     }))
                 }}>{intl.formatMessage({ id: "add" })}</Button>
             }
@@ -199,7 +239,7 @@ const PatientFileTable = ({ params }: { params: { slug: string } }) => {
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={table.getAllColumns().length}>
-                                        <EmptyTable msg={isPatientFileFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                                        <EmptyTable msg={isPatientFileFetching ? intl.formatMessage({ id: "loadingDot" }) : props.page == "file" ? intl.formatMessage({ id: "noDataPatientFileTableSelectPatient" }) : intl.formatMessage({ id: "noData" })} />
                                     </TableCell>
                                 </TableRow>
                             )

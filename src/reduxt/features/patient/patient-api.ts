@@ -70,6 +70,7 @@ const patientApi = createApi({
 })
 
 export const {
+    useGetPatientListQuery,
     useLazyGetPatientListQuery,
     useCreatePatientMutation,
     useUpdatePatientMutation,

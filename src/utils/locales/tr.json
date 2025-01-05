@@ -148,5 +148,13 @@
     "subProcess" : "Alt İşlem",
     "subProcesses" : "Alt İşlemler",
     "createdBy" : "Oluşturan",
-    "updatedBy": "Güncelleyen"
+    "updatedBy": "Güncelleyen",
+    "completeAppointment": "Randevuyu Tamamla",
+    "completeAppointmentText" : "Randevu durumu Tamamlandı olarak ayarlanacak. Onaylıyor musunuz?",
+    "appointmentCompleted": "Randevu Tamamlandı",
+    "helpfulVideos" : "Yardımcı Videolar",
+    "contact" : "İletişim",
+    "noEventsText" : "Tanımlı randevu bulunamadı.",
+    "back" : "Geri",
+    "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin."
 }

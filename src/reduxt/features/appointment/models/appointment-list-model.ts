@@ -76,6 +76,10 @@ export interface AppointmentListResultModel {
     person_name: string
     person_surname: string
     person_full_name: string
+    birthdate: string
+    identity_number: string
+    phone_code: string
+    patient_full_phone: string
     appointment_status_id: number
     appointment_status_name: string
     background_color: string
@@ -91,6 +95,20 @@ export interface AppointmentListResultModel {
     created_person: string
     updated_by: any
     updated_person: any
+    status: boolean
+  }
+  
+  export interface AppointmentUpdateNoteBodyModel {
+    appointment_id: number | null
+    patient_id: number | null
+    appointment_note: string | null
+    status: boolean
+  }
+  
+  export interface AppointmentUpdateStatusBodyModel {
+    appointment_id: number | null | string
+    patient_id: number | null | string
+    appointment_status_id: number | null | string
     status: boolean
   }
   

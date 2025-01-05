@@ -29,6 +29,7 @@ export type NavItemType = {
   isDropdown?: boolean;
   icon?: GenericCardProps['iconPrimary'] | string;
   id?: string;
+  code?:string | null
   link?: string;
   search?: string;
   target?: boolean;

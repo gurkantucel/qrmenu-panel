@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
-import { AppointmentCreateBodyModel, AppointmentListResultModel, AppointmentReadResultModel } from './models/appointment-list-model';
+import { AppointmentCreateBodyModel, AppointmentListResultModel, AppointmentReadResultModel, AppointmentUpdateNoteBodyModel, AppointmentUpdateStatusBodyModel } from './models/appointment-list-model';
 
 const appointmentApi = createApi({
     reducerPath: "appointmentApi",
@@ -65,16 +65,38 @@ const appointmentApi = createApi({
             },
             providesTags: ["appointment"]
         }),
+        appointmentUpdateNote: builder.mutation<CreateResultModel, AppointmentUpdateNoteBodyModel>({
+            query: (body) => {
+                return {
+                    url: `app/appointment/updateNote`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+        }),
+        appointmentUpdateStatus: builder.mutation<CreateResultModel, AppointmentUpdateStatusBodyModel>({
+            query: (body) => {
+                return {
+                    url: `app/appointment/updateStatus`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+            invalidatesTags: ["appointment"]
+        }),
     })
 })
 
 export const {
+    useGetAppointmentListQuery,
     useLazyGetAppointmentListQuery,
     useCreateAppointmentMutation,
     useUpdateAppointmentMutation,
     useDeleteAppointmentMutation,
     useLazyReadAppointmentQuery,
     useLazyGetAppointmentDropdownQuery,
+    useAppointmentUpdateNoteMutation,
+    useAppointmentUpdateStatusMutation
 } = appointmentApi
 
 export default appointmentApi;

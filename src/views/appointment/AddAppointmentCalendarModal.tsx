@@ -14,7 +14,6 @@ import { EventSourceInput } from '@fullcalendar/core';
 import { useFormikContext } from 'formik';
 import dayjs from 'dayjs';
 import { CloseSquare } from 'iconsax-react';
-import { useIntl } from 'react-intl';
 import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import Toolbar from 'sections/apps/calendar/Toolbar';
@@ -24,9 +23,7 @@ import { DropdownListModel } from 'utils/models/dropdown-list-model';
 const AddAppointmentCalendarModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
-
-    const intl = useIntl()
+    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
 
     const [calendarView, setCalendarView] = useState<string>("timeGridWeek");
     const [date, setDate] = useState(new Date());
@@ -174,6 +171,7 @@ const AddAppointmentCalendarModal = () => {
                         headerToolbar={false}
                         allDayMaintainDuration
                         eventResizableFromStart
+                        scrollTime={"08:00:00"}
                         locale={"tr"}
                         select={(val) => {
                             setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD hh:mm'));
@@ -194,12 +192,3 @@ const AddAppointmentCalendarModal = () => {
 }
 
 export default AddAppointmentCalendarModal
-
-function renderEventContent(eventInfo: any) {
-    return (
-        <>
-            <b>{eventInfo.timeText}</b>
-            <i>{eventInfo.event.title}</i>
-        </>
-    )
-}

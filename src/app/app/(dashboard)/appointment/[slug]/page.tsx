@@ -1,9 +1,9 @@
 import React from 'react'
 import AppointmentDetailView from 'views/appointment/AppointmentDetailView'
 
-const AppointmentDetailPage = ({ params }: { params: { slug: string } }) => {
+const AppointmentDetailPage = () => {
   return (
-    <AppointmentDetailView params={params} />
+    <AppointmentDetailView />
   )
 }
 
