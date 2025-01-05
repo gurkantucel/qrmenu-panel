@@ -360,7 +360,7 @@ const AddAppointmentModal = (props: Props) => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="gender">{intl.formatMessage({ id: "appointmentDate" })}</InputLabel>
+                                            <InputLabel htmlFor="appointmentDate">{intl.formatMessage({ id: "appointmentDate" })}</InputLabel>
                                             <OutlinedInput
                                                 id="text-adornment-password"
                                                 type="datetime-local"
@@ -370,7 +370,7 @@ const AddAppointmentModal = (props: Props) => {
                                                 value={values.appointment_start}
                                                 name="appointment_start"
                                                 onChange={(val) => {
-                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD hh:mm'))
+                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD HH:mm'))
                                                 }}
                                                 endAdornment={
                                                     <InputAdornment position="end">

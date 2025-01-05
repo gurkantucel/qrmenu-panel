@@ -208,7 +208,7 @@ const UpdateAppointmentModal = () => {
                                                 value={values.appointment_start}
                                                 name="appointment_start"
                                                 onChange={(val) => {
-                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD hh:mm'))
+                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD HH:mm'))
                                                 }}
                                                 endAdornment={
                                                     <InputAdornment position="end">
