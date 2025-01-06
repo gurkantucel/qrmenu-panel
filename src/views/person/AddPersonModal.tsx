@@ -247,7 +247,12 @@ const AddPersonModal = () => {
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
                                                     placeholder={intl.formatMessage({ id: "phone" })}
-                                                    inputProps={{ maxLength: 10 }}
+                                                    inputProps={{
+                                                        type: "tel",
+                                                        maxLength: 10,
+                                                        inputMode: "numeric",
+                                                        pattern: "[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                                                    }}
                                                 />
                                             </Stack>
                                         </Stack>
@@ -336,11 +341,11 @@ const AddPersonModal = () => {
                                     </Grid>
                                     <AuthorizationsInput />
                                     <Grid item xs={12}>
-                                        <FormControlLabel control={<Switch 
-                                        checked={values.accepting_appointment}
-                                        value={values.accepting_appointment} onChange={(e,checked)=>{
-                                            setFieldValue("accepting_appointment",checked);
-                                        }} />} label={intl.formatMessage({ id: "acceptingAppointment" })} />
+                                        <FormControlLabel control={<Switch
+                                            checked={values.accepting_appointment}
+                                            value={values.accepting_appointment} onChange={(e, checked) => {
+                                                setFieldValue("accepting_appointment", checked);
+                                            }} />} label={intl.formatMessage({ id: "acceptingAppointment" })} />
                                     </Grid>
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>

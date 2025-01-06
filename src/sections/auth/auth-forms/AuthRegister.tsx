@@ -12,7 +12,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-
 // third-party
 import { Form, Formik } from 'formik';
 
@@ -76,7 +75,7 @@ export default function AuthRegister() {
     <>
       <Formik
         initialValues={{
-          membership_package_id: 1,
+          membership_package_id: 0,
           person_name: '',
           person_surname: '',
           person_phone_code: '+90',
@@ -217,6 +216,12 @@ export default function AuthRegister() {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       placeholder="Yetkili Telefon"
+                      inputProps={{
+                        type: "tel",
+                        maxLength: 10,
+                        inputMode: "numeric",
+                        pattern:"[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                      }}
                     />
                   </Stack>
                 </Stack>
@@ -248,7 +253,7 @@ export default function AuthRegister() {
                   </FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="company-signup">Branş</InputLabel>
                   <CustomFormikSelect

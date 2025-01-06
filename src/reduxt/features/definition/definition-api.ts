@@ -13,7 +13,7 @@ const definitionApi = createApi({
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getPackagesDropdown: builder.query<DropdownListModel, void>({
-            query: () => `definition/packages/dropDown`,
+            query: () => `definition/membership-packages/dropDown`,
             providesTags: ["definitions"]
         }),
         getPersonTypeDropdown: builder.query<DropdownListModel, void>({

@@ -11,7 +11,7 @@ const registerValidationSchema = Yup.object({
         .min(1, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
-    person_phone_number: Yup.string().min(10).max(10)
+    person_phone_number: Yup.string().min(10,"10 haneli telefon numaranızı girin.").max(10, "10 haneli telefon numaranızı girin.")
         .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
     person_email: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
     company_name: Yup.string()

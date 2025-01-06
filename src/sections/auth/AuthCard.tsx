@@ -10,7 +10,7 @@ export default function AuthCard({ children, ...other }: MainCardProps) {
   return (
     <MainCard
       sx={{
-        maxWidth: { xs: 500, md: 580 },
+        maxWidth: { xs: 520, md: 620 },
         margin: { xs: 2.5, md: 3 },
         '& > *': {
           flexGrow: 1,
@@ -20,7 +20,7 @@ export default function AuthCard({ children, ...other }: MainCardProps) {
       content={false}
       {...other}
     >
-      <Box sx={{ p: { xs: 2, sm: 3, md: 4, xl: 5 } }}>{children}</Box>
+      <Box sx={{ p: { xs: 3, sm: 3, md: 4, xl: 5 } }}>{children}</Box>
     </MainCard>
   );
 }
