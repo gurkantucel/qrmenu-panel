@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormControl, FormControlLabel, FormHelperText, Grid, InputAdornment, InputLabel, OutlinedInput, Radio, RadioGroup, Stack, Typography } from "@mui/material"
 import { Add, CalendarSearch, CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
@@ -39,6 +39,8 @@ const AddAppointmentModal = (props: Props) => {
     const [initialData, setInitialData] = useState<AppointmentCreateBodyModel>();
 
     const [personName, setPersonName] = useState<null | string>()
+
+    const [patientType, setPatientType] = useState("oldPatient");
 
     const handleClose = () => {
         dispatch(closeModal())
@@ -132,7 +134,7 @@ const AddAppointmentModal = (props: Props) => {
                         patient_name: null,
                         patient_surname: null,
                         patient_identity_number: null,
-                        patient_phone_code: null,
+                        patient_phone_code: patientType == "oldPatient" ? null : "+90",
                         patient_phone_number: null,
                         patient_birthdate: null,
                         person_id: null,
@@ -176,11 +178,16 @@ const AddAppointmentModal = (props: Props) => {
                                 </Grid>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12}>
-                                        <AuthDivider>
-                                            <Typography variant="subtitle1">Mevcut Danışan İle</Typography>
-                                        </AuthDivider>
+                                        <FormControl component="fieldset">
+                                            <RadioGroup aria-label="size" defaultValue="newPerson" name="radio-buttons-group" row value={patientType} onChange={(event,value)=>{
+                                                setPatientType(value)
+                                            }}>
+                                                <FormControlLabel value="oldPatient" control={<Radio color="info" />} label="Mevcut Danışan" />
+                                                <FormControlLabel value="newPatient" control={<Radio color="success" />} label="Yeni Danışan" />
+                                            </RadioGroup>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    {patientType == "oldPatient" && <Grid item xs={12}>
                                         <CustomFormikAsyncSelect
                                             isMulti={false}
                                             name='patient_id'
@@ -194,14 +201,8 @@ const AddAppointmentModal = (props: Props) => {
                                             noOptionsMessage={() => "En az üç karakter ile arayın."}
                                             loadingMessage={() => "Yükleniyor"}
                                         />
-                                    </Grid>
-                                    {values.patient_id == null && <>
-                                        <Grid item xs={12}>
-                                            <AuthDivider>
-                                                <Typography variant="subtitle1">Yeni Danışan İle</Typography>
-                                            </AuthDivider>
-                                            <Typography variant="body2">{"Zorunlu alanlar * ile belirtilmiştir."}</Typography>
-                                        </Grid>
+                                    </Grid>}
+                                    {patientType == "newPatient" && <>
                                         <Grid item xs={12} md={4}>
                                             <Stack spacing={1}>
                                                 <InputLabel htmlFor="patient_name">{intl.formatMessage({ id: "name" })}{"*"}</InputLabel>
