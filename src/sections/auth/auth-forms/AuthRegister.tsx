@@ -220,7 +220,6 @@ export default function AuthRegister() {
                         type: "tel",
                         maxLength: 10,
                         inputMode: "numeric",
-                        pattern:"[0-9]{3}-[0-9]{2}-[0-9]{3}"
                       }}
                     />
                   </Stack>

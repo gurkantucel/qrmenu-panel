@@ -186,7 +186,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                         appointment_process_id: null;
                                                                         amount: null;
                                                                         status: boolean;
-                                                                    }>[])[0].amount))}
+                                                                    }>[])[0]?.amount))}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index].amount) && (errors.data && (errors.data as FormikErrors<{
@@ -195,7 +195,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                 appointment_process_id: null;
                                                                 amount: null;
                                                                 status: boolean;
-                                                            }>[])[0].amount) && (
+                                                            }>[])[0]?.amount) && (
                                                                     <FormHelperText error id="helper-text-firstname-signup">
                                                                         {(errors.data && (errors.data as FormikErrors<{
                                                                             appointment_id: number;
@@ -203,7 +203,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                             appointment_process_id: null;
                                                                             amount: null;
                                                                             status: boolean;
-                                                                        }>[])[0].amount)}
+                                                                        }>[])[0]?.amount)}
                                                                     </FormHelperText>
                                                                 )}
                                                         </Grid>

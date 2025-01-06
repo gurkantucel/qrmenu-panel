@@ -44,7 +44,6 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                     <Tab value={PatientTabEnum.saglik_bilgileri} label="Sağlık Bilgileri" />
                     <Tab value={PatientTabEnum.dosyalar} label="Dosyalar" />
                     <Tab value={PatientTabEnum.odemeler} label="Ödemeler" />
-                    <Tab value={PatientTabEnum.randevular} label="Randevular" />
                 </Tabs>
                 <TabPanel value={selectTab} index={PatientTabEnum.kisisel_bilgiler}>
                     <PatientPersonalInformation params={params} />

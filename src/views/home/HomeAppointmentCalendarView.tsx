@@ -24,7 +24,7 @@ const HomeAppointmentCalendarView = () => {
 
     const intl = useIntl()
 
-    const [calendarView, setCalendarView] = useState<string>("timeGridWeek");
+    const [calendarView, setCalendarView] = useState<string>("dayGridMonth");
     const [date, setDate] = useState(new Date());
     const calendarRef = useRef<FullCalendar>(null);
 

@@ -426,7 +426,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                         placeholder="Seçim yapınız..."
                                         isLoading={getPatientReferenceListLoading}
                                         value={
-                                            values.patient_reference_id ? { label: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
+                                            values.patient_reference_id ? { label: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
                                         onChange={(val: any) => {
                                             setFieldValue("patient_reference_id", val?.value ?? 0);
                                         }}

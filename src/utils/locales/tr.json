@@ -156,5 +156,6 @@
     "contact" : "İletişim",
     "noEventsText" : "Tanımlı randevu bulunamadı.",
     "back" : "Geri",
-    "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin."
+    "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin.",
+    "minute" : "Dakika"
 }

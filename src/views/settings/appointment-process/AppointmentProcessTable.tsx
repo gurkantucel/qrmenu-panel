@@ -22,7 +22,7 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table'
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash } from 'iconsax-react';
@@ -31,7 +31,7 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import dayjs from 'dayjs';
 import { AppointmentProcessListData, Detail } from 'reduxt/features/settings/models/appointment-process-model';
-import { useLazyGetAppointmentProcessListQuery } from 'reduxt/features/settings/appointment-process-api';
+import { useGetAppointmentProcessListQuery } from 'reduxt/features/settings/appointment-process-api';
 import AddAppointmentProcessModal from './AddAppointmentProcessModal';
 import DeleteAppointmentProcessModal from './DeleteAppointmentProcessModal';
 import ViewAppointmentProcessModal from './ViewAppointmentProcessModal';
@@ -109,12 +109,6 @@ const AppointmentProcessTable = () => {
 
   const dispatch = useAppDispatch();
 
-  const [getAppointmentProcessList, {
-    data: getAppointmentProcessListData,
-    isFetching: isAppointmentProcessFetching,
-    isLoading: isAppointmentProcessLoading
-  }] = useLazyGetAppointmentProcessListQuery();
-
   const columns = useMemo<ColumnDef<AppointmentProcessListData, any>[]>(() => [
     columnHelper.accessor('expander', {
       header: () => null,
@@ -185,7 +179,6 @@ const AppointmentProcessTable = () => {
           <Tooltip title={intl.formatMessage({ id: "edit" })}>
             <IconButton
               color="primary"
-              disabled={info.row.original.appointment_process_id == 3}
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
@@ -237,12 +230,18 @@ const AppointmentProcessTable = () => {
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
-  const tableData = useMemo(() => getAppointmentProcessListData?.data ?? [], [getAppointmentProcessListData?.data]);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  const { data: getAppointmentProcessListData, isLoading: isAppointmentProcessLoading, isFetching: isAppointmentProcessFetching } = useGetAppointmentProcessListQuery({
+    page: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+  })
+
+  const tableData = useMemo(() => getAppointmentProcessListData?.data ?? [], [getAppointmentProcessListData?.data]);
 
   const table = useReactTable({
     data: tableData,
@@ -258,26 +257,6 @@ const AppointmentProcessTable = () => {
     manualFiltering: false,
     onColumnFiltersChange: setColumnFilters,
   })
-
-  useEffect(() => {
-    if (getAppointmentProcessListData != null) {
-      getAppointmentProcessList({
-        page: table.getState().pagination.pageIndex + 1,
-        pageSize: table.getState().pagination.pageSize,
-      })
-    }
-  }, [pagination])
-
-  useEffect(() => {
-    console.log(columnFilters);
-    if (columnFilters.length > 0) {
-      console.log("columnFilter length > 0");
-      var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
-      getAppointmentProcessList({ filterSearch: stringParams })
-    } else {
-      getAppointmentProcessList({})
-    }
-  }, [columnFilters])
 
   return (
     <MainCard content={false}>

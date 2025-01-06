@@ -399,7 +399,7 @@ const AddAppointmentModal = (props: Props) => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="appointment_duration">{intl.formatMessage({ id: "appointmentDuration" })}</InputLabel>
+                                            <InputLabel htmlFor="appointment_duration">{`${intl.formatMessage({ id: "appointmentDuration" })}(${intl.formatMessage({ id: "minute" })})`}</InputLabel>
                                             <OutlinedInput
                                                 id="text-adornment-password"
                                                 type="number"
@@ -418,7 +418,7 @@ const AddAppointmentModal = (props: Props) => {
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="appointmentNote">{intl.formatMessage({ id: "appointmentNote" })}</InputLabel>
                                             <OutlinedInput
-                                                id="text-adornment-password"
+                                                id="text-adornment-password"    
                                                 type="text"
                                                 placeholder={intl.formatMessage({ id: "appointmentDuration" })}
                                                 error={Boolean(touched.appointment_note && errors.appointment_note)}

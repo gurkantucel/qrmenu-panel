@@ -8,6 +8,7 @@ const appointmentApi = createApi({
     reducerPath: "appointmentApi",
     tagTypes: ["appointment"],
     baseQuery: baseQueryWithReauth,
+    refetchOnMountOrArgChange: true,
     endpoints: (builder) => ({
         getAppointmentList: builder.query<AppointmentListResultModel, { filterSearch?: string, page?: number, pageSize?: number }>({
             query: (args?: { filterSearch?: string, page?: number, pageSize?: number }) => {

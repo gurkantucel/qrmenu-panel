@@ -8,6 +8,7 @@ import AppointmentFileTable from './appointment-file/AppointmentFileTable'
 import AppointmentProcessTypeTable from './appointment-process-type/AppointmentProcessTypeTable'
 import AppointmentNoteView from './appointment-note/AppointmentNoteView'
 import AppointmentUpdateStatus from './appointment-update-status/AppointmentUpdateStatus'
+import PastAppointmentTable from './PastAppointmentTable'
 
 const AppointmentDetailView = () => {
   return (
@@ -19,6 +20,7 @@ const AppointmentDetailView = () => {
           <AppointmentProcessTypeTable />
           <AppointmentNoteView />
           <AppointmentFileTable />
+          <PastAppointmentTable />
         </Grid>
       </MainCard>
     </>

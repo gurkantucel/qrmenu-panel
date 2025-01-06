@@ -47,13 +47,19 @@ const AddAppointmentProcessModal = () => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess) {
             getAppointmentProcessType();
-            getAppointmentProcessDropdown({});
+            if(id == null){
+                getAppointmentProcessDropdown({});
+            }
             getCurrency();
         }
     }, [open, id])
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess && data !=null) {
+            getAppointmentProcessDropdown({
+                include_packages: data.appointment_process_type_id == 3 ? false : true,
+                excluded_appointment_process_id: data.appointment_process_id
+            });
             const model: CreateAppointmentProcessBodyModel = {
                 appointment_process_id: data.appointment_process_id,
                 currency_id: data.currency_id,
@@ -341,7 +347,7 @@ const AddAppointmentProcessModal = () => {
                                                     value: item.value,
                                                     label: item.label
                                                 }))}
-                                                value={getAppointmentProcessDropdownData?.data.filter((item) => values.sub_appointment_process?.includes(item.value))}
+                                                value={getAppointmentProcessDropdownData?.data?.filter((item) => values.sub_appointment_process?.includes(item.value))}
                                                 onChange={(val: DropdownListData[]) => {
                                                     setFieldValue("sub_appointment_process", val.map((item) => item.value));
                                                 }}

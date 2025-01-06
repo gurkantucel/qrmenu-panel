@@ -79,6 +79,14 @@ const permissionControlMenu = () => {
                 icon: ""
             },
             {
+                id: 'statistics',
+                code: null,
+                title: "İstatistikler",
+                type: 'item',
+                url: '/app/statistics',
+                icon: ""
+            },
+            {
                 id: 'settings',
                 code: "00007",
                 title: "Ayarlar",
