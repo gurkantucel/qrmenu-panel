@@ -61,7 +61,7 @@ const UpdateAppointmentModal = () => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.updateAppointment && data != null) {
             const model: AppointmentCreateBodyModel = {
-                apppointment_id: data.apppointment_id,
+                appointment_id: data.appointment_id,
                 patient_id: data.patient_id,
                 person_id: data.person_id,
                 appointment_status_id: data.appointment_status_id,
@@ -105,7 +105,7 @@ const UpdateAppointmentModal = () => {
             <Dialog open={open && modalType == ModalEnum.updateAppointment} onClose={handleClose}>
                 {false || false ? <CustomScaleLoader /> : <Formik
                     initialValues={initialData ?? {
-                        apppointment_id: null,
+                        appointment_id: null,
                         patient_id: null,
                         patient_name: null,
                         patient_surname: null,
@@ -125,13 +125,14 @@ const UpdateAppointmentModal = () => {
                     enableReinitialize
                     validationSchema={newAppointmentSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.apppointment_id != null) {
+                        if (values.appointment_id != null) {
                             updateAppointment(values);
                         }
                     }}
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                         <Form>
+                            <p>{JSON.stringify(values)}</p>
                             <AddAppointmentCalendarModal />
                             <Box sx={{ px: 3, py: 3 }}>
                                 <Grid

@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 const registerValidationSchema = Yup.object({
+    membership_package_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
     person_name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(1, "Çok Kısa")

@@ -40,7 +40,7 @@ export interface AppointmentListResultModel {
   }
   
   export interface AppointmentCreateBodyModel {
-    apppointment_id?: number | string |  null
+    appointment_id?: number | string |  null
     patient_id?: number | string |  null
     patient_name?: string |  null
     patient_surname?: string |  null

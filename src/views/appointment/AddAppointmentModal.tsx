@@ -79,7 +79,7 @@ const AddAppointmentModal = (props: Props) => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointment && data != null) {
             const model: AppointmentCreateBodyModel = {
-                apppointment_id: data.apppointment_id,
+                appointment_id: data.apppointment_id,
                 patient_id: data.patient_id,
                 person_id: data.person_id,
                 appointment_status_id: data.appointment_status_id,
@@ -129,7 +129,7 @@ const AddAppointmentModal = (props: Props) => {
             <Dialog open={open && modalType == ModalEnum.newAppointment} onClose={handleClose} fullScreen>
                 <Formik
                     initialValues={initialData ?? {
-                        apppointment_id: null,
+                        appointment_id: null,
                         patient_id: null,
                         patient_name: null,
                         patient_surname: null,
@@ -149,7 +149,7 @@ const AddAppointmentModal = (props: Props) => {
                     enableReinitialize
                     validationSchema={newAppointmentSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.apppointment_id != null) {
+                        if (values.appointment_id != null) {
                             //updateAppointment(values);
                         } else {
                             createAppointment(values);
