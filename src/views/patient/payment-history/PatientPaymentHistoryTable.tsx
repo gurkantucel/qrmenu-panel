@@ -52,13 +52,8 @@ const PatientPaymentHistoryTable = ({ params }: { params: { slug: string } }) =>
   }] = useLazyGetPatientPaymentHistoryListQuery();
 
   const columns = useMemo<ColumnDef<PatientPaymentHistoryListData, any>[]>(() => [
-    columnHelper.accessor('appointment_process_type_name', {
-      header: intl.formatMessage({ id: "appointmentType" }),
-      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-      footer: info => info.column.id,
-    }),
     columnHelper.accessor('payment_kind_name', {
-      header: intl.formatMessage({ id: "appointmentKind" }),
+      header: intl.formatMessage({ id: "paymentKind" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
@@ -92,7 +87,7 @@ const PatientPaymentHistoryTable = ({ params }: { params: { slug: string } }) =>
                   open: true, modalType: ModalEnum.newPatientPaymentHistory,
                   id: info.row.original.patient_id,
                   data: info.row.original,
-                  title: `${info.row.original.appointment_process_type_name} ${info.row.original.payment_kind_name} ${info.row.original.amount} ${info.row.original.currency_name}`
+                  title: `${info.row.original.payment_kind_name} ${info.row.original.amount} ${info.row.original.currency_name}`
                 }))
               }}
             >
@@ -107,7 +102,7 @@ const PatientPaymentHistoryTable = ({ params }: { params: { slug: string } }) =>
                 dispatch(setModal({
                   open: true, modalType: ModalEnum.deletePatientPaymentHistory,
                   id: info.row.original.patient_id,
-                  title: `${info.row.original.appointment_process_type_name} ${info.row.original.payment_kind_name} ${info.row.original.amount} ${info.row.original.currency_name}`,
+                  title: `${info.row.original.payment_kind_name} ${info.row.original.amount} ${info.row.original.currency_name}`,
                   data: info.row.original
                 }))
               }}

@@ -185,7 +185,9 @@ const PatientFileTable = (props: Props) => {
                 }
             }} startIcon={<ArrowCircleLeft2 />}>{intl.formatMessage({ id: "back" })}</Button> : intl.formatMessage({ id: "files" })}
             secondary={
-                <Button variant="dashed" startIcon={<Add />} onClick={() => {
+                <Button variant="dashed" 
+                disabled={props.page == "file" && props.patientId == null}
+                startIcon={<Add />} onClick={() => {
                     dispatch(setModal({
                         open: true,
                         modalType: ModalEnum.newPatientFile,

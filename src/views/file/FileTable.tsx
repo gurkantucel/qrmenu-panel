@@ -27,7 +27,7 @@ const FileTable = () => {
                 <AsyncSelect
                     placeholder={"T.C., Telefon veya İsimle Danışan Arayın"}
                     isLoading={getPatientDropdownLoading}
-                    isClearable={true}
+                    isClearable={false}
                     noOptionsMessage={((label) => "Bulunamadı.")}
                     loadOptions={getPatientDropdownOptions}
                     cacheOptions

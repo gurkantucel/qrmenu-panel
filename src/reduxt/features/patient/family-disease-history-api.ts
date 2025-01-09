@@ -21,7 +21,7 @@ const familyDiseaseHistoryApi = createApi({
         createPatientFamilyDiseaseHistory: builder.mutation<CreateResultModel, PatientFamilyDiseaseHistoryCreateBodyModel>({
             query: (body) => {
                 return {
-                    url: `app/patient-disease-history/create`,
+                    url: `app/patient-family-disease-history/create`,
                     method: "POST",
                     body: body
                 }
@@ -31,7 +31,7 @@ const familyDiseaseHistoryApi = createApi({
         updatePatientFamilyDiseaseHistory: builder.mutation<CreateResultModel, PatientFamilyDiseaseHistoryCreateBodyModel>({
             query: (body) => {
                 return {
-                    url: `app/patient-disease-history/update`,
+                    url: `app/patient-family-disease-history/update`,
                     method: "PUT",
                     body: body
                 }

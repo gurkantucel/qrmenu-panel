@@ -160,6 +160,10 @@ const definitionApi = createApi({
             query: () => `definition/appointment-process-type/dropDown`,
             providesTags: ["definitions"]
         }),
+        getPaymentKindDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/payment-kind/dropDown`,
+            providesTags: ["definitions"]
+        }),
     })
 })
 
@@ -196,7 +200,8 @@ export const {
     useLazyGetPatientProcessTypeDropdownQuery,
     useLazyGetPaymentMethodDropdownQuery,
     useLazyGetAppointmentStatusDropdownQuery,
-    useLazyGetAppointmentProcessTypeDropdownQuery
+    useLazyGetAppointmentProcessTypeDropdownQuery,
+    useLazyGetPaymentKindDropdownQuery
 } = definitionApi
 
 export default definitionApi;

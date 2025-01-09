@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -16,6 +16,8 @@ import { enqueueSnackbar } from "notistack";
 import { newPatientDiseaseHistorySchema } from "utils/schemas/patient-validation-schema";
 import { PatientDiseaseHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-disease-history-model";
 import { useCreatePatientDiseaseHistoryMutation, useLazyGetPatientDiseaseHistoryListQuery, useUpdatePatientDiseaseHistoryMutation } from "reduxt/features/patient/disease-history-api";
+import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
+import dayjs from "dayjs";
 
 const AddPatientDiseaseHistoryModal = () => {
 
@@ -34,6 +36,7 @@ const AddPatientDiseaseHistoryModal = () => {
 
     const [getDiseaseStatus, {
         data: getDiseaseStatusData,
+        isLoading: getDiseaseStatusIsLoading
     }] = useLazyGetDiseaseStatusDropdownQuery();
 
     const [createPatientDiseaseHistory, { isLoading: createPatientDiseaseHistoryIsLoading, data: createPatientDiseaseHistoryResponse, error: createPatientDiseaseHistoryError }] = useCreatePatientDiseaseHistoryMutation();
@@ -47,7 +50,7 @@ const AddPatientDiseaseHistoryModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientDiseaseHistory) {
             const model: PatientDiseaseHistoryCreateBodyModel = {
                 patient_disease_history_id: data.patient_disease_history_id,
                 patient_id: data.patient_id,
@@ -177,19 +180,23 @@ const AddPatientDiseaseHistoryModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="disease_status">{intl.formatMessage({ id: "diseaseStatus" })}{"*"}</InputLabel>
-                                            <Select id="disease_status_id"
-                                                placeholder="Hastalık Durumu"
-                                                name="disease_status_id"
-                                                value={values.disease_status_id}
-                                                onChange={handleChange}>
-                                                {getDiseaseStatusData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
-                                            </Select>
+                                            <CustomFormikSelect
+                                                name='disease_status_id'
+                                                placeholder="Seçim yapınız..."
+                                                isLoading={getDiseaseStatusIsLoading}
+                                                menuPosition={"fixed"}
+                                                zIndex={9999}
+                                                options={getDiseaseStatusData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                                value={
+                                                    values.disease_status_id ? { label: getDiseaseStatusData?.data?.find((item) => item.value == values.disease_status_id)?.label ?? "", value: getDiseaseStatusData?.data?.find((item) => item.value == values.disease_status_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("disease_status_id", val?.value ?? 0);
+                                                }}
+                                            />
                                         </Stack>
-                                        {touched.disease_status_id && errors.disease_status_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.disease_status_id}
-                                            </FormHelperText>
-                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
@@ -199,7 +206,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                                 error={Boolean(touched.start_date && errors.start_date)}
                                                 id="start_date"
                                                 type="date"
-                                                value={values.start_date}
+                                                value={dayjs(values.start_date).format('YYYY-MM-DD')}
                                                 name="start_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
@@ -221,7 +228,7 @@ const AddPatientDiseaseHistoryModal = () => {
                                                 error={Boolean(touched.end_date && errors.end_date)}
                                                 id="end_date"
                                                 type="date"
-                                                value={values.end_date}
+                                                value={dayjs(values.end_date).format('YYYY-MM-DD')}
                                                 name="end_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

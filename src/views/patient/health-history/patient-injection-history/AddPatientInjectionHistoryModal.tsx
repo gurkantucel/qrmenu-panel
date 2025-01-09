@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, TextField, Typography } from "@mui/material"
+import {Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -16,6 +16,7 @@ import { newPatientInjectionHistorySchema } from "utils/schemas/patient-validati
 import { PatientInjectionHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-injection-history-model";
 import { useCreatePatientInjectionHistoryMutation, useUpdatePatientInjectionHistoryMutation } from "reduxt/features/patient/injection-history-api";
 import { useLazyGetInjectionTypeDropdownQuery } from "reduxt/features/definition/definition-api";
+import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 
 const AddPatientInjectionHistoryModal = () => {
 
@@ -32,6 +33,7 @@ const AddPatientInjectionHistoryModal = () => {
 
     const [getInjectionType, {
         data: getInjectionTypeData,
+        isLoading: getInjectionTypeIsLoading,
     }] = useLazyGetInjectionTypeDropdownQuery();
 
     const [createPatientInjectionHistory, { isLoading: createPatientInjectionHistoryIsLoading, data: createPatientInjectionHistoryResponse, error: createPatientInjectionHistoryError }] = useCreatePatientInjectionHistoryMutation();
@@ -45,7 +47,7 @@ const AddPatientInjectionHistoryModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientInjectionHistory) {
             const model: PatientInjectionHistoryCreateBodyModel = {
                 patient_injection_history_id: data.patient_injection_history_id,
                 patient_id: data.patient_id,
@@ -200,23 +202,24 @@ const AddPatientInjectionHistoryModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="injection_type_id">{intl.formatMessage({ id: "injectionType" })}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getInjectionTypeData?.data.find((item) => item.value == values.injection_type_id)}
-                                                onChange={(event, newValue) => {
-                                                    setFieldValue("injection_type_id", newValue?.value)
+                                            <CustomFormikSelect
+                                                name='injection_type_id'
+                                                placeholder="Seçim yapınız..."
+                                                isLoading={getInjectionTypeIsLoading}
+                                                isClearable
+                                                menuPosition={"fixed"}
+                                                zIndex={9999}
+                                                options={getInjectionTypeData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                                value={
+                                                    values.injection_type_id ? { label: getInjectionTypeData?.data?.find((item) => item.value == values.injection_type_id)?.label ?? "", value: getInjectionTypeData?.data?.find((item) => item.value == values.injection_type_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("injection_type_id", val?.value ?? 0);
                                                 }}
-                                                id="injection_type_id"
-                                                options={getInjectionTypeData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "injectionType" })} />}
                                             />
                                         </Stack>
-                                        {touched.injection_type_id && errors.injection_type_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.injection_type_id}
-                                            </FormHelperText>
-                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>

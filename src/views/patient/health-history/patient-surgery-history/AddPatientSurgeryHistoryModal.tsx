@@ -41,7 +41,7 @@ const AddPatientSurgeryHistoryModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientSurgeryHistory) {
             const model: PatientSurgeryHistoryCreateBodyModel = {
                 patient_surgery_history_id: data.patient_surgery_history_id,
                 patient_id: data.patient_id,

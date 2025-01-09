@@ -10,7 +10,7 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetCurrencyDropdownQuery, useLazyGetPatientProcessTypeDropdownQuery, useLazyGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetCurrencyDropdownQuery, useLazyGetPaymentKindDropdownQuery, useLazyGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { newPatientPaymentHistorySchema } from "utils/schemas/patient-validation-schema";
@@ -31,7 +31,7 @@ const AddPatientPaymentHistoryModal = () => {
         setInitialData(undefined);
     };
 
-    const [getPatientProcessType, { data: getPatientProcessTypeData, isLoading: isPatientProcessTypeDataLoading }] = useLazyGetPatientProcessTypeDropdownQuery();
+    const [getPaymentKind, { data: getPaymentKindData, isLoading: isPatientProcessTypeDataLoading }] = useLazyGetPaymentKindDropdownQuery();
 
     const [getPaymentMethod, { data: getPaymentMethodData, isLoading: isPaymentMethodLoading }] = useLazyGetPaymentMethodDropdownQuery();
 
@@ -43,18 +43,17 @@ const AddPatientPaymentHistoryModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientPaymentHistory) {
-            getPatientProcessType();
+            getPaymentKind();
             getPaymentMethod();
             getCurrency();
         }
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientPaymentHistory) {
             const model: PatientPaymentHistoryCreateBodyModel = {
                 patient_payment_history_id: data.patient_payment_history_id,
                 patient_id: data.patient_id,
-                appointment_process_type_id: data.appointment_process_type_id,
                 appointment_id: data.appointment_id,
                 payment_kind_id: data.payment_kind_id,
                 payment_method_id: data.payment_method_id,
@@ -119,7 +118,6 @@ const AddPatientPaymentHistoryModal = () => {
                     initialValues={initialData ?? {
                         patient_payment_history_id: null,
                         patient_id: id,
-                        appointment_process_type_id: null,
                         appointment_id: null,
                         payment_kind_id: null,
                         payment_method_id: null,
@@ -160,28 +158,6 @@ const AddPatientPaymentHistoryModal = () => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="appointment_process_type">{intl.formatMessage({ id: "appointmentProcessType" })}</InputLabel>
-                                            <CustomFormikSelect
-                                                name='appointment_process_type_id'
-                                                placeholder="Randevu İşlem Tipi Seçin"
-                                                isClearable={true}
-                                                isLoading={isPatientProcessTypeDataLoading}
-                                                zIndex={9999}
-                                                value={
-                                                    values.appointment_process_type_id ? { label: getPatientProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.label ?? "", value: getPatientProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.value ?? 0 } : null}
-                                                onChange={(val: any) => {
-                                                    setFieldValue("appointment_process_type_id", val?.value ?? 0);
-                                                }}
-
-                                                options={getPatientProcessTypeData?.data?.map((item) => ({
-                                                    value: item.value,
-                                                    label: item.label
-                                                }))}
-                                            />
-                                        </Stack>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
                                             <InputLabel htmlFor="payment_kind">{intl.formatMessage({ id: "paymentKind" })}{"*"}</InputLabel>
                                             <CustomFormikSelect
                                                 name='payment_kind_id'
@@ -190,12 +166,12 @@ const AddPatientPaymentHistoryModal = () => {
                                                 isLoading={isPatientProcessTypeDataLoading}
                                                 zIndex={9998}
                                                 value={
-                                                    values.payment_kind_id ? { label: getPatientProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.label ?? "", value: getPatientProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.value ?? 0 } : null}
+                                                    values.payment_kind_id ? { label: getPaymentKindData?.data?.find((item) => item.value == values.payment_kind_id)?.label ?? "", value: getPaymentKindData?.data?.find((item) => item.value == values.payment_kind_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
                                                     setFieldValue("payment_kind_id", val?.value ?? 0);
                                                 }}
 
-                                                options={getPatientProcessTypeData?.data?.map((item) => ({
+                                                options={getPaymentKindData?.data?.map((item) => ({
                                                     value: item.value,
                                                     label: item.label
                                                 }))}
@@ -232,6 +208,7 @@ const AddPatientPaymentHistoryModal = () => {
                                                 placeholder="Döviz Türü Seçin"
                                                 isClearable={true}
                                                 isLoading={isCurrencyLoading}
+                                                menuPosition="fixed"
                                                 zIndex={9996}
                                                 value={
                                                     values.currency_id ? { label: getCurrencyData?.data?.find((item) => item.value == values.currency_id)?.label ?? "", value: getCurrencyData?.data?.find((item) => item.value == values.currency_id)?.value ?? 0 } : null}

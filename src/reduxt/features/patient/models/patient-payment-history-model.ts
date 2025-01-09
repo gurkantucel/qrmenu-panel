@@ -73,7 +73,7 @@ export interface PatientPaymentHistoryReadData {
 export interface PatientPaymentHistoryCreateBodyModel {
     patient_payment_history_id?: number | string | null
     patient_id?: number | string | null
-    appointment_process_type_id?: number | null
+   //appointment_process_type_id?: number | null
     appointment_id: number | null
     payment_kind_id: number | null
     payment_method_id: number | null

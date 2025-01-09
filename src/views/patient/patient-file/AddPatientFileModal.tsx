@@ -46,6 +46,7 @@ const AddPatientFileModal = () => {
 
     const handleClose = () => {
         dispatch(closeModal())
+        setselectedFiles([])
     };
 
     const [createPatientFile, { isLoading: createPatientFileIsLoading, data: createPatientFileResponse, error: createPatientFileError }] = useCreatePatientFileMutation();

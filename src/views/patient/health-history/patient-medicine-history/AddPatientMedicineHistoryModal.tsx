@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { newPatientMedicineHistorySchema } from "utils/schemas/patient-validation-schema";
 import { useCreatePatientMedicineHistoryMutation, useUpdatePatientMedicineHistoryMutation } from "reduxt/features/patient/medicine-history-api";
 import { PatientMedicineHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-medicine-history-model";
+import dayjs from "dayjs";
 
 const AddPatientMedicineHistoryModal = () => {
 
@@ -42,7 +43,7 @@ const AddPatientMedicineHistoryModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientMedicineHistory) {
             const model: PatientMedicineHistoryCreateBodyModel = {
                 patient_medicine_history_id: data.patient_medicine_history_id,
                 patient_id: data.patient_id,
@@ -228,7 +229,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 error={Boolean(touched.start_date && errors.start_date)}
                                                 id="start_date"
                                                 type="date"
-                                                value={values.start_date}
+                                               value={dayjs(values.start_date).format('YYYY-MM-DD')}
                                                 name="start_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
@@ -250,7 +251,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 error={Boolean(touched.end_date && errors.end_date)}
                                                 id="end_date"
                                                 type="date"
-                                                value={values.end_date}
+                                                value={dayjs(values.end_date).format('YYYY-MM-DD')}
                                                 name="end_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

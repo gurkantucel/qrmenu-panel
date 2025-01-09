@@ -1,6 +1,6 @@
 "use client"
 
-import { Autocomplete, Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
@@ -10,12 +10,14 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetDiseaseStatusDropdownQuery, useLazyGetKinshipDegreeDropdownQuery} from "reduxt/features/definition/definition-api";
+import { useLazyGetDiseaseStatusDropdownQuery, useLazyGetKinshipDegreeDropdownQuery } from "reduxt/features/definition/definition-api";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { newPatientFamilyDiseaseSchema } from "utils/schemas/patient-validation-schema";
 import { PatientFamilyDiseaseHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-family-disease-history-model";
 import { useCreatePatientFamilyDiseaseHistoryMutation, useUpdatePatientFamilyDiseaseHistoryMutation } from "reduxt/features/patient/family-disease-history-api";
+import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
+import dayjs from "dayjs";
 
 const AddPatientFamilyDiseaseHistoryModal = () => {
 
@@ -34,10 +36,12 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
 
     const [getKinshipDegree, {
         data: getKinshipDegreeData,
+        isLoading: getKinshipDegreeIsLoading
     }] = useLazyGetKinshipDegreeDropdownQuery();
 
     const [getDiseaseStatus, {
         data: getDiseaseStatusData,
+        isLoading: getDiseaseStatusIsLoading,
     }] = useLazyGetDiseaseStatusDropdownQuery();
 
     const [createPatientFamilyDiseaseHistory, { isLoading: createPatientFamilyDiseaseHistoryIsLoading, data: createPatientFamilyDiseaseHistoryResponse, error: createPatientFamilyDiseaseHistoryError }] = useCreatePatientFamilyDiseaseHistoryMutation();
@@ -52,7 +56,7 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (data != null) {
+        if (data != null && modalType == ModalEnum.newPatientFamilyDiseaseHistory) {
             const model: PatientFamilyDiseaseHistoryCreateBodyModel = {
                 patient_family_disease_history_id: data.patient_family_disease_history_id,
                 patient_id: data.patient_id,
@@ -185,16 +189,21 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="kinship_degree_id">{intl.formatMessage({ id: "kinshipDegree" })}{"*"}</InputLabel>
-                                            <Autocomplete
-                                                fullWidth
-                                                disablePortal
-                                                value={getKinshipDegreeData?.data.find((item)=> item.value == values.kinship_degree_id)}
-                                                onChange={(event,newValue)=>{
-                                                    setFieldValue("kinship_degree_id",newValue?.value)
+                                            <CustomFormikSelect
+                                                name='kinship_degree_id'
+                                                placeholder="Seçim yapınız..."
+                                                isLoading={getKinshipDegreeIsLoading}
+                                                menuPosition={"fixed"}
+                                                zIndex={9999}
+                                                options={getKinshipDegreeData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                                value={
+                                                    values.kinship_degree_id ? { label: getKinshipDegreeData?.data?.find((item) => item.value == values.kinship_degree_id)?.label ?? "", value: getKinshipDegreeData?.data?.find((item) => item.value == values.kinship_degree_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("kinship_degree_id", val?.value ?? 0);
                                                 }}
-                                                id="kinship_degree_id"
-                                                options={getKinshipDegreeData?.data ?? []}
-                                                renderInput={(params) => <TextField {...params} placeholder={intl.formatMessage({ id: "kinshipDegree" })} />}
                                             />
                                         </Stack>
                                         {touched.kinship_degree_id && errors.kinship_degree_id && (
@@ -206,19 +215,23 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="disease_status">{intl.formatMessage({ id: "diseaseStatus" })}{"*"}</InputLabel>
-                                            <Select id="disease_status_id"
-                                                placeholder="Hastalık Durumu"
-                                                name="disease_status_id"
-                                                value={values.disease_status_id}
-                                                onChange={handleChange}>
-                                                {getDiseaseStatusData?.data?.map((item) => (<MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>))}
-                                            </Select>
+                                            <CustomFormikSelect
+                                                name='disease_status_id'
+                                                placeholder="Seçim yapınız..."
+                                                isLoading={getDiseaseStatusIsLoading}
+                                                menuPosition={"fixed"}
+                                                zIndex={9999}
+                                                options={getDiseaseStatusData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                                value={
+                                                    values.disease_status_id ? { label: getDiseaseStatusData?.data?.find((item) => item.value == values.disease_status_id)?.label ?? "", value: getDiseaseStatusData?.data?.find((item) => item.value == values.disease_status_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("disease_status_id", val?.value ?? 0);
+                                                }}
+                                            />
                                         </Stack>
-                                        {touched.disease_status_id && errors.disease_status_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.disease_status_id}
-                                            </FormHelperText>
-                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
@@ -228,7 +241,7 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                                                 error={Boolean(touched.start_date && errors.start_date)}
                                                 id="start_date"
                                                 type="date"
-                                                value={values.start_date}
+                                                value={dayjs(values.start_date).format('YYYY-MM-DD')}
                                                 name="start_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
@@ -250,7 +263,7 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                                                 error={Boolean(touched.end_date && errors.end_date)}
                                                 id="end_date"
                                                 type="date"
-                                                value={values.end_date}
+                                                value={dayjs(values.end_date).format('YYYY-MM-DD')}
                                                 name="end_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

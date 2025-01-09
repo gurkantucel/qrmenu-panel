@@ -23,6 +23,13 @@ const newPatientDiseaseHistorySchema = Yup.object({
         .min(2, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
+    start_date: Yup.date().nullable().typeError('Başlangıç tarihi geçerli bir tarih olmalıdır'),
+    end_date: Yup.date().nullable()
+        .typeError('Bitiş tarihi geçerli bir tarih olmalıdır')
+        .when(["start_date"], {
+            is: (start_date: any) => start_date && start_date !== '',
+            then: (schema) => Yup.date().nullable().min(Yup.ref('start_date'), 'Bitiş tarihi başlangıç tarihinden büyük olmalıdır'),
+        }),
 })
 
 const newPatientMedicineHistorySchema = Yup.object({
@@ -32,6 +39,13 @@ const newPatientMedicineHistorySchema = Yup.object({
         .min(2, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
+    start_date: Yup.date().nullable().typeError('Başlangıç tarihi geçerli bir tarih olmalıdır'),
+    end_date: Yup.date().nullable()
+        .typeError('Bitiş tarihi geçerli bir tarih olmalıdır')
+        .when(["start_date"], {
+            is: (start_date: any) => start_date && start_date !== '',
+            then: (schema) => Yup.date().nullable().min(Yup.ref('start_date'), 'Bitiş tarihi başlangıç tarihinden büyük olmalıdır'),
+        }),
 })
 
 const newPatientFamilyDiseaseSchema = Yup.object({
@@ -43,6 +57,13 @@ const newPatientFamilyDiseaseSchema = Yup.object({
         .min(2, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
+    start_date: Yup.date().nullable().typeError('Başlangıç tarihi geçerli bir tarih olmalıdır'),
+    end_date: Yup.date().nullable()
+        .typeError('Bitiş tarihi geçerli bir tarih olmalıdır')
+        .when(["start_date"], {
+            is: (start_date: any) => start_date && start_date !== '',
+            then: (schema) => Yup.date().nullable().min(Yup.ref('start_date'), 'Bitiş tarihi başlangıç tarihinden büyük olmalıdır'),
+        }),
 })
 
 const newPatientSurgeryHistorySchema = Yup.object({

@@ -1,6 +1,6 @@
 import { FormHelperText } from '@mui/material'
 import { Field } from 'formik'
-import Select, { ActionMeta, GroupBase, OptionsOrGroups, StylesConfig } from 'react-select'
+import Select, { ActionMeta, GroupBase, MenuPosition, OptionsOrGroups, StylesConfig } from 'react-select'
 
 type Props = {
     name: string
@@ -17,6 +17,7 @@ type Props = {
     isMulti?: any
     onMenuOpen?: (() => void) | undefined
     onMenuClose?: (() => void) | undefined
+    menuPosition?: MenuPosition
 }
 
 const CustomFormikSelect = (props: Props) => {
@@ -35,6 +36,7 @@ const CustomFormikSelect = (props: Props) => {
                         noOptionsMessage={(label) => "Bulunamadı."}
                         onMenuOpen={props.onMenuOpen}
                         onMenuClose={props.onMenuClose}
+                        menuPosition={props.menuPosition}
                         styles={props.styles ?? {
                             container: (baseStyles: any) => ({
                                 ...baseStyles,
@@ -60,9 +62,9 @@ const CustomFormikSelect = (props: Props) => {
                         value={props.value}
                     />
                     {(props.isErrorText ?? true) && meta.touched &&
-                        meta.error &&  <FormHelperText error id={`helper-text-${props.name}`}>
-                        {meta.error}
-                      </FormHelperText>}
+                        meta.error && <FormHelperText error id={`helper-text-${props.name}`}>
+                            {meta.error}
+                        </FormHelperText>}
                 </>
             )}
         </Field>

@@ -130,6 +130,11 @@ const AppointmentProcessTable = () => {
       },
       footer: info => info.column.id,
     }),
+    columnHelper.accessor('code', {
+      header: intl.formatMessage({ id: "code" }),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+      footer: info => info.column.id,
+    }),
     columnHelper.accessor('appointment_process_type_name', {
       header: intl.formatMessage({ id: "type" }),
       cell: info => info.renderValue() == null ? "-" : info.renderValue(),
