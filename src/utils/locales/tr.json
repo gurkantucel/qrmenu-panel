@@ -157,5 +157,6 @@
     "noEventsText" : "Tanımlı randevu bulunamadı.",
     "back" : "Geri",
     "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin.",
-    "minute" : "Dakika"
+    "minute" : "Dakika",
+    "totalCount": "Toplam Satır Sayısı: {count}"
 }

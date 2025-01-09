@@ -22,11 +22,13 @@ interface TablePaginationProps {
   getState: () => TableState;
   getPageCount: () => number;
   initialPageSize?: number;
+  totalCount?: number
+  selectRowLength?: number
 }
 
 // ==============================|| TABLE PAGINATION ||============================== //
 
-export default function TablePagination({ getPageCount, setPageIndex, setPageSize, getState, initialPageSize }: TablePaginationProps) {
+export default function TablePagination({ getPageCount, setPageIndex, setPageSize, getState, initialPageSize, selectRowLength, totalCount }: TablePaginationProps) {
   const [open, setOpen] = useState(false);
   let options: number[] = [10, 25, 50, 100];
 
@@ -64,6 +66,10 @@ export default function TablePagination({ getPageCount, setPageIndex, setPageSiz
       <Grid item>
         <Stack direction="row" spacing={1} alignItems="center">
           <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="caption" color="secondary">
+              {/*1-25/42 -- 26-42/42 */}
+              {selectRowLength && `${selectRowLength}/${totalCount} -`}
+            </Typography>
             <Typography variant="caption" color="secondary">
               {intl.formatMessage({id: "rowPerPage"})}
             </Typography>

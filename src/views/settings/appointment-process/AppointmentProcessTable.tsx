@@ -337,7 +337,9 @@ const AppointmentProcessTable = () => {
                 setPageSize: table.setPageSize,
                 setPageIndex: table.setPageIndex,
                 getState: table.getState,
-                getPageCount: table.getPageCount
+                getPageCount: table.getPageCount,
+                selectRowLength: table.getRowModel().rows.length,
+                totalCount: table.getRowCount()
               }}
             />
           </Box>
