@@ -16,6 +16,8 @@ import Select from 'react-select'
 import MainCard from 'components/MainCard';
 import { useLazyAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
+import { getCookie } from 'cookies-next';
+import { Person } from 'reduxt/features/auth/models/auth-models';
 
 const HomeAppointmentCalendarView = () => {
     const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -83,16 +85,32 @@ const HomeAppointmentCalendarView = () => {
         isFetching: appointmentCalendarFetching
     }] = useLazyGetAppointmentCalendarListQuery();
 
-    useEffect(()=>{
+    useEffect(() => {
         getAcceptingAppointmentDropDownList({})
-    },[])
+    }, [])
 
     useEffect(() => {
         if (getAcceptingAppointmentListData?.status && getAcceptingAppointmentListData.data != null) {
-            setPersonId(getAcceptingAppointmentListData?.data[0].value)
-            getAppointmentCalendarList({ person_id: getAcceptingAppointmentListData?.data[0].value });
+            const cookieValue = getCookie("person");
+            if (cookieValue != null) {
+                var personCookieValue = JSON.parse(cookieValue) as Person;
+                var personFilter = getAcceptingAppointmentListData?.data.find((item) => item.value == personCookieValue.person_id)
+                if (personFilter != null) {
+                    setPersonId(personFilter.value)
+                } else {
+                    setPersonId(getAcceptingAppointmentListData?.data[0].value)
+                }
+            } else {
+                setPersonId(getAcceptingAppointmentListData?.data[0].value)
+            }
         }
     }, [getAcceptingAppointmentListData])
+
+    useEffect(() => {
+        if (personId) {
+            getAppointmentCalendarList({ person_id: personId });
+        }
+    }, [personId])
 
     return (
         <MainCard
@@ -129,7 +147,8 @@ const HomeAppointmentCalendarView = () => {
                             label: item.label
                         }))}
                         onChange={(val: any) => {
-                            getAppointmentCalendarList({ person_id: val?.value })
+                            setPersonId(val?.value);
+                            //getAppointmentCalendarList({ person_id: val?.value })
                         }}
                     />
                 </Typography>
@@ -158,7 +177,7 @@ const HomeAppointmentCalendarView = () => {
                             initialView={calendarView}
                             allDayText='Tüm'
                             scrollTime={"08:00:00"}
-                            noEventsText={intl.formatMessage({id: "noEventsText"})}
+                            noEventsText={intl.formatMessage({ id: "noEventsText" })}
                             dayMaxEventRows={3}
                             eventDisplay="block"
                             headerToolbar={false}
