@@ -1,9 +1,9 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField, Typography } from "@mui/material"
-import { Add, CloseSquare, Eye, EyeSlash } from "iconsax-react"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
+import { CloseSquare, Eye, EyeSlash } from "iconsax-react"
 import { useIntl } from "react-intl";
-import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
+import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { Form, Formik } from 'formik';
@@ -14,7 +14,6 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import IconButton from "components/@extended/IconButton";
 import { updatePersonPasswordSchema } from "utils/schemas/person-validation-schema";
 import { enqueueSnackbar } from "notistack";
-import { PersonCreateBodyModel } from "reduxt/features/person/models/person-list-model";
 
 const UpdatePersonPasswordModal = () => {
 
