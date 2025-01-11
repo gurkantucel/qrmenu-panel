@@ -27,13 +27,14 @@ import { PersonListData } from 'reduxt/features/person/models/person-list-model'
 import { useGetPersonListQuery } from 'reduxt/features/person/person-api';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Trash } from 'iconsax-react';
+import { Edit, Eye, Key, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPersonModal from './AddPersonModal';
 import DeletePersonModal from './DeletePersonModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import ViewPersonModal from './ViewPersonModal';
+import UpdatePersonPasswordModal from './UpdatePersonPasswordModal';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -119,6 +120,20 @@ const PersonTable = () => {
               <Edit />
             </IconButton>
           </Tooltip>
+          <Tooltip title={intl.formatMessage({ id: "changePassword" })}>
+            <IconButton
+              color="warning"
+              onClick={(e: any) => {
+                e.stopPropagation();
+                dispatch(setModal({
+                  open: true, modalType: ModalEnum.updatePersonPassword,
+                  id: info.row.original.person_id,
+                }))
+              }}
+            >
+              <Key />
+            </IconButton>
+          </Tooltip>
           <Tooltip title={intl.formatMessage({ id: "delete" })}>
             <IconButton
               color="error"
@@ -176,6 +191,7 @@ const PersonTable = () => {
         <AddPersonModal />
         <DeletePersonModal />
         <ViewPersonModal />
+        <UpdatePersonPasswordModal />
       </Stack>
       <ScrollX>
         <TableContainer component={Paper}>
@@ -203,7 +219,7 @@ const PersonTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isPersonFetching || isPersonLoading ?[0, 1, 2].map((item: number) => (
+              {isPersonFetching || isPersonLoading ? [0, 1, 2].map((item: number) => (
                 <TableRow key={item}>
                   {[0, 1, 2, 3, 4, 5].map((col: number) => (
                     <TableCell key={col}>

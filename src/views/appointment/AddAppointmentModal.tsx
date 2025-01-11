@@ -126,7 +126,7 @@ const AddAppointmentModal = (props: Props) => {
                     modalType: ModalEnum.newAppointment
                 }))
             }}>{intl.formatMessage({ id: "newAppointment" })}</Button>}
-            <Dialog open={open && modalType == ModalEnum.newAppointment} onClose={handleClose} fullScreen>
+            <Dialog open={open && modalType == ModalEnum.newAppointment} onClose={handleClose}>
                 <Formik
                     initialValues={initialData ?? {
                         appointment_id: null,

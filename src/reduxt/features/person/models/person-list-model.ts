@@ -39,7 +39,7 @@ export interface PersonCreateBodyModel {
   phone_code: string
   phone_number: string
   email: string
-  password: string
+  password?: string
   authorizations: number[]
   accepting_appointment: boolean
   status: boolean
@@ -78,4 +78,9 @@ export interface PersonAuthorization {
   module_id: number
   module_code: string
   module_name: string
+}
+
+export interface UpdatePersonPasswordBodyModel {
+  person_id: string | number | undefined
+  password: string
 }

@@ -166,8 +166,8 @@ const AddAppointmentCalendarModal = () => {
                     />
                     <FullCalendar
                         weekends
-                        editable
-                        droppable
+                        editable={false}
+                        droppable={false}
                         selectable
                         events={appointmentCalendarData?.data as EventSourceInput ?? []}
                         ref={calendarRef}

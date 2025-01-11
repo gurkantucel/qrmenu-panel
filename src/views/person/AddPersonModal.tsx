@@ -76,7 +76,7 @@ const AddPersonModal = () => {
                 phone_code: readPersonData.data.phone_code,
                 phone_number: readPersonData.data.phone_number,
                 email: readPersonData.data.email,
-                password: '',
+                password: undefined,
                 authorizations: readPersonData.data.person_authorizations?.map((item) => item.module_id) ?? [],
                 accepting_appointment: readPersonData.data?.accepting_appointment,
                 status: true
@@ -283,7 +283,7 @@ const AddPersonModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    {id == null && <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="password-login">{intl.formatMessage({ id: "password" })}</InputLabel>
                                             <OutlinedInput
@@ -317,7 +317,7 @@ const AddPersonModal = () => {
                                                 {errors.password}
                                             </FormHelperText>
                                         )}
-                                    </Grid>
+                                    </Grid>}
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="company-signup">{intl.formatMessage({ id: "personType" })}</InputLabel>

@@ -148,9 +148,9 @@ const HomeAppointmentCalendarView = () => {
                         />
                         <FullCalendar
                             weekends
-                            editable
-                            droppable
-                            selectable
+                            editable={false}
+                            droppable={false}
+                            selectable={false}
                             events={appointmentCalendarData?.data as EventSourceInput ?? []}
                             ref={calendarRef}
                             rerenderDelay={10}

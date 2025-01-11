@@ -31,6 +31,8 @@
     "save" : "Kaydet",
     "authorities" : "Yetkileri",
     "password" : "Şifre",
+    "repeatPassword" : "Şifre Tekrarı",
+    "changePassword" : "Şifre Değiştir",
     "addPerson" : "Çalışan Ekle",
     "updatePerson" : "Çalışan Düzenle",
     "newPerson" : "Yeni Çalışan",
@@ -158,5 +160,6 @@
     "back" : "Geri",
     "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin.",
     "minute" : "Dakika",
-    "totalCount": "Toplam Satır Sayısı: {count}"
+    "totalCount": "Toplam Satır Sayısı: {count}",
+    "pastAppointment" : "Geçmiş Randevular"
 }

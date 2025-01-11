@@ -4,6 +4,7 @@ export enum ModalEnum {
     newPerson,
     deletePerson,
     updatePerson,
+    updatePersonPassword,
     viewPerson,
     newPatient,
     deletePatient,

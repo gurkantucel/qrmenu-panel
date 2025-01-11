@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
-import { PersonCreateBodyModel, PersonListModel, PersonReadResultModel } from './models/person-list-model';
+import { PersonCreateBodyModel, PersonListModel, PersonReadResultModel, UpdatePersonPasswordBodyModel } from './models/person-list-model';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 
@@ -66,6 +66,15 @@ const personApi = createApi({
             },
             providesTags: ["person"]
         }),
+        updatePersonPassword: builder.mutation<CreateResultModel, UpdatePersonPasswordBodyModel>({
+            query: (body) => {
+                return {
+                    url: `app/person/updatePersonPassword`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+        }),
     })
 })
 
@@ -77,7 +86,8 @@ export const {
     useDeletePersonMutation,
     useLazyReadPersonQuery,
     useAcceptingAppointmentDropDownQuery,
-    useLazyAcceptingAppointmentDropDownQuery
+    useLazyAcceptingAppointmentDropDownQuery,
+    useUpdatePersonPasswordMutation
 } = personApi
 
 export default personApi;
