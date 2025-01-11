@@ -114,7 +114,7 @@ const SmsTemplateTable = () => {
   const table = useReactTable({
     data: tableData,
     //getSubRows: (row, index) => row.detail ?? [],
-    getRowCanExpand: () => true,
+    //getRowCanExpand: () => true,
     columns,
     onPaginationChange: setPagination,
     state: { columnFilters, pagination },

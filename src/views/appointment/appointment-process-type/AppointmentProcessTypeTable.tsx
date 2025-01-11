@@ -67,8 +67,10 @@ const SubTable = (props: SubTableProps) => {
         }),
     ], [])
 
+    const tableData = useMemo(() => props.data ?? [], [props.data]);
+
     const table = useReactTable({
-        data: props.data ?? [],
+        data: tableData,
         columns,
         getRowCanExpand: () => true,
         getCoreRowModel: getCoreRowModel(),
