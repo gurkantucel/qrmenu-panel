@@ -112,3 +112,77 @@ export interface AppointmentListResultModel {
     status: boolean
   }
   
+
+  export interface AppointmentHistoryListResultModel {
+    requestId: string
+    status: boolean
+    messageCode: string
+    message: string
+    page: number
+    pageSize: number
+    totalCount: number
+    totalPage: number
+    data: AppointmentHistoryData[]
+  }
+  
+  export interface AppointmentHistoryData {
+    expander?:string
+    appointment_id: number
+    patient_id: number
+    patient_name: string
+    patient_surname: string
+    patient_full_name: string
+    person_id: number
+    person_name: string
+    person_surname: string
+    person_full_name: string
+    appointment_status_id: number
+    appointment_status_name: string
+    background_color: string
+    font_color: string
+    all_day: boolean
+    appointment_start: string
+    appointment_duration: number
+    appointment_end: string
+    appointment_note: any
+    appointment_process: AppointmentProcess[]
+    created_at: string
+    updated_at: string
+    created_by: number
+    created_person: string
+    updated_by: any
+    updated_person: any
+    status: boolean
+    islemler?:string
+  }
+  
+  export interface AppointmentProcess {
+    appointment_process_history_id: number
+    appointment_id: number
+    patient_id: number
+    patient_name: string
+    patient_surname: string
+    patient_full_name: string
+    appointment_start: string
+    appointment_duration: number
+    appointment_end: string
+    currency_id: number
+    currency_code: string
+    currency_name: string
+    appointment_process_type_id: number
+    appointment_process_type_name: string
+    parent_appointment_process_history_id: any
+    code: string
+    name: string
+    description: any
+    amount: number
+    vat: number
+    created_at: string
+    updated_at: string
+    created_by: number
+    created_person: string
+    updated_by: any
+    updated_person: any
+    status: boolean
+  }
+  

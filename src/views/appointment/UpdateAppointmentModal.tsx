@@ -1,7 +1,7 @@
 "use client"
 
-import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
-import { CalendarSearch, CloseSquare } from "iconsax-react"
+import { Box, Button, Chip, Dialog, DialogActions, FormHelperText, Grid, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
+import { CalendarSearch, CloseSquare, InfoCircle } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
@@ -32,14 +32,15 @@ const UpdateAppointmentModal = () => {
     const [initialData, setInitialData] = useState<AppointmentCreateBodyModel>();
 
     const [personName, setPersonName] = useState<null | string>()
+    const [isDeletePerson, setIsDeletePerson] = useState(false);
 
     const handleClose = () => {
         dispatch(closeModal())
         setInitialData(undefined);
+        setIsDeletePerson(false);
     };
 
     const [getAppointmentStatusDropdown, { isLoading: getAppointmentStatusDropdownLoading, data: getAppointmentStatusData }] = useLazyGetAppointmentStatusDropdownQuery();
-
 
     const [getAcceptingAppointmentDropDownList, {
         data: getAcceptingAppointmentListData,
@@ -77,6 +78,17 @@ const UpdateAppointmentModal = () => {
     }, [data])
 
     useEffect(() => {
+        if (getAcceptingAppointmentListData?.data != null && data != null) {
+            const personFilter = getAcceptingAppointmentListData?.data?.find((item) => item.value == data.person_id);
+            if (personFilter != null) {
+                setIsDeletePerson(false);
+            } else {
+                setIsDeletePerson(true);
+            }
+        }
+    }, [getAcceptingAppointmentListData])
+
+    useEffect(() => {
         if (updateAppointmentResponse) {
             enqueueSnackbar(updateAppointmentResponse.message, {
                 variant: updateAppointmentResponse?.status == true ? 'success' : 'error', anchorOrigin: {
@@ -99,6 +111,12 @@ const UpdateAppointmentModal = () => {
             },)
         }
     }, [updateAppointmentResponse, updateAppointmentError])
+
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
 
     return (
         <>
@@ -142,7 +160,7 @@ const UpdateAppointmentModal = () => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 4 }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4">{`${intl.formatMessage({ id: "updateAppointment"})}: ${data?.patient_full_name}`}</Typography>
+                                        <Typography variant="h4">{`${intl.formatMessage({ id: "updateAppointment" })}: ${data?.patient_full_name}`}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -151,6 +169,9 @@ const UpdateAppointmentModal = () => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
+                                    {isDeletePerson == true && <Grid item xs={12} sm={12}>
+                                        <Chip label={intl.formatMessage({ id: "isDeletePersonText" }, { name: data.person_full_name })} variant="outlined" color="error" icon={<InfoCircle />} />
+                                    </Grid>}
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="person_id">{`${intl.formatMessage({ id: "doctorPerson" })}*`}</InputLabel>
@@ -161,9 +182,9 @@ const UpdateAppointmentModal = () => {
                                                 isLoading={getAcceptingAppointmentListLoading}
                                                 zIndex={9998}
                                                 value={
-                                                    values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? 0 } : null}
-                                                onChange={(val: any) => {
-                                                    setFieldValue("person_id", val?.value);
+                                                    values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? data?.person_full_name, value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? data?.person_id } : null}
+                                                onChange={(val: any, action) => {
+                                                    setFieldValue("person_id", val?.value ?? null);
                                                     setPersonName(val?.label);
                                                 }}
 
@@ -246,10 +267,16 @@ const UpdateAppointmentModal = () => {
                                                 placeholder={intl.formatMessage({ id: "appointmentDuration" })}
                                                 value={values.appointment_duration}
                                                 name="appointment_duration"
+                                                error={Boolean(touched.appointment_duration && errors.appointment_duration)}
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                             />
                                         </Stack>
+                                        {touched.appointment_duration && errors.appointment_duration && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.appointment_duration}
+                                            </FormHelperText>
+                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
                                         <Stack spacing={1}>

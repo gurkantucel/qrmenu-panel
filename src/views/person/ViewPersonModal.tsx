@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 
 const ViewPersonModal = () => {
     const dispatch = useAppDispatch();
-    const { data: { open, modalType,id} } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const [readPerson, {
@@ -22,7 +22,7 @@ const ViewPersonModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.viewPerson) {
-            readPerson({person_id: id});
+            readPerson({ person_id: id });
         }
     }, [open])
 
@@ -30,6 +30,12 @@ const ViewPersonModal = () => {
     const handleClose = () => {
         dispatch(closeModal())
     };
+
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
 
     return (
         <Dialog open={open && modalType == ModalEnum.viewPerson} onClose={handleClose} fullWidth maxWidth="sm">
@@ -63,16 +69,16 @@ const ViewPersonModal = () => {
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "email" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.email}</Typography>} />
                 </ListItem>
                 <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "authorities" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.person_authorizations.map((item)=> item.module_name).join(', ')}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "authorities" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.person_authorizations.map((item) => item.module_name).join(', ')}</Typography>} />
                 </ListItem>
                 <ListItem divider>
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "acceptingAppointment" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.accepting_appointment ? intl.formatMessage({ id: "yes" }) : intl.formatMessage({ id: "no" })}</Typography>} />
                 </ListItem>
                 <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "createdDate" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.created_at !=null ? dayjs(readPersonData?.data?.created_at ?? "").locale("tr").format("DD.MM.YYYY HH:mm") : "-"}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "createdDate" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.created_at != null ? dayjs(readPersonData?.data?.created_at ?? "").locale("tr").format("DD.MM.YYYY HH:mm") : "-"}</Typography>} />
                 </ListItem>
                 <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "updatedDate" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.created_at !=null ? dayjs(readPersonData?.data?.updated_at ?? "").locale("tr").format("DD.MM.YYYY HH:mm") : "-"}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "updatedDate" })}</Typography>} secondary={<Typography component="span" variant='body1'>{readPersonData?.data.created_at != null ? dayjs(readPersonData?.data?.updated_at ?? "").locale("tr").format("DD.MM.YYYY HH:mm") : "-"}</Typography>} />
                 </ListItem>
             </List>}
         </Dialog>

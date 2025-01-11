@@ -165,6 +165,12 @@ const AddPatientModal = () => {
         }
     }, [updatePatientResponse, updatePatientError])
 
+    useEffect(()=>{
+        return () => {
+            handleClose()
+        }
+    },[])
+
     return (
         <>
             <Button variant="dashed" startIcon={<Add />} onClick={() => {
@@ -536,7 +542,7 @@ const AddPatientModal = () => {
                                             valuePhoneCode={values.emergency_phone_code}
                                             valuePhoneNumber={values.emergency_phone_number}
                                             touchedPhoneNumber={touched.emergency_phone_number}
-                                            errorPhoneNumber={errors.phone_number}
+                                            errorPhoneNumber={errors.emergency_phone_number}
                                         />
                                     </Grid>
                                 </Grid>

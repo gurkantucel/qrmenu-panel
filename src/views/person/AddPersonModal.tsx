@@ -133,6 +133,12 @@ const AddPersonModal = () => {
         }
     }, [updatePersonResponse, updatePersonError])
 
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
+
     return (
         <>
             <Button variant="dashed" startIcon={<Add />} onClick={() => {

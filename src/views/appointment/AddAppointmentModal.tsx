@@ -118,6 +118,12 @@ const AddAppointmentModal = (props: Props) => {
         }
     }, [createAppointmentResponse, createAppointmentError])
 
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
+
     return (
         <>
             {props.page != "home" && <Button variant="dashed" startIcon={<Add />} onClick={() => {
@@ -141,7 +147,7 @@ const AddAppointmentModal = (props: Props) => {
                         appointment_status_id: 1,
                         all_day: false,
                         appointment_start: null,
-                        appointment_duration: null,
+                        appointment_duration: 30,
                         appointment_end: null,
                         appointment_note: null,
                         status: true
@@ -179,7 +185,7 @@ const AddAppointmentModal = (props: Props) => {
                                 <Grid container spacing={3}>
                                     <Grid item xs={12}>
                                         <FormControl component="fieldset">
-                                            <RadioGroup aria-label="size" defaultValue="newPerson" name="radio-buttons-group" row value={patientType} onChange={(event,value)=>{
+                                            <RadioGroup aria-label="size" defaultValue="newPerson" name="radio-buttons-group" row value={patientType} onChange={(event, value) => {
                                                 setPatientType(value)
                                             }}>
                                                 <FormControlLabel value="oldPatient" control={<Radio color="info" />} label="Mevcut Danışan" />
@@ -409,18 +415,24 @@ const AddAppointmentModal = (props: Props) => {
                                                 placeholder={intl.formatMessage({ id: "appointmentDuration" })}
                                                 value={values.appointment_duration}
                                                 name="appointment_duration"
+                                                error={Boolean(touched.appointment_duration && errors.appointment_duration)}
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                             />
                                         </Stack>
+                                        {touched.appointment_duration && errors.appointment_duration && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.appointment_duration}
+                                            </FormHelperText>
+                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="appointmentNote">{intl.formatMessage({ id: "appointmentNote" })}</InputLabel>
                                             <OutlinedInput
-                                                id="text-adornment-password"    
+                                                id="text-adornment-password"
                                                 type="text"
-                                                placeholder={intl.formatMessage({ id: "appointmentDuration" })}
+                                                placeholder={intl.formatMessage({ id: "appointmentNote" })}
                                                 error={Boolean(touched.appointment_note && errors.appointment_note)}
                                                 value={values.appointment_note}
                                                 name="appointment_note"
@@ -442,7 +454,8 @@ const AddAppointmentModal = (props: Props) => {
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation disabled={isSubmitting || createAppointmentIsLoading} type="submit" variant="contained" color="primary">
+                                        <Button disableElevation 
+                                        disabled={isSubmitting || createAppointmentIsLoading || (patientType == "oldPatient" && values.patient_id == null)} type="submit" variant="contained" color="primary">
                                             {(createAppointmentIsLoading) && <PuffLoader size={20} color='white' />}
                                             {(createAppointmentIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>

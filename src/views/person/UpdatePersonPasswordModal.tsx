@@ -69,6 +69,12 @@ const UpdatePersonPasswordModal = () => {
         }
     }, [updatePersonPasswordResponse, updatePersonPasswordError])
 
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
+
     return (
         <>
             <Dialog open={open && modalType == ModalEnum.updatePersonPassword} onClose={handleClose}>
@@ -80,7 +86,7 @@ const UpdatePersonPasswordModal = () => {
                     }}
                     validationSchema={updatePersonPasswordSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        const model = {person_id: values.person_id, password: values.password}
+                        const model = { person_id: values.person_id, password: values.password }
                         updatePersonPassword(model)
                     }}
                 >

@@ -24,7 +24,7 @@ import {
 } from '@tanstack/react-table'
 import { Fragment, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
@@ -156,6 +156,14 @@ const AppointmentProcessTable = () => {
       footer: info => info.column.id,
       meta: {
         filterVariant: 'date',
+      },
+    }),
+    columnHelper.accessor('status', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'select',
       },
     }),
     columnHelper.accessor('islemler', {

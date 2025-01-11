@@ -36,7 +36,8 @@ export enum ModalEnum {
     updateAppointmentProcess,
     deleteAppointmentProcess,
     viewAppointmentProcess,
-    updateAppointmentStatus
+    updateAppointmentStatus,
+    smsTemplateUpdateStatus
 }
 
 type Model = {

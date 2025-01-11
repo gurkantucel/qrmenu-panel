@@ -4,11 +4,19 @@ const newAppointmentSchema = Yup.object({
     patient_id: Yup.number().nullable(),
     patient_name: Yup.string().nullable().when("patient_id", {
         is: (v: any) => v === null || undefined,
-        then: (schema) => Yup.string().min(1, 'Hasta adı zorunludur').required('Hasta adı zorunludur'),
+        then: (schema) => Yup.string()
+            .matches(/^[a-zA-ZğüşıöçİĞÜŞÖÇ]+(?: [a-zA-ZğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
+            .min(1, "Çok Kısa")
+            .max(100, "Çok Uzun")
+            .required('Hasta adı zorunludur')
     }),
     patient_surname: Yup.string().nullable().when("patient_id", {
         is: (v: any) => v === null || undefined,
-        then: (schema) => Yup.string().min(1, 'Hasta soyadı zorunludur').required('Hasta soyadı zorunludur'),
+        then: (schema) => Yup.string()
+        .matches(/^[a-zA-ZğüşıöçİĞÜŞÖÇ]+(?: [a-zA-ZğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
+        .min(1, "Çok Kısa")
+        .max(100, "Çok Uzun")
+        .required('Hasta soyadı zorunludur')
     }),
     patient_phone_code: Yup.string().nullable().when("patient_id", {
         is: (v: any) => v === null || undefined,
@@ -16,8 +24,10 @@ const newAppointmentSchema = Yup.object({
     }),
     patient_phone_number: Yup.string().nullable().when("patient_id", {
         is: (v: any) => v === null || undefined,
-        then: (schema) => Yup.string().min(10, 'Hasta telefon numarası zorunludur').required('Hasta telefon numarası zorunludur'),
+        then: (schema) => Yup.string().min(10, "Telefon numarası girin.").max(10, "Telefon numarası girin.")
+            .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
     }),
+    appointment_duration: Yup.number().min(0,"Bu alan zorunlu").required("Bu alan zorunlu"),
     person_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
     appointment_status_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
     appointment_start: Yup.string().required("Bu alan zorunlu")

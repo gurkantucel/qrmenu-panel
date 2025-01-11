@@ -47,7 +47,7 @@ const AddAppointmentProcessModal = () => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess) {
             getAppointmentProcessType();
-            if(id == null){
+            if (id == null) {
                 getAppointmentProcessDropdown({});
             }
             getCurrency();
@@ -55,7 +55,7 @@ const AddAppointmentProcessModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (open == true && modalType == ModalEnum.newAppointmentProcess && data !=null) {
+        if (open == true && modalType == ModalEnum.newAppointmentProcess && data != null) {
             getAppointmentProcessDropdown({
                 include_packages: data.appointment_process_type_id == 3 ? false : true,
                 excluded_appointment_process_id: data.appointment_process_id
@@ -123,6 +123,12 @@ const AddAppointmentProcessModal = () => {
             },)
         }
     }, [updateAppointmentProcessResponse, updateAppointmentProcessError])
+
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
 
     return (
         <>
@@ -359,7 +365,7 @@ const AddAppointmentProcessModal = () => {
                                             checked={values.status}
                                             value={values.status} onChange={(e, checked) => {
                                                 setFieldValue("status", checked);
-                                            }} />} label={intl.formatMessage({ id: values.status ?  "active" : "passive" })} />
+                                            }} />} label={intl.formatMessage({ id: values.status ? "active" : "passive" })} />
                                     </Grid>
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>

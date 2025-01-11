@@ -16,41 +16,136 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
+    getExpandedRowModel,
     HeaderGroup,
     PaginationState,
     useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Chip, Divider, Grid, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Eye, } from 'iconsax-react';
+import { Box, Chip, Divider, Grid, Skeleton} from '@mui/material';
+import { ArrowDown2, ArrowRight2, MinusCirlce, } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
-import { useAppDispatch } from 'reduxt/hooks';
-import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import { useSearchParams } from 'next/navigation';
-import { useGetAppointmentListQuery } from 'reduxt/features/appointment/appointment-api';
-import { AppointmentListData } from 'reduxt/features/appointment/models/appointment-list-model';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useListAppointmentHistoryQuery } from 'reduxt/features/appointment/appointment-api';
+import { AppointmentHistoryData, AppointmentProcess } from 'reduxt/features/appointment/models/appointment-list-model';
 import dayjs from 'dayjs';
 import ViewAppointmentModal from './ViewAppointmentModal';
 
-const columnHelper = createColumnHelper<AppointmentListData>()
+type SubTableProps = {
+    data?: AppointmentProcess[]
+}
+const subColumnHelper = createColumnHelper<AppointmentProcess>()
+
+const SubTable = (props: SubTableProps) => {
+
+    const intl = useIntl()
+
+    const columns = useMemo<ColumnDef<AppointmentProcess, any>[]>(() => [
+        subColumnHelper.accessor('appointment_process_type_name', {
+            header: intl.formatMessage({ id: "type" }),
+            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('name', {
+            header: intl.formatMessage({ id: "name" }),
+            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('amount', {
+            header: intl.formatMessage({ id: "amount" }),
+            cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('created_at', {
+            header: intl.formatMessage({ id: "date" }),
+            cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+            footer: info => info.column.id,
+            meta: {
+                filterVariant: 'date',
+            },
+        }),
+    ], [])
+
+    const table = useReactTable({
+        data: props.data ?? [],
+        columns,
+        getRowCanExpand: () => true,
+        getCoreRowModel: getCoreRowModel(),
+        getExpandedRowModel: getExpandedRowModel()
+    });
+
+    return (
+        <MainCard
+            content={false}
+            sx={{ ml: { xs: 2.5, sm: 5, md: 6, lg: 10, xl: 12 } }}
+        >
+            <ScrollX>
+                <TableContainer component={Paper}>
+                    <Table size='small'>
+                        <TableHead>
+                            {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                                <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 'auto' } }}>
+                                    {headerGroup.headers.map((header) => (
+                                        <TableCell key={header.id} {...header.column.columnDef.meta}>
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableHead>
+                        <TableBody>
+                            {table.getRowModel().rows.map((row) => (
+                                <Fragment key={row.id}>
+                                    <TableRow>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                    
+                                </Fragment>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </ScrollX>
+        </MainCard>
+    )
+}
+
+const columnHelper = createColumnHelper<AppointmentHistoryData>()
 
 const PastAppointmentTable = () => {
 
     const intl = useIntl()
 
-    const dispatch = useAppDispatch();
-
+    const params = useParams<{ slug: string }>()
     const searchParams = useSearchParams()
     const patientId = searchParams.get('patient')
 
-    /*const [getAppointmentList, {
-      data: getAppointmentListData,
-      isFetching: isAppointmentFetching,
-      isLoading: isAppointmentLoading
-    }] = useLazyGetAppointmentListQuery();*/
-
-    const columns = useMemo<ColumnDef<AppointmentListData, any>[]>(() => [
+    const columns = useMemo<ColumnDef<AppointmentHistoryData, any>[]>(() => [
+        columnHelper.accessor('expander', {
+            header: () => null,
+            enableColumnFilter: false,
+            cell: info => {
+                return info.row.getCanExpand() && (info.row.original.appointment_process?.length ?? 0) > 0 ? (
+                    <Box width={{ xl: 60 }}>
+                        <IconButton color={info.row.getIsExpanded() ? 'primary' : 'secondary'} onClick={info.row.getToggleExpandedHandler()} size="small">
+                            {info.row.getIsExpanded() ? <ArrowDown2 size="32" variant="Outline" /> : <ArrowRight2 size="32" variant="Outline" />}
+                        </IconButton>
+                    </Box>
+                ) : (
+                    <Box width={{ xl: 60 }}>
+                        <IconButton color="secondary" size="small" disabled>
+                            <MinusCirlce />
+                        </IconButton>
+                    </Box>
+                );
+            },
+            footer: info => info.column.id,
+        }),
         columnHelper.accessor('person_full_name', {
             header: intl.formatMessage({ id: "personNameSurname" }),
             cell: info => info.renderValue(),
@@ -77,49 +172,21 @@ const PastAppointmentTable = () => {
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),
-        columnHelper.accessor('islemler', {
-            header: intl.formatMessage({ id: "actions" }),
-            size: 10,
-            enableColumnFilter: false,
-            cell: (info) => {
-                return <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
-                    <Tooltip title={intl.formatMessage({ id: "view" })}>
-                        <IconButton
-                            color="secondary"
-                            onClick={(e: any) => {
-                                e.stopPropagation();
-                                dispatch(setModal({
-                                    open: true,
-                                    modalType: ModalEnum.viewAppointment,
-                                    id: info.row.original.patient_id,
-                                    title: info.row.original.patient_full_name,
-                                    data: info.row.original
-                                }))
-                            }}
-                        >
-                            <Eye />
-                        </IconButton>
-                    </Tooltip>
-                </Stack>
-            },
-            footer: info => info.column.id,
-            meta: {
-                filterVariant: 'select',
-            },
-        }),
     ], [])
 
-    const [columnFilters, setColumnFilters] = useState<any[]>([{ id: "patient_id", value: patientId }, { id: "appointment_status_id", value: 2 }]);
+    const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     })
 
-    const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
+    const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useListAppointmentHistoryQuery({
+        patient_id: patientId ?? 0,
+        appointment_id: params.slug,
         page: pagination.pageIndex + 1,
         pageSize: pagination.pageSize,
-        filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+        filterSearch: columnFilters.length > 0 ? columnFilters?.map((item) => `${item.id}=${item.value}`).join('&') : undefined
     })
 
     const tableData = useMemo(() => getAppointmentListData?.data ?? [], [getAppointmentListData?.data]);
@@ -127,6 +194,7 @@ const PastAppointmentTable = () => {
     const table = useReactTable({
         data: tableData,
         columns,
+        getRowCanExpand: () => true,
         onPaginationChange: setPagination,
         state: { columnFilters, pagination },
         rowCount: getAppointmentListData?.totalCount,
@@ -135,23 +203,6 @@ const PastAppointmentTable = () => {
         manualFiltering: true,
         onColumnFiltersChange: setColumnFilters,
     })
-
-
-    /*useEffect(() => {
-      getAppointmentList({
-        page: table.getState().pagination.pageIndex + 1,
-        pageSize: table.getState().pagination.pageSize,
-      })
-    }, [pagination])*/
-
-    /*useEffect(() => {
-      if (columnFilters.length > 0) {
-        var stringParams = columnFilters.map((item) => `${item.id}=${item.value}`).join('&')
-        getAppointmentList({ filterSearch: stringParams })
-      } else {
-        getAppointmentList({})
-      }
-    }, [columnFilters])*/
 
     return (
         <Grid item xs={12}>
@@ -162,9 +213,9 @@ const PastAppointmentTable = () => {
                         <Table size='small'>
                             <TableHead>
                                 {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                                    <TableRow key={headerGroup.id}>
+                                    <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 58 } }}>
                                         {headerGroup.headers.map((header) => (
-                                            <TableCell key={header.id} {...header.column.columnDef.meta} style={{ width: `${header.getSize()}px` }}>
+                                            <TableCell key={header.id} {...header.column.columnDef.meta}>
                                                 {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                             </TableCell>
                                         ))}
@@ -194,13 +245,22 @@ const PastAppointmentTable = () => {
                                 )) :
                                     table.getRowModel().rows.length > 0 ? (
                                         table.getRowModel().rows.map((row) => (
-                                            <TableRow key={row.id}>
-                                                {row.getVisibleCells().map((cell) => (
-                                                    <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
+                                            <Fragment key={row.id}>
+                                                <TableRow key={row.id}>
+                                                    {row.getVisibleCells().map((cell) => (
+                                                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                        </TableCell>
+                                                    ))}
+                                                </TableRow>
+                                                {row.getIsExpanded() &&
+                                                    <TableRow>
+                                                        <TableCell colSpan={row.getVisibleCells().length}>
+                                                            <SubTable data={row.original.appointment_process} />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                }
+                                            </Fragment>
                                         ))
                                     ) : (
                                         <TableRow>

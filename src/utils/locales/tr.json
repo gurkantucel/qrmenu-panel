@@ -161,5 +161,9 @@
     "noDataPatientFileTableSelectPatient" : "İlk önce danışan seçin.",
     "minute" : "Dakika",
     "totalCount": "Toplam Satır Sayısı: {count}",
-    "pastAppointment" : "Geçmiş Randevular"
+    "pastAppointment" : "Geçmiş Randevular",
+    "updateStatusText" : "Durum değişikliği yapılacak. Onaylıyor musunuz?",
+    "changeStatus": "Durum Değiştir",
+    "isDeletePersonText": "{name} çalışanı üzerine randevu oluşturulmuş. Bu çalışan silinmiş.",
+    "acceptAppointments" : "Randevu Kabul"
 }

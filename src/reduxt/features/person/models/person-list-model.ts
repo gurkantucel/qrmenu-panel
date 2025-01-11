@@ -21,6 +21,7 @@ export interface PersonListData {
   phone_code: string
   phone_number: string
   email: string
+  accepting_appointment: boolean
   created_at: string
   updated_at: string
   created_by: any

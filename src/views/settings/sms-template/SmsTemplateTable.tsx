@@ -1,5 +1,4 @@
 "use client"
-import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,69 +16,49 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   HeaderGroup,
   PaginationState,
-  RowData,
   useReactTable,
 } from '@tanstack/react-table'
-import { useMemo, useState } from 'react';
-import { PersonListData } from 'reduxt/features/person/models/person-list-model';
-import { useGetPersonListQuery } from 'reduxt/features/person/person-api';
-import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Key, Trash } from 'iconsax-react';
+import { Fragment, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { ArrowRotateRight } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
-import AddPersonModal from './AddPersonModal';
-import DeletePersonModal from './DeletePersonModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import ViewPersonModal from './ViewPersonModal';
-import UpdatePersonPasswordModal from './UpdatePersonPasswordModal';
+import { SmsTemplateData } from 'reduxt/features/sms-template/models/sms-template-model';
+import { useGetSmsTemplateListQuery } from 'reduxt/features/sms-template/sms-template-api';
+import UpdateStatusSmsTemplateModal from './UpdateStatusSmsTemplateModal';
 
-declare module '@tanstack/table-core' {
-  interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date'
-  }
-}
 
-const columnHelper = createColumnHelper<PersonListData>()
+const columnHelper = createColumnHelper<SmsTemplateData>()
 
-const PersonTable = () => {
-
+const SmsTemplateTable = () => {
   const intl = useIntl()
 
   const dispatch = useAppDispatch();
 
-  /*const [getPersonList, {
-    data: getPersonListData,
-    isFetching: isPersonFetching,
-    isLoading: isPersonLoading
-  }] = useLazyGetPersonListQuery();*/
-
-  const columns = useMemo<ColumnDef<PersonListData, any>[]>(() => [
-    columnHelper.accessor('name', {
-      header: intl.formatMessage({ id: "nameSurname" }),
-      cell: info => info.renderValue(),
+  const columns = useMemo<ColumnDef<SmsTemplateData, any>[]>(() => [
+    columnHelper.accessor('sms_template_code', {
+      header: intl.formatMessage({ id: "code" }),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('person_type_name', {
-      header: intl.formatMessage({ id: "personType" }),
-      cell: info => info.renderValue(),
+    columnHelper.accessor('sms_template_name', {
+      header: intl.formatMessage({ id: "type" }),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('email', {
-      header: intl.formatMessage({ id: "email" }),
-      cell: info => info.renderValue(),
+    columnHelper.accessor('sms_template_description', {
+      header: intl.formatMessage({ id: "name" }),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('phone_number', {
-      header: intl.formatMessage({ id: "phoneNumber" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('accepting_appointment', {
-      header: intl.formatMessage({ id: "acceptAppointments" }),
-      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? <FormattedMessage id='active' /> : <FormattedMessage id='passive' />} size="small" variant="light" />,
+    columnHelper.accessor('status', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
       footer: info => info.column.id,
       meta: {
         filterVariant: 'select',
@@ -91,62 +70,21 @@ const PersonTable = () => {
       enableColumnFilter: false,
       cell: (info) => {
         return <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
-          <Tooltip title={intl.formatMessage({ id: "view" })}>
-            <IconButton
-              color="secondary"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.viewPerson,
-                  id: info.row.original.person_id,
-                }))
-              }}
-            >
-              <Eye />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "edit" })}>
-            <IconButton
-              color="primary"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.newPerson,
-                  id: info.row.original.person_id,
-                  title: info.row.original.full_name
-                }))
-              }}
-            >
-              <Edit />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "changePassword" })}>
+          <Tooltip title={intl.formatMessage({ id: "changeStatus" })}>
             <IconButton
               color="warning"
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.updatePersonPassword,
-                  id: info.row.original.person_id,
+                  open: true,
+                  modalType: ModalEnum.smsTemplateUpdateStatus,
+                  id: info.row.original.sms_template_id,
+                  title: info.row.original.sms_template_name,
+                  data: info.row.original
                 }))
               }}
             >
-              <Key />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "delete" })}>
-            <IconButton
-              color="error"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.deletePerson,
-                  id: info.row.original.person_id,
-                  title: info.row.original.full_name
-                }))
-              }}
-            >
-              <Trash />
+              <ArrowRotateRight />
             </IconButton>
           </Tooltip>
         </Stack>
@@ -165,21 +103,24 @@ const PersonTable = () => {
     pageSize: 10,
   })
 
-  const { data: getPersonListData, isLoading: isPersonLoading, isFetching: isPersonFetching } = useGetPersonListQuery({
+  const { data: getSmsTemplateListData, isLoading: isSmsTemplateLoading, isFetching: isSmsTemplateFetching } = useGetSmsTemplateListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
   })
 
-  const tableData = useMemo(() => getPersonListData?.data ?? [], [getPersonListData?.data]);
+  const tableData = useMemo(() => getSmsTemplateListData?.data ?? [], [getSmsTemplateListData?.data]);
 
   const table = useReactTable({
     data: tableData,
+    //getSubRows: (row, index) => row.detail ?? [],
+    getRowCanExpand: () => true,
     columns,
     onPaginationChange: setPagination,
     state: { columnFilters, pagination },
-    rowCount: getPersonListData?.totalCount,
+    rowCount: getSmsTemplateListData?.totalCount,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     manualPagination: true,
     manualFiltering: false,
     onColumnFiltersChange: setColumnFilters,
@@ -188,17 +129,14 @@ const PersonTable = () => {
   return (
     <MainCard content={false}>
       <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-        <AddPersonModal />
-        <DeletePersonModal />
-        <ViewPersonModal />
-        <UpdatePersonPasswordModal />
+        <UpdateStatusSmsTemplateModal />
       </Stack>
       <ScrollX>
         <TableContainer component={Paper}>
-          <Table>
+          <Table size='small'>
             <TableHead>
               {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                <TableRow key={headerGroup.id}>
+                <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 58 } }}>
                   {headerGroup.headers.map((header) => (
                     <TableCell key={header.id} {...header.column.columnDef.meta}>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -219,7 +157,7 @@ const PersonTable = () => {
               ))}
             </TableHead>
             <TableBody>
-              {isPersonFetching || isPersonLoading ? [0, 1, 2].map((item: number) => (
+              {isSmsTemplateFetching || isSmsTemplateLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                 <TableRow key={item}>
                   {[0, 1, 2, 3, 4, 5].map((col: number) => (
                     <TableCell key={col}>
@@ -230,18 +168,20 @@ const PersonTable = () => {
               )) :
                 table.getRowModel().rows.length > 0 ? (
                   table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
+                    <Fragment key={row.id}>
+                      <TableRow key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </Fragment>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell colSpan={table.getAllColumns().length}>
-                      <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
+                      <EmptyTable msg={isSmsTemplateFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
                     </TableCell>
                   </TableRow>
                 )
@@ -269,4 +209,4 @@ const PersonTable = () => {
   )
 }
 
-export default PersonTable
+export default SmsTemplateTable

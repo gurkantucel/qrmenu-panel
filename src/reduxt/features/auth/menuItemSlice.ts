@@ -98,6 +98,12 @@ const permissionControlMenu = () => {
                         title: "Randevu İşlemleri",
                         type: 'item',
                         url: '/app/settings/appointment-process',
+                    },
+                    {
+                        id: 'sms-template',
+                        title: "SMS Şablonları",
+                        type: 'item',
+                        url: '/app/settings/sms-template',
                     }
                 ]
             },
