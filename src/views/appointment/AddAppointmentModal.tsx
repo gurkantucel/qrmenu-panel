@@ -28,6 +28,7 @@ import { useLazyGetAppointmentStatusDropdownQuery } from "reduxt/features/defini
 
 type Props = {
     page?: string
+    requestCalendar?: () => void
 }
 
 const AddAppointmentModal = (props: Props) => {
@@ -69,9 +70,7 @@ const AddAppointmentModal = (props: Props) => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointment) {
-            if (props.page != "home") {
-                getAcceptingAppointmentDropDownList({});
-            }
+            getAcceptingAppointmentDropDownList({});
             getAppointmentStatusDropdown();
         }
     }, [open, id])
@@ -104,7 +103,9 @@ const AddAppointmentModal = (props: Props) => {
             },)
             if (createAppointmentResponse?.status == true) {
                 handleClose();
-                //getPatientList({});
+                if (props.page == "home" && props.requestCalendar) {
+                    props?.requestCalendar();
+                }
             }
         }
         if (createAppointmentError) {
@@ -454,8 +455,8 @@ const AddAppointmentModal = (props: Props) => {
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation 
-                                        disabled={isSubmitting || createAppointmentIsLoading || (patientType == "oldPatient" && values.patient_id == null)} type="submit" variant="contained" color="primary">
+                                        <Button disableElevation
+                                            disabled={isSubmitting || createAppointmentIsLoading || (patientType == "oldPatient" && values.patient_id == null)} type="submit" variant="contained" color="primary">
                                             {(createAppointmentIsLoading) && <PuffLoader size={20} color='white' />}
                                             {(createAppointmentIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
