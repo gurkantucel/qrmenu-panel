@@ -32,6 +32,8 @@ import { useGetPatientListQuery } from 'reduxt/features/patient/patient-api';
 import { PatientListData } from 'reduxt/features/patient/models/patient-list-model';
 import DeletePatientModal from './DeletePatientModal';
 import { useRouter } from 'next/navigation';
+import Breadcrumbs from 'components/@extended/Breadcrumbs';
+import { APP_DEFAULT_PATH } from 'config';
 
 const columnHelper = createColumnHelper<PatientListData>()
 
@@ -39,6 +41,11 @@ const PatientTable = () => {
 
   const router = useRouter()
   const intl = useIntl()
+
+  let breadcrumbLinks = [
+    { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
+    { title: `${intl.formatMessage({ id: "patients" })}` },
+  ];
 
   const dispatch = useAppDispatch();
 
@@ -170,84 +177,87 @@ const PatientTable = () => {
   })
 
   return (
-    <MainCard content={false}>
-      <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-        <AddPatientModal />
-        <DeletePatientModal />
-      </Stack>
-      <ScrollX>
-        <TableContainer component={Paper}>
-          <Table size='small'>
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} {...header.column.columnDef.meta} style={{ width: `${header.getSize()}px` }}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} {...header.column.columnDef.meta}>
-                      {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {isPatientFetching || isPatientLoading ?[0, 1, 2, 3].map((item: number) => (
-                <TableRow key={item}>
-                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
-                    <TableCell key={col}>
-                      <Skeleton animation="wave" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              )) :
-                table.getRowModel().rows.length > 0 ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={table.getAllColumns().length}>
-                      <EmptyTable msg={isPatientFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
-                    </TableCell>
+    <>
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "patients" })}`} links={breadcrumbLinks} />
+      <MainCard content={false}>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
+          <AddPatientModal />
+          <DeletePatientModal />
+        </Stack>
+        <ScrollX>
+          <TableContainer component={Paper}>
+            <Table size='small'>
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id} {...header.column.columnDef.meta} style={{ width: `${header.getSize()}px` }}>
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <>
-          <Divider />
-          <Box sx={{ p: 2 }}>
-            <TablePagination
-              {...{
-                setPageSize: table.setPageSize,
-                setPageIndex: table.setPageIndex,
-                getState: table.getState,
-                getPageCount: table.getPageCount,
-                selectRowLength: table.getRowModel().rows.length,
-                totalCount: table.getRowCount()
-              }}
-            />
-          </Box>
-        </>
-      </ScrollX>
-    </MainCard>
+                ))}
+              </TableHead>
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id} {...header.column.columnDef.meta}>
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {isPatientFetching || isPatientLoading ? [0, 1, 2, 3].map((item: number) => (
+                  <TableRow key={item}>
+                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                      <TableCell key={col}>
+                        <Skeleton animation="wave" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )) :
+                  table.getRowModel().rows.length > 0 ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={table.getAllColumns().length}>
+                        <EmptyTable msg={isPatientFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                      </TableCell>
+                    </TableRow>
+                  )
+                }
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <>
+            <Divider />
+            <Box sx={{ p: 2 }}>
+              <TablePagination
+                {...{
+                  setPageSize: table.setPageSize,
+                  setPageIndex: table.setPageIndex,
+                  getState: table.getState,
+                  getPageCount: table.getPageCount,
+                  selectRowLength: table.getRowModel().rows.length,
+                  totalCount: table.getRowCount()
+                }}
+              />
+            </Box>
+          </>
+        </ScrollX>
+      </MainCard>
+    </>
   )
 }
 

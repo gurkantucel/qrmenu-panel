@@ -17,9 +17,10 @@ import { PatientTabEnum } from 'reduxt/features/definition/patientTabSlice';
 import { PatientCreateBodyModel } from 'reduxt/features/patient/models/patient-list-model';
 import dayjs from 'dayjs';
 import { InfoCircle } from 'iconsax-react';
+import { useRouter } from 'next/navigation';
 
 const PatientPersonalInformation = ({ params }: { params: { slug: string } }) => {
-
+    const router = useRouter();
     const intl = useIntl()
     const { data: { selectTab } } = useAppSelector((state: RootState) => state.patientTab);
 
@@ -57,7 +58,8 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
     const [readPatient, {
         data: readPatientData,
         isLoading: readPatientLoading,
-        isFetching: readPatientFetching
+        isFetching: readPatientFetching,
+        error: readPatientError
     }] = useLazyReadPatientQuery();
 
     const [updatePatient, { isLoading: updatePatientIsLoading, data: updatePatientResponse, error: updatePatientError }] = useUpdatePatientMutation();
@@ -72,6 +74,21 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
             readPatient({ patient_id: patientId })
         }
     }, [params.slug])
+
+    useEffect(() => {
+        if (readPatientError) {
+            var error = readPatientError as any;
+            enqueueSnackbar(error.data?.message ?? "Hata", {
+                variant: 'error', anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right'
+                }
+            },)
+            setTimeout(() => {
+                router.push("/app/patient")
+            }, 200)
+        }
+    }, [readPatientError])
 
     useEffect(() => {
         if (readPatientData?.data != null) {

@@ -1,5 +1,5 @@
 'use client'
-import { useSearchParams, useParams } from 'next/navigation'
+import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { Grid, Link, List, ListItem, Stack, Typography } from '@mui/material'
 import MainCard from 'components/MainCard'
 import { useEffect } from 'react'
@@ -8,8 +8,10 @@ import CustomScaleLoader from 'components/CustomScaleLoader'
 import dayjs from 'dayjs'
 import { useLazyGetPatientHealthInformationQuery } from 'reduxt/features/patient/health-information-api'
 import { useIntl } from 'react-intl'
+import { enqueueSnackbar } from 'notistack'
 
 const AppointmentInfoView = () => {
+    const router = useRouter();
     const intl = useIntl()
     const params = useParams<{ slug: string }>()
     const searchParams = useSearchParams()
@@ -18,7 +20,8 @@ const AppointmentInfoView = () => {
     const [getReadAppointment, {
         data: getReadAppointmentData,
         isFetching: isReadAppointmentFetching,
-        isLoading: isReadAppointmentLoading
+        isLoading: isReadAppointmentLoading,
+        error: readAppointmentError
     }] = useLazyReadAppointmentQuery();
 
     const [getPatientHealthInformation, {
@@ -34,6 +37,21 @@ const AppointmentInfoView = () => {
         }
     }, [patientId])
 
+    useEffect(() => {
+        if (readAppointmentError) {
+            var error = readAppointmentError as any;
+            enqueueSnackbar(error.data?.message ?? "Hata", {
+                variant: 'error', anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right'
+                }
+            },)
+            setTimeout(() => {
+                router.push("/app/appointment")
+            }, 200)
+        }
+    }, [readAppointmentError])
+
     return (
         <>
             <Grid item xs={4}>
@@ -43,13 +61,13 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "nameSurname"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "nameSurname" })}</Typography>
                                         <Typography>{getReadAppointmentData?.data?.patient_full_name ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "identityNumber"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "identityNumber" })}</Typography>
                                         <Typography>{getReadAppointmentData?.data?.identity_number ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
@@ -59,15 +77,15 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "phone"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "phone" })}</Typography>
                                         <Typography>
-                                        <Link href={`tel:${getReadAppointmentData?.data?.patient_full_phone}`}>{getReadAppointmentData?.data?.patient_full_phone ?? "-"}</Link>
+                                            <Link href={`tel:${getReadAppointmentData?.data?.patient_full_phone}`}>{getReadAppointmentData?.data?.patient_full_phone ?? "-"}</Link>
                                         </Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "birthdate"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "birthdate" })}</Typography>
                                         <Typography>{getReadAppointmentData?.data?.birthdate ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
@@ -123,13 +141,13 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "height"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "height" })}</Typography>
                                         <Typography>{getPatientHealthInformationData?.data?.height ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "weight"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "weight" })}</Typography>
                                         <Typography>{getPatientHealthInformationData?.data?.weight ?? "-"}</Typography>
                                     </Stack>
                                 </Grid>
@@ -139,7 +157,7 @@ const AppointmentInfoView = () => {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "smoke"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "smoke" })}</Typography>
                                         <Typography>
                                             {getPatientHealthInformationData?.data?.smoke == true ? intl.formatMessage({ id: "yes" }) : getPatientHealthInformationData?.data?.smoke == false ? intl.formatMessage({ id: "yes" }) : "-"}
                                         </Typography>
@@ -147,9 +165,9 @@ const AppointmentInfoView = () => {
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
-                                        <Typography color="secondary">{intl.formatMessage({id: "alcohol"})}</Typography>
+                                        <Typography color="secondary">{intl.formatMessage({ id: "alcohol" })}</Typography>
                                         <Typography>
-                                        {getPatientHealthInformationData?.data?.alcohol == true ? intl.formatMessage({ id: "yes" }) : getPatientHealthInformationData?.data?.alcohol == false ? intl.formatMessage({ id: "yes" }) : "-"}
+                                            {getPatientHealthInformationData?.data?.alcohol == true ? intl.formatMessage({ id: "yes" }) : getPatientHealthInformationData?.data?.alcohol == false ? intl.formatMessage({ id: "yes" }) : "-"}
                                         </Typography>
                                     </Stack>
                                 </Grid>

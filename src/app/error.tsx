@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 
 // project-imports
 import { APP_DEFAULT_PATH } from '../config';
+import { useIntl } from 'react-intl';
 
 // assets
 const error500 = '/assets/images/maintenance/img-error-500.svg';
@@ -24,7 +25,8 @@ const error500 = '/assets/images/maintenance/img-error-500.svg';
 export default function Error500() {
   const theme = useTheme();
   const downSM = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const intl = useIntl()
+  
   return (
     <Grid container direction="column" alignItems="center" justifyContent="center" sx={{ minHeight: '100vh' }} spacing={3}>
       <Grid item xs={12}>
@@ -44,13 +46,13 @@ export default function Error500() {
       <Grid item xs={12}>
         <Stack justifyContent="center" alignItems="center">
           <Typography align="center" variant={downSM ? 'h2' : 'h1'}>
-            Internal Server Error
+          {intl.formatMessage({id: "internalServerError"})}
           </Typography>
           <Typography color="text.secondary" variant="body2" align="center" sx={{ width: { xs: '73%', sm: '70%' }, mt: 1 }}>
-            Server error 500. we fixing the problem. please try again at a later stage.
+          {intl.formatMessage({id: "internalServerError1"})}
           </Typography>
           <Button component={Link} href={APP_DEFAULT_PATH} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
-            Back To Home
+          {intl.formatMessage({id: "backToHome"})}
           </Button>
         </Stack>
       </Grid>

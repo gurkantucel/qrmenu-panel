@@ -35,6 +35,8 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import ViewPersonModal from './ViewPersonModal';
 import UpdatePersonPasswordModal from './UpdatePersonPasswordModal';
+import Breadcrumbs from 'components/@extended/Breadcrumbs';
+import { APP_DEFAULT_PATH } from 'config';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -47,6 +49,11 @@ const columnHelper = createColumnHelper<PersonListData>()
 const PersonTable = () => {
 
   const intl = useIntl()
+
+  let breadcrumbLinks = [
+    { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
+    { title: `${intl.formatMessage({ id: "persons" })}` },
+  ];
 
   const dispatch = useAppDispatch();
 
@@ -186,86 +193,89 @@ const PersonTable = () => {
   })
 
   return (
-    <MainCard content={false}>
-      <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-        <AddPersonModal />
-        <DeletePersonModal />
-        <ViewPersonModal />
-        <UpdatePersonPasswordModal />
-      </Stack>
-      <ScrollX>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} {...header.column.columnDef.meta}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} {...header.column.columnDef.meta}>
-                      {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {isPersonFetching || isPersonLoading ? [0, 1, 2].map((item: number) => (
-                <TableRow key={item}>
-                  {[0, 1, 2, 3, 4, 5].map((col: number) => (
-                    <TableCell key={col}>
-                      <Skeleton animation="wave" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              )) :
-                table.getRowModel().rows.length > 0 ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={table.getAllColumns().length}>
-                      <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
-                    </TableCell>
+    <>
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "persons" })}`} links={breadcrumbLinks} />
+      <MainCard content={false}>
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
+          <AddPersonModal />
+          <DeletePersonModal />
+          <ViewPersonModal />
+          <UpdatePersonPasswordModal />
+        </Stack>
+        <ScrollX>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id} {...header.column.columnDef.meta}>
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )
-              }
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <>
-          <Divider />
-          <Box sx={{ p: 2 }}>
-            <TablePagination
-              {...{
-                setPageSize: table.setPageSize,
-                setPageIndex: table.setPageIndex,
-                getState: table.getState,
-                getPageCount: table.getPageCount,
-                selectRowLength: table.getRowModel().rows.length,
-                totalCount: table.getRowCount()
-              }}
-            />
-          </Box>
-        </>
-      </ScrollX>
-    </MainCard>
+                ))}
+              </TableHead>
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id} {...header.column.columnDef.meta}>
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {isPersonFetching || isPersonLoading ? [0, 1, 2].map((item: number) => (
+                  <TableRow key={item}>
+                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                      <TableCell key={col}>
+                        <Skeleton animation="wave" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )) :
+                  table.getRowModel().rows.length > 0 ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={table.getAllColumns().length}>
+                        <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
+                      </TableCell>
+                    </TableRow>
+                  )
+                }
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <>
+            <Divider />
+            <Box sx={{ p: 2 }}>
+              <TablePagination
+                {...{
+                  setPageSize: table.setPageSize,
+                  setPageIndex: table.setPageIndex,
+                  getState: table.getState,
+                  getPageCount: table.getPageCount,
+                  selectRowLength: table.getRowModel().rows.length,
+                  totalCount: table.getRowCount()
+                }}
+              />
+            </Box>
+          </>
+        </ScrollX>
+      </MainCard>
+    </>
   )
 }
 

@@ -25,7 +25,7 @@ const ViewAppointmentModal = () => {
                 sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
             >
                 <Grid item>
-                    <DialogTitle>{intl.formatMessage({ id: "employeeDetail" })}</DialogTitle>
+                    <DialogTitle>{intl.formatMessage({ id: "appointmentDetail" })}</DialogTitle>
                 </Grid>
                 <Grid item sx={{ mr: 1.5 }}>
                     <IconButton color="secondary" onClick={handleClose}>
