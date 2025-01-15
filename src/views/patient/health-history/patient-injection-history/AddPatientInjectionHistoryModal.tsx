@@ -17,6 +17,7 @@ import { PatientInjectionHistoryCreateBodyModel } from "reduxt/features/patient/
 import { useCreatePatientInjectionHistoryMutation, useUpdatePatientInjectionHistoryMutation } from "reduxt/features/patient/injection-history-api";
 import { useLazyGetInjectionTypeDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
+import dayjs from "dayjs";
 
 const AddPatientInjectionHistoryModal = () => {
 
@@ -229,7 +230,7 @@ const AddPatientInjectionHistoryModal = () => {
                                                 error={Boolean(touched.injection_date && errors.injection_date)}
                                                 id="injection_date"
                                                 type="date"
-                                                value={values.injection_date}
+                                                value={dayjs(values.injection_date).format('YYYY-MM-DD')}
                                                 name="injection_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

@@ -53,7 +53,7 @@ const newAppointmentProcessSchema = Yup.object({
     appointment_process_type_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
     sub_appointment_process: Yup.array(Yup.number()).nullable().when("appointment_process_type_id", {
         is: (v: any) => v === 3,
-        then: (schema) => Yup.array(Yup.number()).required("Bu alan zorunlu"),
+        then: (schema) => Yup.array(Yup.number()).required("Bu alan zorunlu").min(1,"Bu alan zorunlu")
     })
 })
 

@@ -5,7 +5,7 @@ import { Column, RowData, Table } from '@tanstack/react-table';
 import DebouncedInput from './DebouncedInput';
 
 // assets
-import { MenuItem, Select } from '@mui/material';
+import { InputBaseComponentProps, MenuItem, Select } from '@mui/material';
 import { useIntl } from 'react-intl';
 
 
@@ -17,12 +17,13 @@ type TextInputProps = {
   setFilterValue: (updater: any) => void;
   header?: string;
   searchText?: string
-  type?:string
+  type?: string
+  inputProps?: InputBaseComponentProps | undefined
 };
 
 // ==============================|| FILTER - TEXT FIELD ||============================== //
 
-function TextInput({ columnId, columnFilterValue, header, searchText, setFilterValue, type }: TextInputProps) {
+function TextInput({ columnId, columnFilterValue, header, searchText, setFilterValue, type, inputProps }: TextInputProps) {
   const dataListId = columnId + 'list';
 
   return (
@@ -32,7 +33,7 @@ function TextInput({ columnId, columnFilterValue, header, searchText, setFilterV
       value={columnFilterValue ?? ''}
       onFilterChange={(value) => setFilterValue(value)}
       placeholder={`${searchText ?? "Search"} ${header}`}
-      inputProps={{ list: dataListId }}
+      inputProps={{ ...inputProps, list: dataListId }}
       size="small"
       startAdornment={false}
     />
@@ -77,6 +78,16 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
       setFilterValue={column.setFilterValue}
       searchText={intl.formatMessage({ id: "search" })}
       header={column.columnDef.header as string}
+    />
+  ) : meta == "number" ? (
+    <TextInput
+      type='number'
+      columnId={column.id}
+      columnFilterValue={columnFilterValue as string}
+      setFilterValue={column.setFilterValue}
+      searchText={intl.formatMessage({ id: "search" })}
+      header={column.columnDef.header as string}
+      inputProps={{min: 0}}
     />
   ) : (
     <TextInput

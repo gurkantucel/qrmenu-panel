@@ -91,6 +91,9 @@ const AppointmentTable = () => {
       header: intl.formatMessage({ id: "duration" }),
       cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
+      meta: {
+        filterVariant: 'number',
+      },
     }),
     columnHelper.accessor('islemler', {
       header: intl.formatMessage({ id: "actions" }),

@@ -354,7 +354,7 @@ const AddAppointmentProcessModal = () => {
                                                     label: item.label
                                                 }))}
                                                 value={getAppointmentProcessDropdownData?.data?.filter((item) => values.sub_appointment_process?.includes(item.value))}
-                                                onChange={(val: DropdownListData[]) => {
+                                                onChange={(val: DropdownListData[],actionMeta) => {
                                                     setFieldValue("sub_appointment_process", val.map((item) => item.value));
                                                 }}
                                             />

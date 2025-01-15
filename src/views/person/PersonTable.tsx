@@ -40,7 +40,7 @@ import { APP_DEFAULT_PATH } from 'config';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date'
+    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date' | 'number'
   }
 }
 
@@ -64,7 +64,7 @@ const PersonTable = () => {
   }] = useLazyGetPersonListQuery();*/
 
   const columns = useMemo<ColumnDef<PersonListData, any>[]>(() => [
-    columnHelper.accessor('name', {
+    columnHelper.accessor('full_name', {
       header: intl.formatMessage({ id: "nameSurname" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
