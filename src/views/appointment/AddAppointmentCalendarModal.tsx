@@ -182,7 +182,7 @@ const AddAppointmentCalendarModal = () => {
                         scrollTime={"08:00:00"}
                         locale={"tr"}
                         select={(val) => {
-                            setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm'));
+                            setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm:ss'));
                             const calc = durationCalc(val.startStr,val.endStr);
                             setFieldValue("appointment_duration", calc);
                             handleClose();

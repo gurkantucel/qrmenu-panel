@@ -237,7 +237,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                                         value={
                                             values.gender_id ? { label: getGenderListData?.data?.find((item) => item.value == values.gender_id)?.label ?? "", value: getGenderListData?.data?.find((item) => item.value == values.gender_id)?.value ?? 0 } : null}
                                         onChange={(val: any) => {
-                                            setFieldValue("gender_id", val?.value ?? 0);
+                                            setFieldValue("gender_id", val?.value);
                                         }}
 
                                         options={getGenderListData?.data?.map((item) => ({
