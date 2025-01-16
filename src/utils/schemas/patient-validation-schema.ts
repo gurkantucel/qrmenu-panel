@@ -92,6 +92,7 @@ const newPatientInjectionHistorySchema = Yup.object({
         .min(2, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
+    injection_date: Yup.date().required("Bu alan zorunlu").typeError("Bu alan zorunlu"),
 })
 
 const newPatientPaymentHistorySchema = Yup.object({

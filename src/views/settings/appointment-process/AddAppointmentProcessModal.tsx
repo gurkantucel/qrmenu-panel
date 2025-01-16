@@ -48,7 +48,7 @@ const AddAppointmentProcessModal = () => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess) {
             getAppointmentProcessType();
             if (id == null) {
-                getAppointmentProcessDropdown({});
+                //getAppointmentProcessDropdown({});
             }
             getCurrency();
         }
@@ -56,10 +56,12 @@ const AddAppointmentProcessModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess && data != null) {
-            getAppointmentProcessDropdown({
-                include_packages: data.appointment_process_type_id == 3 ? false : true,
-                excluded_appointment_process_id: data.appointment_process_id
-            });
+            if (data.appointment_process_type_id == 3) {
+                getAppointmentProcessDropdown({
+                    include_packages: data.appointment_process_type_id == 3 ? false : true,
+                    excluded_appointment_process_id: data.appointment_process_id
+                });
+            }
             const model: CreateAppointmentProcessBodyModel = {
                 appointment_process_id: data.appointment_process_id,
                 currency_id: data.currency_id,
@@ -242,6 +244,15 @@ const AddAppointmentProcessModal = () => {
                                                     values.appointment_process_type_id ? { label: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.label ?? "", value: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
                                                     setFieldValue("appointment_process_type_id", val?.value ?? 0);
+                                                    if (val?.value == 3) {
+                                                        //paket ise getir.
+                                                        getAppointmentProcessDropdown({
+                                                            include_packages: val?.value == 3 ? false : true,
+                                                            //excluded_appointment_process_id: values.appointment_process_id
+                                                        });
+                                                    } else {
+                                                        setFieldValue("sub_appointment_process", null);
+                                                    }
                                                 }}
                                             />
                                         </Stack>
@@ -354,7 +365,7 @@ const AddAppointmentProcessModal = () => {
                                                     label: item.label
                                                 }))}
                                                 value={getAppointmentProcessDropdownData?.data?.filter((item) => values.sub_appointment_process?.includes(item.value))}
-                                                onChange={(val: DropdownListData[],actionMeta) => {
+                                                onChange={(val: DropdownListData[], actionMeta) => {
                                                     setFieldValue("sub_appointment_process", val.map((item) => item.value));
                                                 }}
                                             />

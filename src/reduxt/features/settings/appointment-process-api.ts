@@ -47,8 +47,8 @@ const appointmentProcessApi = createApi({
             },
             invalidatesTags: ["appointmentProcess"]
         }),
-        getAppointmentProcessDropdown: builder.query<DropdownListModel, { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number }>({
-            query: (args?: { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number }) => {
+        getAppointmentProcessDropdown: builder.query<DropdownListModel, { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }>({
+            query: (args?: { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }) => {
                 return {
                     url: `app/appointment-process/dropDown`,
                     params: args
