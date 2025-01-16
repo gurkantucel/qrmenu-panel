@@ -61,6 +61,10 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         setCookie("refreshToken", loginResponse.data.refresh_token)
         setCookie("person", loginResponse.data.person)
         setCookie("personAuthorizations", loginResponse.data.personAuthorizations);
+        setCookie("membership", {
+          membership_package_name: loginResponse.data.currentAccount.membership_package_name,
+          membership_end_date: loginResponse.data.currentAccount.membership_end_date,
+        });
         dispatch(setMenuItem());
         setTimeout(() => {
           router.push("/app/home")

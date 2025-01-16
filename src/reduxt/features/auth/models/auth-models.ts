@@ -67,6 +67,7 @@ export interface CurrentAccount {
   sgk_number: any
   package_id: number
   package_name: string
+  membership_package_name: string
   membership_start_date: string
   membership_end_date: string
   country_id: number
@@ -95,4 +96,9 @@ export interface ResetPasswordBodyModel {
   reset_token: string
   new_password: string
   confirm_password: string
+}
+
+export interface Membership {
+  membership_start_date:string
+  membership_package_name: string
 }

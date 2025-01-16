@@ -26,12 +26,21 @@ import { deleteCookie } from 'cookies-next';
 import { useIntl } from 'react-intl';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
+import dayjs from 'dayjs';
+import { Chip } from '@mui/material';
 
 const avatar1 = '/assets/images/users/avatar-6.png';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
   drawerOpen: boolean;
+}
+
+const diffInDays = () => {
+  const today = dayjs();
+  const expiryDate = dayjs('2025-02-10');
+  const diffInDays = expiryDate.diff(today, 'day');
+  return `${diffInDays.toString()} Gün`;
 }
 
 const ExpandMore = styled(({ expand, drawerOpen, ...other }: ExpandMoreProps) => {
@@ -65,6 +74,7 @@ export default function UserList() {
     deleteCookie("token");
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");
+    deleteCookie("membership");
     dispatch(resetMenuItemState());
     router.push('/app/auth/login');
   };
@@ -108,7 +118,12 @@ export default function UserList() {
           <ListItemAvatar>
             <Avatar alt="Avatar" src={avatar1} sx={{ ...(drawerOpen && { width: 46, height: 46 }) }} />
           </ListItemAvatar>
-          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? user.role : '-'} />
+          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? <>
+            <Chip size='small' variant="combined"
+              color="primary" sx={{paddingLeft: 1}} label={<Chip size='small' color="info" label={diffInDays()} />} avatar={
+                <>{user.membership.membership_package_name}</>
+              } />
+          </> : <>{'-'}</>} />
         </ListItem>
       </List>
       <Menu
