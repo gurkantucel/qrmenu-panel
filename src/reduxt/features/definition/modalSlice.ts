@@ -37,7 +37,7 @@ export enum ModalEnum {
     deleteAppointmentProcess,
     viewAppointmentProcess,
     updateAppointmentStatus,
-    smsTemplateUpdateStatusi,
+    smsTemplateUpdateStatus,
     deleteInfoModal
 }
 
