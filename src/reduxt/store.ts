@@ -21,6 +21,7 @@ import appointmentApi from './features/appointment/appointment-api'
 import appointmentProcessTypeApi from './features/appointment/appointment-process-type-api'
 import appointmentProcessApi from './features/settings/appointment-process-api'
 import smsTemplateApi from './features/sms-template/sms-template-api'
+import personTypeApi from './features/settings/person-type-api'
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ export const store = configureStore({
     [appointmentProcessTypeApi.reducerPath] : appointmentProcessTypeApi.reducer,
     [appointmentProcessApi.reducerPath] : appointmentProcessApi.reducer,
     [smsTemplateApi.reducerPath] : smsTemplateApi.reducer,
+    [personTypeApi.reducerPath] : personTypeApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -65,7 +67,8 @@ export const store = configureStore({
     appointmentCalendarApi.middleware,
     appointmentProcessTypeApi.middleware,
     appointmentProcessApi.middleware,
-    smsTemplateApi.middleware
+    smsTemplateApi.middleware,
+    personTypeApi.middleware
   ]),
 })
 

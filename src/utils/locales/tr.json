@@ -144,6 +144,7 @@
     "download": "İndir",
     "code": "Kod",
     "uniqueIdExample": "Benzersiz Kimlik. Örn: PRP001",
+    "uniqueIdExample2": "Benzersiz Kimlik. Örn: TUR001",
     "description": "Açıklama",
     "vat": "KDV",
     "processType": "İşlem Tipi",
@@ -183,5 +184,9 @@
     "delayed" : "Gecikti",
     "completed" :  "Tamamlandı",
     "inComplete" : "Tamamlanmadı",
-    "cancelled" : "İptal Edildi"
+    "cancelled" : "İptal Edildi",
+    "personTypes" : "Çalışan Türleri",
+    "new" : "Yeni",
+    "newPersonType" : "Yeni Çalışan Türü Ekle",
+    "updatePersonType" : "Çalışan Türü Düzenle"
 }

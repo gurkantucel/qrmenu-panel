@@ -104,6 +104,12 @@ const permissionControlMenu = () => {
                         title: "SMS Şablonları",
                         type: 'item',
                         url: '/app/settings/sms-template',
+                    },
+                    {
+                        id: 'person-type',
+                        title: "Çalışan Türleri",
+                        type: 'item',
+                        url: '/app/settings/person-type',
                     }
                 ]
             },
