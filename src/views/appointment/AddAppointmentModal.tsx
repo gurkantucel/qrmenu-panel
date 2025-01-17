@@ -109,7 +109,7 @@ const AddAppointmentModal = (props: Props) => {
             }
         }
         if (createAppointmentError) {
-            var error = createAppointmentError as any;
+            const error = createAppointmentError as any;
             enqueueSnackbar(error.data?.message ?? "Hata", {
                 variant: 'error', anchorOrigin: {
                     vertical: 'bottom',
@@ -378,7 +378,7 @@ const AddAppointmentModal = (props: Props) => {
                                                 value={values.appointment_start}
                                                 name="appointment_start"
                                                 onChange={(val) => {
-                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD HH:mm'))
+                                                    setFieldValue("appointment_start", dayjs(val.target.value).format('YYYY-MM-DD HH:mm:ss'))
                                                 }}
                                                 endAdornment={
                                                     <InputAdornment position="end">

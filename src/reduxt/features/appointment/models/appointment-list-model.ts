@@ -16,10 +16,12 @@ export interface AppointmentListResultModel {
     patient_name: string
     patient_surname: string
     patient_full_name: string
+    patient_deleted_at: string | null
     person_id: number
     person_name: string
     person_surname: string
     person_full_name: string
+    person_deleted_at: string | null
     appointment_status_id: number
     appointment_status_name: string
     background_color: string

@@ -173,6 +173,15 @@
     "pageNotFound": "Sayfa Bulunamadı",
     "pageNotFound1": "Aradığınız sayfa taşındı, kaldırıldı, yeniden adlandırıldı veya hiç var olmayabilir!",
     "backToHome": "Ana Sayfaya Dön",
-    "internalServerError" : "Dahili Sunucu Hatası",
-    "internalServerError1" : "Sunucu hatası 500. Sorunu düzeltiyoruz. Lütfen daha sonra tekrar deneyin."
+    "internalServerError": "Dahili Sunucu Hatası",
+    "internalServerError1": "Sunucu hatası 500. Sorunu düzeltiyoruz. Lütfen daha sonra tekrar deneyin.",
+    "info": "Bilgi",
+    "noActionDeletedPerson": "Çalışan silindiği için işlem yapılamaz.",
+    "noActionDeletedPatient": "Danışan silindiği için işlem yapılamaz.",
+    "waiting" : "Bekliyor",
+    "postponed" : "Ertelendi",
+    "delayed" : "Gecikti",
+    "completed" :  "Tamamlandı",
+    "inComplete" : "Tamamlanmadı",
+    "cancelled" : "İptal Edildi"
 }

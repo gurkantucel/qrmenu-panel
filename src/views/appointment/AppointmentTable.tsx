@@ -37,6 +37,7 @@ import DeleteAppointmentModal from './DeleteAppointmentModal';
 import ViewAppointmentModal from './ViewAppointmentModal';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
+import { enqueueSnackbar } from 'notistack';
 
 const columnHelper = createColumnHelper<AppointmentListData>()
 
@@ -71,13 +72,16 @@ const AppointmentTable = () => {
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('appointment_status_name', {
+    columnHelper.accessor('appointment_status_id', {
       header: intl.formatMessage({ id: "status" }),
       //cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       cell: (info) => {
         return <Chip color={info.row.original.appointment_status_id == 1 ? "warning" : info.row.original.appointment_status_id == 2 ? "success" : info.row.original.appointment_status_id == 3 ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
       },
       footer: info => info.column.id,
+      meta: {
+        filterVariant: 'appointmentStatus',
+      },
     }),
     columnHelper.accessor('appointment_start', {
       header: intl.formatMessage({ id: "appointmentDate" }),
@@ -106,7 +110,24 @@ const AppointmentTable = () => {
               color="warning"
               onClick={(e: any) => {
                 e.stopPropagation();
-                router.push(`appointment/${info.row.original.appointment_id}?patient=${info.row.original.patient_id}`)
+                if (info.row.original.patient_deleted_at) {
+                  enqueueSnackbar(intl.formatMessage({ id: "noActionDeletedPatient" }), {
+                    variant: 'error', anchorOrigin: {
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }
+                  },)
+                } else if (info.row.original.person_deleted_at) {
+                  enqueueSnackbar(intl.formatMessage({ id: "noActionDeletedPerson" }), {
+                    variant: 'error', anchorOrigin: {
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }
+                  },)
+                }
+                else {
+                  router.push(`appointment/${info.row.original.appointment_id}?patient=${info.row.original.patient_id}`)
+                }
               }}
             >
               <PenAdd />
@@ -134,13 +155,29 @@ const AppointmentTable = () => {
               color="primary"
               onClick={(e: any) => {
                 e.stopPropagation();
-                dispatch(setModal({
-                  open: true,
-                  modalType: ModalEnum.updateAppointment,
-                  id: info.row.original.patient_id,
-                  title: info.row.original.patient_full_name,
-                  data: info.row.original
-                }))
+                if (info.row.original.patient_deleted_at) {
+                  enqueueSnackbar(intl.formatMessage({ id: "noActionDeletedPatient" }), {
+                    variant: 'error', anchorOrigin: {
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }
+                  },)
+                } else if (info.row.original.person_deleted_at) {
+                  enqueueSnackbar(intl.formatMessage({ id: "noActionDeletedPerson" }), {
+                    variant: 'error', anchorOrigin: {
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }
+                  },)
+                } else {
+                  dispatch(setModal({
+                    open: true,
+                    modalType: ModalEnum.updateAppointment,
+                    id: info.row.original.patient_id,
+                    title: info.row.original.patient_full_name,
+                    data: info.row.original
+                  }))
+                }
               }}
             >
               <Edit />
@@ -172,7 +209,13 @@ const AppointmentTable = () => {
     }),
   ], [])
 
-  const [columnFilters, setColumnFilters] = useState<any[]>([]);
+  const [columnFilters, setColumnFilters] = useState<any[]>([{
+    "id": "appointment_start",
+    "value": dayjs().format("YYYY-MM-DD")
+  }, {
+    "id": "appointment_status_id",
+    "value": 1
+  }]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -182,7 +225,7 @@ const AppointmentTable = () => {
   const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
-    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+    filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
   })
 
   const tableData = useMemo(() => getAppointmentListData?.data ?? [], [getAppointmentListData?.data]);
@@ -225,6 +268,7 @@ const AppointmentTable = () => {
           <UpdateAppointmentModal />
           <DeleteAppointmentModal />
           <ViewAppointmentModal />
+
         </Stack>
         <ScrollX>
           <TableContainer component={Paper}>

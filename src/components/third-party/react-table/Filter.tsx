@@ -70,6 +70,28 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
     <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
     <MenuItem value="true">{intl.formatMessage({ id: "active" })}</MenuItem>
     <MenuItem value="false">{intl.formatMessage({ id: "passive" })}</MenuItem>
+  </Select> : meta == "appointmentStatus" ? <Select
+    sx={{
+      width: '100%',
+      '& .MuiSelect-select': {
+        width: "100% !important",
+        padding: "10px 10px 10px 12px"
+      }
+    }}
+    MenuProps={{
+      style: { zIndex: 9999, },
+    }}
+    defaultValue={"1"}
+    onChange={(event) => {
+      column.setFilterValue(event.target.value);
+    }}>
+    <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
+    <MenuItem value="1">{intl.formatMessage({ id: "waiting" })}</MenuItem>
+    <MenuItem value="4">{intl.formatMessage({ id: "postponed" })}</MenuItem>
+    <MenuItem value="5">{intl.formatMessage({ id: "delayed" })}</MenuItem>
+    <MenuItem value="2">{intl.formatMessage({ id: "completed" })}</MenuItem>
+    <MenuItem value="6">{intl.formatMessage({ id: "inComplete" })}</MenuItem>
+    <MenuItem value="3">{intl.formatMessage({ id: "cancelled" })}</MenuItem>
   </Select> : meta == "date" ? (
     <TextInput
       type='date'

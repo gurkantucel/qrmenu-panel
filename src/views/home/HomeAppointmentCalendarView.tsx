@@ -7,7 +7,7 @@ import timelinePlugin from '@fullcalendar/timeline';
 import { Box, SpeedDial, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
-import { EventSourceInput } from '@fullcalendar/core';
+import { EventContentArg, EventSourceInput } from '@fullcalendar/core';
 import { Theme } from '@mui/material/styles';
 import { useIntl } from 'react-intl';
 import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
@@ -118,8 +118,8 @@ const HomeAppointmentCalendarView = () => {
 
     return (
         <>
-            <AddAppointmentModal page='home' requestCalendar={()=>{
-                getAppointmentCalendarList({person_id: personId ?? 0})
+            <AddAppointmentModal page='home' requestCalendar={() => {
+                getAppointmentCalendarList({ person_id: personId ?? 0 })
             }} />
             <MainCard
                 title={intl.formatMessage({ id: "appointments" })}
@@ -192,6 +192,7 @@ const HomeAppointmentCalendarView = () => {
                                 allDayMaintainDuration
                                 eventResizableFromStart
                                 locale={"tr"}
+                                eventContent={renderEventContent}
                                 select={(val) => {
                                 }}
                                 //eventDrop={handleEventUpdate}
@@ -222,3 +223,20 @@ const HomeAppointmentCalendarView = () => {
 }
 
 export default HomeAppointmentCalendarView
+
+function renderEventContent(eventInfo: EventContentArg) {
+    if (eventInfo.view.type == "listWeek") {
+        return (
+            <div style={{textDecoration: eventInfo.backgroundColor == "#2ca87f" ? "line-through": "none"}}>
+                <b>{eventInfo.timeText}</b>
+                <label>{eventInfo.event.title}</label>
+            </div>
+        )
+    }
+    return (
+        <>
+            <b>{eventInfo.timeText}</b>
+            <label>{eventInfo.event.title}</label>
+        </>
+    )
+}

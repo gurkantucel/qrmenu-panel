@@ -40,7 +40,7 @@ import { APP_DEFAULT_PATH } from 'config';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date' | 'number'
+    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date' | 'number' | 'appointmentStatus'
   }
 }
 

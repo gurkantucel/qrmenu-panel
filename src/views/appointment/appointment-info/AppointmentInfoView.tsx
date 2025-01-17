@@ -39,13 +39,14 @@ const AppointmentInfoView = () => {
 
     useEffect(() => {
         if (readAppointmentError) {
-            var error = readAppointmentError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right'
-                }
-            },)
+            const error = readAppointmentError as any;
+            enqueueSnackbar(error.data?.message ?? 'Hata', {
+              variant: 'error',
+              anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+              }
+            });
             setTimeout(() => {
                 router.push("/app/appointment")
             }, 200)
