@@ -27,7 +27,6 @@ import { Edit, Eye, PenAdd, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
@@ -38,7 +37,6 @@ const columnHelper = createColumnHelper<MakeAnOfferListData>()
 
 const MakeAnOfferTable = () => {
 
-  const router = useRouter()
   const intl = useIntl()
 
   let breadcrumbLinks = [
