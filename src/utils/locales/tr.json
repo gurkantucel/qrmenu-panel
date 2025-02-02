@@ -188,5 +188,7 @@
     "personTypes" : "Çalışan Türleri",
     "new" : "Yeni",
     "newPersonType" : "Yeni Çalışan Türü Ekle",
-    "updatePersonType" : "Çalışan Türü Düzenle"
+    "updatePersonType" : "Çalışan Türü Düzenle",
+    "print" : "Yazdır",
+    "makeAnOffer" : "Teklif Ver"
 }

@@ -63,6 +63,14 @@ const permissionControlMenu = () => {
                 icon: ""
             },
             {
+                id: 'make-an-offer',
+                code: null,
+                title: "Teklif Ver",
+                type: 'item',
+                url: '/app/make-an-offer',
+                icon: ""
+            },
+            {
                 id: 'payments',
                 code: "00005",
                 title: "Ödemeler",

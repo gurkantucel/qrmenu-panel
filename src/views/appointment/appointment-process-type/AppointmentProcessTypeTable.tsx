@@ -32,7 +32,6 @@ import AddAppointmentProcessTypeModal from './AddAppointmentProcessTypeModal';
 import UpdateAppointmentProcessTypeModal from './UpdateAppointmentProcessTypeModal';
 import DeleteAppointmentProcessTypeModal from './DeleteAppointmentProcessTypeModal';
 
-
 type SubTableProps = {
     data?: SubAppointmentProcess[]
 }
@@ -217,17 +216,19 @@ const AppointmentProcessTypeTable = () => {
                 sx={{ marginBottom: 3 }}
                 title={intl.formatMessage({ id: "processes" })}
                 secondary={
-                    <Button variant="dashed" startIcon={<Add />} onClick={() => {
-                        dispatch(setModal({
-                            open: true,
-                            modalType: ModalEnum.newAppointmentProcessType,
-                            id: params.slug,
-                            data: {
-                                patient_id: patientId,
-                                appointment_id: params.slug
-                            }
-                        }))
-                    }}>{intl.formatMessage({ id: "add" })}</Button>
+                    <>
+                        <Button variant="dashed" startIcon={<Add />} onClick={() => {
+                            dispatch(setModal({
+                                open: true,
+                                modalType: ModalEnum.newAppointmentProcessType,
+                                id: params.slug,
+                                data: {
+                                    patient_id: patientId,
+                                    appointment_id: params.slug
+                                }
+                            }))
+                        }}>{intl.formatMessage({ id: "add" })}</Button>
+                    </>
                 }
             >
                 <AddAppointmentProcessTypeModal />

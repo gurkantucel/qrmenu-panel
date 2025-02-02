@@ -28,8 +28,8 @@ const newAppointmentSchema = Yup.object({
             .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
     }),
     appointment_duration: Yup.number().min(0,"Bu alan zorunlu").required("Bu alan zorunlu"),
-    person_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
-    appointment_status_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    person_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    appointment_status_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     appointment_start: Yup.string().required("Bu alan zorunlu")
 })
 
@@ -47,10 +47,10 @@ const updateAppointmentProcessTypeSchema = Yup.object({
 const newAppointmentProcessSchema = Yup.object({
     name: Yup.string().min(1, "Bu alan zorunlu").max(50, "Bu alan zorunlu").required("Bu alan zorunlu"),
     code: Yup.string().min(1, "Bu alan zorunlu").max(10, "Bu alan zorunlu").required("Bu alan zorunlu"),
-    currency_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    currency_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     amount: Yup.number().min(0, "Minumum 0 girin.").required("Bu alan zorunlu"),
     vat: Yup.number().nullable().min(0, "Minumum 0 girin."),
-    appointment_process_type_id: Yup.number().min(1, "Seçim yapın.").required("Bu alan zorunlu"),
+    appointment_process_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     sub_appointment_process: Yup.array(Yup.number()).nullable().when("appointment_process_type_id", {
         is: (v: any) => v === 3,
         then: (schema) => Yup.array(Yup.number()).required("Bu alan zorunlu").min(1,"Bu alan zorunlu")

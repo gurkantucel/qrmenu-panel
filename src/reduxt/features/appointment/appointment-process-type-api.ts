@@ -59,6 +59,23 @@ const appointmentProcessTypeApi = createApi({
             query: () => `app/appointment-process/dropDown`,
             providesTags: ["appointment-process-type"]
         }),
+        printAppointment: builder.query<void, { appointment_id?: number | string }>({
+            query: (args?: { appointment_id?: number | string }) => ({
+                url: `app/appointment/printAppointment`,
+                responseHandler: async (response: Response) => {
+                    const blobUrl = window.URL.createObjectURL(await response.blob());
+                    console.log(JSON.stringify(response.headers));
+                    const fileName = response.headers.get("content-disposition")?.split('filename=')[1].split(';')[0];
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = fileName ?? "download.pdf";
+                    a.click();
+                    a.parentNode?.removeChild(a);
+                },
+                params: args
+            }),
+            //transformResponse: (response: any) => response.blob()
+        }),
     })
 })
 
@@ -68,7 +85,8 @@ export const {
     useUpdateAppointmentProcessTypeMutation,
     useDeleteAppointmentProcessTypeMutation,
     useLazyReadAppointmentProcessTypeQuery,
-    useLazyGetAppointmentProcessDropdownQuery
+    useLazyGetAppointmentProcessDropdownQuery,
+    useLazyPrintAppointmentQuery
 } = appointmentProcessTypeApi
 
 export default appointmentProcessTypeApi;
