@@ -38,6 +38,7 @@ import ViewAppointmentModal from './ViewAppointmentModal';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
 import { enqueueSnackbar } from 'notistack';
+import { useGetAppointmentStatusDropdownQuery } from 'reduxt/features/definition/definition-api';
 
 const columnHelper = createColumnHelper<AppointmentListData>()
 
@@ -212,15 +213,14 @@ const AppointmentTable = () => {
   const [columnFilters, setColumnFilters] = useState<any[]>([{
     "id": "appointment_start",
     "value": dayjs().format("YYYY-MM-DD")
-  }, {
-    "id": "appointment_status_id",
-    "value": 1
   }]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
+
+  const { data: getAppointmentStatusData } = useGetAppointmentStatusDropdownQuery()
 
   const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
     page: pagination.pageIndex + 1,
@@ -289,7 +289,7 @@ const AppointmentTable = () => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getAppointmentStatusData={getAppointmentStatusData?.data} />}
                       </TableCell>
                     ))}
                   </TableRow>

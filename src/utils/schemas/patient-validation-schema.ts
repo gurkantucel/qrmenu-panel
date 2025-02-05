@@ -95,6 +95,22 @@ const newPatientInjectionHistorySchema = Yup.object({
     injection_date: Yup.date().required("Bu alan zorunlu").typeError("Bu alan zorunlu"),
 })
 
+const newPatientAllergyHistorySchema = Yup.object({
+    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    name: Yup.string()
+        .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
+        .min(2, "Çok Kısa")
+        .max(100, "Çok Uzun")
+        .required("Bu alan zorunlu"),
+    start_date: Yup.date().nullable().typeError('Başlangıç tarihi geçerli bir tarih olmalıdır'),
+    end_date: Yup.date().nullable()
+        .typeError('Bitiş tarihi geçerli bir tarih olmalıdır')
+        .when(["start_date"], {
+            is: (start_date: any) => start_date && start_date !== '',
+            then: (schema) => Yup.date().nullable().min(Yup.ref('start_date'), 'Bitiş tarihi başlangıç tarihinden büyük olmalıdır'),
+        }),
+})
+
 const newPatientPaymentHistorySchema = Yup.object({
     patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     payment_kind_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
@@ -103,4 +119,4 @@ const newPatientPaymentHistorySchema = Yup.object({
     amount: Yup.number().required("Bu alan zorunlu"),
 })
 
-export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema }
+export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema }

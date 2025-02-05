@@ -199,6 +199,7 @@ export const {
     useLazyGetPatientReferenceDropdownQuery,
     useLazyGetPatientProcessTypeDropdownQuery,
     useLazyGetPaymentMethodDropdownQuery,
+    useGetAppointmentStatusDropdownQuery,
     useLazyGetAppointmentStatusDropdownQuery,
     useLazyGetAppointmentProcessTypeDropdownQuery,
     useLazyGetPaymentKindDropdownQuery

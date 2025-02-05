@@ -23,6 +23,7 @@ import appointmentProcessApi from './features/settings/appointment-process-api'
 import smsTemplateApi from './features/sms-template/sms-template-api'
 import personTypeApi from './features/settings/person-type-api'
 import makeAnOfferApi from './features/make-an-offer/make-an-offer-api'
+import allergyHistoryApi from './features/patient/allergy-history-api'
 
 export const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
     [surgeryHistoryApi.reducerPath] : surgeryHistoryApi.reducer,
     [treatmentHistoryApi.reducerPath] : treatmentHistoryApi.reducer,
     [injectionHistoryApi.reducerPath] : injectionHistoryApi.reducer,
+    [allergyHistoryApi.reducerPath] : allergyHistoryApi.reducer,
     [healthInformationApi.reducerPath] : healthInformationApi.reducer,
     [patientFileApi.reducerPath] : patientFileApi.reducer,
     [patientPaymentHistoryApi.reducerPath] : patientPaymentHistoryApi.reducer,
@@ -62,6 +64,7 @@ export const store = configureStore({
     surgeryHistoryApi.middleware,
     treatmentHistoryApi.middleware,
     injectionHistoryApi.middleware,
+    allergyHistoryApi.middleware,
     healthInformationApi.middleware,
     patientFileApi.middleware,
     patientPaymentHistoryApi.middleware,

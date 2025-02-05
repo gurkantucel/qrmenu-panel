@@ -1,3 +1,4 @@
+import PatientAllergyHistoryTable from './health-history/patient-allergy-history/PatientAllergyHistoryTable';
 import PatientDiseaseHistoryTable from './health-history/patient-disease-history/PatientDiseaseHistoryTable';
 import PatientFamilyDiseaseHistoryTable from './health-history/patient-family-disease-history/PatientFamilyDiseaseHistoryTable';
 import PatientInjectionHistoryTable from './health-history/patient-injection-history/PatientInjectionHistoryTable';
@@ -10,6 +11,7 @@ export const PatientHealthHistory = ({ params }: { params: { slug: string } }) =
         <>
             <PatientDiseaseHistoryTable params={params} />
             <PatientMedicineHistoryTable params={params} />
+            <PatientAllergyHistoryTable params={params} />
             <PatientFamilyDiseaseHistoryTable params={params} />
             <PatientSurgeryHistoryTable params={params} />
             <PatientTreatmentHistoryTable params={params} />

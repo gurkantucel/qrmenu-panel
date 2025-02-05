@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
@@ -18,6 +18,7 @@ import { enqueueSnackbar } from "notistack";
 import { CreateAppointmentProcessBodyModel } from "reduxt/features/settings/models/appointment-process-model";
 import { useCreateAppointmentProcessMutation, useLazyGetAppointmentProcessDropdownQuery, useUpdateAppointmentProcessMutation } from "reduxt/features/settings/appointment-process-api";
 import { newAppointmentProcessSchema } from "utils/schemas/appointment-validation-schema";
+import CurrencyInput from 'react-currency-input-field';
 
 const AddAppointmentProcessModal = () => {
 
@@ -71,6 +72,7 @@ const AddAppointmentProcessModal = () => {
                 description: data.description,
                 amount: data.amount,
                 vat: data.vat,
+                vat_included: data.vat_included,
                 sub_appointment_process: data.sub_appointment_process,
                 status: data.status
             }
@@ -149,14 +151,18 @@ const AddAppointmentProcessModal = () => {
                         code: '',
                         name: '',
                         description: null,
-                        amount: null,
-                        vat: null,
+                        amount: undefined,
+                        vat: 0,
                         sub_appointment_process: null,
+                        vat_included: false,
                         status: true
                     }}
                     enableReinitialize
                     validationSchema={newAppointmentProcessSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                        if (values.amount && typeof values.amount == "number") {
+                            values.amount = values.amount.toFixed(2);
+                        }
                         if (values.appointment_process_id != null) {
                             updateAppointmentProcess(values);
                         } else {
@@ -305,18 +311,30 @@ const AddAppointmentProcessModal = () => {
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="person_id">
                                                 {`${intl.formatMessage({ id: "amount" })}*`}</InputLabel>
-                                            <OutlinedInput
-                                                id="name"
-                                                type="number"
-                                                value={values.amount}
-                                                name={`amount`}
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "amount" })}
-                                                fullWidth
-                                                inputProps={{ min: 0 }}
-                                                error={Boolean(touched.amount && errors.amount)}
-                                            />
+                                            <Field name={"amount"}>
+                                                {({ field, form, meta }: any) => (
+                                                    <CurrencyInput
+                                                        id="amount"
+                                                        name={`amount`}
+                                                        placeholder={intl.formatMessage({ id: "amount" })}
+                                                        value={values.amount ?? undefined}
+                                                        decimalsLimit={2}
+                                                        onValueChange={(value, name, values) => {
+                                                            setFieldValue("amount", values?.float)
+                                                        }}
+                                                        style={{
+                                                            padding: 14,
+                                                            border: `1px solid ${touched.amount && errors.amount ? "#F04134" : "#BEC8D0"}`,
+                                                            borderRadius: 8,
+                                                            color: "#1D2630",
+                                                            fontSize: "0.875rem",
+                                                            boxSizing: "content-box",
+                                                            height: "1.4375em",
+                                                            font: "inherit"
+                                                        }}
+                                                    />
+                                                )}
+                                            </Field>
                                         </Stack>
                                         {touched.amount && errors.amount && (
                                             <FormHelperText error id="helper-text-firstname-signup">
@@ -346,6 +364,13 @@ const AddAppointmentProcessModal = () => {
                                                 {`${errors.vat}`}
                                             </FormHelperText>
                                         )}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControlLabel control={<Switch
+                                            checked={values.vat_included}
+                                            value={values.status} onChange={(e, checked) => {
+                                                setFieldValue("vat_included", checked);
+                                            }} />} label={intl.formatMessage({ id: "vatIncluded" })} />
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
                                         <Stack spacing={1}>

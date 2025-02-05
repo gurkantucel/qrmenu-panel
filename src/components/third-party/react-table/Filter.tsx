@@ -7,6 +7,7 @@ import DebouncedInput from './DebouncedInput';
 // assets
 import { InputBaseComponentProps, MenuItem, Select } from '@mui/material';
 import { useIntl } from 'react-intl';
+import { DropdownListData } from 'utils/models/dropdown-list-model';
 
 
 // ==============================|| FILTER - NUMBER FIELD ||============================== //
@@ -43,11 +44,12 @@ function TextInput({ columnId, columnFilterValue, header, searchText, setFilterV
 type Props<T extends RowData> = {
   column: Column<T, unknown>;
   table: Table<T>;
+  getAppointmentStatusData?: DropdownListData[]
 };
 
 // ==============================|| FILTER - INPUT ||============================== //
 
-export default function Filter<T extends RowData>({ column, table }: Props<T>) {
+export default function Filter<T extends RowData>({ column, table, getAppointmentStatusData }: Props<T>) {
   const intl = useIntl()
   //const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
 
@@ -75,23 +77,21 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
       width: '100%',
       '& .MuiSelect-select': {
         width: "100% !important",
-        padding: "10px 10px 10px 12px"
+        padding: "10px 10px 10px 12px",
+        textTransform: "none"
       }
     }}
     MenuProps={{
       style: { zIndex: 9999, },
     }}
-    defaultValue={"1"}
+    defaultValue={"-"}
     onChange={(event) => {
       column.setFilterValue(event.target.value);
     }}>
     <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
-    <MenuItem value="1">{intl.formatMessage({ id: "waiting" })}</MenuItem>
-    <MenuItem value="4">{intl.formatMessage({ id: "postponed" })}</MenuItem>
-    <MenuItem value="5">{intl.formatMessage({ id: "delayed" })}</MenuItem>
-    <MenuItem value="2">{intl.formatMessage({ id: "completed" })}</MenuItem>
-    <MenuItem value="6">{intl.formatMessage({ id: "inComplete" })}</MenuItem>
-    <MenuItem value="3">{intl.formatMessage({ id: "cancelled" })}</MenuItem>
+    {getAppointmentStatusData?.map((item) => (
+      <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
+    ))}
   </Select> : meta == "date" ? (
     <TextInput
       type='date'
@@ -109,7 +109,7 @@ export default function Filter<T extends RowData>({ column, table }: Props<T>) {
       setFilterValue={column.setFilterValue}
       searchText={intl.formatMessage({ id: "search" })}
       header={column.columnDef.header as string}
-      inputProps={{min: 0}}
+      inputProps={{ min: 0 }}
     />
   ) : (
     <TextInput

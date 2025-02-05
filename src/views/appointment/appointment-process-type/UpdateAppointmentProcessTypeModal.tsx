@@ -53,16 +53,27 @@ const UpdateAppointmentProcessTypeModal = () => {
 
     return (
         <>
-            <Dialog open={open && modalType == ModalEnum.updateAppointmentProcessType} onClose={handleClose} fullWidth maxWidth="md">
+            <Dialog open={open && modalType == ModalEnum.updateAppointmentProcessType} onClose={handleClose} fullWidth maxWidth="xl">
                 <Formik
                     initialValues={{
                         appointment_process_history_id: data?.appointment_process_history_id,
                         appointment_id: data?.appointment_id,
+                        currency_code: data?.currency_code,
+                        currency_name: data?.currency_name,
                         amount: data?.amount,
+                        quantity: data?.quantity,
+                        discount_percentage: data?.discount_percentage,
+                        discount_amount: data?.discount_amount,
+                        vat: data?.vat,
+                        vat_included: data?.vat_included,
+                        vat_amount: data?.vat_amount,
+                        total: data?.total,
+                        status: data?.status
                     }}
                     enableReinitialize
                     validationSchema={updateAppointmentProcessTypeSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                        values.quantity = values.quantity.toFixed(2)
                         updateAppointmentProcessType(values);
                     }}
                 >
@@ -86,7 +97,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid item xs={12} md={2}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="person_id">{`${intl.formatMessage({ id: "appointmentProcess" })}*`}</InputLabel>
                                             <CustomFormikSelect
@@ -98,10 +109,33 @@ const UpdateAppointmentProcessTypeModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid item xs={12} md={1}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="person_id">
-                                                {`${intl.formatMessage({ id: "amount" })}*`}</InputLabel>
+                                            <InputLabel htmlFor="quantity">
+                                                {`${intl.formatMessage({ id: "quantity" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="quantity"
+                                                type="number"
+                                                value={values.quantity}
+                                                name={`quantity`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "quantity" })}
+                                                fullWidth
+                                                error={Boolean(touched.quantity && errors.quantity)}
+                                                inputProps={{min: 0,step: "0.01"}}
+                                            />
+                                        </Stack>
+                                        {touched.quantity && errors.quantity && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.quantity}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="unitPrice">
+                                                {`${intl.formatMessage({ id: "unitPrice" })}*`}</InputLabel>
                                             <OutlinedInput
                                                 id="name"
                                                 type="number"
@@ -109,15 +143,147 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 name={`amount`}
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "amount" })}
+                                                placeholder={intl.formatMessage({ id: "unitPrice" })}
                                                 fullWidth
                                                 startAdornment={<>{data?.currency_code ?? ""}</>}
                                                 error={Boolean(touched.amount && errors.amount)}
+                                                inputProps={{min: 0}}
                                             />
                                         </Stack>
                                         {touched.amount && errors.amount && (
                                             <FormHelperText error id="helper-text-firstname-signup">
                                                 {`${errors.amount}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={1}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="discount_percentage">
+                                                {`${intl.formatMessage({ id: "discount" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="discount_percentage"
+                                                type="number"
+                                                value={values.discount_percentage}
+                                                name={`discount_percentage`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "discount" })}
+                                                fullWidth
+                                                error={Boolean(touched.discount_percentage && errors.discount_percentage)}
+                                                inputProps={{min: 0}}
+                                            />
+                                        </Stack>
+                                        {touched.quantity && errors.quantity && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.quantity}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="discountAmount">
+                                                {`${intl.formatMessage({ id: "discountAmount" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="discount_amount"
+                                                type="number"
+                                                value={(values.quantity * values.amount * values.discount_percentage) / 100}
+                                                disabled
+                                                name={`discount_amount`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "discountAmount" })}
+                                                fullWidth
+                                                startAdornment={<>{data?.currency_code ?? ""}</>}
+                                                error={Boolean(touched.discount_amount && errors.discount_amount)}
+                                                inputProps={{min: 0}}
+                                            />
+                                        </Stack>
+                                        {touched.discount_amount && errors.discount_amount && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.discount_amount}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={1}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="vat">
+                                                {`${intl.formatMessage({ id: "vat" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="vat"
+                                                type="number"
+                                                value={values.vat}
+                                                name={`vat`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "vat" })}
+                                                fullWidth
+                                                error={Boolean(touched.vat && errors.vat)}
+                                                inputProps={{min: 0}}
+                                            />
+                                        </Stack>
+                                        {touched.vat && errors.vat && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.vat}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="vatAmount">
+                                                {`${intl.formatMessage({ id: "vatAmount" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="vat_amount"
+                                                type="number"
+                                                value={
+                                                    (values.quantity * values.amount -
+                                                        (values.quantity * values.amount * values.discount_percentage) / 100) *
+                                                    (values.vat / 100)
+                                                }
+                                                disabled
+                                                name={`vat_amount`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "vatAmount" })}
+                                                fullWidth
+                                                startAdornment={<>{data?.currency_code ?? ""}</>}
+                                                error={Boolean(touched.vat_amount && errors.vat_amount)}
+                                                inputProps={{min: 0}}
+                                            />
+                                        </Stack>
+                                        {touched.vat_amount && errors.vat_amount && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.vat_amount}`}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="total">
+                                                {`${intl.formatMessage({ id: "total" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="total"
+                                                type="number"
+                                                value={
+                                                    values.quantity * values.amount -
+                                                    (values.quantity * values.amount * values.discount_percentage) / 100 +
+                                                    (values.quantity * values.amount -
+                                                        (values.quantity * values.amount * values.discount_percentage) / 100) *
+                                                    (values.vat / 100)
+                                                }
+                                                disabled
+                                                name={`total`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "total" })}
+                                                fullWidth
+                                                startAdornment={<>{data?.currency_code ?? ""}</>}
+                                                error={Boolean(touched.total && errors.total)}
+                                                inputProps={{min: 0}}
+                                            />
+                                        </Stack>
+                                        {touched.vat_amount && errors.vat_amount && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {`${errors.vat_amount}`}
                                             </FormHelperText>
                                         )}
                                     </Grid>

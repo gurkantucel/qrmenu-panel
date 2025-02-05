@@ -205,7 +205,7 @@ const AddAppointmentModal = (props: Props) => {
                                             onChange={(value) => {
                                                 setFieldValue("patient_id", value?.value);
                                             }}
-                                            noOptionsMessage={() => "En az üç karakter ile arayın."}
+                                            noOptionsMessage={() => "En az dört karakter ile arayın."}
                                             loadingMessage={() => "Yükleniyor"}
                                         />
                                     </Grid>}

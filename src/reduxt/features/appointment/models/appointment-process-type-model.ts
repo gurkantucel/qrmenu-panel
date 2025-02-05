@@ -31,7 +31,13 @@ export interface AppointmentProcessTypeData {
     name: string
     description: any
     amount: string
+    discount_percentage: number
+    discount_amount: string
+    quantity: string
     vat: number
+    vat_included: boolean
+    vat_amount: string
+    total: string
     sub_appointment_process?: SubAppointmentProcess[]
     created_at: string
     updated_at: string
@@ -62,7 +68,13 @@ export interface SubAppointmentProcess {
     name: string
     description: any
     amount: number
+    discount_percentage: number
+    discount_amount: number
+    quantity: string | number
     vat: number
+    vat_included: boolean
+    vat_amount: string
+    total: string
     created_at: string
     updated_at: string
     created_by: number
@@ -81,7 +93,12 @@ export interface AppointmentProcessTypeCreateData {
     appointment_id: number | null
     patient_id: number | null
     appointment_process_id: number | null
+    quantity: number | null
     amount: number | null
+    discount_percentage: number | null
+    vat: number | null
+    vat_included: boolean
+    total: number | string | null
     currency_code?: number | null
     status: boolean
 }

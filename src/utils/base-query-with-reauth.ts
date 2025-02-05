@@ -14,11 +14,12 @@ const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
-    prepareHeaders(headers, api) {
+    prepareHeaders(headers) {
         const token = getCookie("token");
         if (token) {
             headers.set("Authorization", `Bearer ${token}`)
         }
+        return headers;
     },
 })
 

@@ -59,6 +59,16 @@ const SubTable = (props: SubTableProps) => {
             cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
             footer: info => info.column.id,
         }),
+        subColumnHelper.accessor('discount_percentage', {
+            header: intl.formatMessage({ id: "discount" }),
+            cell: info => info.renderValue() == null ? "-" : `${info.row.original.discount_amount} (%${info.row.original.discount_percentage})`,
+            footer: info => info.column.id,
+        }),
+        subColumnHelper.accessor('total', {
+            header: intl.formatMessage({ id: "total" }),
+            cell: info => info.renderValue() == null ? "-" : `${info.row.original.total} ${info.row.original.currency_code}`,
+            footer: info => info.column.id,
+        }),
         subColumnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "name" }),
             cell: info => "",
@@ -141,8 +151,28 @@ const AppointmentProcessTypeTable = () => {
             footer: info => info.column.id,
         }),
         columnHelper.accessor('amount', {
-            header: intl.formatMessage({ id: "amount" }),
-            cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
+            header: intl.formatMessage({ id: "unitPrice" }),
+            cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.amount))}`,
+            footer: info => info.column.id,
+        }),
+        columnHelper.accessor('quantity', {
+            header: intl.formatMessage({ id: "quantity" }),
+            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            footer: info => info.column.id,
+        }),
+        columnHelper.accessor('discount_percentage', {
+            header: intl.formatMessage({ id: "discount" }),
+            cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.discount_amount))} (%${info.row.original.discount_percentage})`,
+            footer: info => info.column.id,
+        }),
+        columnHelper.accessor('vat', {
+            header: intl.formatMessage({ id: "vat" }),
+            cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.vat_amount))} (%${info.row.original.vat})`,
+            footer: info => info.column.id,
+        }),
+        columnHelper.accessor('total', {
+            header: intl.formatMessage({ id: "total" }),
+            cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
             footer: info => info.column.id,
         }),
         columnHelper.accessor('islemler', {

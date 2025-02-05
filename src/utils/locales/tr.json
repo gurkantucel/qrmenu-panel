@@ -65,6 +65,9 @@
     "appointment": "Randevu",
     "treatment": "Tedavi",
     "medicineHistory": "İlaç Geçmişi",
+    "allergyHistory" : "Alerji Geçmişi",
+    "addAllergyHistory": "Alerji Geçmişi Ekle",
+    "updateAllergyHistory": "Alerji Geçmişi Düzenle",
     "treatmentMethodName": "Tedavi Yöntemi Adı",
     "usagePeriod": "Kullanım Süresi",
     "addMedicineHistory": "İlaç Geçmişi Ekle",
@@ -190,5 +193,12 @@
     "newPersonType" : "Yeni Çalışan Türü Ekle",
     "updatePersonType" : "Çalışan Türü Düzenle",
     "print" : "Yazdır",
-    "makeAnOffer" : "Teklif Ver"
+    "makeAnOffer" : "Teklif Ver",
+    "vatIncluded" : "KDV Dahil",
+    "quantity" : "Adet",
+    "unitPrice" : "Birim Fiyat",
+    "discount" : "İskonto",
+    "discountAmount" : "İskonto Tutarı",
+    "vatAmount" : "KDV Tutarı",
+    "total" : "Toplam"
 }

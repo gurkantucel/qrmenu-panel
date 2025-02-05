@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const newAppointmentSchema = Yup.object({
-    patient_id: Yup.number().nullable(),
+    patient_id: Yup.string().nullable(),
     patient_name: Yup.string().nullable().when("patient_id", {
         is: (v: any) => v === null || undefined,
         then: (schema) => Yup.string()
@@ -35,7 +35,7 @@ const newAppointmentSchema = Yup.object({
 
 const newAppointmentProcessTypeSchema = Yup.object({
     data: Yup.array(Yup.object({
-        appointment_process_id: Yup.number().required("Bu alan zorunlu"),
+        appointment_process_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
         amount: Yup.number().required("Bu alan zorunlu")
     }))
 })
@@ -49,7 +49,7 @@ const newAppointmentProcessSchema = Yup.object({
     code: Yup.string().min(1, "Bu alan zorunlu").max(10, "Bu alan zorunlu").required("Bu alan zorunlu"),
     currency_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     amount: Yup.number().min(0, "Minumum 0 girin.").required("Bu alan zorunlu"),
-    vat: Yup.number().nullable().min(0, "Minumum 0 girin."),
+    vat: Yup.number().min(0, "Minumum 0 girin."),
     appointment_process_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     sub_appointment_process: Yup.array(Yup.number()).nullable().when("appointment_process_type_id", {
         is: (v: any) => v === 3,

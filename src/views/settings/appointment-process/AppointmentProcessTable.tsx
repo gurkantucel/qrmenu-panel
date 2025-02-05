@@ -319,7 +319,7 @@ const AppointmentProcessTable = () => {
               <TableBody>
                 {isAppointmentProcessFetching || isAppointmentProcessLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                   <TableRow key={item}>
-                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    {[0, 1, 2, 3, 4, 5, 6].map((col: number) => (
                       <TableCell key={col}>
                         <Skeleton animation="wave" />
                       </TableCell>

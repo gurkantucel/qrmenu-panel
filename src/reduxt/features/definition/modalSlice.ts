@@ -13,6 +13,8 @@ export enum ModalEnum {
     deletePatientDiseaseHistory,
     newPatientMedicineHistory,
     deletePatientMedicineHistory,
+    newPatientAllergyHistory,
+    deletePatientAllergyHistory,
     newPatientFamilyDiseaseHistory,
     deletePatientFamilyDiseaseHistory,
     newPatientSurgeryHistory,

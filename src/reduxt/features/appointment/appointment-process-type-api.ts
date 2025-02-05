@@ -72,6 +72,7 @@ const appointmentProcessTypeApi = createApi({
                     a.click();
                     a.parentNode?.removeChild(a);
                 },
+                keepUnusedDataFor: 0,
                 params: args
             }),
             //transformResponse: (response: any) => response.blob()

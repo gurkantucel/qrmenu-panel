@@ -67,8 +67,9 @@ export interface CreateAppointmentProcessBodyModel {
     code: string | null
     name: string | null
     description: string | null
-    amount: number | null
-    vat: number | null
+    amount?: number | string | null
+    vat: number | null | string
+    vat_included: boolean
     sub_appointment_process: number[] | null
     status: boolean
 }
