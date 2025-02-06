@@ -63,8 +63,8 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                 kinship_degree_id: data.kinship_degree_id,
                 disease_status_id: data.disease_status_id,
                 name: data.name,
-                start_date: data.start_date,
-                end_date: data.end_date,
+                start_date: data.start_date != null ? dayjs(data.start_date).format("YYYY-MM-DD") : null,
+                end_date: data.end_date != null ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
                 status: data.status
             }
             setInitialData(model);
@@ -206,11 +206,6 @@ const AddPatientFamilyDiseaseHistoryModal = () => {
                                                 }}
                                             />
                                         </Stack>
-                                        {touched.kinship_degree_id && errors.kinship_degree_id && (
-                                            <FormHelperText error id="helper-text-email-signup">
-                                                {errors.kinship_degree_id}
-                                            </FormHelperText>
-                                        )}
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>

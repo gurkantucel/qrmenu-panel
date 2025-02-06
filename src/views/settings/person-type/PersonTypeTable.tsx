@@ -22,7 +22,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
@@ -63,6 +63,14 @@ const PersonTypeTable = () => {
       header: intl.formatMessage({ id: "description" }),
       cell: info => info.renderValue() != null ? info.renderValue() : "-",
       footer: info => info.column.id,
+    }),
+    columnHelper.accessor('status', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? <FormattedMessage id='active' /> : <FormattedMessage id='passive' />} size="small" variant="light" />,
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'select',
+      },
     }),
     columnHelper.accessor('islemler', {
       header: intl.formatMessage({ id: "actions" }),

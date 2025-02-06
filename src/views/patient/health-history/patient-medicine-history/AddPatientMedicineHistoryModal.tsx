@@ -38,7 +38,7 @@ const AddPatientMedicineHistoryModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientMedicineHistory) {
-            
+
         }
     }, [open, id])
 
@@ -52,8 +52,8 @@ const AddPatientMedicineHistoryModal = () => {
                 name: data.name,
                 dosage: data.dosage,
                 usage_period: data.usage_period,
-                start_date: data.start_date,
-                end_date: data.end_date,
+                start_date: data.start_date != null ? dayjs(data.start_date).format("YYYY-MM-DD") : null,
+                end_date: data.end_date != null ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
                 status: data.status
             }
             setInitialData(model);
@@ -168,7 +168,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
-                                                inputProps={{maxLength: 100}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -190,7 +190,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "dosage" })}
                                                 fullWidth
                                                 error={Boolean(touched.dosage && errors.dosage)}
-                                                inputProps={{maxLength: 50}}
+                                                inputProps={{ maxLength: 50 }}
                                             />
                                         </Stack>
                                         {touched.dosage && errors.dosage && (
@@ -206,13 +206,13 @@ const AddPatientMedicineHistoryModal = () => {
                                                 id="usage_period"
                                                 type="firstname"
                                                 value={values.usage_period}
-                                                name="usage_period" 
+                                                name="usage_period"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={intl.formatMessage({ id: "usagePeriod" })}
                                                 fullWidth
                                                 error={Boolean(touched.usage_period && errors.usage_period)}
-                                                inputProps={{maxLength: 50}}
+                                                inputProps={{ maxLength: 50 }}
                                             />
                                         </Stack>
                                         {touched.usage_period && errors.usage_period && (
@@ -229,7 +229,7 @@ const AddPatientMedicineHistoryModal = () => {
                                                 error={Boolean(touched.start_date && errors.start_date)}
                                                 id="start_date"
                                                 type="date"
-                                               value={dayjs(values.start_date).format('YYYY-MM-DD')}
+                                                value={dayjs(values.start_date).format('YYYY-MM-DD')}
                                                 name="start_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

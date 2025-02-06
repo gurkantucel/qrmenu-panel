@@ -54,7 +54,7 @@ const AddAppointmentModal = (props: Props) => {
 
     const getPatientDropdownOptions = async (inputValue: string) => {
 
-        if (inputValue.length > 3) {
+        if (inputValue.length >= 3) {
             const items = await getPatientDropdown({ label: inputValue })
             return items.data?.data ?? [];
         }
@@ -201,12 +201,12 @@ const AddAppointmentModal = (props: Props) => {
                                             loadOptions={getPatientDropdownOptions}
                                             isClearable
                                             isLoading={getPatientDropdownLoading}
-                                            placeholder={"T.C., Telefon veya İsimle Danışan Arayın"}
+                                            placeholder={intl.formatMessage({ id: "searchTCPhoneOrName" })}
                                             onChange={(value) => {
                                                 setFieldValue("patient_id", value?.value);
                                             }}
-                                            noOptionsMessage={() => "En az dört karakter ile arayın."}
-                                            loadingMessage={() => "Yükleniyor"}
+                                            noOptionsMessage={() => intl.formatMessage({ id: "searchLeastThreeCharacters" })}
+                                            loadingMessage={() => intl.formatMessage({ id: "loadingDot" })}
                                         />
                                     </Grid>}
                                     {patientType == "newPatient" && <>
@@ -275,11 +275,11 @@ const AddAppointmentModal = (props: Props) => {
                                                 <OutlinedInput
                                                     fullWidth
                                                     error={Boolean(touched.patient_identity_number && errors.patient_identity_number)}
-                                                    id="identity_number"
+                                                    id="patient_identity_number"
                                                     type="lastname"
                                                     value={values.patient_identity_number}
                                                     disabled={values.patient_id != null}
-                                                    name="identity_number"
+                                                    name="patient_identity_number"
                                                     onBlur={handleBlur}
                                                     onChange={handleChange}
                                                     placeholder={intl.formatMessage({ id: "identityNumber" })}

@@ -200,5 +200,11 @@
     "discount" : "İskonto",
     "discountAmount" : "İskonto Tutarı",
     "vatAmount" : "KDV Tutarı",
-    "total" : "Toplam"
+    "total" : "Toplam",
+    "reference" : "Referans",
+    "province" : "İl",
+    "district" : "İlçe",
+    "address" : "Adres",
+    "searchLeastThreeCharacters" : "En az üç karakter ile arayın.",
+    "searchTCPhoneOrName" : "T.C., Telefon veya İsimle Danışan Arayın"
 }

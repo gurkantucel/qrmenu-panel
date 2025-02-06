@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams, useParams, useRouter } from 'next/navigation'
-import { Grid, Link, List, ListItem, Stack, Typography } from '@mui/material'
+import { Grid, List, Link, ListItem, Stack, Typography } from '@mui/material'
 import MainCard from 'components/MainCard'
 import { useEffect } from 'react'
 import { useLazyReadAppointmentQuery } from 'reduxt/features/appointment/appointment-api';
@@ -63,7 +63,8 @@ const AppointmentInfoView = () => {
                                 <Grid item xs={12} md={6}>
                                     <Stack spacing={0.5}>
                                         <Typography color="secondary">{intl.formatMessage({ id: "nameSurname" })}</Typography>
-                                        <Typography>{getReadAppointmentData?.data?.patient_full_name ?? "-"}</Typography>
+                                        <Typography>
+                                            <Link href={`/app/patient/${getReadAppointmentData?.data?.patient_id}`} target='_blank'>{getReadAppointmentData?.data?.patient_full_name ?? "-"}</Link></Typography>
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} md={6}>

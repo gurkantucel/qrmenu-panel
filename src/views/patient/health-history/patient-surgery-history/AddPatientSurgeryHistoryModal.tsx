@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { newPatientSurgeryHistorySchema } from "utils/schemas/patient-validation-schema";
 import { PatientSurgeryHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-surgery-history-model";
 import { useCreatePatientSurgeryHistoryMutation, useUpdatePatientSurgeryHistoryMutation } from "reduxt/features/patient/surgery-history-api";
+import dayjs from "dayjs";
 
 const AddPatientSurgeryHistoryModal = () => {
 
@@ -47,7 +48,7 @@ const AddPatientSurgeryHistoryModal = () => {
                 patient_id: data.patient_id,
                 appointment_id: data.appointment_id,
                 name: data.name,
-                surgery_date: data.surgery_date,
+                surgery_date: data.surgery_date != null ? dayjs(data.surgery_date).format("YYYY-MM-DD") : null,
                 complications: data.complications,
                 status: data.status
             }

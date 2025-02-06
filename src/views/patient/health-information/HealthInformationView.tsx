@@ -98,6 +98,12 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                 }}
                 enableReinitialize
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                    if(values.height && values.weight){
+                        const height = Number(values.height);
+                        const weight = Number(values.weight);
+                        values.height = height.toFixed(2);
+                        values.weight = weight.toFixed(2);
+                    }
                     updatePatientHealthInformation(values);
                 }}
             >

@@ -38,7 +38,7 @@ const AddPatientAllergyHistoryModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientAllergyHistory) {
-            
+
         }
     }, [open, id])
 
@@ -49,8 +49,8 @@ const AddPatientAllergyHistoryModal = () => {
                 patient_id: data.patient_id,
                 name: data.name,
                 complications: data.complications,
-                start_date: data.start_date,
-                end_date: data.end_date,
+                start_date: data.start_date != null ? dayjs(data.start_date).format("YYYY-MM-DD") : null,
+                end_date: data.end_date != null ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
                 status: data.status
             }
             setInitialData(model);
@@ -162,7 +162,7 @@ const AddPatientAllergyHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "name" })}
                                                 fullWidth
                                                 error={Boolean(touched.name && errors.name)}
-                                                inputProps={{maxLength: 100}}
+                                                inputProps={{ maxLength: 100 }}
                                             />
                                         </Stack>
                                         {touched.name && errors.name && (
@@ -184,7 +184,7 @@ const AddPatientAllergyHistoryModal = () => {
                                                 placeholder={intl.formatMessage({ id: "complications" })}
                                                 fullWidth
                                                 error={Boolean(touched.complications && errors.complications)}
-                                                inputProps={{maxLength: 50}}
+                                                inputProps={{ maxLength: 50 }}
                                             />
                                         </Stack>
                                         {touched.complications && errors.complications && (
@@ -201,7 +201,7 @@ const AddPatientAllergyHistoryModal = () => {
                                                 error={Boolean(touched.start_date && errors.start_date)}
                                                 id="start_date"
                                                 type="date"
-                                               value={dayjs(values.start_date).format('YYYY-MM-DD')}
+                                                value={dayjs(values.start_date).format('YYYY-MM-DD')}
                                                 name="start_date"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}

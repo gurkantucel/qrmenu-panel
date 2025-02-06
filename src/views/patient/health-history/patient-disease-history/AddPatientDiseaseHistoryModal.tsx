@@ -56,8 +56,8 @@ const AddPatientDiseaseHistoryModal = () => {
                 patient_id: data.patient_id,
                 disease_status_id: data.disease_status_id,
                 name: data.name,
-                start_date: data.start_date,
-                end_date: data.end_date,
+                start_date: data.start_date != null ? dayjs(data.start_date).format("YYYY-MM-DD") : null,
+                end_date: data.end_date != null ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
                 status: data.status
             }
             setInitialData(model);

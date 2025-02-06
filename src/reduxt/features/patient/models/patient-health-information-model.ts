@@ -31,7 +31,7 @@ export interface PatientHealtInformationUpdateBodyModel {
     patient_health_information_id: number | string | null
     patient_id: number | string | null
     blood_type_id: number | string | null
-    height: number | string | null
+    height: number | string |  null
     weight: number | string | null
     smoke: boolean | null
     alcohol: boolean | null

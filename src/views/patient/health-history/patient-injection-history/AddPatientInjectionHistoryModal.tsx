@@ -55,7 +55,7 @@ const AddPatientInjectionHistoryModal = () => {
                 injection_type_id: data.injection_type_id,
                 name: data.name,
                 dosage: data.dosage,
-                injection_date: data.injection_date,
+                injection_date: data.injection_date != null ? dayjs(data.injection_date).format("YYYY-MM-DD") : null,
                 complications: data.complications,
                 status: data.status
             }
@@ -224,7 +224,7 @@ const AddPatientInjectionHistoryModal = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="injection_date">{intl.formatMessage({ id: "treatmentDate" })}</InputLabel>
+                                            <InputLabel htmlFor="injection_date">{intl.formatMessage({ id: "injectionDate" })}</InputLabel>
                                             <OutlinedInput
                                                 fullWidth
                                                 error={Boolean(touched.injection_date && errors.injection_date)}

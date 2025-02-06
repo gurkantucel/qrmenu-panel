@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { PatientTreatmentHistoryCreateBodyModel } from "reduxt/features/patient/models/patient-treatment-history-model";
 import { useCreatePatientTreatmentHistoryMutation, useUpdatePatientTreatmentHistoryMutation } from "reduxt/features/patient/treatment-history-api";
 import { newPatientTreatmentHistorySchema } from "utils/schemas/patient-validation-schema";
+import dayjs from "dayjs";
 
 const AddPatientTreatmentHistoryModal = () => {
 
@@ -46,7 +47,7 @@ const AddPatientTreatmentHistoryModal = () => {
                 patient_treatment_history_id: data.patient_treatment_history_id,
                 patient_id: data.patient_id,
                 name: data.name,
-                treatment_date: data.treatment_date,
+                treatment_date: data.treatment_date != null ? dayjs(data.treatment_date).format("YYYY-MM-DD") : null,
                 complications: data.complications,
                 status: data.status
             }

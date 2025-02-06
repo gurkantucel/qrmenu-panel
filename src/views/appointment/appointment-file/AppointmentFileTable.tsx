@@ -39,6 +39,7 @@ const handleDownload = (link:string,fileName:string) => {
     // Anchor tag oluşturma ve indirme tetikleme
     const downloadLink = document.createElement('a');
     downloadLink.href = link;
+    downloadLink.target = "_blank";
     downloadLink.download = fileName; // İndirilecek dosyanın adı
     document.body.appendChild(downloadLink);
     downloadLink.click();

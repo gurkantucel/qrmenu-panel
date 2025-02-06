@@ -422,7 +422,7 @@ const AddPatientModal = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="company-signup">İl</InputLabel>
+                                            <InputLabel htmlFor="company-signup">{intl.formatMessage({ id: "province" })}</InputLabel>
                                             <CustomFormikSelect
                                                 name='city_id'
                                                 placeholder="Seçim yapınız..."
@@ -444,7 +444,7 @@ const AddPatientModal = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="company-signup">İlçe</InputLabel>
+                                            <InputLabel htmlFor="company-signup">{intl.formatMessage({ id: "district" })}</InputLabel>
                                             <CustomFormikSelect
                                                 name='district_id'
                                                 placeholder="Seçim yapınız..."
@@ -464,7 +464,7 @@ const AddPatientModal = () => {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="personal-addrees1">Adres</InputLabel>
+                                            <InputLabel htmlFor="personal-addrees1">{intl.formatMessage({ id: "address" })}</InputLabel>
                                             <TextField
                                                 fullWidth
                                                 id="personal-addrees1"
@@ -486,7 +486,7 @@ const AddPatientModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="patient_reference_id">
-                                            <>Referans </>
+                                            <>{intl.formatMessage({ id: "reference" })}</>
                                             <Tooltip title="Kliniği nereden duydun?"><InfoCircle size={14} /></Tooltip>
                                             </InputLabel>
                                             <CustomFormikSelect
@@ -495,7 +495,7 @@ const AddPatientModal = () => {
                                                 isLoading={getPatientReferenceListLoading}
                                                 zIndex={9993}
                                                 value={
-                                                    values.patient_reference_id ? { label: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getDistrictListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
+                                                    values.patient_reference_id ? { label: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
                                                     setFieldValue("patient_reference_id", val?.value ?? 0);
                                                 }}
