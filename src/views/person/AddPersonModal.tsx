@@ -1,7 +1,7 @@
 "use client"
 
 import { Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, Stack, Switch, TextField, Typography } from "@mui/material"
-import { Add, Eye, EyeSlash } from "iconsax-react"
+import { Add, CloseSquare, Eye, EyeSlash } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
@@ -11,7 +11,7 @@ import AnimateButton from "components/@extended/AnimateButton";
 import { useCreatePersonMutation, useLazyReadPersonQuery, useUpdatePersonMutation } from "reduxt/features/person/person-api";
 import { PuffLoader } from "react-spinners";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { useLazyGetModuleDropdownQuery, useLazyGetPersonTypeDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetModuleDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import { DropdownListData } from "utils/models/dropdown-list-model";
 import IconButton from "components/@extended/IconButton";
@@ -19,6 +19,7 @@ import { newPersonValidationSchema } from "utils/schemas/person-validation-schem
 import { enqueueSnackbar } from "notistack";
 import { PersonCreateBodyModel } from "reduxt/features/person/models/person-list-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
+import { useLazyGetPersonTypeDropdownQuery } from "reduxt/features/settings/person-type-api";
 
 const AddPersonModal = () => {
 
@@ -59,7 +60,7 @@ const AddPersonModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPerson) {
-            getPersonType();
+            getPersonType({});
             if (id != null) {
                 readPerson({ person_id: id })
             }
@@ -175,7 +176,23 @@ const AddPersonModal = () => {
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                         <Form>
                             <Box sx={{ px: 3, py: 5 }}>
-                                <Typography variant="h5" marginBottom={"1.4rem"}>{intl.formatMessage({ id: id != null ? "updatePerson" : "addPerson" })}</Typography>
+                                <Grid
+                                    container
+                                    spacing={2}
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    marginBottom={"1.4rem"}
+                                    sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
+                                >
+                                    <Grid item>
+                                        <Typography variant="h4">{intl.formatMessage({ id: id != null ? "updatePerson" : "addPerson" })}</Typography>
+                                    </Grid>
+                                    <Grid item sx={{ mr: 1.5 }}>
+                                        <IconButton color="secondary" onClick={handleClose}>
+                                            <CloseSquare size={48} />
+                                        </IconButton>
+                                    </Grid>
+                                </Grid>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>

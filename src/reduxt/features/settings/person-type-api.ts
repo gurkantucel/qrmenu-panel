@@ -12,7 +12,7 @@ const personTypeApi = createApi({
         getPersonTypeList: builder.query<PersonTypeListResultModel, { filterSearch?: string, page?: number, pageSize?: number }>({
             query: (args?: { filterSearch?: string, page?: number, pageSize?: number }) => {
                 return {
-                    url: `definition/person-type/list?page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
+                    url: `app/person-type/list?page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
                 }
             },
             providesTags: ["personType"]
@@ -20,7 +20,7 @@ const personTypeApi = createApi({
         createPersonType: builder.mutation<CreateResultModel, PersonTypeCreateBodyModel>({
             query: (body) => {
                 return {
-                    url: `definition/person-type/create`,
+                    url: `app/person-type/create`,
                     method: "POST",
                     body: body
                 }
@@ -30,7 +30,7 @@ const personTypeApi = createApi({
         updatePersonType: builder.mutation<CreateResultModel, PersonTypeCreateBodyModel>({
             query: (body) => {
                 return {
-                    url: `definition/person-type/update`,
+                    url: `app/person-type/update`,
                     method: "PUT",
                     body: body
                 }
@@ -40,7 +40,7 @@ const personTypeApi = createApi({
         deletePersonType: builder.mutation<CreateResultModel, { person_type_id: number | string }>({
             query: (args) => {
                 return {
-                    url: `definition/person-type/delete`,
+                    url: `app/person-type/delete`,
                     method: "DELETE",
                     params: args
                 }
@@ -50,7 +50,7 @@ const personTypeApi = createApi({
         getPersonTypeDropdown: builder.query<DropdownListModel, { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }>({
             query: (args?: { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }) => {
                 return {
-                    url: `definition/person-type/dropDown`,
+                    url: `app/person-type/dropDown`,
                     params: args
                 }
             },

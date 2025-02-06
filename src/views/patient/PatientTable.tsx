@@ -22,7 +22,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Link, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Box, Divider, Skeleton, Stack, Tooltip} from '@mui/material';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPatientModal from './AddPatientModal';
@@ -34,6 +34,7 @@ import DeletePatientModal from './DeletePatientModal';
 import { useRouter } from 'next/navigation';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
+import Link from 'next/link';
 
 const columnHelper = createColumnHelper<PatientListData>()
 
@@ -58,7 +59,7 @@ const PatientTable = () => {
   const columns = useMemo<ColumnDef<PatientListData, any>[]>(() => [
     columnHelper.accessor('full_name', {
       header: intl.formatMessage({ id: "nameSurname" }),
-      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`}>
+      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`} className='custom-link'>
         {`${info.renderValue()}`}
       </Link>,
       footer: info => info.column.id,
@@ -70,7 +71,7 @@ const PatientTable = () => {
     }),
     columnHelper.accessor('phone_number', {
       header: intl.formatMessage({ id: "phoneNumber" }),
-      cell: info => info.renderValue() == null ? "-" : <Link href={`tel:${info.row.original.phone_code}${info.renderValue()}`}>
+      cell: info => info.renderValue() == null ? "-" : <Link href={`tel:${info.row.original.phone_code}${info.renderValue()}`} className='custom-link'>
         {`${info.renderValue()}`}
       </Link>,
       footer: info => info.column.id,

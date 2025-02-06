@@ -12,3 +12,14 @@ input[type='number']::-webkit-inner-spin-button {
 .css-lxfabf .fc-timegrid-event-harness-inset .fc-timegrid-event {
   padding: 0px 4px !important;
 }
+
+a.custom-link {
+  margin: 0;
+  font: inherit;
+  color: #00a854;
+  text-decoration: none
+}
+
+a.custom-link:hover {
+  text-decoration: underline;
+}

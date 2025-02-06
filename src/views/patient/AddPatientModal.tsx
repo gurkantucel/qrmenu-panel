@@ -220,10 +220,11 @@ const AddPatientModal = () => {
                                     spacing={2}
                                     justifyContent="space-between"
                                     alignItems="center"
+                                    marginBottom={"1.4rem"}
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}' }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4" marginBottom={"1.4rem"}>{intl.formatMessage({ id: id != null ? "updatePatient" : "newPatient" })}</Typography>
+                                        <Typography variant="h4">{intl.formatMessage({ id: id != null ? "updatePatient" : "newPatient" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>

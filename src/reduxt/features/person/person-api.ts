@@ -87,7 +87,7 @@ export const {
     useLazyReadPersonQuery,
     useAcceptingAppointmentDropDownQuery,
     useLazyAcceptingAppointmentDropDownQuery,
-    useUpdatePersonPasswordMutation
+    useUpdatePersonPasswordMutation,
 } = personApi
 
 export default personApi;
