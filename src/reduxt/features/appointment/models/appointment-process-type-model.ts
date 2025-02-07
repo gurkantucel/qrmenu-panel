@@ -93,7 +93,7 @@ export interface AppointmentProcessTypeCreateData {
     appointment_id: number | null
     patient_id: number | null
     appointment_process_id: number | null
-    quantity: number | null
+    quantity: string | null
     amount: number | null
     discount_percentage: number | null
     vat: number | null

@@ -71,9 +71,11 @@ const UpdateAppointmentProcessTypeModal = () => {
                         status: data?.status
                     }}
                     enableReinitialize
+                    validateOnChange={false}
                     validationSchema={updateAppointmentProcessTypeSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        values.quantity = values.quantity.toFixed(2)
+                        const quantity = Number(values.quantity);
+                        values.quantity = quantity.toFixed(2)
                         updateAppointmentProcessType(values);
                     }}
                 >
@@ -123,7 +125,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 placeholder={intl.formatMessage({ id: "quantity" })}
                                                 fullWidth
                                                 error={Boolean(touched.quantity && errors.quantity)}
-                                                inputProps={{min: 0,step: "0.01"}}
+                                                inputProps={{min: 0,step: "0.5"}}
                                             />
                                         </Stack>
                                         {touched.quantity && errors.quantity && (

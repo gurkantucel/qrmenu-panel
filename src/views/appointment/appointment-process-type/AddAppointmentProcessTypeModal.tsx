@@ -91,18 +91,20 @@ const AddAppointmentProcessTypeModal = () => {
                             discount_amount: 0,
                             vat: 0,
                             vat_included: false,
-                            vat_amount: null,
+                            vat_amount: 0,
                             total: 0,
                             currency_code: null,
                             status: true,
                         }]
                     }}
                     enableReinitialize
+                    validateOnChange={false}
                     validationSchema={newAppointmentProcessTypeSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                         const model = {
                             data: values.data.map(item => ({
                                 ...item,
+                                quantity: item.quantity.toFixed(2),
                                 currency_code: undefined
                             }))
                         };
@@ -220,7 +222,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     placeholder={intl.formatMessage({ id: "quantity" })}
                                                                     fullWidth
                                                                     error={Boolean((touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity))}
-                                                                    inputProps={{min: 0,step: "0.01"}}
+                                                                    inputProps={{min: 0,step: "0.5"}}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity) && (
