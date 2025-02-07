@@ -151,8 +151,15 @@ export interface AppointmentProcessDropdownModel {
 }
 
 export interface AppointmentProcessDropdownData {
-    value: number
+    value: string
     label: string
+    appointment_process_code: string
+    appointment_process_name: string
+    appointment_process_description?: string | null
+    vat: number,
+    vat_included: boolean
+    appointment_process_type_code: string
+    appointment_process_type_name: string
     currency_code: string
     amount: string
 }

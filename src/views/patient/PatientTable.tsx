@@ -22,7 +22,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Skeleton, Stack, Tooltip} from '@mui/material';
+import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddPatientModal from './AddPatientModal';
@@ -35,6 +35,7 @@ import { useRouter } from 'next/navigation';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
 import Link from 'next/link';
+import { useGetGenderDropdownQuery } from 'reduxt/features/definition/definition-api';
 
 const columnHelper = createColumnHelper<PatientListData>()
 
@@ -68,6 +69,9 @@ const PatientTable = () => {
       header: intl.formatMessage({ id: "gender" }),
       cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
+      meta: {
+        filterVariant: 'gender',
+      },
     }),
     columnHelper.accessor('phone_number', {
       header: intl.formatMessage({ id: "phoneNumber" }),
@@ -160,8 +164,11 @@ const PatientTable = () => {
   const { data: getPatientListData, isLoading: isPatientLoading, isFetching: isPatientFetching } = useGetPatientListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
-    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+    //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+    filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
   })
+
+  const { data: getGenderListData} = useGetGenderDropdownQuery();
 
   const tableData = useMemo(() => getPatientListData?.data ?? [], [getPatientListData?.data]);
 
@@ -204,7 +211,7 @@ const PatientTable = () => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getGenderData={getGenderListData?.data} />}
                       </TableCell>
                     ))}
                   </TableRow>

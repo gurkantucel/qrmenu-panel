@@ -11,13 +11,13 @@ export interface PatientFamilyDiseaseHistoryListModel {
   }
   
   export interface PatientFamilyDiseaseHistoryListData {
-    patient_family_disease_history_id: number
-    patient_id: number
+    patient_family_disease_history_id: string
+    patient_id: string
     patient_name: string
     patient_surname: string
-    disease_status_id: number
+    disease_status_id: string
     disease_status_name: string
-    kinship_degree_id: number
+    kinship_degree_id: string
     kinship_degree_name: string
     name: string
     start_date: any
@@ -33,10 +33,10 @@ export interface PatientFamilyDiseaseHistoryListModel {
   }
   
   export interface PatientFamilyDiseaseHistoryCreateBodyModel {
-    patient_family_disease_history_id?: number | null
+    patient_family_disease_history_id?: string | null
     patient_id?: number | string | null
-    kinship_degree_id: number | null
-    disease_status_id: number | null
+    kinship_degree_id: string | null
+    disease_status_id: string | null
     name: string
     start_date: string | null
     end_date: string | null

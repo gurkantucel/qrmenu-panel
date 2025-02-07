@@ -33,7 +33,7 @@ export interface PatientDiseaseHistoryListModel {
   export interface PatientDiseaseHistoryCreateBodyModel {
     patient_disease_history_id?: number | null
     patient_id?: number | string | null
-    disease_status_id: number | null
+    disease_status_id: string | null
     name: string | null
     start_date?: string | null
     end_date?: string | null 

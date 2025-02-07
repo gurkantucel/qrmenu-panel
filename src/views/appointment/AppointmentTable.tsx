@@ -22,7 +22,7 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Chip, Divider, Link, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { Edit, Eye, PenAdd, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
@@ -39,6 +39,8 @@ import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
 import { enqueueSnackbar } from 'notistack';
 import { useGetAppointmentStatusDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
+import Link from 'next/link';
 
 const columnHelper = createColumnHelper<AppointmentListData>()
 
@@ -63,7 +65,7 @@ const AppointmentTable = () => {
   const columns = useMemo<ColumnDef<AppointmentListData, any>[]>(() => [
     columnHelper.accessor('patient_full_name', {
       header: intl.formatMessage({ id: "patientNameSurname" }),
-      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`}>
+      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`} className='custom-link'>
         {`${info.renderValue()}`}
       </Link>,
       footer: info => info.column.id,
@@ -72,6 +74,9 @@ const AppointmentTable = () => {
       header: intl.formatMessage({ id: "personNameSurname" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
+      meta: {
+        filterVariant: 'personNameSurname',
+      },
     }),
     columnHelper.accessor('appointment_status_id', {
       header: intl.formatMessage({ id: "status" }),
@@ -221,6 +226,7 @@ const AppointmentTable = () => {
   })
 
   const { data: getAppointmentStatusData } = useGetAppointmentStatusDropdownQuery()
+  const { data: personData } = useAcceptingAppointmentDropDownQuery({})
 
   const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
     page: pagination.pageIndex + 1,
@@ -289,7 +295,7 @@ const AppointmentTable = () => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getAppointmentStatusData={getAppointmentStatusData?.data} />}
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getAppointmentStatusData={getAppointmentStatusData?.data} getPersonData={personData?.data} />}
                       </TableCell>
                     ))}
                   </TableRow>

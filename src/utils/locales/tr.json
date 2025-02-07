@@ -206,5 +206,11 @@
     "district" : "İlçe",
     "address" : "Adres",
     "searchLeastThreeCharacters" : "En az üç karakter ile arayın.",
-    "searchTCPhoneOrName" : "T.C., Telefon veya İsimle Danışan Arayın"
+    "searchTCPhoneOrName" : "T.C., Telefon veya İsimle Danışan Arayın",
+    "totalAmount": "Toplam Tutar",
+    "totalDiscount": "Toplam İskonto",
+    "calculatedVAT": "Hesaplanan KDV",
+    "amountToBePaid": "Ödenecek Tutar",
+    "quoteNote" : "Teklif Notu",
+    "expiration" : "Son Kullanma Tarihi"
 }

@@ -75,17 +75,17 @@ export default function AuthRegister() {
     <>
       <Formik
         initialValues={{
-          membership_package_id: 0,
+          membership_package_id: "",
           person_name: '',
           person_surname: '',
           person_phone_code: '+90',
           person_phone_number: '',
           person_email: '',
           company_name: '',
-          branch_id: 0,
-          country_id: 0,
-          city_id: 0,
-          district_id: 0,
+          branch_id: "",
+          country_id: "",
+          city_id: "",
+          district_id: "",
           address: '',
           status: true,
           membershipAgreement: false,

@@ -183,6 +183,7 @@ export const {
     useLazyGetDistrictListQuery,
     useLazyGetDistrictDropdownQuery,
     useLazyGetWorkAgreementTypeListQuery,
+    useGetGenderDropdownQuery,
     useLazyGetGenderDropdownQuery,
     useLazyGetTypeOfWorkDropdownQuery,
     useLazyGetMaritalStatusDropdownQuery,

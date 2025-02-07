@@ -10,7 +10,7 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetGenderDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
@@ -41,10 +41,12 @@ const AddPatientModal = () => {
         isLoading: getNationalityListLoading
     }] = useLazyGetNationalityDropdownQuery();
 
-    const [getGenderList, {
+    /*const [getGenderList, {
         data: getGenderListData,
         isLoading: getGenderListLoading
-    }] = useLazyGetGenderDropdownQuery();
+    }] = useLazyGetGenderDropdownQuery();*/
+
+    const { data: getGenderListData,isLoading: getGenderListLoading} = useGetGenderDropdownQuery();
 
     const [getCountryList, { data: getCountryListData,
         isLoading: getCountryLoading
@@ -79,7 +81,7 @@ const AddPatientModal = () => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatient) {
             getNationalityList();
-            getGenderList();
+            //getGenderList();
             getCountryList();
             getPatientReferenceList();
             if (id != null) {

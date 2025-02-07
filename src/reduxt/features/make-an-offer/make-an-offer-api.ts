@@ -37,7 +37,7 @@ const makeAnOfferApi = createApi({
             },
             invalidatesTags: ["quote"]
         }),
-        deleteMakeAnOffer: builder.mutation<CreateResultModel, { appointment_id: number | string, patient_id: number | string }>({
+        deleteMakeAnOffer: builder.mutation<CreateResultModel, { quote_id: number | string }>({
             query: (args) => {
                 return {
                     url: `app/quote/delete`,
@@ -47,7 +47,7 @@ const makeAnOfferApi = createApi({
             },
             invalidatesTags: ["quote"]
         }),
-        readMakeAnOffer: builder.query<MakeAnOfferReadResultModel, { appointment_id?: number | string, patient_id?: number | string }>({
+        readMakeAnOffer: builder.query<MakeAnOfferReadResultModel, { quote_id?: number | string }>({
             query: (args) => {
                 return {
                     url: `app/quote/read`,
@@ -55,6 +55,24 @@ const makeAnOfferApi = createApi({
                 }
             },
             providesTags: ["quote"]
+        }),
+        printMakeAnOffer: builder.query<void, { quote_id?: number | string }>({
+            query: (args?: { quote_id?: number | string }) => ({
+                url: `app/quote/print`,
+                responseHandler: async (response: Response) => {
+                    const blobUrl = window.URL.createObjectURL(await response.blob());
+                    console.log(JSON.stringify(response.headers));
+                    const fileName = response.headers.get("content-disposition")?.split('filename=')[1].split(';')[0];
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = fileName ?? "download.pdf";
+                    a.click();
+                    a.parentNode?.removeChild(a);
+                },
+                keepUnusedDataFor: 0,
+                params: args
+            }),
+            //transformResponse: (response: any) => response.blob()
         }),
     })
 })
@@ -64,7 +82,9 @@ export const {
     useCreateMakeAnOfferMutation,
     useUpdateMakeAnOfferMutation,
     useDeleteMakeAnOfferMutation,
-    useReadMakeAnOfferQuery
+    useReadMakeAnOfferQuery,
+    useLazyReadMakeAnOfferQuery,
+    useLazyPrintMakeAnOfferQuery
 } = makeAnOfferApi
 
 export default makeAnOfferApi;

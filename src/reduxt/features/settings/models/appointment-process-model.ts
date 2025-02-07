@@ -12,11 +12,11 @@ export interface AppointmentProcessListResultModel {
 
 export interface AppointmentProcessListData {
     expander?:string
-    appointment_process_id: number
-    currency_id: number
+    appointment_process_id: string
+    currency_id: string
     currency_name: string
     currency_code: string
-    appointment_process_type_id: number
+    appointment_process_type_id: string
     appointment_process_type_name: string
     code: string
     name: string
@@ -37,11 +37,11 @@ export interface AppointmentProcessListData {
 
 export interface Detail {
     expander?:string
-    appointment_process_id: number
-    currency_id: number
+    appointment_process_id: string
+    currency_id: string
     currency_name: string
     currency_code: string
-    appointment_process_type_id: number
+    appointment_process_type_id: string
     appointment_process_type_name: string
     code: string
     name: string
@@ -62,14 +62,14 @@ export interface Detail {
 
 export interface CreateAppointmentProcessBodyModel {
     appointment_process_id?: number | string | null
-    currency_id: number | null
-    appointment_process_type_id: number | null
+    currency_id: string | null
+    appointment_process_type_id: string | null
     code: string | null
     name: string | null
     description: string | null
     amount?: number | string | null
     vat: number | null | string
     vat_included: boolean
-    sub_appointment_process: number[] | null
+    sub_appointment_process: string[] | null
     status: boolean
 }

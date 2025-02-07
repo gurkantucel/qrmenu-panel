@@ -22,16 +22,22 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Link, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, PenAdd, Trash } from 'iconsax-react';
+import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Edit, Eye, Printer, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import dayjs from 'dayjs';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
-import { useGetMakeAnOfferListQuery } from 'reduxt/features/make-an-offer/make-an-offer-api';
+import { useGetMakeAnOfferListQuery, useLazyPrintMakeAnOfferQuery } from 'reduxt/features/make-an-offer/make-an-offer-api';
 import { MakeAnOfferListData } from 'reduxt/features/make-an-offer/models/make-an-offer-model';
+import AddMakeAnOfferModal from './AddMakeAnOfferModal';
+import UpdateMakeAnOfferModal from './UpdateMakeAnOfferModal';
+import DeleteMakeAnOfferModal from './DeleteMakeAnOfferModal';
+import { PuffLoader } from 'react-spinners';
+import ViewMakeAnOfferModal from './ViewMakeAnOfferModal';
+import Link from 'next/link';
 
 const columnHelper = createColumnHelper<MakeAnOfferListData>()
 
@@ -46,6 +52,11 @@ const MakeAnOfferTable = () => {
 
   const dispatch = useAppDispatch();
 
+  const [printMakeAnOffer, {
+    isFetching: printMakeAnOfferFetching,
+    isLoading: printMakeAnOfferLoading
+  }] = useLazyPrintMakeAnOfferQuery();
+
   /*const [getAppointmentList, {
     data: getAppointmentListData,
     isFetching: isAppointmentFetching,
@@ -53,25 +64,31 @@ const MakeAnOfferTable = () => {
   }] = useLazyGetAppointmentListQuery();*/
 
   const columns = useMemo<ColumnDef<MakeAnOfferListData, any>[]>(() => [
-    columnHelper.accessor('name', {
+    columnHelper.accessor('patient_full_name', {
       header: intl.formatMessage({ id: "patientNameSurname" }),
-      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.name}`}>
+      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`} className='custom-link'>
         {`${info.renderValue()}`}
       </Link>,
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('person_name', {
+    columnHelper.accessor('person_full_name', {
       header: intl.formatMessage({ id: "personNameSurname" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('created_at', {
-      header: intl.formatMessage({ id: "appointmentDate" }),
+    columnHelper.accessor('expiration', {
+      header: intl.formatMessage({ id: "expiration" }),
       cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY HH:mm"),
       footer: info => info.column.id,
       meta: {
         filterVariant: 'date',
       },
+    }),
+    columnHelper.accessor('total', {
+      header: intl.formatMessage({ id: "total" }),
+      enableColumnFilter: false,
+      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
+      footer: info => info.column.id,
     }),
     columnHelper.accessor('islemler', {
       header: intl.formatMessage({ id: "actions" }),
@@ -79,16 +96,6 @@ const MakeAnOfferTable = () => {
       enableColumnFilter: false,
       cell: (info) => {
         return <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
-          <Tooltip title={intl.formatMessage({ id: "makeAProcess" })}>
-            <IconButton
-              color="warning"
-              onClick={(e: any) => {
-                e.stopPropagation();
-              }}
-            >
-              <PenAdd />
-            </IconButton>
-          </Tooltip>
           <Tooltip title={intl.formatMessage({ id: "view" })}>
             <IconButton
               color="secondary"
@@ -96,15 +103,26 @@ const MakeAnOfferTable = () => {
                 e.stopPropagation();
                 dispatch(setModal({
                   open: true,
-                  modalType: ModalEnum.viewAppointment,
+                  modalType: ModalEnum.viewMakeAnOffer,
                   id: info.row.original.quote_id,
-                  title: info.row.original.name,
+                  title: info.row.original.patient_full_name,
                   data: info.row.original
                 }))
               }}
             >
               <Eye />
             </IconButton>
+          </Tooltip>
+          <Tooltip title={intl.formatMessage({ id: "print" })}>
+            {printMakeAnOfferLoading || printMakeAnOfferFetching ? <PuffLoader size={24} color='black' /> : <IconButton
+              color="warning"
+              onClick={(e: any) => {
+                e.stopPropagation();
+                printMakeAnOffer({quote_id: info.row.original.quote_id})
+              }}
+            >
+              <Printer />
+            </IconButton>}
           </Tooltip>
           <Tooltip title={intl.formatMessage({ id: "edit" })}>
             <IconButton
@@ -113,10 +131,9 @@ const MakeAnOfferTable = () => {
                 e.stopPropagation();
                 dispatch(setModal({
                   open: true,
-                  modalType: ModalEnum.updateAppointment,
+                  modalType: ModalEnum.updateMakeAnOffer,
                   id: info.row.original.quote_id,
-                  title: info.row.original.name,
-                  data: info.row.original
+                  title: info.row.original.patient_full_name,
                 }))
               }}
             >
@@ -129,10 +146,9 @@ const MakeAnOfferTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.deleteAppointment,
+                  open: true, modalType: ModalEnum.deleteMakeAnOffer,
                   id: info.row.original.quote_id,
-                  title: info.row.original.name,
-                  data: { quote_id: info.row.original.quote_id }
+                  title: info.row.original.patient_full_name
                 }))
               }}
             >
@@ -146,7 +162,7 @@ const MakeAnOfferTable = () => {
         filterVariant: 'select',
       },
     }),
-  ], [])
+  ], [printMakeAnOfferFetching,printMakeAnOfferLoading])
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
@@ -197,6 +213,10 @@ const MakeAnOfferTable = () => {
       <Breadcrumbs custom heading={`${intl.formatMessage({ id: "makeAnOffer" })}`} links={breadcrumbLinks} />
       <MainCard content={false}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
+          <AddMakeAnOfferModal />
+          <UpdateMakeAnOfferModal />
+          <DeleteMakeAnOfferModal />
+          <ViewMakeAnOfferModal />
           {/*<AddAppointmentModal />
           <UpdateAppointmentModal />
           <DeleteAppointmentModal />
@@ -230,7 +250,7 @@ const MakeAnOfferTable = () => {
               <TableBody>
                 {isAppointmentFetching || isAppointmentLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                   <TableRow key={item}>
-                    {[0, 1, 2, 3].map((col: number) => (
+                    {[0, 1, 2, 3,4].map((col: number) => (
                       <TableCell key={col}>
                         <Skeleton animation="wave" />
                       </TableCell>

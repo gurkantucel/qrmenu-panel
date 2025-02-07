@@ -391,7 +391,7 @@ const AddAppointmentProcessTypeModal = () => {
                                     <Grid item xs={12}>
                                         <Stack spacing={2}>
                                             <Stack direction="row" justifyContent="space-between">
-                                                <Typography color="grey.500">Toplam Tutar:</Typography>
+                                                <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
                                                 <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
                                                     values.data.reduce((sum, item) => {
                                                         const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
@@ -400,7 +400,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                 )}`}</Typography>
                                             </Stack>
                                             <Stack direction="row" justifyContent="space-between" spacing={4}>
-                                                <Typography color="grey.500">Toplam İskonto:</Typography>
+                                                <Typography color="grey.500">{`${intl.formatMessage({ id: "totalDiscount" })}:`}</Typography>
                                                 <Typography variant="h6" color="success.main">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
                                                         values.data.reduce((sum, item) => sum + (item.quantity * item.amount * item.discount_percentage) / 100, 0)
@@ -408,7 +408,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                 </Typography>
                                             </Stack>
                                             <Stack direction="row" justifyContent="space-between">
-                                                <Typography color="grey.500">Hesaplanan KDV:</Typography>
+                                                <Typography color="grey.500">{`${intl.formatMessage({ id: "calculatedVAT" })}:`}</Typography>
                                                 <Typography>
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
                                                         values.data.reduce((sum, item) => {
@@ -418,7 +418,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                     )}`}</Typography>
                                             </Stack>
                                             <Stack direction="row" justifyContent="space-between" spacing={4}>
-                                                <Typography variant="subtitle1">Ödenecek Tutar:</Typography>
+                                                <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>
                                                 <Typography variant="subtitle1">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(values.data.reduce((sum, item) => {
                                                         const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;

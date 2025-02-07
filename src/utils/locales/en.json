@@ -202,5 +202,11 @@
   "district": "District",
   "address": "Address",
   "searchLeastThreeCharacters": "Call with at least three characters.",
-  "searchTCPhoneOrName": "T.C., call a client by phone or name"
+  "searchTCPhoneOrName": "T.C., call a client by phone or name",
+  "totalAmount": "Total Amount",
+  "totalDiscount": "Total Discount",
+  "calculatedVAT": "Calculated VAT",
+  "amountToBePaid": "Amount To Be Paid",
+  "quoteNote" : "Quote Note",
+  "expiration" : "Expiration"
 }

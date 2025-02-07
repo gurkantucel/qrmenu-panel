@@ -11,9 +11,9 @@ export interface PersonListModel {
 }
 
 export interface PersonListData {
-  person_id: number
-  user_id: number
-  person_type_id: number
+  person_id: string
+  user_id: string
+  person_type_id: string
   person_type_name: string
   name: string
   surname: string
@@ -33,15 +33,15 @@ export interface PersonListData {
 }
 
 export interface PersonCreateBodyModel {
-  person_id?: number
-  person_type_id: number
+  person_id?: string
+  person_type_id: string
   name: string
   surname: string
   phone_code: string
   phone_number: string
   email: string
   password?: string
-  authorizations: number[]
+  authorizations: string[]
   accepting_appointment: boolean
   status: boolean
 }
@@ -55,10 +55,10 @@ export interface PersonReadResultModel {
 }
 
 export interface PersonReadData {
-  person_id: number
-  person_type_id: number
+  person_id: string
+  person_type_id: string
   person_type_name: string
-  user_id: number
+  user_id: string
   name: string
   surname: string
   phone_code: string
@@ -76,7 +76,7 @@ export interface PersonReadData {
 }
 
 export interface PersonAuthorization {
-  module_id: number
+  module_id: string
   module_code: string
   module_name: string
 }

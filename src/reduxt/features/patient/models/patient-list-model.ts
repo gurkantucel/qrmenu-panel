@@ -45,9 +45,9 @@ export interface PatientListData {
 }
 
 export interface PatientCreateBodyModel {
-  patient_id?: number | null
-  gender_id?: number | null
-  nationality_id?: number | null
+  patient_id?: number | string | null
+  gender_id?: number | string | null
+  nationality_id?: number | string | null
   name: string
   surname: string
   identity_number: string | null
@@ -55,11 +55,11 @@ export interface PatientCreateBodyModel {
   phone_number: string
   email: string | null
   birthdate: string | null
-  country_id: number | null
-  city_id: number | null
-  district_id: number | null
+  country_id: number | string | null
+  city_id: number | string | null
+  district_id: number | string |  null
   address: string | null
-  patient_reference_id: number | null
+  patient_reference_id: number | string | null
   emergency_full_name: string | null
   emergency_phone_code: string | null
   emergency_phone_number: string | null

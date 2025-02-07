@@ -44,6 +44,10 @@ export enum ModalEnum {
     newPersonType,
     updatePersonType,
     deletePersonType,
+    newMakeAnOffer,
+    updateMakeAnOffer,
+    viewMakeAnOffer,
+    deleteMakeAnOffer
 }
 
 type Model = {

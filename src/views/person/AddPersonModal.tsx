@@ -152,14 +152,14 @@ const AddPersonModal = () => {
                 {readPersonLoading || readPersonFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialData ?? {
                         person_id: undefined,
-                        person_type_id: 0,
+                        person_type_id: "",
                         name: '',
                         surname: '',
                         phone_code: '+90',
                         phone_number: '',
                         email: '',
                         password: '',
-                        authorizations: [0],
+                        authorizations: [""],
                         accepting_appointment: true,
                         status: true
                     }}

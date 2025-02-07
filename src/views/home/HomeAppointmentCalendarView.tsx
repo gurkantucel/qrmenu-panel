@@ -26,7 +26,7 @@ import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 const HomeAppointmentCalendarView = () => {
     const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
-    const [personId, setPersonId] = useState<number | null>()
+    const [personId, setPersonId] = useState<string | null>()
 
     const intl = useIntl()
     const dispatch = useAppDispatch();

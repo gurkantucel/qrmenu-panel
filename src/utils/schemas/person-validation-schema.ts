@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const newPersonValidationSchema = Yup.object({
-    person_id: Yup.number().nullable(),
+    person_id: Yup.string().nullable(),
     person_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })

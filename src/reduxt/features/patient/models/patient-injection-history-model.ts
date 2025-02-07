@@ -36,9 +36,9 @@ export interface PatientInjectionHistoryListData {
 }
 
 export interface PatientInjectionHistoryCreateBodyModel {
-    patient_injection_history_id?: number | null
+    patient_injection_history_id?: number | string | null
     patient_id?: number | string
-    injection_type_id: number| null
+    injection_type_id: number| string | null
     name: string
     dosage: string | null
     injection_date: string | null

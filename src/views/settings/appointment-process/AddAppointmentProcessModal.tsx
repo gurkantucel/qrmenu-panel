@@ -146,8 +146,8 @@ const AddAppointmentProcessModal = () => {
                 <Formik
                     initialValues={initialData ?? {
                         appointment_process_id: undefined,
-                        currency_id: 0,
-                        appointment_process_type_id: 0,
+                        currency_id: "",
+                        appointment_process_type_id: "",
                         code: '',
                         name: '',
                         description: null,
@@ -384,7 +384,7 @@ const AddAppointmentProcessModal = () => {
                                                 isLoading={getAppointmentProcessDropdownLoading}
                                                 zIndex={9997}
                                                 isMulti={true}
-                                                isDisabled={values.appointment_process_type_id != 3}
+                                                isDisabled={values.appointment_process_type_id != "305ee410-8284-408e-99c7-9c2ee07f7297"}
                                                 options={getAppointmentProcessDropdownData?.data?.map((item) => ({
                                                     value: item.value,
                                                     label: item.label

@@ -1,16 +1,16 @@
 //REGISTER
 export interface RegisterBodyModel {
-  membership_package_id: number
+  membership_package_id: string
   person_name: string
   person_surname: string
   person_phone_code: string
   person_phone_number: string
   person_email: string
   company_name: string
-  branch_id: number
-  country_id: number
-  city_id: number
-  district_id: number
+  branch_id: string
+  country_id: string
+  city_id: string
+  district_id: string
   address: string
   status: boolean
 }
@@ -40,12 +40,12 @@ export interface User {
 }
 
 export interface Person {
-  person_id: number
+  person_id: string
   name: string
   surname: string
   full_name: string
   email: string
-  person_type_id: number
+  person_type_id: string
   person_type_name: string
   status: boolean
 }

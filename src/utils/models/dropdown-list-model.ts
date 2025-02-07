@@ -6,7 +6,7 @@ export interface DropdownListModel {
   }
   
   export interface DropdownListData {
-    value: number
+    value: string
     label: string
   }
   
