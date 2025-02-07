@@ -65,6 +65,10 @@
   "appointment": "Meeting",
   "treatment": "Treatment",
   "medicineHistory": "Medication History",
+  "allergyHistory": "Allergy History",
+  "addAllergyHistory": "Add Allergy History",
+  "updateAllergyHistory": "Update Allergy History",
+  "allergyName": "Allergy Name",
   "treatmentMethodName": "Treatment Method Name",
   "usagePeriod": "Usage Time",
   "addMedicineHistory": "Add Medication History",
@@ -207,6 +211,6 @@
   "totalDiscount": "Total Discount",
   "calculatedVAT": "Calculated VAT",
   "amountToBePaid": "Amount To Be Paid",
-  "quoteNote" : "Quote Note",
-  "expiration" : "Expiration"
+  "quoteNote": "Quote Note",
+  "expiration": "Expiration"
 }

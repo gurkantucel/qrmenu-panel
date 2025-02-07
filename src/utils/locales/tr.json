@@ -68,6 +68,7 @@
     "allergyHistory" : "Alerji Geçmişi",
     "addAllergyHistory": "Alerji Geçmişi Ekle",
     "updateAllergyHistory": "Alerji Geçmişi Düzenle",
+    "allergyName" : "Alerji Adı",
     "treatmentMethodName": "Tedavi Yöntemi Adı",
     "usagePeriod": "Kullanım Süresi",
     "addMedicineHistory": "İlaç Geçmişi Ekle",

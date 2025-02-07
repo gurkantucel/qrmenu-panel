@@ -45,7 +45,7 @@ const PatientAllergyHistoryTable = ({ params }: { params: { slug: string } }) =>
 
     const columns = useMemo<ColumnDef<PatientAllergyHistoryListData, any>[]>(() => [
         columnHelper.accessor('name', {
-            header: intl.formatMessage({ id: "drugName" }),
+            header: intl.formatMessage({ id: "allergyName" }),
             cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             footer: info => info.column.id,
         }),

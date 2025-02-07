@@ -15,10 +15,12 @@ import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyAcceptingAppointmentDropDownQuery } from "reduxt/features/person/person-api";
 import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
 import { MakeAnOfferCreateBodyModel, MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
-import { useLazyReadMakeAnOfferQuery } from "reduxt/features/make-an-offer/make-an-offer-api";
+import { useLazyPrintMakeAnOfferQuery, useLazyReadMakeAnOfferQuery } from "reduxt/features/make-an-offer/make-an-offer-api";
 import { newMakeAnOfferSchema } from "utils/schemas/make-an-offer-validation-schema";
 import CustomScaleLoader from "components/CustomScaleLoader";
 import dayjs from "dayjs";
+import AnimateButton from "components/@extended/AnimateButton";
+import { PuffLoader } from "react-spinners";
 
 const ViewMakeAnOfferModal = () => {
 
@@ -46,6 +48,11 @@ const ViewMakeAnOfferModal = () => {
         isLoading: getReadMakeAnOfferLoading,
         isFetching: getReadMakeAnOfferIsFetching
     }] = useLazyReadMakeAnOfferQuery();
+
+    const [printMakeAnOffer, {
+        isFetching: printMakeAnOfferFetching,
+        isLoading: printMakeAnOfferLoading
+    }] = useLazyPrintMakeAnOfferQuery();
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.viewMakeAnOffer) {
@@ -104,7 +111,7 @@ const ViewMakeAnOfferModal = () => {
     return (
         <>
             <Dialog open={open && modalType == ModalEnum.viewMakeAnOffer} onClose={handleClose} fullScreen>
-            {getReadMakeAnOfferLoading || getReadMakeAnOfferIsFetching ? <CustomScaleLoader /> : <Formik
+                {getReadMakeAnOfferLoading || getReadMakeAnOfferIsFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialData ?? {
                         quote_id: null,
                         patient_id: null,
@@ -140,7 +147,7 @@ const ViewMakeAnOfferModal = () => {
                     enableReinitialize
                     validationSchema={newMakeAnOfferSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        
+
                     }}
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -210,7 +217,7 @@ const ViewMakeAnOfferModal = () => {
                                                                         isDisabled
                                                                         zIndex={999 - index}
                                                                         value={
-                                                                            values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code== values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code== values.detail[index].appointment_process_code)?.value ?? 0 } : null}
+                                                                            values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
                                                                         onChange={(val: any) => {
                                                                             if (values.detail.length > 1 && !values.detail.some(item => item.currency_code == val?.value?.currency_code)) {
                                                                                 enqueueSnackbar("Seçilen randevu işlemlerinde farklı para birimleri tanımlı. ", {
@@ -519,6 +526,17 @@ const ViewMakeAnOfferModal = () => {
                                     <Button color="info" onClick={handleClose}>
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
+                                    <AnimateButton>
+                                        <Button
+                                            disableElevation
+                                            onClick={() => {
+                                                printMakeAnOffer({ quote_id: getReadMakeAnOfferData?.data.quote_id })
+                                            }}
+                                            disabled={isSubmitting || printMakeAnOfferLoading || printMakeAnOfferFetching} type="button" variant="contained" color="secondary">
+                                            {(printMakeAnOfferLoading) && <PuffLoader size={20} color='white' />}
+                                            {(printMakeAnOfferLoading == false) && intl.formatMessage({ id: "print" })}
+                                        </Button>
+                                    </AnimateButton>
                                 </DialogActions>
                             </Box>
                         </Form>
