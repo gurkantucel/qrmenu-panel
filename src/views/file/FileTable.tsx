@@ -24,7 +24,7 @@ const FileTable = () => {
 
     const getPatientDropdownOptions = async (inputValue: string) => {
 
-        if (inputValue.length > 3) {
+        if (inputValue.length >= 3) {
             const items = await getPatientDropdown({ label: inputValue })
             return items.data?.data ?? [];
         }

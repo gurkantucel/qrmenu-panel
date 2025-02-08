@@ -173,9 +173,9 @@ const AddAppointmentProcessTypeModal = () => {
                                                             </Grid>
                                                         </Grid>
                                                         {/* Randevu İşlemi */}
-                                                        <Grid item xs={12} md={2}>
+                                                        <Grid item xs={12} md={2.5}>
                                                             <Stack spacing={1}>
-                                                                <InputLabel htmlFor="person_id">{`${intl.formatMessage({ id: "appointmentProcess" })}*`}</InputLabel>
+                                                                <InputLabel htmlFor="appointment_process_id">{`${intl.formatMessage({ id: "appointmentProcess" })}*`}</InputLabel>
                                                                 <CustomFormikSelect
                                                                     name={`data[${index}].appointment_process_id`}
                                                                     placeholder={intl.formatMessage({ id: "selectAppointmentProcess" })}

@@ -78,7 +78,7 @@ const MakeAnOfferTable = () => {
     }),
     columnHelper.accessor('expiration', {
       header: intl.formatMessage({ id: "expiration" }),
-      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY HH:mm"),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
       footer: info => info.column.id,
       meta: {
         filterVariant: 'date',

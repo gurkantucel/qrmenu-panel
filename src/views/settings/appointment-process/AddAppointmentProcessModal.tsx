@@ -57,9 +57,9 @@ const AddAppointmentProcessModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess && data != null) {
-            if (data.appointment_process_type_id == 3) {
+            if (data.appointment_process_type_id == "305ee410-8284-408e-99c7-9c2ee07f7297") {
                 getAppointmentProcessDropdown({
-                    include_packages: data.appointment_process_type_id == 3 ? false : true,
+                    include_packages: data.appointment_process_type_id == "305ee410-8284-408e-99c7-9c2ee07f7297" ? false : true,
                     excluded_appointment_process_id: data.appointment_process_id
                 });
             }
@@ -250,10 +250,10 @@ const AddAppointmentProcessModal = () => {
                                                     values.appointment_process_type_id ? { label: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.label ?? "", value: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
                                                     setFieldValue("appointment_process_type_id", val?.value ?? 0);
-                                                    if (val?.value == 3) {
+                                                    if (val?.value == "305ee410-8284-408e-99c7-9c2ee07f7297") {
                                                         //paket ise getir.
                                                         getAppointmentProcessDropdown({
-                                                            include_packages: val?.value == 3 ? false : true,
+                                                            include_packages: val?.value == "305ee410-8284-408e-99c7-9c2ee07f7297" ? false : true,
                                                             //excluded_appointment_process_id: values.appointment_process_id
                                                         });
                                                     } else {

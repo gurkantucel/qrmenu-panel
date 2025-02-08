@@ -58,6 +58,8 @@ const AddPatientPaymentHistoryModal = () => {
                 payment_kind_id: data.payment_kind_id,
                 payment_method_id: data.payment_method_id,
                 currency_id: data.currency_id,
+                discount_percentage: data.discount_percentage,
+                discount_amount: data.discount_amount,
                 amount: data.amount,
                 status: data.status
             }
@@ -113,7 +115,7 @@ const AddPatientPaymentHistoryModal = () => {
 
     return (
         <>
-            <Dialog open={open && modalType == ModalEnum.newPatientPaymentHistory} onClose={handleClose} fullWidth maxWidth="md">
+            <Dialog open={open && modalType == ModalEnum.newPatientPaymentHistory} onClose={handleClose} fullWidth maxWidth="xl">
                 {<Formik
                     initialValues={initialData ?? {
                         patient_payment_history_id: null,
@@ -122,6 +124,8 @@ const AddPatientPaymentHistoryModal = () => {
                         payment_kind_id: null,
                         payment_method_id: null,
                         currency_id: null,
+                        discount_amount: 0,
+                        discount_percentage: 0,
                         amount: null,
                         status: true
                     }}
@@ -156,7 +160,7 @@ const AddPatientPaymentHistoryModal = () => {
                                 </Grid>
                                 <Typography variant="body2" marginBottom={"1.4rem"}>{"Zorunlu alanlar * ile belirtilmiştir."}</Typography>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="payment_kind">{intl.formatMessage({ id: "paymentKind" })}{"*"}</InputLabel>
                                             <CustomFormikSelect
@@ -178,7 +182,7 @@ const AddPatientPaymentHistoryModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="payment_method">{intl.formatMessage({ id: "paymentMethod" })}{"*"}</InputLabel>
                                             <CustomFormikSelect
@@ -200,7 +204,7 @@ const AddPatientPaymentHistoryModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="currency">{intl.formatMessage({ id: "currencyType" })}{"*"}</InputLabel>
                                             <CustomFormikSelect
@@ -223,9 +227,31 @@ const AddPatientPaymentHistoryModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
+                                    <Grid item xs={12} md={1}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="amount">{intl.formatMessage({ id: "amount" })}{"*"}</InputLabel>
+                                            <InputLabel htmlFor="quantity">{intl.formatMessage({ id: "quantity" })}{"*"}</InputLabel>
+                                            <OutlinedInput
+                                                id="amount"
+                                                type="number"
+                                                value={values.amount}
+                                                name="quantity"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "quantity" })}
+                                                fullWidth
+                                                error={Boolean(touched.amount && errors.amount)}
+                                                inputProps={{ min: 0, step: "0.5" }}
+                                            />
+                                        </Stack>
+                                        {touched.amount && errors.amount && (
+                                            <FormHelperText error id="helper-text-amount">
+                                                {errors.amount}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="amount">{intl.formatMessage({ id: "unitPrice" })}{"*"}</InputLabel>
                                             <OutlinedInput
                                                 id="amount"
                                                 type="number"
@@ -241,6 +267,50 @@ const AddPatientPaymentHistoryModal = () => {
                                         {touched.amount && errors.amount && (
                                             <FormHelperText error id="helper-text-amount">
                                                 {errors.amount}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="discount_percentage">
+                                                {`${intl.formatMessage({ id: "discount" })}%*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="discount_percentage"
+                                                type="number"
+                                                value={values.discount_percentage}
+                                                name="discount_percentage"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "discount" })}
+                                                fullWidth
+                                                error={Boolean(touched.discount_percentage && errors.discount_percentage)}
+                                            />
+                                        </Stack>
+                                        {touched.discount_percentage && errors.discount_percentage && (
+                                            <FormHelperText error id="helper-text-amount">
+                                                {errors.discount_percentage}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={2}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="discountAmount">
+                                                {`${intl.formatMessage({ id: "discountAmount" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="discount_amount"
+                                                type="number"
+                                                value={values.discount_amount}
+                                                name="discount_amount"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "discountAmount" })}
+                                                fullWidth
+                                                error={Boolean(touched.discount_amount && errors.discount_amount)}
+                                            />
+                                        </Stack>
+                                        {touched.discount_amount && errors.discount_amount && (
+                                            <FormHelperText error id="helper-text-amount">
+                                                {errors.discount_amount}
                                             </FormHelperText>
                                         )}
                                     </Grid>

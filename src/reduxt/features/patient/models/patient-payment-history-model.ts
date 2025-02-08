@@ -78,6 +78,8 @@ export interface PatientPaymentHistoryCreateBodyModel {
     payment_kind_id: string | null
     payment_method_id: string | null
     currency_id: string | null
+    discount_amount: number
+    discount_percentage: number
     amount: number | null
     status: boolean
 }
