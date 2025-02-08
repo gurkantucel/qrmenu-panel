@@ -39,7 +39,7 @@ export interface PatientListData {
   created_person: string
   updated_by: any
   updated_person: any
-  last_appointment_date?:string
+  appointment_start?:string
   status: boolean
   islemler?:string
 }

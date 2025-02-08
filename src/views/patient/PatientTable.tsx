@@ -36,6 +36,7 @@ import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
 import Link from 'next/link';
 import { useGetGenderDropdownQuery } from 'reduxt/features/definition/definition-api';
+import dayjs from 'dayjs';
 
 const columnHelper = createColumnHelper<PatientListData>()
 
@@ -85,10 +86,13 @@ const PatientTable = () => {
       cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('last_appointment_date', {
+    columnHelper.accessor('appointment_start', {
       header: intl.formatMessage({ id: "lastAppointmentDate" }),
-      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY HH:mm"),
       footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
     }),
     /*columnHelper.accessor('status', {
       header: intl.formatMessage({ id: "status" }),
