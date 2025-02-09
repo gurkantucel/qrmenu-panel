@@ -13,17 +13,16 @@ import { useEffect, useState } from "react";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
-import { useLazyGetPatientDropdownQuery } from "reduxt/features/patient/patient-api";
 import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateTenantPaymentMutation, useLazyReadTenantPaymentQuery, useUpdateTenantPaymentMutation } from "reduxt/features/patient/tenant-payment-api";
-import CustomFormikAsyncSelect from "components/third-party/formik/custom-formik-asyncselect";
 import { useLazyGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 import { newPatientPaymentHistorySchema } from "utils/schemas/patient-validation-schema";
 import { TenantPaymentCreateBodyModel } from "reduxt/features/patient/models/tenant-payment-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
 import dayjs from "dayjs";
+import { useParams } from "next/navigation";
 
 type Props = {
     page?: string
@@ -35,7 +34,8 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
     const dispatch = useAppDispatch();
     const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
-
+    const params = useParams<{ slug: string }>()
+    
     const [initialData, setInitialData] = useState<TenantPaymentCreateBodyModel>();
 
     const handleClose = () => {
@@ -43,17 +43,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
         setInitialData(undefined);
     };
 
-    const [getPatientDropdown, { isLoading: getPatientDropdownLoading }] = useLazyGetPatientDropdownQuery();
-
     const [getAppointmentProcessDropdown, { isLoading: getAppointmentProcessDropdownLoading, data: getAppointmentProcessDropdownData }] = useLazyGetAppointmentProcessDropdownQuery();
-
-    const getPatientDropdownOptions = async (inputValue: string) => {
-
-        if (inputValue.length >= 3) {
-            const items = await getPatientDropdown({ label: inputValue })
-            return items.data?.data ?? [];
-        }
-    }
 
     const [getPaymentMethodDropDownList, {
         data: getPaymentMethodListData,
@@ -180,7 +170,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                     initialValues={initialData ?? {
                         payment_id: null,
                         appointment_id: null,
-                        patient_id: null,
+                        patient_id: params.slug,
                         payment_method_id: null,
                         payment_date: null,
                         payment_note: null,
@@ -235,21 +225,6 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
-                                    {data == null && <Grid item xs={12} sm={6}>
-                                        <CustomFormikAsyncSelect
-                                            isMulti={false}
-                                            name='patient_id'
-                                            loadOptions={getPatientDropdownOptions}
-                                            isClearable
-                                            isLoading={getPatientDropdownLoading}
-                                            placeholder={intl.formatMessage({ id: "searchTCPhoneOrName" })}
-                                            onChange={(value) => {
-                                                setFieldValue("patient_id", value?.value);
-                                            }}
-                                            noOptionsMessage={() => intl.formatMessage({ id: "searchLeastThreeCharacters" })}
-                                            loadingMessage={() => intl.formatMessage({ id: "loadingDot" })}
-                                        />
-                                    </Grid>}
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <CustomFormikSelect
@@ -257,7 +232,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                 placeholder="Ödeme Yöntemi Seçin"
                                                 isClearable={true}
                                                 isLoading={getPaymentMethodListLoading}
-                                                zIndex={998}
+                                                zIndex={999}
                                                 value={
                                                     values.payment_method_id ? { label: getPaymentMethodListData?.data?.find((item) => item.value == values.payment_method_id)?.label ?? "", value: getPaymentMethodListData?.data?.find((item) => item.value == values.payment_method_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
@@ -331,7 +306,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         placeholder={intl.formatMessage({ id: "selectAppointmentProcess" })}
                                                                         isClearable={true}
                                                                         isLoading={getAppointmentProcessDropdownLoading}
-                                                                        zIndex={999 - index}
+                                                                        zIndex={998 - index}
                                                                         value={
                                                                             values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
                                                                         onChange={(val: any) => {
