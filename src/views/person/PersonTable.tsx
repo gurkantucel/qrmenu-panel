@@ -175,7 +175,8 @@ const PersonTable = () => {
   const { data: getPersonListData, isLoading: isPersonLoading, isFetching: isPersonFetching } = useGetPersonListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
-    filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
+    //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&'),
+    filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
   })
 
   const tableData = useMemo(() => getPersonListData?.data ?? [], [getPersonListData?.data]);
