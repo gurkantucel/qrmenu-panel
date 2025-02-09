@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import MainCard from 'components/MainCard';
 import { Chip } from '@mui/material';
+import { Book, CalendarTick, ImportSquare, Notepad2, Profile2User } from 'iconsax-react';
 
 const featureChat = '/assets/images/landing/chat.png';
 const featureMail = '/assets/images/landing/mail.png';
@@ -37,30 +38,18 @@ export default function FeaturesPage() {
     value: number;
   }
 
-  function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
+  function TabPanel({ children, value, index, ...other }: TabPanelProps) {
     return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`vertical-tabpanel-${index}`}
-        aria-labelledby={`vertical-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box sx={{ width: "65vw", paddingLeft: 2 }}>
-            {children}
-          </Box>
-        )}
+      <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+        {value === index && <Box sx={{ pt: 2 }}>{children}</Box>}
       </div>
     );
   }
 
   function a11yProps(index: number) {
     return {
-      id: `vertical-tab-${index}`,
-      'aria-controls': `vertical-tabpanel-${index}`,
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`
     };
   }
 
@@ -89,34 +78,36 @@ export default function FeaturesPage() {
           <Grid item xs={12}>
             <Grid container spacing={3} alignItems="start">
               <Box
-                sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', padding: 6 }}
+                sx={{
+                  bgcolor: 'background.paper', 
+                  borderBottom: 1, borderColor: 'divider',
+                  padding: {
+                    xs: 1,
+                    md: 6
+                  }
+                }}
               >
-                <Tabs
-                  orientation="vertical"
-                  variant="scrollable"
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="Vertical tabs example"
-                  sx={{ borderRight: 1, borderColor: 'divider', }}
-                >
-                  <Tab label="Randevu Yönetimi" {...a11yProps(0)} />
-                  <Tab label="Hasta Bilgilendirme" {...a11yProps(1)} />
-                  <Tab label="Finansal Bilgiler" {...a11yProps(2)} />
-                  <Tab label="Döküman Yönetimi" {...a11yProps(3)} />
+                <Tabs value={value} onChange={handleChange} variant="scrollable" aria-label="basic tabs example">
+                  <Tab label="Randevu Yönetimi" icon={<CalendarTick />} iconPosition="start" {...a11yProps(0)} />
+                  <Tab label="Ödemeler" icon={<Notepad2 />} iconPosition="start" {...a11yProps(0)} />
+                  <Tab label="Teklif Ver" icon={<ImportSquare />} iconPosition="start" {...a11yProps(0)} />
+                  <Tab label="Hasta Bilgilendirme" icon={<Book />} iconPosition="start" {...a11yProps(1)} />
+                  <Tab label="Finansal Bilgiler" icon={<Profile2User />} iconPosition="start" {...a11yProps(2)} />
+                  <Tab label="Döküman Yönetimi" icon={<Book />} iconPosition="start" {...a11yProps(3)} />
                 </Tabs>
                 <TabPanel value={value} index={0}>
                   <MainCard>
                     <Typography variant="body1" sx={{ fontSize: 15, marginBottom: 2 }} color="text.secondary">
-                    <Chip label="Randevu Yönetimi" variant="combined" color="primary" sx={{marginRight: 1}} />{"Çalışma programınızı ve muayene sürelerinizi dikkate alarak, randevularınızı etkin bir şekilde yönetebileceğiniz gelişmiş randevu takip sistemi sunuyoruz."}
+                      <Chip label="Randevu Yönetimi" variant="combined" color="primary" sx={{ marginRight: 1, marginBottom: 1 }} />{"Çalışma programınızı ve muayene sürelerinizi dikkate alarak, randevularınızı etkin bir şekilde yönetebileceğiniz gelişmiş randevu takip sistemi sunuyoruz."}
                     </Typography>
-                    <CardMedia component="img" image={featureChat} sx={{ width: '100%', minHeight: '100%' }} />
+                    <CardMedia component="img" image={featureChat} sx={{ width: '90%', minHeight: '80%' }} />
                   </MainCard>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <MainCard>
                     <Typography variant="body1" sx={{ fontSize: 15, marginBottom: 2 }} color="text.secondary">
-                    <Chip label="Hasta Bilgilendirme" variant="combined" color="primary" sx={{marginRight: 1}} />
-                    {"Hasta bilgilendirme modülü sayesinde hastalarınıza otomatik olarak doğum günü kutlamaları, randevu bilgilendirmeleri, geri bildirim talepleri vb. tüm mesajları SMS olarak gönderebilirsiniz."}
+                      <Chip label="Hasta Bilgilendirme" variant="combined" color="primary" sx={{ marginRight: 1 }} />
+                      {"Hasta bilgilendirme modülü sayesinde hastalarınıza otomatik olarak doğum günü kutlamaları, randevu bilgilendirmeleri, geri bildirim talepleri vb. tüm mesajları SMS olarak gönderebilirsiniz."}
                     </Typography>
                     <CardMedia component="img" image={featureMail} sx={{ width: '100%', minHeight: '100%' }} />
                   </MainCard>
@@ -124,7 +115,7 @@ export default function FeaturesPage() {
                 <TabPanel value={value} index={2}>
                   <MainCard>
                     <Typography variant="body1" sx={{ fontSize: 15, marginBottom: 2 }} color="text.secondary">
-                    <Chip label="Finansal Bilgiler" variant="combined" color="primary" sx={{marginRight: 1}} /> {"Hastalarınıza sağladığınız tüm hizmetleri hizmet girişi olarak kaydederek, bu hizmetlere bağlı finansal çıktıları kolayca yönetebilirsiniz."}
+                      <Chip label="Finansal Bilgiler" variant="combined" color="primary" sx={{ marginRight: 1 }} /> {"Hastalarınıza sağladığınız tüm hizmetleri hizmet girişi olarak kaydederek, bu hizmetlere bağlı finansal çıktıları kolayca yönetebilirsiniz."}
                     </Typography>
                     <CardMedia component="img" image={featureChat} sx={{ width: '100%', minHeight: '100%' }} />
                   </MainCard>
@@ -133,7 +124,7 @@ export default function FeaturesPage() {
                   <Grid container justifyContent={"center"} alignItems={"center"}>
                     <MainCard>
                       <Typography variant="body1" sx={{ fontSize: 15, marginBottom: 2 }} color="text.secondary">
-                      <Chip label="Döküman Yönetimi" variant="combined" color="primary" sx={{marginRight: 1}} />{"Kliniğiniz ve hastalarınız için gerekli tüm dokümanları güvenle KlinikEase\'te depolayabilirsiniz."}
+                        <Chip label="Döküman Yönetimi" variant="combined" color="primary" sx={{ marginRight: 1 }} />{"Kliniğiniz ve hastalarınız için gerekli tüm dokümanları güvenle KlinikEase\'te depolayabilirsiniz."}
                       </Typography>
                       <CardMedia component="img" image={featureSocial} sx={{ width: '100%', minHeight: '100%' }} />
                     </MainCard>

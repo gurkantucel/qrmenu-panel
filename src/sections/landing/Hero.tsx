@@ -114,7 +114,7 @@ export default function HeroPage() {
                       variant="h6"
                       sx={{ fontSize: { xs: '0.875rem', md: '1rem' }, fontWeight: 400, lineHeight: { xs: 1.4, md: 1.4 } }}
                     >
-                      İster tek kişilik muayenehaneniz olsun, ister farklı branşlarda onlarca çalışanı olan klinik. Klinik Ease tam size göre.
+                      Yeni başlıyor olun, ya da köklü bir klinik. Klinik Ease, işinizi kolaylaştırmak için ihtiyacınız olan her şeye sahiptir.
                     </Typography>
                   </motion.div>
                 </Grid>

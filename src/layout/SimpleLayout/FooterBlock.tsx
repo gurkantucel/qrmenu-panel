@@ -65,8 +65,7 @@ export default function FooterBlock({ isFull }: showProps) {
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="subtitle1" sx={{ fontWeight: 400, maxWidth: 320 }}>
-                      Phoenixcoded has gained the trust of over 5.5K customers since 2015, thanks to our commitment to delivering
-                      high-quality products. Our experienced team players are responsible for managing Able Pro.
+                      {"Klinik Ease, sadece bir yazılım değil, aynı zamanda işinizi büyütmenize yardımcı olacak bir iş ortağıdır. İhtiyaçlarınıza özel çözümlerimizle kliniğinizin potansiyelini en üst düzeye çıkarın. Hemen Klinik Ease'i keşfedin ve kliniğiniz için en iyi çözümü bulun."}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -144,11 +143,7 @@ export default function FooterBlock({ isFull }: showProps) {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} sm={8}>
               <Typography>
-                © Handcrafted by Team{' '}
-                <Link href="https://1.envato.market/xk3bQd" underline="none">
-                  {' '}
-                  Phoenixcoded
-                </Link>
+                2025 - KlinikEase
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4}>

@@ -10,7 +10,6 @@ import { alpha, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Container from '@mui/material/Container';
 import Collapse from '@mui/material/Collapse';
 import Drawer from '@mui/material/Drawer';
@@ -94,7 +93,7 @@ export default function Header() {
   const ispValue = params.get('isp');
   const ispValueAvailable = ispValue !== null && parseInt(ispValue) === 1;
 
-  const url = ispValueAvailable ? 'https://1.envato.market/jrEAbP' : 'https://1.envato.market/zNkqj6';
+  const url = ispValueAvailable ? '#' : '#';
   const items = [
     {
       label: 'Bootstrap',
@@ -256,7 +255,7 @@ export default function Header() {
               <Links
                 className="header-link"
                 color="secondary.main"
-                href="https://phoenixcoded.gitbook.io/able-pro"
+                href="#"
                 target="_blank"
                 underline="none"
               >
@@ -265,7 +264,7 @@ export default function Header() {
               <Links
                 className="header-link"
                 color="secondary.main"
-                href="https://phoenixcoded.gitbook.io/able-pro"
+                href="#"
                 target="_blank"
                 underline="none"
               >
@@ -274,7 +273,7 @@ export default function Header() {
               <Links
                 className="header-link"
                 color="secondary.main"
-                href="https://phoenixcoded.gitbook.io/able-pro"
+                href="#"
                 target="_blank"
                 underline="none"
               >
@@ -302,10 +301,6 @@ export default function Header() {
                 <Logo reverse to="/" />
               </Box>
               <Stack direction="row" spacing={2}>
-                <Button variant="outlined" color="warning" component={Link} href="/components-overview/buttons" sx={{ mt: 0.25 }}>
-                  All Components
-                </Button>
-
                 <IconButton size="large" color="secondary" onClick={drawerToggler(true)} sx={{ p: 1 }}>
                   <HambergerMenu />
                 </IconButton>
@@ -327,7 +322,7 @@ export default function Header() {
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
-                        <ListItemText primary="Dashboard" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
+                        <ListItemText primary="Ana Sayfa" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
                     <Links sx={linksSx} href="/components-overview/buttons" target="_blank">
@@ -335,7 +330,7 @@ export default function Header() {
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
-                        <ListItemText primary="All Components" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
+                        <ListItemText primary="Hakkımızda" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
                     <Links sx={linksSx} href="https://codedthemes.com/?s=able+pro" target="_blank">
@@ -343,7 +338,7 @@ export default function Header() {
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
-                        <ListItemText primary="Free Version" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
+                        <ListItemText primary="Fiyatlar" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
                     <Links sx={linksSx} href="https://phoenixcoded.gitbook.io/able-pro" target="_blank">
@@ -351,37 +346,7 @@ export default function Header() {
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
-                        <ListItemText primary="Documentation" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
-                      </ListItemButton>
-                    </Links>
-                    <Links sx={linksSx} href="https://phoenixcoded.authordesk.app/" target="_blank">
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <Minus color={theme.palette.secondary.main} />
-                        </ListItemIcon>
-                        <ListItemText primary="Support" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
-                      </ListItemButton>
-                    </Links>
-                    <Links
-                      sx={linksSx}
-                      href="https://1.envato.market/c/1289604/275988/4415?subId1=phoenixcoded&u=https%3A%2F%2Fthemeforest.net%2Fitem%2Fable-pro-responsive-bootstrap-4-admin-template%2F19300403"
-                      target="_blank"
-                    >
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <Minus color={theme.palette.secondary.main} />
-                        </ListItemIcon>
-                        <ListItemText primary="Purchase Now" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
-                        <Chip color="primary" label="v1.0" size="small" />
-                      </ListItemButton>
-                    </Links>
-                    <Links style={{ textDecoration: 'none' }} href="#" onClick={() => setOpenDrawer(!openDrawer)}>
-                      <ListItemButton>
-                        <ListItemIcon>
-                          <Minus color={theme.palette.secondary.main} />
-                        </ListItemIcon>
-                        <ListItemText primary="Live Preview" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
-                        <Stack sx={{ path: { strokeWidth: 2 } }}>{openDrawer ? <ArrowUp2 size="16" /> : <ArrowDown2 size="16" />}</Stack>
+                        <ListItemText primary="Tanıtım ve Özellikler" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
                     <Collapse in={openDrawer} timeout="auto" unmountOnExit>
