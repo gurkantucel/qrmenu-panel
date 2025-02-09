@@ -58,7 +58,7 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                     <PatientFileTable />
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.odemeler}>
-                    <PatientPaymentHistoryTable params={params} />
+                    <PatientPaymentHistoryTable />
                 </TabPanel>
             </Box>
         </MainCard>

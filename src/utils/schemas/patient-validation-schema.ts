@@ -16,8 +16,8 @@ const newPatientValidationSchema = Yup.object({
 })
 
 const newPatientDiseaseHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    disease_status_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    disease_status_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -33,7 +33,7 @@ const newPatientDiseaseHistorySchema = Yup.object({
 })
 
 const newPatientMedicineHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -49,9 +49,9 @@ const newPatientMedicineHistorySchema = Yup.object({
 })
 
 const newPatientFamilyDiseaseSchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    kinship_degree_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    disease_status_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    kinship_degree_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    disease_status_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -67,7 +67,7 @@ const newPatientFamilyDiseaseSchema = Yup.object({
 })
 
 const newPatientSurgeryHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -76,7 +76,7 @@ const newPatientSurgeryHistorySchema = Yup.object({
 })
 
 const newPatientTreatmentHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -85,7 +85,7 @@ const newPatientTreatmentHistorySchema = Yup.object({
 })
 
 const newPatientInjectionHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     //injection_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
@@ -96,7 +96,7 @@ const newPatientInjectionHistorySchema = Yup.object({
 })
 
 const newPatientAllergyHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(2, "Çok Kısa")
@@ -112,11 +112,15 @@ const newPatientAllergyHistorySchema = Yup.object({
 })
 
 const newPatientPaymentHistorySchema = Yup.object({
-    patient_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    payment_kind_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    payment_method_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    currency_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    amount: Yup.number().required("Bu alan zorunlu"),
+    patient_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    payment_method_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    payment_date: Yup.string().required("Bu alan zorunlu"),
+    detail: Yup.array(Yup.object({
+        appointment_process_code: Yup.string().required("Bu alan zorunlu"),
+        amount: Yup.number().required("Bu alan zorunlu"),
+        quantity: Yup.number().required("Bu alan zorunlu"),
+        discount_percentage: Yup.number().required("Bu alan zorunlu"),
+    }))
 })
 
 export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema }

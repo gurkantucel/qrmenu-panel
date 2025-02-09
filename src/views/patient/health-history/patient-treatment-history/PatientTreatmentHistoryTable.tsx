@@ -139,6 +139,7 @@ const PatientTreatmentHistoryTable = ({ params }: { params: { slug: string } }) 
                     }))
                 }}>{intl.formatMessage({ id: "add" })}</Button>
             }
+            contentSX={{padding: 0}}
         >
             <AddPatientTreatmentHistoryModal />
             <DeletePatientTreatmentHistoryModal />

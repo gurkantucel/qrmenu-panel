@@ -82,7 +82,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
 
     return (
         <MainCard
-            sx={{ marginBottom: 3, height: boxHeight }}
+            sx={{ marginBottom: 3, height: boxHeight,}}
             title={intl.formatMessage({ id: "healthInformation" })}
         >
             {isPatientHealthInformationFetching || isPatientHealthInformationLoading ? <CustomScaleLoader /> : <Formik

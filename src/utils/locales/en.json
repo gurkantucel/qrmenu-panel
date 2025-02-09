@@ -212,5 +212,6 @@
   "calculatedVAT": "Calculated VAT",
   "amountToBePaid": "Amount To Be Paid",
   "quoteNote": "Quote Note",
-  "expiration": "Expiration"
+  "expiration": "Expiration",
+  "note" : "Note"
 }

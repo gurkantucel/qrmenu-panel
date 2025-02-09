@@ -71,11 +71,11 @@ const permissionControlMenu = () => {
                 icon: ""
             },
             {
-                id: 'payments',
+                id: 'payment',
                 code: "00005",
                 title: "Ödemeler",
                 type: 'item',
-                url: '/app/payments',
+                url: '/app/payment',
                 icon: ""
             },
             {

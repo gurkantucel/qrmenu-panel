@@ -3,7 +3,7 @@
 import { Box, Button, Dialog, DialogActions, Divider, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
 import { Add, CloseSquare, Minus } from "iconsax-react"
 import { useIntl } from "react-intl";
-import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
+import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { FieldArray, Form, Formik, FormikErrors } from 'formik';
@@ -91,7 +91,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                 appointment_id: getTenantPaymentData.data.appointment_id,
                 patient_id: getTenantPaymentData.data.patient_id,
                 payment_method_id: getTenantPaymentData.data.payment_method_id,
-                payment_date: getTenantPaymentData.data.payment_date !=null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
+                payment_date: getTenantPaymentData.data.payment_date != null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
                 payment_note: getTenantPaymentData.data.payment_note,
                 detail: getTenantPaymentData.data.detail.map((item) => ({
                     payment_id: item.payment_id,
@@ -175,6 +175,12 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
 
     return (
         <>
+            {<Button variant="dashed" startIcon={<Add />} onClick={() => {
+                dispatch(setModal({
+                    open: true,
+                    modalType: ModalEnum.newPatientPaymentHistory
+                }))
+            }}>{intl.formatMessage({ id: "new" })}</Button>}
             <Dialog open={open && modalType == ModalEnum.newPatientPaymentHistory} onClose={handleClose} fullScreen>
                 {getTenantPaymentLoading || getTenantPaymentIsFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialData ?? {
@@ -223,7 +229,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     spacing={2}
                                     justifyContent="space-between"
                                     alignItems="center"
-                                    sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 1 }}
+                                    sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 3 }}
                                 >
                                     <Grid item>
                                         <Typography variant="h4">{id != null ? `${data?.patient_full_name} - ${intl.formatMessage({ id: "updatePayment" })}` : intl.formatMessage({ id: "newPayment" })}</Typography>
@@ -637,9 +643,9 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     </Button>
                                     <AnimateButton>
                                         <Button disableElevation
-                                            disabled={isSubmitting || createTenantPaymentIsLoading || updateTenantPaymentIsLoading} type="submit" variant="contained" color="primary">
-                                            {(createTenantPaymentIsLoading || updateTenantPaymentIsLoading) && <PuffLoader size={20} color='white' />}
-                                            {(createTenantPaymentIsLoading == false || updateTenantPaymentIsLoading == false) && intl.formatMessage({ id: "save" })}
+                                            disabled={isSubmitting || createTenantPaymentIsLoading || updateTenantPaymentIsLoading} type="submit" variant="contained" color="primary">
+                                            {(createTenantPaymentIsLoading || updateTenantPaymentIsLoading) && <PuffLoader size={20} color='white' />}
+                                            {(createTenantPaymentIsLoading == false || updateTenantPaymentIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
                                     </AnimateButton>
                                 </DialogActions>

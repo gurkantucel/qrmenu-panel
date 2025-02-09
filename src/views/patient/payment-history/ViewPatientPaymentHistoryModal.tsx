@@ -1,25 +1,18 @@
 "use client"
 
 import { Box, Button, Dialog, DialogActions, Divider, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
-import { Add, CloseSquare, Minus } from "iconsax-react"
+import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { FieldArray, Form, Formik, FormikErrors } from 'formik';
-import AnimateButton from "components/@extended/AnimateButton";
-import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import IconButton from "components/@extended/IconButton";
-import { enqueueSnackbar } from "notistack";
-import { useLazyGetPatientDropdownQuery } from "reduxt/features/patient/patient-api";
 import AuthDivider from "sections/auth/AuthDivider";
-import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
-import { useCreateTenantPaymentMutation, useLazyReadTenantPaymentQuery, useUpdateTenantPaymentMutation } from "reduxt/features/patient/tenant-payment-api";
-import CustomFormikAsyncSelect from "components/third-party/formik/custom-formik-asyncselect";
-import { useLazyGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyReadTenantPaymentQuery } from "reduxt/features/patient/tenant-payment-api";
 import { newPatientPaymentHistorySchema } from "utils/schemas/patient-validation-schema";
 import { TenantPaymentCreateBodyModel } from "reduxt/features/patient/models/tenant-payment-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
@@ -30,7 +23,7 @@ type Props = {
     requestCalendar?: () => void
 }
 
-const AddPatientPaymentHistoryModal = (props: Props) => {
+const ViewPatientPaymentHistoryModal = (props: Props) => {
 
     const dispatch = useAppDispatch();
     const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
@@ -43,55 +36,27 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
         setInitialData(undefined);
     };
 
-    const [getPatientDropdown, { isLoading: getPatientDropdownLoading }] = useLazyGetPatientDropdownQuery();
-
-    const [getAppointmentProcessDropdown, { isLoading: getAppointmentProcessDropdownLoading, data: getAppointmentProcessDropdownData }] = useLazyGetAppointmentProcessDropdownQuery();
-
-    const getPatientDropdownOptions = async (inputValue: string) => {
-
-        if (inputValue.length >= 3) {
-            const items = await getPatientDropdown({ label: inputValue })
-            return items.data?.data ?? [];
-        }
-    }
-
-    const [getPaymentMethodDropDownList, {
-        data: getPaymentMethodListData,
-        isLoading: getPaymentMethodListLoading
-    }] = useLazyGetPaymentMethodDropdownQuery();
-
     const [getTenantPayment, {
         data: getTenantPaymentData,
         isLoading: getTenantPaymentLoading,
         isFetching: getTenantPaymentIsFetching
     }] = useLazyReadTenantPaymentQuery();
 
-    const [createTenantPayment, { isLoading: createTenantPaymentIsLoading, data: createTenantPaymentResponse, error: createTenantPaymentError }] = useCreateTenantPaymentMutation();
-
-    const [updateTenantPayment, { isLoading: updateTenantPaymentIsLoading, data: updateTenantPaymentResponse, error: updateTenantPaymentError }] = useUpdateTenantPaymentMutation();
-
 
     useEffect(() => {
-        if (open == true && modalType == ModalEnum.newPatientPaymentHistory) {
-            getAppointmentProcessDropdown();
-            getPaymentMethodDropDownList();
-        }
-    }, [open, id])
-
-    useEffect(() => {
-        if (open == true && modalType == ModalEnum.newPatientPaymentHistory && id != null && data != null) {
+        if (open == true && modalType == ModalEnum.viewPatientPaymentHistory && id != null && data != null) {
             getTenantPayment({ payment_id: data.payment_id, patient_id: data.patient_id })
         }
     }, [open, id, data])
 
     useEffect(() => {
-        if (open == true && modalType == ModalEnum.newPatientPaymentHistory && getTenantPaymentData?.data != null) {
+        if (open == true && modalType == ModalEnum.viewPatientPaymentHistory && getTenantPaymentData?.data != null) {
             const model: TenantPaymentCreateBodyModel = {
                 payment_id: getTenantPaymentData.data.payment_id,
                 appointment_id: getTenantPaymentData.data.appointment_id,
                 patient_id: getTenantPaymentData.data.patient_id,
                 payment_method_id: getTenantPaymentData.data.payment_method_id,
-                payment_date: getTenantPaymentData.data.payment_date !=null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
+                payment_date: getTenantPaymentData.data.payment_date != null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
                 payment_note: getTenantPaymentData.data.payment_note,
                 detail: getTenantPaymentData.data.detail.map((item) => ({
                     payment_id: item.payment_id,
@@ -118,54 +83,6 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
         }
     }, [getTenantPaymentData])
 
-    useEffect(() => {
-        if (createTenantPaymentResponse) {
-            enqueueSnackbar(createTenantPaymentResponse.message, {
-                variant: createTenantPaymentResponse?.status == true ? 'success' : 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-            if (createTenantPaymentResponse?.status == true) {
-                handleClose();
-                if (props.page == "home" && props.requestCalendar) {
-                    props?.requestCalendar();
-                }
-            }
-        }
-        if (createTenantPaymentError) {
-            const error = createTenantPaymentError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-        }
-    }, [createTenantPaymentResponse, createTenantPaymentError])
-
-    useEffect(() => {
-        if (updateTenantPaymentResponse) {
-            enqueueSnackbar(updateTenantPaymentResponse.message, {
-                variant: updateTenantPaymentResponse?.status == true ? 'success' : 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-            if (updateTenantPaymentResponse?.status == true) {
-                handleClose();
-            }
-        }
-        if (updateTenantPaymentError) {
-            const error = updateTenantPaymentError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-        }
-    }, [updateTenantPaymentResponse, updateTenantPaymentError])
 
     useEffect(() => {
         return () => {
@@ -175,7 +92,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
 
     return (
         <>
-            <Dialog open={open && modalType == ModalEnum.newPatientPaymentHistory} onClose={handleClose} fullScreen>
+            <Dialog open={open && modalType == ModalEnum.viewPatientPaymentHistory} onClose={handleClose} fullScreen>
                 {getTenantPaymentLoading || getTenantPaymentIsFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialData ?? {
                         payment_id: null,
@@ -208,11 +125,6 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                     enableReinitialize
                     validationSchema={newPatientPaymentHistorySchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.payment_id != null) {
-                            updateTenantPayment(values);
-                        } else {
-                            createTenantPayment(values);
-                        }
                     }}
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -223,7 +135,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     spacing={2}
                                     justifyContent="space-between"
                                     alignItems="center"
-                                    sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 1 }}
+                                    sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 4 }}
                                 >
                                     <Grid item>
                                         <Typography variant="h4">{id != null ? `${data?.patient_full_name} - ${intl.formatMessage({ id: "updatePayment" })}` : intl.formatMessage({ id: "newPayment" })}</Typography>
@@ -235,39 +147,19 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
-                                    {data == null && <Grid item xs={12} sm={6}>
-                                        <CustomFormikAsyncSelect
-                                            isMulti={false}
-                                            name='patient_id'
-                                            loadOptions={getPatientDropdownOptions}
-                                            isClearable
-                                            isLoading={getPatientDropdownLoading}
-                                            placeholder={intl.formatMessage({ id: "searchTCPhoneOrName" })}
-                                            onChange={(value) => {
-                                                setFieldValue("patient_id", value?.value);
-                                            }}
-                                            noOptionsMessage={() => intl.formatMessage({ id: "searchLeastThreeCharacters" })}
-                                            loadingMessage={() => intl.formatMessage({ id: "loadingDot" })}
+                                    <Grid item xs={12} sm={6}>
+                                        <CustomFormikSelect
+                                            isDisabled
+                                            name="patient_id"
+                                            value={{ label: getTenantPaymentData?.data.patient_full_name }}
                                         />
-                                    </Grid>}
+                                    </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <CustomFormikSelect
-                                                name='payment_method_id'
-                                                placeholder="Ödeme Yöntemi Seçin"
-                                                isClearable={true}
-                                                isLoading={getPaymentMethodListLoading}
-                                                zIndex={998}
-                                                value={
-                                                    values.payment_method_id ? { label: getPaymentMethodListData?.data?.find((item) => item.value == values.payment_method_id)?.label ?? "", value: getPaymentMethodListData?.data?.find((item) => item.value == values.payment_method_id)?.value ?? 0 } : null}
-                                                onChange={(val: any) => {
-                                                    setFieldValue("payment_method_id", val?.value ?? 0);
-                                                }}
-
-                                                options={getPaymentMethodListData?.data?.map((item) => ({
-                                                    value: item.value,
-                                                    label: item.label
-                                                }))}
+                                                isDisabled
+                                                name="payment_method_id"
+                                                value={{ label: getTenantPaymentData?.data.payment_method_name }}
                                             />
                                         </Stack>
                                     </Grid>
@@ -282,46 +174,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                             render={arrayHelpers => (
                                                 <>
                                                     {values.detail && values.detail.length > 0 && values.detail.map((item, index) => (
-                                                        <Grid container justifyContent={"start"} alignContent={"center"} alignItems={"center"} spacing={1} marginBottom={2} padding={2} key={index}>
-                                                            <Grid item xs={12} md={1}>
-                                                                <Grid container justifyContent={"center"} paddingTop={4}>
-                                                                    <Grid marginRight={1}>
-                                                                        <IconButton shape="rounded" variant="contained"
-                                                                            color="secondary"
-                                                                            size="small" onClick={() => {
-                                                                                arrayHelpers.insert(index, {
-                                                                                    payment_id: null,
-                                                                                    appointment_process_type_code: null,
-                                                                                    appointment_process_type_name: null,
-                                                                                    appointment_process_code: null,
-                                                                                    appointment_process_name: null,
-                                                                                    appointment_process_description: null,
-                                                                                    currency_code: null,
-                                                                                    currency_name: null,
-                                                                                    amount: 0,
-                                                                                    quantity: 1,
-                                                                                    discount_percentage: 0,
-                                                                                    discount_amount: 0,
-                                                                                    vat: 0,
-                                                                                    vat_included: false,
-                                                                                    vat_amount: 0,
-                                                                                    total: 0,
-                                                                                    status: true
-                                                                                })
-                                                                            }}>
-                                                                            <Add />
-                                                                        </IconButton>
-                                                                    </Grid>
-                                                                    <IconButton shape="rounded" variant="contained"
-                                                                        color="secondary"
-                                                                        disabled={values.detail.length == 1}
-                                                                        size="small" onClick={() => {
-                                                                            arrayHelpers.remove(index)
-                                                                        }}>
-                                                                        <Minus />
-                                                                    </IconButton>
-                                                                </Grid>
-                                                            </Grid>
+                                                        <Grid container justifyContent={"start"} alignContent={"center"} alignItems={"center"} spacing={1} marginBottom={1} padding={2} margin={2} key={index}>
                                                             {/* Randevu İşlemi */}
                                                             <Grid item xs={12} md={2}>
                                                                 <Stack spacing={1}>
@@ -329,41 +182,14 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                     <CustomFormikSelect
                                                                         name={`detail[${index}].appointment_process_code`}
                                                                         placeholder={intl.formatMessage({ id: "selectAppointmentProcess" })}
-                                                                        isClearable={true}
-                                                                        isLoading={getAppointmentProcessDropdownLoading}
+                                                                        isDisabled
                                                                         zIndex={999 - index}
-                                                                        value={
-                                                                            values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
-                                                                        onChange={(val: any) => {
-                                                                            if (values.detail.length > 1 && !values.detail.some(item => item.currency_code == val?.value?.currency_code)) {
-                                                                                enqueueSnackbar("Seçilen randevu işlemlerinde farklı para birimleri tanımlı. ", {
-                                                                                    variant: 'error', anchorOrigin: {
-                                                                                        vertical: 'bottom',
-                                                                                        horizontal: 'right'
-                                                                                    }
-                                                                                },)
-                                                                                return;
-                                                                            }
-                                                                            setFieldValue(`detail[${index}].appointment_process_type_code`, val?.value.appointment_process_type_code);
-                                                                            setFieldValue(`detail[${index}].appointment_process_type_name`, val?.value.appointment_process_type_name);
-                                                                            setFieldValue(`detail[${index}].appointment_process_code`, val?.value.appointment_process_code);
-                                                                            setFieldValue(`detail[${index}].appointment_process_name`, val?.value.appointment_process_name);
-                                                                            setFieldValue(`detail[${index}].appointment_process_description`, val?.value.appointment_process_description);
-                                                                            setFieldValue(`detail[${index}].amount`, val?.value?.amount);
-                                                                            setFieldValue(`detail[${index}].vat`, val?.value?.vat);
-                                                                            setFieldValue(`detail[${index}].vat_included`, val?.value?.vat_included);
-                                                                            setFieldValue(`detail[${index}].currency_code`, val?.value?.currency_code);
-                                                                            setFieldValue(`detail[${index}].currency_name`, val?.value?.currency_name);
-                                                                        }}
-                                                                        options={getAppointmentProcessDropdownData?.data?.map((item) => ({
-                                                                            value: item,
-                                                                            label: item.label
-                                                                        }))}
+                                                                        value={{ label: getTenantPaymentData?.data.detail[index].appointment_process_name, value: getTenantPaymentData?.data.detail[index].appointment_process_name }}
                                                                     />
                                                                 </Stack>
                                                             </Grid>
                                                             {/* Adet*/}
-                                                            <Grid item xs={12} md={0.7}>
+                                                            <Grid item xs={12} md={1}>
                                                                 <Stack spacing={1}>
                                                                     <InputLabel htmlFor="quantity">
                                                                         {`${intl.formatMessage({ id: "quantity" })}*`}</InputLabel>
@@ -372,6 +198,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         type="number"
                                                                         value={values.detail[index].quantity}
                                                                         name={`detail[${index}].quantity`}
+                                                                        disabled
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
                                                                         placeholder={intl.formatMessage({ id: "quantity" })}
@@ -387,7 +214,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                 )}
                                                             </Grid>
                                                             {/* Birim Fiyat */}
-                                                            <Grid item xs={12} md={1.5}>
+                                                            <Grid item xs={12} md={2}>
                                                                 <Stack spacing={1}>
                                                                     <InputLabel htmlFor="unitPrice">
                                                                         {`${intl.formatMessage({ id: "unitPrice" })}*`}</InputLabel>
@@ -396,6 +223,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         type="number"
                                                                         value={values.detail[index].amount}
                                                                         name={`detail[${index}].amount`}
+                                                                        disabled
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
                                                                         placeholder={intl.formatMessage({ id: "amount" })}
@@ -410,7 +238,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                 )}
                                                             </Grid>
                                                             {/* İskonto */}
-                                                            <Grid item xs={12} md={0.7}>
+                                                            <Grid item xs={12} md={1}>
                                                                 <Stack spacing={1}>
                                                                     <InputLabel htmlFor="discount_percentage">
                                                                         {`${intl.formatMessage({ id: "discount" })}%*`}</InputLabel>
@@ -419,6 +247,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         type="number"
                                                                         value={values.detail[index].discount_percentage}
                                                                         name={`detail[${index}].discount_percentage`}
+                                                                        disabled
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
                                                                         placeholder={intl.formatMessage({ id: "discount" })}
@@ -458,7 +287,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                 )}
                                                             </Grid>
                                                             {/* KDV */}
-                                                            <Grid item xs={12} md={0.7}>
+                                                            <Grid item xs={12} md={1}>
                                                                 <Stack spacing={1}>
                                                                     <InputLabel htmlFor="vatRate">
                                                                         {`${intl.formatMessage({ id: "vat" })}%`}</InputLabel>
@@ -467,6 +296,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         type="number"
                                                                         value={values.detail[index].vat}
                                                                         name={`detail[${index}].vat`}
+                                                                        disabled
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
                                                                         placeholder={intl.formatMessage({ id: "vat" })}
@@ -597,6 +427,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                             type="text"
                                             placeholder={intl.formatMessage({ id: "note" })}
                                             error={Boolean(touched.payment_note && errors.payment_note)}
+                                            disabled
                                             value={values.payment_note}
                                             name="payment_note"
                                             onBlur={handleBlur}
@@ -617,6 +448,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                         <OutlinedInput
                                             id="payment_date"
                                             type="date"
+                                            disabled
                                             placeholder={intl.formatMessage({ id: "date" })}
                                             error={Boolean(touched.payment_date && errors.payment_date)}
                                             value={dayjs(values.payment_date).format('YYYY-MM-DD')}
@@ -635,13 +467,6 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                     <Button color="info" onClick={handleClose}>
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
-                                    <AnimateButton>
-                                        <Button disableElevation
-                                            disabled={isSubmitting || createTenantPaymentIsLoading || updateTenantPaymentIsLoading} type="submit" variant="contained" color="primary">
-                                            {(createTenantPaymentIsLoading || updateTenantPaymentIsLoading) && <PuffLoader size={20} color='white' />}
-                                            {(createTenantPaymentIsLoading == false || updateTenantPaymentIsLoading == false) && intl.formatMessage({ id: "save" })}
-                                        </Button>
-                                    </AnimateButton>
                                 </DialogActions>
                             </Box>
                         </Form>
@@ -652,4 +477,4 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
     )
 }
 
-export default AddPatientPaymentHistoryModal
+export default ViewPatientPaymentHistoryModal

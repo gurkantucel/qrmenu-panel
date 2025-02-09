@@ -27,6 +27,7 @@ export enum ModalEnum {
     deletePatientFile,
     newPatientPaymentHistory,
     deletePatientPaymentHistory,
+    viewPatientPaymentHistory,
     newAppointment,
     viewAppointment,
     updateAppointment,

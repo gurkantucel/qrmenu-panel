@@ -213,5 +213,6 @@
     "calculatedVAT": "Hesaplanan KDV",
     "amountToBePaid": "Ödenecek Tutar",
     "quoteNote" : "Teklif Notu",
-    "expiration" : "Son Kullanma Tarihi"
+    "expiration" : "Son Kullanma Tarihi",
+    "note" : "Not"
 }

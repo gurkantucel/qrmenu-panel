@@ -14,7 +14,7 @@ import treatmentHistoryApi from './features/patient/treatment-history-api'
 import injectionHistoryApi from './features/patient/injection-history-api'
 import healthInformationApi from './features/patient/health-information-api'
 import patientFileApi from './features/patient/patient-file-api'
-import patientPaymentHistoryApi from './features/patient/patient-payment-history-api'
+import tenantPaymentApi from './features/patient/tenant-payment-api'
 import appointmentCalendarModalSlice from './features/appointment/appointmentCalendarModalSlice'
 import appointmentCalendarApi from './features/appointment/appointment-calendar-api'
 import appointmentApi from './features/appointment/appointment-api'
@@ -44,7 +44,7 @@ export const store = configureStore({
     [allergyHistoryApi.reducerPath] : allergyHistoryApi.reducer,
     [healthInformationApi.reducerPath] : healthInformationApi.reducer,
     [patientFileApi.reducerPath] : patientFileApi.reducer,
-    [patientPaymentHistoryApi.reducerPath] : patientPaymentHistoryApi.reducer,
+    [tenantPaymentApi.reducerPath] : tenantPaymentApi.reducer,
     [appointmentApi.reducerPath] : appointmentApi.reducer,
     [appointmentCalendarApi.reducerPath]: appointmentCalendarApi.reducer,
     [appointmentProcessTypeApi.reducerPath] : appointmentProcessTypeApi.reducer,
@@ -67,7 +67,7 @@ export const store = configureStore({
     allergyHistoryApi.middleware,
     healthInformationApi.middleware,
     patientFileApi.middleware,
-    patientPaymentHistoryApi.middleware,
+    tenantPaymentApi.middleware,
     appointmentApi.middleware,
     appointmentCalendarApi.middleware,
     appointmentProcessTypeApi.middleware,

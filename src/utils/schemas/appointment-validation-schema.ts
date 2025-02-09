@@ -51,9 +51,9 @@ const newAppointmentProcessSchema = Yup.object({
     amount: Yup.number().min(0, "Minumum 0 girin.").required("Bu alan zorunlu"),
     vat: Yup.number().min(0, "Minumum 0 girin."),
     appointment_process_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    sub_appointment_process: Yup.array(Yup.number()).nullable().when("appointment_process_type_id", {
-        is: (v: any) => v === 3,
-        then: (schema) => Yup.array(Yup.number()).required("Bu alan zorunlu").min(1,"Bu alan zorunlu")
+    sub_appointment_process: Yup.array(Yup.string()).nullable().when("appointment_process_type_id", {
+        is: (v: any) => v === "305ee410-8284-408e-99c7-9c2ee07f7297",
+        then: (schema) => Yup.array(Yup.string()).required("Bu alan zorunlu").min(1,"Bu alan zorunlu")
     })
 })
 

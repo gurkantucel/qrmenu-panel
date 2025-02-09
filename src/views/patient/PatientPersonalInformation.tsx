@@ -179,7 +179,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
         >
             {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                 <Form>
-                    <Box sx={{ px: 3, py: 3 }}>
+                    <Box sx={{ px: 1, py: 1 }}>
                         <Typography variant="body2" marginBottom={"1.4rem"}>{"Zorunlu alanlar * ile belirtilmiştir."}</Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={6}>
