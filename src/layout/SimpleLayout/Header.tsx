@@ -11,7 +11,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Collapse from '@mui/material/Collapse';
 import Drawer from '@mui/material/Drawer';
 import Links from '@mui/material/Link';
 import List from '@mui/material/List';
@@ -26,26 +25,11 @@ import Box from '@mui/material/Box';
 // project-imports
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
-import Dot from 'components/@extended/Dot';
 import Logo from 'components/logo';
 import { ThemeDirection } from 'config';
 
 // assets
-import { ArrowDown2, ArrowUp2, ExportSquare, HambergerMenu, Minus } from 'iconsax-react';
-const techBootstrap = '/assets/images/landing/tech-bootstrap.svg';
-const techReact = '/assets/images/landing/tech-react.svg';
-const techCodeigniter = '/assets/images/landing/tech-codeigniter.svg';
-const techNet = '/assets/images/landing/tech-net.svg';
-const techFigma = '/assets/images/landing/tech-figma.svg';
-const techVue = 'assets/images/landing/tech-vuetify.svg';
-const techAngular = 'assets/images/landing/tech-angular.svg';
-const techVuelaravel = 'assets/images/landing/tech-l+v.svg';
-const techNextJS = 'assets/images/landing/tech-nextjs.svg';
-const techLaravelBootstrap = 'assets/images/landing/tech-Laravel+Bootstrap.svg';
-const techDjango = 'assets/images/landing/tech-Django.svg';
-const techFlask = 'assets/images/landing/tech-Flask.svg';
-const techNodeJs = 'assets/images/landing/tech-Node-js.svg';
-const techSvelteKit = 'assets/images/landing/tech-SvelteKit.svg';
+import { ExportSquare, HambergerMenu, Minus } from 'iconsax-react';
 
 interface ElevationScrollProps {
   children: ReactElement;
@@ -77,8 +61,6 @@ export default function Header() {
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerToggle, setDrawerToggle] = useState<boolean>(false);
 
-  const [openDrawer, setOpenDrawer] = useState(false);
-
   /** Method called on multiple components with different event types */
   const drawerToggler = (open: boolean) => (event: any) => {
     if (event.type! === 'keydown' && (event.key! === 'Tab' || event.key! === 'Shift')) {
@@ -94,119 +76,6 @@ export default function Header() {
   const ispValueAvailable = ispValue !== null && parseInt(ispValue) === 1;
 
   const url = ispValueAvailable ? '#' : '#';
-  const items = [
-    {
-      label: 'Bootstrap',
-      image: techBootstrap,
-      url: 'https://ableproadmin.com/dashboard/index.html',
-      target: '_blank',
-      tooltipTitle: 'Bootstrap'
-    },
-    {
-      label: 'React MUI',
-      image: techReact,
-      url: 'https://ableproadmin.com/react/dashboard/default',
-      target: '_blank',
-      tooltipTitle: 'React MUI'
-    },
-    {
-      label: 'Angular',
-      image: techAngular,
-      url: 'https://ableproadmin.com/angular/default/dashboard/default',
-      target: '_blank',
-      tooltipTitle: 'Angular'
-    },
-    {
-      label: 'CodeIgniter',
-      image: techCodeigniter,
-      url: 'https://ableproadmin.com/codeigniter/default/public/dashboard-default',
-      target: '_blank',
-      tooltipTitle: 'CodeIgniter'
-    },
-    {
-      label: 'ASP.net',
-      image: techNet,
-      url: 'https://able-pro.azurewebsites.net/Dashboard/Index',
-      target: '_blank',
-      tooltipTitle: 'ASP.net'
-    },
-    {
-      label: 'Next js',
-      image: techNextJS,
-      url: '/login',
-      target: '_blank',
-      tooltipTitle: 'Next js'
-    },
-    {
-      label: 'Vue',
-      image: techVue,
-      url: 'https://ableproadmin.com/vue/dashboard/default',
-      target: '_blank',
-      tooltipTitle: 'Vue'
-    },
-    {
-      label: 'Vuetify Laravel',
-      image: techVuelaravel,
-      url: 'https://phplaravel-207002-4524103.cloudwaysapps.com/build/dashboards/default',
-      target: '_blank',
-      tooltipTitle: 'Vuetify Laravel'
-    },
-    {
-      label: 'Laravel Bootstrap',
-      image: techLaravelBootstrap,
-      url: '#!',
-      target: '_self',
-      tooltipTitle: 'Live Preview Not Available'
-    },
-    {
-      label: 'Django',
-      image: techDjango,
-      url: '#!',
-      target: '_self',
-      tooltipTitle: 'Live Preview Not Available'
-    },
-    {
-      label: 'Node JS',
-      image: techNodeJs,
-      url: '#!',
-      target: '_self',
-      tooltipTitle: 'Live Preview Not Available'
-    },
-    {
-      label: 'Flask',
-      image: techFlask,
-      url: '#!',
-      target: '_self',
-      tooltipTitle: 'Live Preview Not Available'
-    },
-    {
-      label: 'SvelteKit',
-      image: techSvelteKit,
-      url: '#!',
-      target: '_self',
-      tooltipTitle: 'Live Preview Not Available'
-    },
-    {
-      label: 'Figma',
-      image: techFigma,
-      url: 'https://www.figma.com/file/6XqmRhRmkr33w0EFD49acY/Able-Pro--v9.0-Figma-Preview?type=design&mode=design&t=4FS2Lw6WxsmJ3RLm-0',
-      target: '_blank',
-      tooltipTitle: 'Figma'
-    }
-  ];
-
-  const ListItem = items.map((item, index) => {
-    const finalUrl = item.url !== '#!' && ispValueAvailable ? `${item.url}?isp=1` : item.url;
-    return (
-      <ListItemButton key={index} component="a" href={finalUrl} target="_blank" sx={{ p: 0 }}>
-        <ListItemIcon>
-          <Dot size={4} color="secondary" />
-        </ListItemIcon>
-        <ListItemText primary={item.label} primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
-      </ListItemButton>
-    );
-  });
-
 
   const linksSx = {
     textDecoration: 'none'
@@ -349,9 +218,6 @@ export default function Header() {
                         <ListItemText primary="Tanıtım ve Özellikler" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Collapse in={openDrawer} timeout="auto" unmountOnExit>
-                      {openDrawer && <List sx={{ p: 0, pl: 6, '& .MuiListItemIcon-root': { minWidth: 20 } }}>{ListItem}</List>}
-                    </Collapse>
                   </List>
                 </Box>
               </Drawer>
