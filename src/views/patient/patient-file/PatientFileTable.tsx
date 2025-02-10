@@ -195,7 +195,11 @@ const PatientFileTable = (props: Props) => {
                     }))
                 }}>{intl.formatMessage({ id: "add" })}</Button>
             }
-            contentSX={{padding: 0}}
+            contentSX={{
+                padding: 0, '&:last-child': {
+                    paddingBottom: 0
+                }
+            }}
         >
             <AddPatientFileModal />
             <DeletePatientFileModal />

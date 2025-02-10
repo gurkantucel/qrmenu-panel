@@ -169,6 +169,11 @@ const AppointmentFileTable = () => {
         <Grid item xs={12}>
             <MainCard
                 sx={{ marginBottom: 3 }}
+                contentSX={{
+                    padding: 0, '&:last-child': {
+                        paddingBottom: 0
+                    }
+                }}
                 title={intl.formatMessage({ id: "files" })}
                 secondary={
                     <Button variant="dashed" startIcon={<Add />} onClick={() => {

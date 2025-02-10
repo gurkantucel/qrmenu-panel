@@ -100,5 +100,6 @@ export interface ResetPasswordBodyModel {
 
 export interface Membership {
   membership_start_date:string
+  membership_end_date: string
   membership_package_name: string
 }

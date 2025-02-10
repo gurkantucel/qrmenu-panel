@@ -36,9 +36,9 @@ interface ExpandMoreProps extends IconButtonProps {
   drawerOpen: boolean;
 }
 
-const diffInDays = () => {
+const diffInDays = (endDate: string) => {
   const today = dayjs();
-  const expiryDate = dayjs('2025-02-10');
+  const expiryDate = dayjs(endDate);
   const diffInDays = expiryDate.diff(today, 'day');
   return `${diffInDays.toString()} Gün`;
 }
@@ -120,7 +120,7 @@ export default function UserList() {
           </ListItemAvatar>
           <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? <>
             <Chip size='small' variant="combined"
-              color="primary" sx={{paddingLeft: 1}} label={<Chip size='small' color="info" label={diffInDays()} />} avatar={
+              color="primary" sx={{paddingLeft: 1}} label={<Chip size='small' color="info" label={diffInDays(user.membership.membership_end_date)} />} avatar={
                 <>{user.membership.membership_package_name}</>
               } />
           </> : <>{'-'}</>} />

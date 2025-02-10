@@ -184,7 +184,11 @@ const PatientPaymentHistoryTable = () => {
           }))
         }}>{intl.formatMessage({ id: "newPayment" })}</Button>
       }
-      contentSX={{ padding: 0 }}
+      contentSX={{
+        padding: 0, '&:last-child': {
+            paddingBottom: 0
+        }
+    }}
     >
       <AddPatientPaymentHistoryModal />
       <DeletePatientPaymentHistoryModal />

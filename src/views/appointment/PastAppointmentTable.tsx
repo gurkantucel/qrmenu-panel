@@ -209,7 +209,11 @@ const PastAppointmentTable = () => {
     return (
         <Grid item xs={12}>
             <ViewAppointmentModal />
-            <MainCard title={intl.formatMessage({ id: "pastAppointment" })}>
+            <MainCard title={intl.formatMessage({ id: "pastAppointment" })} contentSX={{
+                    padding: 0, '&:last-child': {
+                        paddingBottom: 0
+                    }
+                }}>
                 <ScrollX>
                     <TableContainer component={Paper}>
                         <Table size='small'>

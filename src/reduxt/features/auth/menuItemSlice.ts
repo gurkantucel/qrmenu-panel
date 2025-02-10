@@ -64,7 +64,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'make-an-offer',
-                code: null,
+                code: "00005",
                 title: "Teklif Ver",
                 type: 'item',
                 url: '/app/make-an-offer',
@@ -72,7 +72,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'payment',
-                code: "00005",
+                code: "00006",
                 title: "Ödemeler",
                 type: 'item',
                 url: '/app/payment',
@@ -80,7 +80,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'sms-transactions',
-                code: "00006",
+                code: "00007",
                 title: "SMS İşlemleri",
                 type: 'item',
                 url: '/app/sms-transactions',
@@ -88,7 +88,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'statistics',
-                code: null,
+                code: "00008",
                 title: "İstatistikler",
                 type: 'item',
                 url: '/app/statistics',
@@ -96,25 +96,28 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'settings',
-                code: "00007",
+                code: null,
                 title: "Ayarlar",
                 type: 'collapse',
                 icon: "",
                 children: [
                     {
                         id: 'appointment-process',
+                        code: "00009",
                         title: "Randevu İşlemleri",
                         type: 'item',
                         url: '/app/settings/appointment-process',
                     },
                     {
                         id: 'sms-template',
+                        code: "00010",
                         title: "SMS Şablonları",
                         type: 'item',
                         url: '/app/settings/sms-template',
                     },
                     {
                         id: 'person-type',
+                        code: "00011",
                         title: "Çalışan Türleri",
                         type: 'item',
                         url: '/app/settings/person-type',
@@ -130,9 +133,30 @@ const permissionControlMenu = () => {
                 icon: ""
             }
         ]
-        const newMenuItems = menuItems.filter(menuItem =>
-            pAuth.some(moduleId => moduleId.code === menuItem.code) || menuItem.code == null
-        );
+
+        const newMenuItems: any[] = [];
+
+        menuItems.forEach(menuItem => {
+            const authorized = pAuth.find(auth => auth.code === menuItem.code);
+
+            if (authorized || menuItem.code === null) {
+                if (menuItem.type === 'collapse' && menuItem.children) {
+                    const newChildren: any[] = [];
+                    menuItem.children.forEach(child => {
+                        const childAuthorized = pAuth.find(auth => auth.code === child.code);
+                        if (childAuthorized) {
+                            newChildren.push(child);
+                        }
+                    });
+                    if (newChildren.length > 0) {
+                        newMenuItems.push({ ...menuItem, children: newChildren });
+                    }
+                } else {
+                    newMenuItems.push(menuItem);
+                }
+            }
+        });
+
         return newMenuItems;
     }
     return [];
