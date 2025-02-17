@@ -214,5 +214,6 @@
     "amountToBePaid": "Ödenecek Tutar",
     "quoteNote" : "Teklif Notu",
     "expiration" : "Son Kullanma Tarihi",
-    "note" : "Not"
+    "note" : "Not",
+    "discountText" : "İndirim\n({coupon_code} - %{discount_percentage}):"
 }

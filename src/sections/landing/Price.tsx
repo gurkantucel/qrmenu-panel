@@ -1,55 +1,17 @@
 "use client"
 import { Box, Button, Chip, Container, Grid, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
+import { getHomeMembershipPackages } from 'app/(simple)/landing/actions';
 import MainCard from 'components/MainCard';
-import React, { Fragment } from 'react'
+import { setCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
+import React, { Fragment, useEffect, useState } from 'react'
+import { MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
 
 const PriceLandingPage = () => {
-    const timePeriod = true;
 
-    const plans = [
-        {
-            active: false,
-            title: '1 Yıllık',
-            description: 'Günlük: ₺26,02',
-            price: 9.499,
-            planList: [
-                "Aylık 250 SMS Hakkı",
-                "Limitsiz Döküman Yönetimi",
-                "Sınırsız Kullanıcı",
-                "Sınırsız Hasta Kaydı",
-                "Sınırsız Randevu Kaydı",
-            ],
-            permission: [0, 1, 2, 3, 4]
-        },
-        {
-            active: true,
-            title: '3 Yıllık',
-            description: 'Günlük: ₺17,80',
-            price: 19.499,
-            planList: [
-                "Aylık 750 SMS Hakkı",
-                "Limitsiz Döküman Yönetimi",
-                "Sınırsız Kullanıcı",
-                "Sınırsız Hasta Kaydı",
-                "Sınırsız Randevu Kaydı",
-            ],
-            permission: [0, 1, 2, 3, 4]
-        },
-        {
-            active: false,
-            title: '2 Yıllık',
-            description: 'Günlük: ₺20,54',
-            price: 14.999,
-            planList: [
-                "Aylık 500 SMS Hakkı",
-                "Limitsiz Döküman Yönetimi",
-                "Sınırsız Kullanıcı",
-                "Sınırsız Hasta Kaydı",
-                "Sınırsız Randevu Kaydı",
-            ],
-            permission: [0, 1, 2, 3, 4, 5, 6, 7]
-        }
-    ];
+    const router = useRouter();
+
+    const timePeriod = true;
 
     const priceListDisable = {
         opacity: 0.4,
@@ -67,76 +29,96 @@ const PriceLandingPage = () => {
         lineHeight: 1
     };
 
+    const [result, setResult] = useState<MembershipPackagesListModel | null>(null);
+
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await getHomeMembershipPackages();
+                setResult(response?.data);
+            } catch (err: any) {
+            }
+        }
+
+        fetchData();
+    }, []);
+
     return (
         <Box sx={{ bgcolor: 'secondary.200', pb: { md: 10, xs: 7 }, pt: 4 }}>
             <Container>
-            <Grid item container spacing={3} xs={12} alignItems="center">
-                {plans.map((plan, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <MainCard>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <Box sx={plan.active ? priceActivePlan : { padding: 3 }}>
-                                        <Grid container spacing={3}>
-                                            {plan.active && (
-                                                <Grid item xs={12} sx={{ textAlign: 'center' }}>
-                                                    <Chip label="En Avantajlı" color="success" />
+                <Grid item container spacing={3} xs={12} alignItems="center">
+                    {result != null && result.data.map((plan, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                            <MainCard>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Box sx={plan.featured ? priceActivePlan : { padding: 3 }}>
+                                            <Grid container spacing={3}>
+                                                {plan.featured && (
+                                                    <Grid item xs={12} sx={{ textAlign: 'center' }}>
+                                                        <Chip label="En Avantajlı" color="success" />
+                                                    </Grid>
+                                                )}
+                                                <Grid item xs={12}>
+                                                    <Stack spacing={0} textAlign="center">
+                                                        <Typography variant="h4">{plan.name}</Typography>
+                                                        <Typography>
+                                                            {`Günlük: ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: plan.currency_code }).format(Number(parseFloat(plan.amount) / plan.duration))}`}
+                                                        </Typography>
+                                                    </Stack>
                                                 </Grid>
-                                            )}
-                                            <Grid item xs={12}>
-                                                <Stack spacing={0} textAlign="center">
-                                                    <Typography variant="h4">{plan.title}</Typography>
-                                                    <Typography>{plan.description}</Typography>
-                                                </Stack>
+                                                <Grid item xs={12}>
+                                                    <Stack spacing={0} alignItems="center">
+                                                        {timePeriod && (
+                                                            <Typography variant="h2" sx={price}>
+                                                                {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: plan.currency_code }).format(Number(plan.amount))}`}
+                                                            </Typography>
+                                                        )}
+                                                        {!timePeriod && (
+                                                            <Typography variant="h2" sx={price}>
+                                                                {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: plan.currency_code }).format(Number(plan.amount))}`}
+                                                            </Typography>
+                                                        )}
+                                                    </Stack>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Button type='button' color={plan.featured ? 'primary' : 'secondary'} variant={plan.featured ? 'contained' : 'outlined'} fullWidth onClick={()=>{
+                                                        setCookie("membership_package_id",plan.membership_package_id);
+                                                        router.push("app/auth/register");
+                                                    }}>
+                                                        Satın Al
+                                                    </Button>
+                                                </Grid>
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <Stack spacing={0} alignItems="center">
-                                                    {timePeriod && (
-                                                        <Typography variant="h2" sx={price}>
-                                                            ₺{plan.price}
-                                                        </Typography>
-                                                    )}
-                                                    {!timePeriod && (
-                                                        <Typography variant="h2" sx={price}>
-                                                            ₺{plan.price * 12 - 99}
-                                                        </Typography>
-                                                    )}
-                                                </Stack>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <Button color={plan.active ? 'primary' : 'secondary'} variant={plan.active ? 'contained' : 'outlined'} fullWidth>
-                                                    Satın Al
-                                                </Button>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <List
+                                            sx={{
+                                                m: 0,
+                                                p: 0,
+                                                '&> li': {
+                                                    px: 0,
+                                                    py: 0.625
+                                                }
+                                            }}
+                                            component="ul"
+                                        >
+                                            {plan.detail.map((list, i) => (
+                                                <Fragment key={i}>
+                                                    <ListItem sx={!plan.detail.includes(list) ? priceListDisable : {}}>
+                                                        <ListItemText primary={list.name} sx={{ textAlign: 'center' }} />
+                                                    </ListItem>
+                                                </Fragment>
+                                            ))}
+                                        </List>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <List
-                                        sx={{
-                                            m: 0,
-                                            p: 0,
-                                            '&> li': {
-                                                px: 0,
-                                                py: 0.625
-                                            }
-                                        }}
-                                        component="ul"
-                                    >
-                                        {plan.planList.map((list, i) => (
-                                            <Fragment key={i}>
-                                                <ListItem sx={!plan.permission.includes(i) ? priceListDisable : {}}>
-                                                    <ListItemText primary={list} sx={{ textAlign: 'center' }} />
-                                                </ListItem>
-                                            </Fragment>
-                                        ))}
-                                    </List>
-                                </Grid>
-                            </Grid>
-                        </MainCard>
-                    </Grid>
-                ))}
-            </Grid>
+                            </MainCard>
+                        </Grid>
+                    ))}
+                </Grid>
             </Container>
         </Box>
     )

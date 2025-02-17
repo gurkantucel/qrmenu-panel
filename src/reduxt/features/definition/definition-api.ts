@@ -6,6 +6,7 @@ import { DistrictListResultModel } from './models/district-type-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 import { QueryStringParamsType } from 'utils/models/query-string-params-type';
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
+import { MembershipPackagesListModel } from './models/membership-packages-model';
 
 const definitionApi = createApi({
     reducerPath: "definitionApi",
@@ -14,6 +15,10 @@ const definitionApi = createApi({
     endpoints: (builder) => ({
         getPackagesDropdown: builder.query<DropdownListModel, void>({
             query: () => `definition/membership-packages/dropDown`,
+            providesTags: ["definitions"]
+        }),
+        getMembershipPackagesDetail: builder.query<MembershipPackagesListModel, void>({
+            query: () => `definition/membership-packages/detailedList`,
             providesTags: ["definitions"]
         }),
         getPersonTypeDropdown: builder.query<DropdownListModel, void>({
@@ -169,6 +174,7 @@ const definitionApi = createApi({
 
 export const {
     useGetPackagesDropdownQuery,
+    useGetMembershipPackagesDetailQuery,
     useLazyGetPersonTypeDropdownQuery,
     useLazyGetModuleDropdownQuery,
     useGetCompanyTypeListQuery,

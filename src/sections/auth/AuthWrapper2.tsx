@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import AuthCard from './AuthCard';
 
 // assets
-const AuthSideImg = '/assets/images/auth/img-auth-sideimg.png';
+const AuthSideImg = '/assets/images/auth/pay-bg.png';
 
 interface Props {
   children: ReactElement;

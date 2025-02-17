@@ -34,6 +34,7 @@
     "axios": "^1.7.3",
     "axios-mock-adapter": "^2.0.0",
     "cookies-next": "^4.3.0",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
@@ -71,6 +72,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.13",
     "@types/node": "20.11.4",
     "@types/react": "^18.3.3",

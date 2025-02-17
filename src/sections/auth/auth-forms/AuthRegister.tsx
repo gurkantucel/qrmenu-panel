@@ -1,39 +1,159 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // material-ui
 import Button from '@mui/material/Button';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 // third-party
-import { Form, Formik } from 'formik';
+import { Form, Formik, useFormikContext } from 'formik';
 
 // project-imports
 import AnimateButton from 'components/@extended/AnimateButton';
 import AuthDivider from '../AuthDivider';
-import { Checkbox, MenuItem, Select, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
-import { useGetBranchDropdownQuery, useGetCountryDropdownQuery, useGetPackagesDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useGetBranchDropdownQuery, useGetCountryDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery, useGetMembershipPackagesDetailQuery } from 'reduxt/features/definition/definition-api';
 import { registerValidationSchema } from 'utils/schemas/auth-validation-schema';
 import { useRegisterMutation } from 'reduxt/features/auth/auth-api';
 import { useRouter } from 'next/navigation';
 import { enqueueSnackbar } from 'notistack';
 import PuffLoader from 'react-spinners/PuffLoader';
+import CustomFormikPhone from 'components/third-party/formik/custom-formik-phone';
+import { useIntl } from 'react-intl';
+import { deleteCookie, getCookie } from 'cookies-next';
+import { MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
+import { useLazyGetCouponCheckValidityQuery } from 'reduxt/features/coupon/coupon-api';
+import AuthFormsAydinlatmaMetni from './auth-form-article/AydinlatmaMetni';
+import AuthFormsUyelikSozlesmesi from './auth-form-article/UyelikSozlesmesi';
+import AuthFormsKvkk from './auth-form-article/KvkkMetni';
+
+type CouponCheckProps = {
+  getPackagesList?: MembershipPackagesListModel
+}
 
 // ============================|| JWT - REGISTER ||============================ //
+
+const MemberShipControl = () => {
+  const { setFieldValue } = useFormikContext();
+  const cookie = getCookie("membership_package_id");
+  useEffect(() => {
+    if (cookie != null) {
+      setFieldValue("membership_package_id", cookie);
+    }
+  }, [setFieldValue])
+  return null;
+}
+
+const CouponCheckValidity = (props: CouponCheckProps) => {
+  const { touched, errors, values, handleBlur, handleChange, setFieldValue } = useFormikContext<any>();
+
+  const [buttonType, setButtonType] = useState("uygula");
+
+  const [getCouponCheckValidity, {
+    isLoading: getCouponCheckValidityLoading,
+    isError: getCouponCheckValidityIsError,
+    error: getCouponCheckValidityError
+  }] = useLazyGetCouponCheckValidityQuery();
+
+  const handleApplyCoupon = async (coupon_code: string, product_id: string) => {
+    try {
+      if (buttonType == "uygula") {
+        const result = await getCouponCheckValidity({ coupon_code: coupon_code, product_id: product_id }).unwrap();
+        if (result?.data?.discount_percentage) {
+          setFieldValue("amount", result?.data?.amount);
+          setFieldValue("total_amount", result?.data?.total_amount);
+          setFieldValue("vat", result?.data?.vat);
+          setFieldValue("vat_amount", result?.data?.vat_amount);
+          setFieldValue("discount_percentage", result?.data?.discount_percentage);
+          setFieldValue("discount_amount", result?.data?.discount_amount);
+          setFieldValue("total", result?.data?.total);
+          setButtonType("kaldir");
+        }
+      } else if (buttonType == "kaldir") {
+        setFieldValue("coupon_code", "");
+        setButtonType("uygula");
+        const filter = props.getPackagesList?.data?.find((item) => item.membership_package_id == values.membership_package_id);
+        if (filter) {
+          setFieldValue("amount", filter?.amount);
+          setFieldValue("total_amount", filter?.total);
+          setFieldValue("vat", filter?.vat);
+          setFieldValue("vat_amount", filter?.vat_amount);
+          setFieldValue("discount_amount", "");
+          setFieldValue("total", filter?.total);
+        }
+      }
+    } catch (error) {
+      if (getCouponCheckValidityIsError) {
+        var errors = getCouponCheckValidityError as any;
+        enqueueSnackbar(errors.data?.message ?? "Hata", {
+          variant: 'error', anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right'
+          }
+        },)
+      }
+    }
+  }
+
+
+  return (
+    <Grid container flexDirection={"row"} alignItems={"center"} alignContent={"end"} paddingLeft={3} spacing={1} marginTop={1}>
+      <Grid item xs={10}>
+        <OutlinedInput
+          fullWidth
+          error={Boolean(touched.coupon_code && errors.coupon_code)}
+          id="coupon_code"
+          type="text"
+          value={values.coupon_code}
+          name="coupon_code"
+          onBlur={handleBlur}
+          onChange={handleChange}
+          placeholder="İndirim Kodu"
+          inputProps={{ maxLength: 50 }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <AnimateButton>
+          <Button disableElevation disabled={getCouponCheckValidityLoading} fullWidth size="large" type="button" 
+          variant="contained" 
+          color={buttonType == "uygula" ? "primary" : "secondary"} 
+          onClick={() => {
+            if (values.coupon_code.trim().length == 0) {
+              enqueueSnackbar("Kupon kodu girin.", {
+                variant: 'error', anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right'
+                }
+              },)
+              return;
+            }
+            handleApplyCoupon(values.coupon_code, values.membership_package_id)
+          }}>
+            {getCouponCheckValidityLoading && <PuffLoader size={20} color='white' />}
+            {getCouponCheckValidityLoading == false && buttonType == "uygula" ? "Uygula" : "Kaldır"}
+          </Button>
+        </AnimateButton>
+      </Grid>
+    </Grid>
+  )
+}
 
 export default function AuthRegister() {
 
   const router = useRouter()
+  const intl = useIntl()
 
-  const { data: getPackagesList, isLoading: getPackagesLoading } = useGetPackagesDropdownQuery();
+  //const memberShipPackageCookie = getCookie("membership_package_id");
+
+  const { data: getPackagesList, isLoading: getPackagesLoading } = useGetMembershipPackagesDetailQuery();
+
   const { data: getCountryList, isLoading: getCountryLoading } = useGetCountryDropdownQuery();
   const [getCityList, { data: getCityListData,
     isLoading: getCityListLoading
@@ -44,7 +164,7 @@ export default function AuthRegister() {
   }] = useLazyGetDistrictDropdownQuery();
   const { data: getBranchListData, isLoading: getBranchLoading } = useGetBranchDropdownQuery();
 
-  const [register, { isLoading: registerIsLoading, data: registerResponse, error: registerError}] = useRegisterMutation();
+  const [register, { isLoading: registerIsLoading, data: registerResponse, error: registerError }] = useRegisterMutation();
 
   useEffect(() => {
     if (registerResponse) {
@@ -56,7 +176,8 @@ export default function AuthRegister() {
       },)
       if (registerResponse?.status == true) {
         setTimeout(() => {
-          router.push("/app/auth/login")
+          deleteCookie("membership_package_id");
+          router.push(`/app/auth/pay-form/${registerResponse.data[0]}`)
         }, 1000)
       }
     }
@@ -76,11 +197,22 @@ export default function AuthRegister() {
       <Formik
         initialValues={{
           membership_package_id: "",
+          currency_code: "",
+          amount: "",
+          total_amount: "",
+          discount_percentage: "",
+          discount_amount: "",
+          vat: "",
+          vat_amount: "",
+          total: "",
+          coupon_id: "",
+          coupon_code: '',
           person_name: '',
           person_surname: '',
           person_phone_code: '+90',
           person_phone_number: '',
           person_email: '',
+          identity_number: '',
           company_name: '',
           branch_id: "",
           country_id: "",
@@ -96,11 +228,13 @@ export default function AuthRegister() {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           const model = {
             membership_package_id: values.membership_package_id,
+            coupon_code: values.coupon_code.length == 0 ? null : values.coupon_code,
             person_name: values.person_name,
             person_surname: values.person_surname,
             person_phone_code: values.person_phone_code,
             person_phone_number: values.person_phone_number,
             person_email: values.person_email,
+            identity_number: values.identity_number,
             company_name: values.company_name,
             branch_id: values.branch_id,
             country_id: values.country_id,
@@ -114,27 +248,8 @@ export default function AuthRegister() {
       >
         {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <Form>
+            <MemberShipControl />
             <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="company-signup">Paket</InputLabel>
-                  <CustomFormikSelect
-                    name='membership_package_id'
-                    placeholder="Seçim yapınız..."
-                    isLoading={getPackagesLoading}
-                    zIndex={9995}
-                    options={getPackagesList?.data?.map((item) => ({
-                      value: item.value,
-                      label: item.label
-                    }))}
-                    value={
-                      values.membership_package_id ? { label: getPackagesList?.data?.find((item) => item.value == values.membership_package_id)?.label ?? "", value: getPackagesList?.data?.find((item) => item.value == values.membership_package_id)?.value ?? 0 } : null}
-                    onChange={(val: any) => {
-                      setFieldValue("membership_package_id", val?.value ?? 0);
-                    }}
-                  />
-                </Stack>
-              </Grid>
               <Grid item xs={12}>
                 <AuthDivider>
                   <Typography variant="body1">Yetkili Bilgileri</Typography>
@@ -185,50 +300,18 @@ export default function AuthRegister() {
                 )}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="personal-phone">Yetkili Telefon</InputLabel>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Select
-                      MenuProps={{
-                        style: { zIndex: 9999 }
-                      }}
-                      value={values.person_phone_code} name="person_phone_code" onBlur={handleBlur} onChange={handleChange}>
-                      <MenuItem value="+90">+90</MenuItem>
-                      <MenuItem value="+91">+91</MenuItem>
-                      <MenuItem value="1-671">1-671</MenuItem>
-                      <MenuItem value="+36">+36</MenuItem>
-                      <MenuItem value="(225)">(255)</MenuItem>
-                      <MenuItem value="+39">+39</MenuItem>
-                      <MenuItem value="1-876">1-876</MenuItem>
-                      <MenuItem value="+7">+7</MenuItem>
-                      <MenuItem value="(254)">(254)</MenuItem>
-                      <MenuItem value="(373)">(373)</MenuItem>
-                      <MenuItem value="1-664">1-664</MenuItem>
-                      <MenuItem value="+95">+95</MenuItem>
-                      <MenuItem value="(264)">(264)</MenuItem>
-                    </Select>
-                    <TextField
-                      fullWidth
-                      id="person_phone_number"
-                      error={Boolean(touched.person_phone_number && errors.person_phone_number)}
-                      value={values.person_phone_number}
-                      name="person_phone_number"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      placeholder="Yetkili Telefon"
-                      inputProps={{
-                        type: "tel",
-                        maxLength: 10,
-                        inputMode: "numeric",
-                      }}
-                    />
-                  </Stack>
-                </Stack>
-                {touched.person_phone_number && errors.person_phone_number && (
-                  <FormHelperText error id="personal-contact-helper">
-                    {errors.person_phone_number}
-                  </FormHelperText>
-                )}
+                <CustomFormikPhone
+                  label={`Yetkili Telefon`}
+                  placeHolder={`Yetkili Telefon`}
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
+                  namePhoneCode="person_phone_code"
+                  valuePhoneCode={values.person_phone_code}
+                  namePhoneNumber="person_phone_number"
+                  valuePhoneNumber={values.person_phone_number}
+                  touchedPhoneNumber={touched.person_phone_number}
+                  errorPhoneNumber={errors.person_phone_number}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Stack spacing={1}>
@@ -300,12 +383,34 @@ export default function AuthRegister() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Stack spacing={1}>
+                  <InputLabel htmlFor="identity_number">{"VKN/TCKN"}</InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    error={Boolean(touched.identity_number && errors.identity_number)}
+                    id="identity_number"
+                    type="lastname"
+                    value={values.identity_number}
+                    name="identity_number"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder={"VKN/TCKN"}
+                    inputProps={{ maxLength: 11 }}
+                  />
+                </Stack>
+                {touched.identity_number && errors.identity_number && (
+                  <FormHelperText error id="helper-text-company-signup">
+                    {errors.identity_number}
+                  </FormHelperText>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Stack spacing={1}>
                   <InputLabel htmlFor="company-signup">Ülke</InputLabel>
                   <CustomFormikSelect
                     name='country_id'
                     placeholder="Seçim yapınız..."
                     isLoading={getCountryLoading}
-                    zIndex={9995}
+                    zIndex={995}
                     options={getCountryList?.data?.map((item) => ({
                       value: item.value,
                       label: item.label
@@ -329,7 +434,7 @@ export default function AuthRegister() {
                     isLoading={getCityListLoading}
                     value={
                       values.city_id ? { label: getCityListData?.data?.find((item) => item.value == values.city_id)?.label ?? "", value: getCityListData?.data?.find((item) => item.value == values.city_id)?.value ?? 0 } : null}
-                    zIndex={9994}
+                    zIndex={994}
                     onChange={(val: any) => {
                       setFieldValue("city_id", val?.value ?? 0);
                       setFieldValue("district_id", null);
@@ -349,7 +454,7 @@ export default function AuthRegister() {
                     name='district_id'
                     placeholder="Seçim yapınız..."
                     isLoading={getDistrictListLoading}
-                    zIndex={9993}
+                    zIndex={993}
                     value={
                       values.district_id ? { label: getDistrictListData?.data?.find((item) => item.value == values.district_id)?.label ?? "", value: getDistrictListData?.data?.find((item) => item.value == values.district_id)?.value ?? 0 } : null}
                     onChange={(val: any) => {
@@ -385,62 +490,77 @@ export default function AuthRegister() {
                   </FormHelperText>
                 )}
               </Grid>
+              <Grid item xs={12}>
+                <AuthDivider>
+                  <Typography variant="body1">Paket Bilgileri</Typography>
+                </AuthDivider>
+              </Grid>
+              <Grid item xs={12}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="company-signup">Paket</InputLabel>
+                  <CustomFormikSelect
+                    name='membership_package_id'
+                    placeholder="Seçim yapınız..."
+                    isLoading={getPackagesLoading}
+                    zIndex={995}
+                    options={getPackagesList?.data?.map((item) => ({
+                      value: item.membership_package_id,
+                      label: item.name
+                    }))}
+                    value={
+                      values.membership_package_id ? { label: getPackagesList?.data?.find((item) => item.membership_package_id == values.membership_package_id)?.name ?? "", value: getPackagesList?.data?.find((item) => item.membership_package_id == values.membership_package_id)?.membership_package_id ?? "0" } : null}
+                    onChange={(val: any) => {
+                      setFieldValue("membership_package_id", val?.value ?? "0");
+                      const filter = getPackagesList?.data?.find((item) => item.membership_package_id == val.value);
+                      setFieldValue("currency_code", filter?.currency_code);
+                      setFieldValue("amount", filter?.amount);
+                      setFieldValue("total_amount", filter?.amount);
+                      setFieldValue("vat", filter?.vat);
+                      setFieldValue("vat_amount", filter?.vat_amount);
+                      setFieldValue("total", filter?.total);
+                      if (values.coupon_code != null) {
+                        setFieldValue("coupon_code", "");
+                      }
+                    }}
+                  />
+                </Stack>
+              </Grid>
+              {values.membership_package_id &&
+                <>
+                  <CouponCheckValidity getPackagesList={getPackagesList} />
+                  <Grid container flexDirection={"column"} alignContent="flex-end" marginTop={2}>
+                    <Grid item xs={6}>
+                      <Stack spacing={2}>
+                        <Stack direction="row" justifyContent="space-between">
+                          <Typography color="grey.500">{`${intl.formatMessage({ id: "amount" })}:`}</Typography>
+                          <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.amount))}`}</Typography>
+                        </Stack>
+                        <Stack direction="row" justifyContent="space-between">
+                          <Typography color="grey.500">{`${intl.formatMessage({ id: "vat" })} (%${values.vat}):`}</Typography>
+                          <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.vat))}`}</Typography>
+                        </Stack>
+                        <Stack direction="row" justifyContent="space-between">
+                          <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
+                          <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.total_amount))}`}</Typography>
+                        </Stack>
+                        {values.discount_amount && <Stack direction="row" justifyContent="space-between">
+                          <Typography color="grey.500">{`${intl.formatMessage({ id: "discountText" }, { coupon_code: values.coupon_code, discount_percentage: values.discount_percentage })} `}</Typography>
+                          <Typography>{` ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.discount_amount))}`}</Typography>
+                        </Stack>}
+                        <Stack direction="row" justifyContent="space-between" spacing={7}>
+                          <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>
+                          <Typography variant="subtitle1">
+                            {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.total))}`}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </>}
               <Grid item xs={12} sm={12}>
-                <Grid container flexDirection={"row"} alignItems={"center"} justifyContent={"start"} marginLeft={"-11px"}>
-                  <Grid><Checkbox name='membershipAgreement' onChange={handleChange} /></Grid>
-                  <Grid>
-                    <Typography
-                      component={Link}
-                      href={"#"}
-                      variant="body2"
-                      sx={{ textDecoration: 'none' }}
-                      color="primary"
-                    >
-                      {"Üyelik Sözleşmesi *"}
-                    </Typography><>{" Okudum ve Kabul Ediyorum."}</></Grid>
-                  {touched.membershipAgreement && errors.membershipAgreement && (
-                    <Grid> <FormHelperText style={{ marginTop: 0 }} error id="membershipAgreement">
-                      {`(${errors.membershipAgreement})`}
-                    </FormHelperText></Grid>
-                  )}
-                </Grid>
-                <Grid container flexDirection={"row"} alignItems={"center"} justifyContent={"start"} marginLeft={"-11px"}>
-                  <Grid><Checkbox name='illuminationText' onChange={handleChange} /></Grid>
-                  <Grid>
-                    <Typography
-                      component={Link}
-                      href={"#"}
-                      variant="body2"
-                      sx={{ textDecoration: 'none' }}
-                      color="primary"
-                    >
-                      {"Aydınlatma Metni *"}
-                    </Typography><>{" Okudum ve Kabul Ediyorum."}</></Grid>
-                  {touched.illuminationText && errors.illuminationText && (
-                    <Grid> <FormHelperText style={{ marginTop: 0 }} error id="illuminationText">
-                      {`(${errors.illuminationText})`}
-                    </FormHelperText></Grid>
-                  )}
-                </Grid>
-                <Grid container flexDirection={"row"} alignItems={"center"} justifyContent={"start"} marginLeft={"-11px"}>
-                  <Grid><Checkbox name='kvkk' onChange={handleChange} /></Grid>
-                  <Grid>
-                    <Typography
-                      component={Link}
-                      href={"#"}
-                      variant="body2"
-                      sx={{ textDecoration: 'none' }}
-                      color="primary"
-                    >
-                      {"Kişisel Verilerin İşlenmesine ilişkin Açık Rıza"}
-                    </Typography><>{" Okudum ve Kabul Ediyorum."}</></Grid>
-                  {touched.kvkk && errors.kvkk && (
-                    <Grid> <FormHelperText style={{ marginTop: 0 }} error id="kvkk">
-                      {`(${errors.kvkk})`}
-                    </FormHelperText></Grid>
-                  )}
-                </Grid>
-
+                <AuthFormsUyelikSozlesmesi />
+                <AuthFormsAydinlatmaMetni />
+                <AuthFormsKvkk />
               </Grid>
               <Grid item xs={12}>
                 <AnimateButton>

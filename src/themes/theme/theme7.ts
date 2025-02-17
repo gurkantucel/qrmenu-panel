@@ -9,12 +9,12 @@ import { PaletteThemeProps } from 'types/theme';
 export default function Theme7(mode: ThemeMode): PaletteThemeProps {
   const contrastText = '#fff';
 
-  let primaryColors = ['#d1e8d99c', '#8cdba9', '#63cf8e', '#3ec277', '#1db564', '#00a854', '#008245', '#005c34', '#003620', '#000f0a'];
+  let primaryColors = ['#d1e8d99c', '#8cdba9', '#63cf8e', '#3ec277', '#1db564', '#60d99d', '#008245', '#005c34', '#003620', '#000f0a'];
   let secondaryColors = ['#F8F9FA', '#F8F9FA', '#F3F5F7', '#DBE0E5', '#BEC8D0', '#8996A4', '#5B6B79', '#3E4853', '#1D2630', '#131920'];
   let errorColors = ['#FDE8E7', '#F25E52', '#F04134', '#EE3B2F', '#E92A21'];
   let warningColors = ['#FFF7E0', '#FFC926', '#FFBF00', '#FFB900', '#FFA900'];
   let infoColors = ['#E0F4F5', '#26B0BA', '#00A2AE', '#009AA7', '#008694'];
-  let successColors = ['#E0F5EA', '#26B56E', '#00A854', '#00A04D', '#008D3A'];
+  let successColors = ['#E0F5EA', '#26B56E', '#60d99d', '#00A04D', '#008D3A'];
 
   if (mode === ThemeMode.DARK) {
     primaryColors = ['#1a2721', '#173728', '#15472e', '#115c36', '#0b7841', '#05934c', '#1da65d', '#3cba73', '#61ca8b', '#8ad7a6'];

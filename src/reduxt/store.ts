@@ -24,6 +24,8 @@ import smsTemplateApi from './features/sms-template/sms-template-api'
 import personTypeApi from './features/settings/person-type-api'
 import makeAnOfferApi from './features/make-an-offer/make-an-offer-api'
 import allergyHistoryApi from './features/patient/allergy-history-api'
+import couponApi from './features/coupon/coupon-api'
+import staticPageApi from './features/static-page/static-page-api'
 
 export const store = configureStore({
   reducer: {
@@ -52,6 +54,8 @@ export const store = configureStore({
     [smsTemplateApi.reducerPath] : smsTemplateApi.reducer,
     [personTypeApi.reducerPath] : personTypeApi.reducer,
     [makeAnOfferApi.reducerPath] : makeAnOfferApi.reducer,
+    [couponApi.reducerPath] : couponApi.reducer,
+    [staticPageApi.reducerPath] : staticPageApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -74,7 +78,9 @@ export const store = configureStore({
     appointmentProcessApi.middleware,
     smsTemplateApi.middleware,
     personTypeApi.middleware,
-    makeAnOfferApi.middleware
+    makeAnOfferApi.middleware,
+    couponApi.middleware,
+    staticPageApi.middleware
   ]),
 })
 

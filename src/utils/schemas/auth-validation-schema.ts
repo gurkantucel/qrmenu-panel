@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const registerValidationSchema = Yup.object({
     //membership_package_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    membership_package_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    membership_package_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     person_name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(1, "Çok Kısa")
@@ -13,18 +13,21 @@ const registerValidationSchema = Yup.object({
         .min(1, "Çok Kısa")
         .max(100, "Çok Uzun")
         .required("Bu alan zorunlu"),
-    person_phone_number: Yup.string().min(10,"10 haneli telefon numaranızı girin.").max(10, "10 haneli telefon numaranızı girin.")
+    person_phone_number: Yup.string().min(10, "10 haneli telefon numaranızı girin.").max(10, "10 haneli telefon numaranızı girin.")
         .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
     person_email: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
+    identity_number: Yup.string()
+        .required('Vergi kimlik numarası gereklidir')
+        .matches(/^[0-9]{10,11}$/, 'VKN/TCKN 10 veya 11 haneli olmalıdır.'),
     company_name: Yup.string()
         .matches(/^[a-zA-Z0-9ğüşıöçİĞÜŞÖÇ&.]+(?: [a-zA-Z0-9ğüşıöçİĞÜŞÖÇ&.]+)*$/, { message: "Boşluklar ve özel karakterler içermemelidir." })
         .min(1, "Çok Kısa")
         .max(200, "Çok Uzun")
         .required("Bu alan zorunlu"),
-    branch_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    country_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    city_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-    district_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    branch_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    country_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    city_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
+    district_id: Yup.string().min(36, "Seçim yapın.").required("Bu alan zorunlu"),
     address: Yup.string()
         .matches(/^\S+(?: \S+)*$/, { message: "Boşluklar içermemelidir." })
         .min(15, "Çok Kısa")
@@ -45,4 +48,4 @@ const loginValidationSchema = Yup.object({
 })
 
 
-export { registerValidationSchema, loginValidationSchema}
+export { registerValidationSchema, loginValidationSchema }
