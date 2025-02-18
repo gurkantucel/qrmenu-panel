@@ -147,6 +147,9 @@ export async function POST(req: NextRequest) {
             coupon_discount_percentage: model.coupon_discount_percentage,
             product_name: model.product_name
         }
+
+        console.log(responseJsonResponse);
+
         if (response.status == 200) {
             return Response.json({
                 ...responseJsonResponse,
