@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import AnimateButton from 'components/@extended/AnimateButton';
 import Link from 'next/link';
 import AuthWrapper2 from 'sections/auth/AuthWrapper2';
+
 const PaySuccessPage = () => {
     return (
         <AuthWrapper2>

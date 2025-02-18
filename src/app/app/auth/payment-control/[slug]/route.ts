@@ -49,9 +49,9 @@ export async function POST(req: NextRequest) {
             console.log("iyzicoResult", iyzicoResult);
             console.log(req.url);
             if (iyzicoResult.status == "success") {
-                return NextResponse.redirect(new URL(`/app/auth/pay-success/${conversationId}`, req.url))
+                return NextResponse.redirect(new URL(`/app/auth/pay-success/${conversationId}`, Constants.URL()));
             }
-            return NextResponse.redirect(new URL('/register', req.url))
+            return NextResponse.redirect(new URL('/app/auth/register', req.url))
         }
 
     } catch (error) {
