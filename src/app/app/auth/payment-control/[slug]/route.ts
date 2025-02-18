@@ -4,7 +4,7 @@ import CryptoJS from 'crypto-js';
 
 export async function POST(req: NextRequest) {
     try {
-        console.log(JSON.stringify(req));
+        //console.log(JSON.stringify(req));
         const body = await req.text();
 
         const apiKey = Constants.IYZICOAPIKEY();
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
             console.log("iyzicoResult", iyzicoResult);
             console.log(req.url);
             if (iyzicoResult.status == "success") {
-                return NextResponse.redirect(new URL(`/app/auth/pay-success/${conversationId}`, Constants.URL()));
+                return NextResponse.redirect(new URL(`/app/auth/pay-success/${conversationId}`, req.url));
             }
             return NextResponse.redirect(new URL('/app/auth/register', req.url))
         }
