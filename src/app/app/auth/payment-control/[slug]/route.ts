@@ -15,8 +15,6 @@ export async function POST(req: NextRequest) {
         console.log("pathname", req.nextUrl.pathname);
         const conversationId = req.nextUrl.pathname.split("/")[4];
 
-        console.log("conversationId", conversationId);
-
         const raw = JSON.stringify({
             "locale": "tr",
             "conversationId": conversationId,

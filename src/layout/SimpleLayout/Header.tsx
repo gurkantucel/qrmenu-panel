@@ -75,7 +75,7 @@ export default function Header() {
   const ispValue = params.get('isp');
   const ispValueAvailable = ispValue !== null && parseInt(ispValue) === 1;
 
-  const url = ispValueAvailable ? '#' : '#';
+  const url = ispValueAvailable ? '/app/auth/login' : '/app/auth/login';
 
   const linksSx = {
     textDecoration: 'none'

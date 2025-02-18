@@ -40,7 +40,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'patients',
-                code: "00002",
+                code: "00025",
                 title: "Danışanlar",
                 type: 'item',
                 url: '/app/patient',
@@ -48,7 +48,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'person',
-                code: "00003",
+                code: "00038",
                 title: "Çalışanlar",
                 type: 'item',
                 url: '/app/person',
@@ -56,7 +56,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'files',
-                code: "00004",
+                code: "00029",
                 title: "Dosyalar",
                 type: 'item',
                 url: '/app/files',
@@ -64,7 +64,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'make-an-offer',
-                code: "00005",
+                code: "00041",
                 title: "Teklif Ver",
                 type: 'item',
                 url: '/app/make-an-offer',
@@ -80,7 +80,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'sms-transactions',
-                code: "00007",
+                code: "00042",
                 title: "SMS İşlemleri",
                 type: 'item',
                 url: '/app/sms-transactions',
@@ -88,7 +88,7 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'statistics',
-                code: "00008",
+                code: "00049",
                 title: "İstatistikler",
                 type: 'item',
                 url: '/app/statistics',
@@ -103,21 +103,21 @@ const permissionControlMenu = () => {
                 children: [
                     {
                         id: 'appointment-process',
-                        code: "00009",
+                        code: "00002",
                         title: "Randevu İşlemleri",
                         type: 'item',
                         url: '/app/settings/appointment-process',
                     },
                     {
                         id: 'sms-template',
-                        code: "00010",
+                        code: "00048",
                         title: "SMS Şablonları",
                         type: 'item',
                         url: '/app/settings/sms-template',
                     },
                     {
                         id: 'person-type',
-                        code: "00011",
+                        code: "00047",
                         title: "Çalışan Türleri",
                         type: 'item',
                         url: '/app/settings/person-type',

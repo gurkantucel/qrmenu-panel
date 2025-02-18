@@ -16,6 +16,7 @@ import Logo from 'components/logo';
 
 // assets
 import { Dribbble, Facebook, Link2, Youtube, Xrp } from 'iconsax-react';
+import LogoBankIcons from 'sections/landing/LogoBankIcons';
 
 // link - custom style
 const FooterLink = styled(Link)(({ theme }) => ({
@@ -75,54 +76,45 @@ export default function FooterBlock({ isFull }: showProps) {
               <Grid container spacing={{ xs: 5, md: 2 }}>
                 <Grid item xs={6} sm={4}>
                   <Stack spacing={3}>
-                    <Typography variant="h5">Company</Typography>
+                    <Typography variant="h5">Sözleşmeler</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="https://1.envato.market/xk3bQd" target="_blank" underline="none">
-                        Profile
+                      <FooterLink href="/article/uyelik-sozlesmesi" target="_blank" underline="none">
+                        {"Üyelik Sözleşmesi"}
                       </FooterLink>
-                      <FooterLink href="https://1.envato.market/Qyre4x" target="_blank" underline="none">
-                        Portfolio
+                      <FooterLink href="/article/aydinlatma-metni" target="_blank" underline="none">
+                        {"Aydınlatma Metni"}
                       </FooterLink>
-                      <FooterLink href="https://1.envato.market/Py9k4X" target="_blank" underline="none">
-                        Follow Us
+                      <FooterLink href="/article/kisisel-verilerin-islenmesine-iliskin-acik-riza" target="_blank" underline="none">
+                        {"Kişisel Verilerin İşlenmesine ilişkin Açık Rıza"}
                       </FooterLink>
-                      <FooterLink href="https://phoenixcoded.net" target="_blank" underline="none">
-                        Website
+                      <FooterLink href="/article/teslim-iade-sartlari" target="_blank" underline="none">
+                        {"Teslimat ve İade Şartları"}
                       </FooterLink>
                     </Stack>
                   </Stack>
                 </Grid>
                 <Grid item xs={6} sm={4}>
                   <Stack spacing={3}>
-                    <Typography variant="h5">Help & Support</Typography>
+                    <Typography variant="h5">Klinik Ease</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro" target="_blank" underline="none">
-                        Documentation
+                      <FooterLink href="article/hakkimizda" target="_blank" underline="none">
+                        {"Hakkımızda"}
                       </FooterLink>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro/v/nextjs/roadmap/" target="_blank" underline="none">
-                        Feature Request
-                      </FooterLink>
-                      <FooterLink href="https://phoenixcoded.gitbook.io/able-pro/v/nextjs/roadmap" target="_blank" underline="none">
-                        RoadMap
-                      </FooterLink>
-                      <FooterLink href="https://phoenixcoded.authordesk.app/" target="_blank" underline="none">
-                        Support
-                      </FooterLink>
-                      <FooterLink href="https://themeforest.net/user/phoenixcoded#contact" target="_blank" underline="none">
-                        Email Us
+                      <FooterLink href="/iletisim" target="_blank" underline="none">
+                        {"İletişim"}
                       </FooterLink>
                     </Stack>
                   </Stack>
                 </Grid>
                 <Grid item xs={6} sm={4}>
                   <Stack spacing={3}>
-                    <Typography variant="h5">Useful Resources</Typography>
+                    <Typography variant="h5">{"Özellikler"}</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="https://themeforest.net/page/item_support_policy" target="_blank" underline="none">
-                        Support Policy
+                      <FooterLink href="#" target="_blank" underline="none">
+                        {"Öne Çıkan Özellikler"}
                       </FooterLink>
-                      <FooterLink href="https://themeforest.net/licenses/standard" target="_blank" underline="none">
-                        Licenses Term
+                      <FooterLink href="#" target="_blank" underline="none">
+                        {"Blog"}
                       </FooterLink>
                     </Stack>
                   </Stack>
@@ -145,6 +137,7 @@ export default function FooterBlock({ isFull }: showProps) {
               <Typography>
                 2025 - KlinikEase
               </Typography>
+              <LogoBankIcons />
             </Grid>
             <Grid item xs={12} sm={4}>
               <Grid container spacing={2} alignItems="center" sx={{ justifyContent: 'flex-end' }}>
