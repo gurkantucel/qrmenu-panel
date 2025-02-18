@@ -58,6 +58,13 @@ export async function POST(req: NextRequest) {
         const apiKey = Constants.IYZICOAPIKEY();
         const secretKey = Constants.IYZICOSECRETKEY();
 
+        console.log(`url: ${callbackUrl}`);
+        console.log(`ApiUrl: ${Constants.APIURL()}`);
+        console.log(`apiKey: ${apiKey}`);
+        console.log(`secretKey: ${secretKey}`);
+        console.log(`IYZICOAPIURL: ${Constants.IYZICOAPIURL()}`)
+
+
         const randomKey = new Date().getTime() + "KLINIKHGT7837";
         const uri_path = "/payment/iyzipos/checkoutform/initialize/auth/ecom";
 
