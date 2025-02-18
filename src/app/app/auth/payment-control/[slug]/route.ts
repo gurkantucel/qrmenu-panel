@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
 
         if (response.status == 200) {
             const iyzicoResult = await response.json();
-            console.log("iyzicoResult", iyzicoResult);
-            console.log(req.url);
+            //console.log("iyzicoResult", iyzicoResult);
+            //console.log(req.url);
             if (iyzicoResult.status == "success") {
                 return NextResponse.redirect(new URL(`/app/auth/pay-success/${conversationId}`, req.url));
             }
