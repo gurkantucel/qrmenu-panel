@@ -28,11 +28,12 @@ import PuffLoader from 'react-spinners/PuffLoader';
 import CustomFormikPhone from 'components/third-party/formik/custom-formik-phone';
 import { useIntl } from 'react-intl';
 import { deleteCookie, getCookie } from 'cookies-next';
-import { MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
+import { MembershipPackagesListData, MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
 import { useLazyGetCouponCheckValidityQuery } from 'reduxt/features/coupon/coupon-api';
 import AuthFormsAydinlatmaMetni from './auth-form-article/AydinlatmaMetni';
 import AuthFormsUyelikSozlesmesi from './auth-form-article/UyelikSozlesmesi';
 import AuthFormsKvkk from './auth-form-article/KvkkMetni';
+import { useAppSelector } from 'reduxt/hooks';
 
 type CouponCheckProps = {
   getPackagesList?: MembershipPackagesListModel
@@ -43,11 +44,26 @@ type CouponCheckProps = {
 const MemberShipControl = () => {
   const { setFieldValue } = useFormikContext();
   const cookie = getCookie("membership_package_id");
+  const getMembershipPackagesDetail: MembershipPackagesListModel | undefined | any = useAppSelector((state) => state.definitionApi.queries["getMembershipPackagesDetail(undefined)"]?.data);
+
   useEffect(() => {
     if (cookie != null) {
       setFieldValue("membership_package_id", cookie);
     }
   }, [setFieldValue])
+
+  useEffect(()=>{
+    if(getMembershipPackagesDetail?.data && cookie){
+      const filter: MembershipPackagesListData = getMembershipPackagesDetail?.data?.find((item:any) => item.membership_package_id == cookie);
+      setFieldValue("amount", filter?.amount);
+      setFieldValue("total_amount", filter?.total);
+      setFieldValue("vat", filter?.vat);
+      setFieldValue("vat_amount", filter?.vat_amount);
+      setFieldValue("discount_amount", "");
+      setFieldValue("total", filter?.total);
+    }
+  },[getMembershipPackagesDetail,cookie])
+
   return null;
 }
 
@@ -197,7 +213,7 @@ export default function AuthRegister() {
       <Formik
         initialValues={{
           membership_package_id: "",
-          currency_code: "",
+          currency_code: "TRY",
           amount: "",
           total_amount: "",
           discount_percentage: "",
@@ -545,7 +561,7 @@ export default function AuthRegister() {
                         </Stack>
                         {values.discount_amount && <Stack direction="row" justifyContent="space-between">
                           <Typography color="grey.500">{`${intl.formatMessage({ id: "discountText" }, { coupon_code: values.coupon_code, discount_percentage: values.discount_percentage })} `}</Typography>
-                          <Typography>{` ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.discount_amount))}`}</Typography>
+                          <Typography>{` ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code ?? "TRY" }).format(Number(values.discount_amount))}`}</Typography>
                         </Stack>}
                         <Stack direction="row" justifyContent="space-between" spacing={7}>
                           <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>

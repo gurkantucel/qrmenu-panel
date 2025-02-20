@@ -4,10 +4,9 @@ import { getHomeMembershipPackages } from 'app/(simple)/landing/actions';
 import MainCard from 'components/MainCard';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
-import React, { Fragment, useEffect, useState } from 'react'
-import { MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
+import React, { Fragment} from 'react'
 
-const PriceLandingPage = () => {
+const PriceLandingPage = async () => {
 
     const router = useRouter();
 
@@ -29,26 +28,13 @@ const PriceLandingPage = () => {
         lineHeight: 1
     };
 
-    const [result, setResult] = useState<MembershipPackagesListModel | null>(null);
-
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await getHomeMembershipPackages();
-                setResult(response?.data);
-            } catch (err: any) {
-            }
-        }
-
-        fetchData();
-    }, []);
+    const result = await getHomeMembershipPackages();
 
     return (
         <Box sx={{ bgcolor: 'secondary.200', pb: { md: 10, xs: 7 }, pt: 4 }}>
             <Container>
                 <Grid item container spacing={3} xs={12} alignItems="center">
-                    {result != null && result.data.map((plan, index) => (
+                    {result != null && result.data.data.map((plan: any, index: number) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <MainCard>
                                 <Grid container spacing={3}>
@@ -83,8 +69,8 @@ const PriceLandingPage = () => {
                                                     </Stack>
                                                 </Grid>
                                                 <Grid item xs={12}>
-                                                    <Button type='button' color={plan.featured ? 'primary' : 'secondary'} variant={plan.featured ? 'contained' : 'outlined'} fullWidth onClick={()=>{
-                                                        setCookie("membership_package_id",plan.membership_package_id);
+                                                    <Button type='button' color={plan.featured ? 'primary' : 'secondary'} variant={plan.featured ? 'contained' : 'outlined'} fullWidth onClick={() => {
+                                                        setCookie("membership_package_id", plan.membership_package_id);
                                                         router.push("app/auth/register");
                                                     }}>
                                                         Satın Al
@@ -105,7 +91,7 @@ const PriceLandingPage = () => {
                                             }}
                                             component="ul"
                                         >
-                                            {plan.detail.map((list, i) => (
+                                            {plan.detail?.map((list: any, i: number) => (
                                                 <Fragment key={i}>
                                                     <ListItem sx={!plan.detail.includes(list) ? priceListDisable : {}}>
                                                         <ListItemText primary={list.name} sx={{ textAlign: 'center' }} />

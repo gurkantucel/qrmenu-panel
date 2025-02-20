@@ -1,31 +1,27 @@
-"use client"
-
 import { Box, Container, Grid, Typography } from '@mui/material'
 import Breadcrumbs from 'components/@extended/Breadcrumbs'
 import MainCard from 'components/MainCard'
 import { APP_DEFAULT_PATH } from 'config';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { getStaticPage } from './actions';
-import { StaticPageResultModel } from 'reduxt/features/static-page/models/static-page-model';
-import { useParams } from 'next/navigation';
+import { Metadata } from 'next';
 
-const ArticlePage = () => {
+type Params = {
+    params: {
+        slug: string
+    }
+}
 
-    const [result, setResult] = useState<StaticPageResultModel | null>(null);
+export const generateMetadata = async ({params}:Params): Promise<Metadata | undefined> => {
+    const result = await getStaticPage(params?.slug);
+    if(!result || result.status == "failure"){
+        return;
+    }
+    return { title: result.data.data.title, description: result.data.data.description };
+};
 
-    const params = useParams<{ slug: string }>()
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await getStaticPage(params.slug);
-                setResult(response?.data);
-            } catch (err: any) {
-            }
-        }
-
-        fetchData();
-    }, []);
+const ArticlePage = async ({params}: Params) => {
+    const result = await getStaticPage(params?.slug);
 
     return (
         <Box sx={{ pt: 15, pb: 10.5 }}>
@@ -33,7 +29,7 @@ const ArticlePage = () => {
                 {result && result.data && <Grid container spacing={2}>
                     <Breadcrumbs custom links={[
                         { title: 'Ana Sayfa', to: APP_DEFAULT_PATH },
-                        { title: result.data.title }
+                        { title: result.data.data.title }
                     ]} />
                     <Grid item xs={12}>
                         <MainCard
@@ -41,7 +37,7 @@ const ArticlePage = () => {
                         >
                             <Typography variant="body1">
                                 <div
-                                    dangerouslySetInnerHTML={{ __html: result.data.content ?? "" }}
+                                    dangerouslySetInnerHTML={{ __html: result.data.data.content ?? "" }}
                                 />
                             </Typography>
                         </MainCard>

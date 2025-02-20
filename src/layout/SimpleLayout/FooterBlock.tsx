@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 import Logo from 'components/logo';
 
 // assets
-import { Dribbble, Facebook, Link2, Youtube, Xrp } from 'iconsax-react';
+import { Youtube, Instagram } from 'iconsax-react';
 import LogoBankIcons from 'sections/landing/LogoBankIcons';
 
 // link - custom style
@@ -78,17 +78,17 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">Sözleşmeler</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="/article/uyelik-sozlesmesi" target="_blank" underline="none">
+                      <FooterLink href="/teslimat-ve-iade-sartlari" target="_blank" underline="none">
+                        {"Teslimat ve İade Şartları"}
+                      </FooterLink>
+                      <FooterLink href="/uyelik-sozlesmesi" target="_blank" underline="none">
                         {"Üyelik Sözleşmesi"}
                       </FooterLink>
-                      <FooterLink href="/article/aydinlatma-metni" target="_blank" underline="none">
-                        {"Aydınlatma Metni"}
+                      <FooterLink href="/gizlilik-sozlesmesi" target="_blank" underline="none">
+                        {"Gizlilik Sözleşmesi"}
                       </FooterLink>
-                      <FooterLink href="/article/kisisel-verilerin-islenmesine-iliskin-acik-riza" target="_blank" underline="none">
-                        {"Kişisel Verilerin İşlenmesine ilişkin Açık Rıza"}
-                      </FooterLink>
-                      <FooterLink href="/article/teslim-iade-sartlari" target="_blank" underline="none">
-                        {"Teslimat ve İade Şartları"}
+                      <FooterLink href="/mesafeli-satis-sozlesmesi" target="_blank" underline="none">
+                        {"Mesafeli Satış Sözleşmesi"}
                       </FooterLink>
                     </Stack>
                   </Stack>
@@ -97,7 +97,7 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">Klinik Ease</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="article/hakkimizda" target="_blank" underline="none">
+                      <FooterLink href="/hakkimizda" target="_blank" underline="none">
                         {"Hakkımızda"}
                       </FooterLink>
                       <FooterLink href="/iletisim" target="_blank" underline="none">
@@ -142,36 +142,15 @@ export default function FooterBlock({ isFull }: showProps) {
             <Grid item xs={12} sm={4}>
               <Grid container spacing={2} alignItems="center" sx={{ justifyContent: 'flex-end' }}>
                 <Grid item>
-                  <Tooltip title="Linkedin">
-                    <Link href="https://in.linkedin.com/company/phoenixcoded" underline="none" target="_blank" sx={linkSX}>
-                      <Link2 variant="Bold" size={24} />
-                    </Link>
-                  </Tooltip>
-                </Grid>
-                <Grid item>
-                  <Tooltip title="Twitter">
-                    <Link href="https://twitter.com/phoenixcoded?lang=en" underline="none" target="_blank" sx={linkSX}>
-                      <Xrp variant="Bold" size={16} />
-                    </Link>
-                  </Tooltip>
-                </Grid>
-                <Grid item>
-                  <Tooltip title="Facebook">
-                    <Link href="https://www.facebook.com/Phoenixcoded/" underline="none" target="_blank" sx={linkSX}>
-                      <Facebook variant="Bold" size={20} />
-                    </Link>
-                  </Tooltip>
-                </Grid>
-                <Grid item>
-                  <Tooltip title="Dribbble">
-                    <Link href="https://dribbble.com/Phoenixcoded" underline="none" target="_blank" sx={linkSX}>
-                      <Dribbble variant="Bold" size={20} />
+                  <Tooltip title="Instagram">
+                    <Link href="#" underline="none" target="_blank" sx={linkSX}>
+                      <Instagram variant='Bold' size={20} />
                     </Link>
                   </Tooltip>
                 </Grid>
                 <Grid item>
                   <Tooltip title="Youtube">
-                    <Link href="https://www.youtube.com/@Phoenixcodedwebsolution?app=desktop" underline="none" target="_blank" sx={linkSX}>
+                    <Link href="#" underline="none" target="_blank" sx={linkSX}>
                       <Youtube variant="Bold" size={20} />
                     </Link>
                   </Tooltip>
