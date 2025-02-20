@@ -553,7 +553,7 @@ export default function AuthRegister() {
                         </Stack>
                         <Stack direction="row" justifyContent="space-between">
                           <Typography color="grey.500">{`${intl.formatMessage({ id: "vat" })} (%${values.vat}):`}</Typography>
-                          <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.vat))}`}</Typography>
+                          <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.currency_code }).format(Number(values.vat_amount))}`}</Typography>
                         </Stack>
                         <Stack direction="row" justifyContent="space-between">
                           <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
