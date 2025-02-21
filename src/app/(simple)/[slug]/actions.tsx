@@ -1,10 +1,7 @@
 'use server'
-
-import { cache } from "react";
 import Constants from "utils/Constants"
 
-
-export const getStaticPage = cache(async (slug: string) => {
+export const getStaticPage = (async (slug: string) => {
     try {
         const result = await fetch(`${Constants.APIURL()}/api/definition/static-page/read?slug=${slug}`)
         if (result.status == 200) {
