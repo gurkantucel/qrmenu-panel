@@ -30,7 +30,7 @@ import { ThemeMode } from 'config';
 
 // assets
 const avatar1 = '/assets/images/users/avatar-6.png';
-import { Setting2, Profile, Logout } from 'iconsax-react';
+import { Profile, Logout } from 'iconsax-react';
 import { deleteCookie} from 'cookies-next';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                         </Stack>
                       </Grid>
                       <Grid item>
-                        <Tooltip title="Logout">
+                        <Tooltip title="Çıkış">
                           <IconButton size="large" color="error" sx={{ p: 1 }} onClick={handleLogout}>
                             <Logout variant="Bulk" />
                           </IconButton>
@@ -188,10 +188,10 @@ export default function ProfilePage() {
                           textTransform: 'capitalize'
                         }}
                         icon={<Profile size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Profile"
+                        label="Profil"
                         {...a11yProps(0)}
                       />
-                      <Tab
+                      {/*<Tab
                         sx={{
                           display: 'flex',
                           flexDirection: 'row',
@@ -199,10 +199,10 @@ export default function ProfilePage() {
                           alignItems: 'center',
                           textTransform: 'capitalize'
                         }}
-                        icon={<Setting2 size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Setting"
+                        icon={<InfoCircle size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
+                        label="Yardım"
                         {...a11yProps(1)}
-                      />
+                      />*/}
                     </Tabs>
                   </Box>
                   <TabPanel value={value} index={0} dir={theme.direction}>

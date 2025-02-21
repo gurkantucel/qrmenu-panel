@@ -89,7 +89,8 @@ export default function HeroPage() {
                       component="span"
                       sx={{
                         fontSize: 'inherit',
-                        background: 'linear-gradient(90deg, rgb(37, 161, 244), rgb(249, 31, 169), rgb(37, 161, 244)) 0 0 / 400% 100%',
+                        /*background: 'linear-gradient(90deg, rgb(37, 161, 244), rgb(249, 31, 169), rgb(37, 161, 244)) 0 0 / 400% 100%',*/
+                        background: 'linear-gradient(90deg, rgb(96 217 157), rgb(52 139 63), rgb(96 217 157)) 0 0 / 400% 100%',
                         color: 'transparent',
                         WebkitBackgroundClip: 'text',
                         backgroundClip: 'text',

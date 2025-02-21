@@ -78,7 +78,7 @@ export const modalSlice = createSlice({
             state.data = action.payload
         },
         closeModal: (state) => {
-            state.data = { open: false }
+            state.data = { open: false, id: undefined }
         },
         resetModalState: () => initialState
     }

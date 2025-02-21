@@ -143,7 +143,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     <IconButton shape="rounded" variant="contained"
                                                                         color="secondary"
                                                                         size="small" onClick={() => {
-                                                                            arrayHelpers.insert(index, {
+                                                                            arrayHelpers.push({
                                                                                 appointment_id: data.appointment_id,
                                                                                 patient_id: data.patient_id,
                                                                                 appointment_process_id: null,

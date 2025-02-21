@@ -91,7 +91,7 @@ const AddPatientModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (readPatientData?.data != null) {
+        if (id !=null && readPatientData?.data != null) {
             const model: PatientCreateBodyModel = {
                 patient_id: readPatientData.data.patient_id,
                 gender_id: readPatientData.data.gender_id,
@@ -496,7 +496,7 @@ const AddPatientModal = () => {
                                                 name='patient_reference_id'
                                                 placeholder="Seçim yapınız..."
                                                 isLoading={getPatientReferenceListLoading}
-                                                zIndex={9993}
+                                                zIndex={9992}
                                                 value={
                                                     values.patient_reference_id ? { label: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.label ?? "", value: getPatientReferenceListData?.data?.find((item) => item.value == values.patient_reference_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {

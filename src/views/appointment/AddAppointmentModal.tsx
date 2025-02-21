@@ -145,7 +145,7 @@ const AddAppointmentModal = (props: Props) => {
                         patient_phone_number: null,
                         patient_birthdate: null,
                         person_id: null,
-                        appointment_status_id: 1,
+                        appointment_status_id: null,
                         all_day: false,
                         appointment_start: null,
                         appointment_duration: 30,
@@ -329,7 +329,7 @@ const AddAppointmentModal = (props: Props) => {
                                                 placeholder="Doktor/Çalışan Seçin"
                                                 isClearable={true}
                                                 isLoading={getAcceptingAppointmentListLoading}
-                                                zIndex={9998}
+                                                zIndex={997}
                                                 value={
                                                     values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
@@ -352,7 +352,7 @@ const AddAppointmentModal = (props: Props) => {
                                                 placeholder="Randevu Durumu Seçin"
                                                 isClearable={true}
                                                 isLoading={getAppointmentStatusDropdownLoading}
-                                                zIndex={9997}
+                                                zIndex={996}
                                                 value={
                                                     values.appointment_status_id ? { label: getAppointmentStatusData?.data?.find((item) => item.value == values.appointment_status_id)?.label ?? "", value: getAppointmentStatusData?.data?.find((item) => item.value == values.appointment_status_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
