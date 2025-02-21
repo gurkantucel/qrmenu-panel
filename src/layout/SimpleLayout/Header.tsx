@@ -112,13 +112,13 @@ export default function Header() {
                 sx={{ ml: theme.direction === ThemeDirection.RTL ? 3 : 0 }}
                 color="secondary.main"
                 component={Link}
-                href="/login"
+                href="/landing"
                 target="_blank"
                 underline="none"
               >
                 Ana Sayfa
               </Links>
-              <Links className="header-link" color="secondary.main" component={Link} href="/components-overview/buttons" underline="none">
+              <Links className="header-link" color="secondary.main" component={Link} href="/hakkimizda" underline="none">
                 Hakkımızda
               </Links>
               <Links
@@ -186,7 +186,7 @@ export default function Header() {
                   onKeyDown={drawerToggler(false)}
                 >
                   <List>
-                    <Links sx={linksSx} href="/login" target="_blank">
+                    <Links sx={linksSx} href="/landing" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -194,7 +194,7 @@ export default function Header() {
                         <ListItemText primary="Ana Sayfa" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Links sx={linksSx} href="/components-overview/buttons" target="_blank">
+                    <Links sx={linksSx} href="/hakkimizda" target="_blank">
                       <ListItemButton>  
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -202,7 +202,7 @@ export default function Header() {
                         <ListItemText primary="Hakkımızda" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Links sx={linksSx} href="https://codedthemes.com/?s=able+pro" target="_blank">
+                    <Links sx={linksSx} href="#" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -210,7 +210,7 @@ export default function Header() {
                         <ListItemText primary="Fiyatlar" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Links sx={linksSx} href="https://phoenixcoded.gitbook.io/able-pro" target="_blank">
+                    <Links sx={linksSx} href="#" target="_blank">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />

@@ -3,7 +3,7 @@ import Constants from "utils/Constants"
 
 export const getStaticPage = (async (slug: string) => {
     try {
-        const result = await fetch(`${Constants.APIURL()}/api/definition/static-page/read?slug=${slug}`)
+        const result = await fetch(`${Constants.APIURL()}/api/definition/static-page/read?slug=${slug}`,{ next: { revalidate: 3600 } })
         if (result.status == 200) {
             var model = await result.json();
             return {
