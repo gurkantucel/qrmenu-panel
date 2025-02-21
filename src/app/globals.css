@@ -1,7 +1,7 @@
 /* scroll bar */
 @import 'simplebar-react/dist/simplebar.min.css';
 
-.css-13ddxbb > * + * {
+.css-13ddxbb>*+* {
   margin: 0 !important;
 }
 
@@ -22,4 +22,11 @@ a.custom-link {
 
 a.custom-link:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .mobil-logo {
+    width: 100%;
+    height: auto;
+  }
 }

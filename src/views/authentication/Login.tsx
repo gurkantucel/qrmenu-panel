@@ -19,7 +19,7 @@ export default function Login() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid container xs={12} marginBottom={5} justifyContent={"center"}>
-             <Image src={"/assets/images/logo_new_20.png"} width={466} height={90} alt='Logo' quality={100} />
+             <Image src={"/assets/images/logo_new_20.png"} width={466} height={90} alt='Logo' quality={100} className='mobil-logo' />
           </Grid>
           <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: { xs: -0.5, sm: 0.5 } }}>
             <Typography variant="h3">Üye Girişi</Typography>
