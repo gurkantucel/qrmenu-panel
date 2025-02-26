@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // material-ui
 import Button from '@mui/material/Button';
@@ -34,6 +34,8 @@ import AuthFormsAydinlatmaMetni from './auth-form-article/AydinlatmaMetni';
 import AuthFormsUyelikSozlesmesi from './auth-form-article/UyelikSozlesmesi';
 import AuthFormsKvkk from './auth-form-article/KvkkMetni';
 import { useAppSelector } from 'reduxt/hooks';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { RegisterBodyModel } from 'reduxt/features/auth/models/auth-models';
 
 type CouponCheckProps = {
   getPackagesList?: MembershipPackagesListModel
@@ -52,9 +54,9 @@ const MemberShipControl = () => {
     }
   }, [setFieldValue])
 
-  useEffect(()=>{
-    if(getMembershipPackagesDetail?.data && cookie){
-      const filter: MembershipPackagesListData = getMembershipPackagesDetail?.data?.find((item:any) => item.membership_package_id == cookie);
+  useEffect(() => {
+    if (getMembershipPackagesDetail?.data && cookie) {
+      const filter: MembershipPackagesListData = getMembershipPackagesDetail?.data?.find((item: any) => item.membership_package_id == cookie);
       setFieldValue("amount", filter?.amount);
       setFieldValue("total_amount", filter?.total);
       setFieldValue("vat", filter?.vat);
@@ -62,7 +64,7 @@ const MemberShipControl = () => {
       setFieldValue("discount_amount", "");
       setFieldValue("total", filter?.total);
     }
-  },[getMembershipPackagesDetail,cookie])
+  }, [getMembershipPackagesDetail, cookie])
 
   return null;
 }
@@ -137,21 +139,21 @@ const CouponCheckValidity = (props: CouponCheckProps) => {
       </Grid>
       <Grid item xs={2}>
         <AnimateButton>
-          <Button disableElevation disabled={getCouponCheckValidityLoading} fullWidth size="large" type="button" 
-          variant="contained" 
-          color={buttonType == "uygula" ? "primary" : "secondary"} 
-          onClick={() => {
-            if (values.coupon_code.trim().length == 0) {
-              enqueueSnackbar("Kupon kodu girin.", {
-                variant: 'error', anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'right'
-                }
-              },)
-              return;
-            }
-            handleApplyCoupon(values.coupon_code, values.membership_package_id)
-          }}>
+          <Button disableElevation disabled={getCouponCheckValidityLoading} fullWidth size="large" type="button"
+            variant="contained"
+            color={buttonType == "uygula" ? "primary" : "secondary"}
+            onClick={() => {
+              if (values.coupon_code.trim().length == 0) {
+                enqueueSnackbar("Kupon kodu girin.", {
+                  variant: 'error', anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                  }
+                },)
+                return;
+              }
+              handleApplyCoupon(values.coupon_code, values.membership_package_id)
+            }}>
             {getCouponCheckValidityLoading && <PuffLoader size={20} color='white' />}
             {getCouponCheckValidityLoading == false && buttonType == "uygula" ? "Uygula" : "Kaldır"}
           </Button>
@@ -165,6 +167,7 @@ export default function AuthRegister() {
 
   const router = useRouter()
   const intl = useIntl()
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   //const memberShipPackageCookie = getCookie("membership_package_id");
 
@@ -181,6 +184,20 @@ export default function AuthRegister() {
   const { data: getBranchListData, isLoading: getBranchLoading } = useGetBranchDropdownQuery();
 
   const [register, { isLoading: registerIsLoading, data: registerResponse, error: registerError }] = useRegisterMutation();
+
+  const submitRegister = useCallback(async (values: RegisterBodyModel) => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+    if (typeof window !== "undefined") {
+      const token = await executeRecaptcha('yourAction');
+      const model = { ...values, recaptcha: token };
+      console.log(`token recapthca ${token}`)
+      register(model);
+    }
+    // Do whatever you want with the token
+  }, [executeRecaptcha]);
 
   useEffect(() => {
     if (registerResponse) {
@@ -259,7 +276,7 @@ export default function AuthRegister() {
             address: values.address,
             status: values.status,
           }
-          register(model);
+          submitRegister(model);
         }}
       >
         {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -577,6 +594,9 @@ export default function AuthRegister() {
                 <AuthFormsUyelikSozlesmesi />
                 <AuthFormsAydinlatmaMetni />
                 <AuthFormsKvkk />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant='caption' sx={{ fontSize: 10, color: "#999" }}>Bu site reCAPTCHA tarafından korunmaktadır ve <a rel="nofollow" target='_blank' href="https://policies.google.com/privacy" style={{ color: "#999" }}>Google Gizlilik Politikası</a> ile <a rel="nofollow" target='_blank' href="https://policies.google.com/terms" style={{ color: "#999" }}>Hizmet Şartları</a> geçerlidir.</Typography>
               </Grid>
               <Grid item xs={12}>
                 <AnimateButton>

@@ -30,6 +30,7 @@ import { ThemeDirection } from 'config';
 
 // assets
 import { ExportSquare, HambergerMenu, Minus } from 'iconsax-react';
+import { usePathname } from 'next/navigation';
 
 interface ElevationScrollProps {
   children: ReactElement;
@@ -57,6 +58,8 @@ function ElevationScroll({ children, window }: ElevationScrollProps) {
 
 export default function Header() {
   const theme = useTheme();
+
+  const pathname = usePathname();
 
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerToggle, setDrawerToggle] = useState<boolean>(false);
@@ -103,47 +106,52 @@ export default function Header() {
               alignItems="center"
               sx={{
                 '& .header-link': { fontWeight: 500, '&:hover': { color: theme.palette.primary.main } },
+                '& .header-link-active': {
+                  fontWeight: 500,
+                  color: theme.palette.primary.main
+                },
                 display: { xs: 'none', md: 'flex' }
               }}
               spacing={3}
             >
               <Links
-                className="header-link"
+                className={pathname == "/" ? "header-link-active" : "header-link"}
                 sx={{ ml: theme.direction === ThemeDirection.RTL ? 3 : 0 }}
                 color="secondary.main"
                 component={Link}
                 href="/landing"
-                target="_blank"
                 underline="none"
               >
                 Ana Sayfa
               </Links>
-              <Links className="header-link" color="secondary.main" component={Link} href="/hakkimizda" underline="none">
+              <Links 
+                className={pathname == "/hakkimizda" ? "header-link-active" : "header-link"}
+                color="secondary.main" 
+                component={Link} 
+                href="/hakkimizda" 
+                underline="none">
                 Hakkımızda
               </Links>
               <Links
-                className="header-link"
+                className={pathname == "/fiyatlar" ? "header-link-active" : "header-link"}
                 color="secondary.main"
-                href="#"
-                target="_blank"
+                href="/fiyatlar"
                 underline="none"
               >
                 Fiyatlar
               </Links>
               <Links
-                className="header-link"
+                className={pathname == "/tanitim-ve-ozellikler" ? "header-link-active" : "header-link"}
                 color="secondary.main"
-                href="#"
-                target="_blank"
+                href="/tanitim-ve-ozellikler"
                 underline="none"
               >
                 Tanıtım ve Özellikler
               </Links>
               <Links
-                className="header-link"
+                className={pathname == "/iletisim" ? "header-link-active" : "header-link"}
                 color="secondary.main"
-                href="#"
-                target="_blank"
+                href="/iletisim"
                 underline="none"
               >
                 Bize Ulaşın
@@ -186,7 +194,7 @@ export default function Header() {
                   onKeyDown={drawerToggler(false)}
                 >
                   <List>
-                    <Links sx={linksSx} href="/landing" target="_blank">
+                    <Links sx={linksSx} href="/landing">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -194,7 +202,7 @@ export default function Header() {
                         <ListItemText primary="Ana Sayfa" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Links sx={linksSx} href="/hakkimizda" target="_blank">
+                    <Links sx={linksSx} href="/hakkimizda">
                       <ListItemButton>  
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
@@ -202,7 +210,7 @@ export default function Header() {
                         <ListItemText primary="Hakkımızda" primaryTypographyProps={{ variant: 'h6', color: 'secondary.main' }} />
                       </ListItemButton>
                     </Links>
-                    <Links sx={linksSx} href="#" target="_blank">
+                    <Links sx={linksSx} href="/fiyatlar">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />

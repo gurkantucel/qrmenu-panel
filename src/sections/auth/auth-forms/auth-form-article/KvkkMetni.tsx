@@ -25,7 +25,7 @@ const AuthFormsKvkk = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.kvkk) {
-            getStaticPageRead({ code: "00008" });
+            getStaticPageRead({ slug: "kvkk" });
         }
     }, [open, modalType])
 

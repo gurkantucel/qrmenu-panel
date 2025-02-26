@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, SyntheticEvent, useEffect } from 'react';
+import { useState, SyntheticEvent, useEffect, useCallback } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -28,6 +28,7 @@ import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch } from 'reduxt/hooks';
 import { setMenuItem } from 'reduxt/features/auth/menuItemSlice';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 // ============================|| JWT - LOGIN ||============================ //
 
@@ -39,6 +40,8 @@ export default function AuthLogin({ providers, csrfToken }: any) {
 
   const router = useRouter();
 
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -47,6 +50,23 @@ export default function AuthLogin({ providers, csrfToken }: any) {
   const handleMouseDownPassword = (event: SyntheticEvent) => {
     event.preventDefault();
   };
+
+  const submitLogin = useCallback(async (values: {
+    username: string;
+    password: string;
+  }) => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+    if (typeof window !== "undefined") {
+      const token = await executeRecaptcha('yourAction');
+      const model = { ...values, recaptcha: token };
+      console.log(`token recapthca ${token}`)
+      login(model);
+    }
+    // Do whatever you want with the token
+  }, [executeRecaptcha]);
 
   useEffect(() => {
     if (loginResponse) {
@@ -91,7 +111,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         }}
         validationSchema={loginValidationSchema}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          login(values);
+          submitLogin(values);
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -159,6 +179,9 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                     {"Şifremi unuttum?"}
                   </Typography>
                 </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant='caption' sx={{fontSize: 10, color: "#999"}}>Bu site reCAPTCHA tarafından korunmaktadır ve <a rel="nofollow" target='_blank' href="https://policies.google.com/privacy" style={{color: "#999"}}>Google Gizlilik Politikası</a> ile <a rel="nofollow" target='_blank' href="https://policies.google.com/terms" style={{color: "#999"}}>Hizmet Şartları</a> geçerlidir.</Typography>
               </Grid>
               <Grid item xs={12}>
                 <AnimateButton>

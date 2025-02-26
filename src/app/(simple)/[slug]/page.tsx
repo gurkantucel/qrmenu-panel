@@ -5,6 +5,7 @@ import { APP_DEFAULT_PATH } from 'config';
 import React from 'react'
 import { getStaticPage } from './actions';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation'
 
 type Params = {
     params: {
@@ -12,17 +13,19 @@ type Params = {
     }
 }
 
-export const generateMetadata = async ({params}:Params): Promise<Metadata | undefined> => {
+export const generateMetadata = async ({ params }: Params): Promise<Metadata | undefined> => {
     const result = await getStaticPage(params?.slug);
-    if(!result || result.status == "failure"){
+    if (!result || result.status == "failure") {
         return;
     }
     return { title: result.data.data.title, description: result.data.data.description };
 };
 
-const ArticlePage = async ({params}: Params) => {
+const BlogPage = async ({ params }: Params) => {
     const result = await getStaticPage(params?.slug);
-
+    if (result.status == "failure") {
+        return notFound();
+    }
     return (
         <Box sx={{ pt: 15, pb: 10.5 }}>
             <Container>
@@ -50,4 +53,4 @@ const ArticlePage = async ({params}: Params) => {
     )
 }
 
-export default ArticlePage
+export default BlogPage

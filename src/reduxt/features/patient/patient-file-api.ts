@@ -9,7 +9,7 @@ const patientFileApi = createApi({
     tagTypes: ["patientFile"],
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        getPatientFileList: builder.query<PatientFileListModel, { patient_id: number | string | undefined, appointment_id?: number | string | undefined }>({
+        getPatientFileList: builder.query<PatientFileListModel, { patient_id?: number | string | undefined, appointment_id?: number | string | undefined }>({
             query: (args) => {
                 return {
                     url: `app/patient-file/list`,

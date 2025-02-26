@@ -7,8 +7,8 @@ const staticPageApi = createApi({
     tagTypes: ["staticPage"],
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        getStaticPageRead: builder.query<StaticPageResultModel, { code?: string }>({
-            query: (args?: { code?: string }) => {
+        getStaticPageRead: builder.query<StaticPageResultModel, { slug?: string }>({
+            query: (args?: { slug?: string }) => {
                 return {
                     url: `definition/static-page/read`,
                     params: args

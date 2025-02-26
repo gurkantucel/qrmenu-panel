@@ -25,7 +25,7 @@ const AuthFormsUyelikSozlesmesi = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.uyelikSozlesmesi) {
-            getStaticPageRead({ code: "00006" });
+            getStaticPageRead({ slug: "uyelik-sozlesmesi" });
         }
     }, [open, modalType])
 

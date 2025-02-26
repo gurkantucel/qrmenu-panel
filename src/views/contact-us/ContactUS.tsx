@@ -1,28 +1,25 @@
 // material-ui
 import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
 
 // project-imports
-import ContactForm from 'sections/extra-pages/contact/ContactForm';
 import ContactHeader from 'sections/extra-pages/contact/ContactHeader';
-import ContactEmail from 'sections/extra-pages/contact/ContactEmail';
+import ContactContent from 'sections/extra-pages/contact/ContactContent';
+import FaqLandingPage from 'sections/landing/Faq';
+import { getHomeFaq } from 'app/(simple)/landing/actions';
 
 // ==============================|| CONTACT US - MAIN ||============================== //
 
-export default function ContactUSPage() {
+export default async function ContactUSPage() {
+  const faqResult = await getHomeFaq();
   return (
-    <Grid container spacing={12} justifyContent="center" alignItems="center" sx={{ mb: 12 }}>
-      <Grid item xs={12} md={12}>
-        <ContactHeader />
+    <>
+      <Grid container spacing={12} justifyContent="center" alignItems="center" sx={{ mb: 12 }}>
+        <Grid item xs={12} md={12}>
+          <ContactHeader />
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={10} lg={9}>
-        <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 2 } }}>
-          <ContactForm />
-        </Container>
-      </Grid>
-      <Grid item xs={12} md={12}>
-        <ContactEmail />
-      </Grid>
-    </Grid>
+      <ContactContent />
+      <FaqLandingPage result={faqResult} />
+    </>
   );
 }

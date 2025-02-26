@@ -110,7 +110,7 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">{"Özellikler"}</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="#" target="_blank" underline="none">
+                      <FooterLink href="/tanitim-ve-ozellikler" underline="none">
                         {"Öne Çıkan Özellikler"}
                       </FooterLink>
                       <FooterLink href="#" target="_blank" underline="none">

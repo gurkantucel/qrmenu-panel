@@ -4,10 +4,21 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid, Ty
 import { motion } from 'framer-motion'
 import React from 'react'
 
-const FaqLandingPage = () => {
+type Props = {
+    page?: string
+    result?: any
+}
+
+const FaqLandingPage = (props: Props) => {
+
+    if (props.result.data == null) {
+        return <></>
+    }
+
     return (
         <Box sx={{
-            bgcolor: '#edf8f4', pb: { md: 10, xs: 7 }, pt: 4,
+            bgcolor: props.page == "home" ? '#edf8f4' : 'transparent',
+            pb: { md: 10, xs: 7 }, pt: 4,
             '& .MuiAccordion-root': {
                 borderColor: 'divider',
                 borderRadius: 4,
@@ -55,61 +66,18 @@ const FaqLandingPage = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Accordion>
-                    <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                        <Typography variant="h6">Sistemi nasıl satın alabilirim?</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-                        <Typography variant="h6">İhtiyaç halinde nasıl teknik destek alırım?</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-                        <Typography variant="h6">Accordion 03</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
-                        <Typography variant="h6">Accordion 04</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-                <Accordion>
-                    <AccordionSummary aria-controls="panel5d-content" id="panel5d-header">
-                        <Typography variant="h6">Accordion 05</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
+                {props.result?.data?.data?.map((item: any, index: number) => (
+                    <Accordion key={`accordion-${index}`}>
+                        <AccordionSummary aria-controls={`panel${index}d-content`} id={`panel${index}d-header`}>
+                            <Typography variant="h6">{item.label ?? "-"}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                {item.field ?? "-"}
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
             </Container>
         </Box >
     )

@@ -18,7 +18,11 @@ import { Book, CalendarTick, ImportSquare, Notepad2, Profile2User } from 'iconsa
 
 // ==============================|| LANDING - APPS PAGE ||============================== //
 
-export default function FeaturesPage() {
+type Props = {
+  page?:string
+}
+
+export default function FeaturesPage(props: Props) {
 
   const [value, setValue] = useState(0);
 
@@ -49,7 +53,7 @@ export default function FeaturesPage() {
   }
 
   return (
-    <Box sx={{ bgcolor: "#edf8f4", overflow: 'hidden', pt: { md: 10, xs: 5 } }}>
+    <Box sx={{ bgcolor: props.page == "home" ?  "#edf8f4" : "transparent", overflow: 'hidden', pt: { md: 10, xs: 5 } }}>
       <Container>
         <Grid container spacing={3} alignItems="center" justifyContent="center">
           <Grid item xs={12}>

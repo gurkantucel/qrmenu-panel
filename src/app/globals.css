@@ -30,3 +30,7 @@ a.custom-link:hover {
     height: auto;
   }
 }
+
+.grecaptcha-badge {
+	visibility: hidden;
+}

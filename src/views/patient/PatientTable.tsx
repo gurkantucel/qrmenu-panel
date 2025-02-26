@@ -81,13 +81,16 @@ const PatientTable = () => {
       </Link>,
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('age', {
-      header: intl.formatMessage({ id: "age" }),
-      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
-      footer: info => info.column.id,
-    }),
     columnHelper.accessor('appointment_start', {
       header: intl.formatMessage({ id: "lastAppointmentDate" }),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY HH:mm"),
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
+    }),
+    columnHelper.accessor('created_at', {
+      header: intl.formatMessage({ id: "createdDate" }),
       cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY HH:mm"),
       footer: info => info.column.id,
       meta: {

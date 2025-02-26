@@ -39,7 +39,7 @@ const FileTable = () => {
                 <AsyncSelect
                     placeholder={"T.C., Telefon veya İsimle Danışan Arayın"}
                     isLoading={getPatientDropdownLoading}
-                    isClearable={false}
+                    isClearable={true}
                     noOptionsMessage={((label) => "Bulunamadı.")}
                     loadOptions={getPatientDropdownOptions}
                     cacheOptions
@@ -62,8 +62,10 @@ const FileTable = () => {
                             color: '#aeaeae',
                         }),
                     }}
-                    onChange={(value) => {
-                        setPatientId(`${value?.value}`);
+                    onChange={(value,actionMeta) => {
+                        if(actionMeta.action == "select-option"){
+                            setPatientId(`${value?.value}`);
+                        }
                     }}
                 />
             </Grid>

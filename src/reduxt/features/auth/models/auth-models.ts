@@ -13,6 +13,7 @@ export interface RegisterBodyModel {
   district_id: string
   address: string
   status: boolean
+  recaptcha?:string
 }
 
 
@@ -85,6 +86,7 @@ export interface CurrentAccount {
 export interface LoginBodyModel {
   username: string
   password: string
+  recaptcha?:string
 }
 
 export interface UsernameBodyModel {

@@ -35,7 +35,7 @@ export const FileTypeBoxIcon = (props:Props) => {
         case 'png':
         case 'gif':
         case 'bmp':
-            return <Image src={props.imageUrl ?? "#"} alt={props.alt ?? ""} width={128} height={128} style={{ objectFit: "none" }} />
+            return props.imageUrl !=null ? <Image src={props.imageUrl ?? "#"} alt={props.alt ?? ""} width={128} height={128} style={{ objectFit: "none" }} /> : <></>
         case 'mp4':
         case 'mov':
         case 'avi':

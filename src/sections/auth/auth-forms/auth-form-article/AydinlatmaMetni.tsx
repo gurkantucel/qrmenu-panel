@@ -25,7 +25,7 @@ const AuthFormsAydinlatmaMetni = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.aydinlatmaMetni) {
-            getStaticPageRead({ code: "00007" });
+            getStaticPageRead({ slug: "aydinlatma-metni" });
         }
     }, [open, modalType])
 

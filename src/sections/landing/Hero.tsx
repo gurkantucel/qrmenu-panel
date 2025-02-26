@@ -1,65 +1,26 @@
 'use client';
-
-import { useState, MouseEvent } from 'react';
-
 // material-ui
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Menu from '@mui/material/Menu';
-import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
-//project imports
-import { useIspValue } from 'hooks/useIspValue';
-import { techData } from 'data/tech-data';
 
 // third-party
 import { motion } from 'framer-motion';
 
 // assets
 import AnimateButton from 'components/@extended/AnimateButton';
+import { useRouter } from 'next/navigation';
 
 
 // ==============================|| LANDING - HERO PAGE ||============================== //
 
 export default function HeroPage() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const router = useRouter();
 
-  const ispValueAvailable = useIspValue();
-
-  const listItems = techData.map((item, index) => {
-    // Construct the final URL
-    const finalUrl = item.url !== '#!' && ispValueAvailable ? `${item.url}?isp=1` : item.url;
-
-    return (
-      <ListItemButton key={index} component="a" href={finalUrl} target={item.target}>
-        <Tooltip title={item.tooltipTitle} placement="bottom">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <ListItemAvatar
-              sx={{ minWidth: 'auto', marginRight: 1, filter: item.tooltipTitle === 'Live Preview Not Available' ? 'grayscale(1)' : '' }}
-            >
-              <CardMedia component="img" image={item.image} sx={{ width: '30px' }} />
-            </ListItemAvatar>
-            <ListItemText primary={item.label} />
-          </div>
-        </Tooltip>
-      </ListItemButton>
-    );
-  });
-
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClick = () => {
+    router.push("/tanitim-ve-ozellikler")
   };
 
   return (
@@ -130,9 +91,7 @@ export default function HeroPage() {
                     <Grid item>
                       <AnimateButton>
                         <Button
-                          aria-controls={open ? 'wallet-menu' : undefined}
                           aria-haspopup="true"
-                          aria-expanded={open ? 'true' : undefined}
                           onClick={handleClick}
                           size="large"
                           color="primary"
@@ -141,17 +100,6 @@ export default function HeroPage() {
                           Özellikleri İncele
                         </Button>
                       </AnimateButton>
-                      <Menu
-                        id="wallet-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{ 'aria-labelledby': 'wallet-button', sx: { p: 1.25, minWidth: 150 } }}
-                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                      >
-                        {listItems}
-                      </Menu>
                     </Grid>
                   </Grid>
                 </motion.div>

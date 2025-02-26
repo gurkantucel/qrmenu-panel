@@ -17,10 +17,10 @@ export default function ContactHeader() {
         <Box sx={{ width: { xs: '100%', sm: 252, md: 360, lg: 436 }, py: 6, mx: 'auto' }}>
           <Stack spacing={1}>
             <Typography align="center" variant="h2">
-              Talk to our Expert
+              {"Size Yardımcı Olmak İçin Buradayız 😊"}
             </Typography>
             <Typography align="center" color="text.secondary">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              {"Yaşadığınız problemleri ya da merak ettiğiniz soruları cevaplamaktan mutluluk duyarız."}
             </Typography>
           </Stack>
         </Box>

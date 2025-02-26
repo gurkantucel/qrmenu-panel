@@ -80,7 +80,7 @@ const PatientFileTable = (props: Props) => {
             header: intl.formatMessage({ id: "fileName" }),
             cell: info => {
                 return <Stack direction="row" spacing={1.5} alignItems="center">
-                    {info.row.original.type != "folder" ? <Link href={info.row.original.url} target='_blank'>
+                    {info.row.original.type != "folder" ? <Link href={info.row.original.url ?? "#"} target='_blank'>
                         <FileTypeBoxIcon objectMime={info.row.original.object_mime} imageUrl={info.row.original.url} alt={info.renderValue()} />
                     </Link> : <FolderBoxIcon />}
                     <Stack spacing={0}>
@@ -165,9 +165,9 @@ const PatientFileTable = (props: Props) => {
     }, [selectTab])
 
     useEffect(() => {
-        console.log(props.page, props.patientId);
+        console.log(props.page, props.patientId);   
         if (props.page == "file") {
-            if (props.patientId != null) {
+            if (props.patientId) {
                 getPatientFileList({ patient_id: props.patientId })
             }
         }
