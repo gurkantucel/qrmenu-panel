@@ -38,7 +38,7 @@ import ViewAppointmentModal from './ViewAppointmentModal';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
 import { enqueueSnackbar } from 'notistack';
-import { useGetAppointmentStatusDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useGetAppointmentStatusDropdownQuery, useGetAppointmentTypeDropdownQuery } from 'reduxt/features/definition/definition-api';
 import { useAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
 import Link from 'next/link';
 
@@ -82,11 +82,19 @@ const AppointmentTable = () => {
       header: intl.formatMessage({ id: "status" }),
       //cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       cell: (info) => {
-        return <Chip color={info.row.original.appointment_status_id == 1 ? "warning" : info.row.original.appointment_status_id == 2 ? "success" : info.row.original.appointment_status_id == 3 ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
+        return <Chip color={info.row.original.appointment_status_code == "00001" ? "warning" : info.row.original.appointment_status_code == "00002" ? "success" : info.row.original.appointment_status_code == "00003" ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
       },
       footer: info => info.column.id,
       meta: {
         filterVariant: 'appointmentStatus',
+      },
+    }),
+    columnHelper.accessor('appointment_type_id', {
+      header: intl.formatMessage({ id: "appointmentType2" }),
+      cell: info => info.renderValue() == null ? "-" : info.row.original.appointment_type_name,
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'appointmentType',
       },
     }),
     columnHelper.accessor('appointment_start', {
@@ -226,6 +234,7 @@ const AppointmentTable = () => {
   })
 
   const { data: getAppointmentStatusData } = useGetAppointmentStatusDropdownQuery()
+  const { data: getAppointmentTypeData } = useGetAppointmentTypeDropdownQuery()
   const { data: personData } = useAcceptingAppointmentDropDownQuery({})
 
   const { data: getAppointmentListData, isLoading: isAppointmentLoading, isFetching: isAppointmentFetching } = useGetAppointmentListQuery({
@@ -295,7 +304,7 @@ const AppointmentTable = () => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getAppointmentStatusData={getAppointmentStatusData?.data} getPersonData={personData?.data} />}
+                        {header.column.getCanFilter() && <Filter column={header.column} table={table} getAppointmentStatusData={getAppointmentStatusData?.data} getAppointmentTypeData={getAppointmentTypeData?.data} getPersonData={personData?.data} />}
                       </TableCell>
                     ))}
                   </TableRow>

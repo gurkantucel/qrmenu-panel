@@ -24,7 +24,7 @@ import { AppointmentCalendarModalEnum, setCalendarModal } from "reduxt/features/
 import { AppointmentCreateBodyModel } from "reduxt/features/appointment/models/appointment-list-model";
 import { useCreateAppointmentMutation } from "reduxt/features/appointment/appointment-api";
 import { newAppointmentSchema } from "utils/schemas/appointment-validation-schema";
-import { useLazyGetAppointmentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useLazyGetAppointmentStatusDropdownQuery, useLazyGetAppointmentTypeDropdownQuery } from "reduxt/features/definition/definition-api";
 
 type Props = {
     page?: string
@@ -52,6 +52,8 @@ const AddAppointmentModal = (props: Props) => {
 
     const [getAppointmentStatusDropdown, { isLoading: getAppointmentStatusDropdownLoading, data: getAppointmentStatusData }] = useLazyGetAppointmentStatusDropdownQuery();
 
+    const [getAppointmentTypeDropdown, { isLoading: getAppointmentTypeDropdownLoading, data: getAppointmentTypeData }] = useLazyGetAppointmentTypeDropdownQuery();
+
     const getPatientDropdownOptions = async (inputValue: string) => {
 
         if (inputValue.length >= 3) {
@@ -72,6 +74,7 @@ const AddAppointmentModal = (props: Props) => {
         if (open == true && modalType == ModalEnum.newAppointment) {
             getAcceptingAppointmentDropDownList({});
             getAppointmentStatusDropdown();
+            getAppointmentTypeDropdown();
         }
     }, [open, id])
 
@@ -82,6 +85,7 @@ const AddAppointmentModal = (props: Props) => {
                 patient_id: data.patient_id,
                 person_id: data.person_id,
                 appointment_status_id: data.appointment_status_id,
+                appointment_type_id: data.appointment_type_id,
                 all_day: data.all_day,
                 appointment_start: data.appointment_start,
                 appointment_duration: data.appointment_duration,
@@ -146,6 +150,7 @@ const AddAppointmentModal = (props: Props) => {
                         patient_birthdate: null,
                         person_id: null,
                         appointment_status_id: null,
+                        appointment_type_id: "24b5eafe-8963-46f2-99ec-4af530ac8579",
                         all_day: false,
                         appointment_start: null,
                         appointment_duration: 30,
@@ -426,6 +431,28 @@ const AddAppointmentModal = (props: Props) => {
                                                 {errors.appointment_duration}
                                             </FormHelperText>
                                         )}
+                                    </Grid>
+                                    <Grid item xs={12} sm={6} sx={{ paddingTop: "10px !important" }}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="appointment_type_id">{`${intl.formatMessage({ id: "appointmentType2" })}*`}</InputLabel>
+                                            <CustomFormikSelect
+                                                name='appointment_type_id'
+                                                placeholder="Randevu Tipi Seçin"
+                                                isClearable={true}
+                                                isLoading={getAppointmentTypeDropdownLoading}
+                                                zIndex={996}
+                                                value={
+                                                    values.appointment_type_id ? { label: getAppointmentTypeData?.data?.find((item) => item.value == values.appointment_type_id)?.label ?? "", value: getAppointmentTypeData?.data?.find((item) => item.value == values.appointment_type_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("appointment_type_id", val?.value ?? null);
+                                                }}
+
+                                                options={getAppointmentTypeData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                            />
+                                        </Stack>
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
                                         <Stack spacing={1}>

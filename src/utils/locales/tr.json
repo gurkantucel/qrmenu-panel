@@ -114,6 +114,7 @@
     "uploadFile": "Dosya Yükle",
     "largerFile": "Dosya 30MB'ten büyük",
     "appointmentType": "Randevu Türü",
+    "appointmentType2": "Randevu Tipi",
     "appointmentKind": "Randevu Süreci",
     "paymentMethod": "Ödeme Metodu",
     "newPayment": "Yeni Ödeme",

@@ -45,13 +45,14 @@ type Props<T extends RowData> = {
   column: Column<T, unknown>;
   table: Table<T>;
   getAppointmentStatusData?: DropdownListData[]
+  getAppointmentTypeData?: DropdownListData[]
   getPersonData?: DropdownListData[]
   getGenderData?: DropdownListData[]
 };
 
 // ==============================|| FILTER - INPUT ||============================== //
 
-export default function Filter<T extends RowData>({ column, table, getAppointmentStatusData, getPersonData, getGenderData }: Props<T>) {
+export default function Filter<T extends RowData>({ column, table, getAppointmentStatusData, getAppointmentTypeData, getPersonData, getGenderData }: Props<T>) {
   const intl = useIntl()
   //const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
 
@@ -93,6 +94,26 @@ export default function Filter<T extends RowData>({ column, table, getAppointmen
     }}>
     <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
     {getAppointmentStatusData?.map((item) => (
+      <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
+    ))}
+  </Select> : meta == "appointmentType" ? <Select
+    sx={{
+      width: '100%',
+      '& .MuiSelect-select': {
+        width: "100% !important",
+        padding: "10px 10px 10px 12px",
+        textTransform: "none"
+      }
+    }}
+    MenuProps={{
+      style: { zIndex: 9999, },
+    }}
+    defaultValue={"-"}
+    onChange={(event) => {
+      column.setFilterValue(event.target.value);
+    }}>
+    <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
+    {getAppointmentTypeData?.map((item) => (
       <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>
     ))}
   </Select> : meta == "personNameSurname" ? <Select

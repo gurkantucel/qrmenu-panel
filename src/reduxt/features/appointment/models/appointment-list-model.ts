@@ -23,7 +23,11 @@ export interface AppointmentListResultModel {
     person_full_name: string
     person_deleted_at: string | null
     appointment_status_id: number
+    appointment_status_code: string
     appointment_status_name: string
+    appointment_type_id: number
+    appointment_type_code: string
+    appointment_type_name: string
     background_color: string
     font_color: string
     all_day: boolean
@@ -52,6 +56,7 @@ export interface AppointmentListResultModel {
     patient_birthdate?: string |  null
     person_id: number | string |  null
     appointment_status_id: number | string |  null
+    appointment_type_id: string | null 
     all_day: boolean | null
     appointment_start: string |  null
     appointment_duration: number | null

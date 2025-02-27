@@ -8,7 +8,7 @@ import ReduxWrapper from '../reduxt/ReduxWrapper';
 
 export const metadata: Metadata = {
   title: 'Klinik Ease',
-  description: 'Klinik Ease'
+  description: 'Klinik Ease',
 };
 
 export default function RootLayout({ children }: { children: React.ReactElement }) {

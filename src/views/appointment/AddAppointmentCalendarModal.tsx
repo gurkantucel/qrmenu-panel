@@ -20,7 +20,7 @@ import Toolbar from 'sections/apps/calendar/Toolbar';
 import Select from 'react-select'
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 
-const durationCalc = (startStr:string,endStr:string) => {
+const durationCalc = (startStr: string, endStr: string) => {
     const startDate = dayjs(startStr);
     const endDate = dayjs(endStr);
     const differenceInMilliseconds = endDate.diff(startDate, 'milliseconds');
@@ -183,7 +183,7 @@ const AddAppointmentCalendarModal = () => {
                         locale={"tr"}
                         select={(val) => {
                             setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm:ss'));
-                            const calc = durationCalc(val.startStr,val.endStr);
+                            const calc = durationCalc(val.startStr, val.endStr);
                             setFieldValue("appointment_duration", calc);
                             handleClose();
                         }}

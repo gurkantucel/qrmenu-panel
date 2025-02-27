@@ -30,6 +30,7 @@ const newAppointmentSchema = Yup.object({
     appointment_duration: Yup.number().min(0,"Bu alan zorunlu").required("Bu alan zorunlu"),
     person_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     appointment_status_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
+    appointment_type_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
     appointment_start: Yup.string().required("Bu alan zorunlu")
 })
 
