@@ -34,3 +34,8 @@ a.custom-link:hover {
 .grecaptcha-badge {
 	visibility: hidden;
 }
+
+.blog-image {
+  width: 100%;
+  height: auto;
+}

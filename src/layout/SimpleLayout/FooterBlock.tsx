@@ -78,16 +78,16 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">Sözleşmeler</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="/teslimat-ve-iade-sartlari" target="_blank" underline="none">
+                      <FooterLink href="/teslimat-ve-iade-sartlari" underline="none">
                         {"Teslimat ve İade Şartları"}
                       </FooterLink>
-                      <FooterLink href="/uyelik-sozlesmesi" target="_blank" underline="none">
+                      <FooterLink href="/uyelik-sozlesmesi" underline="none">
                         {"Üyelik Sözleşmesi"}
                       </FooterLink>
-                      <FooterLink href="/gizlilik-sozlesmesi" target="_blank" underline="none">
+                      <FooterLink href="/gizlilik-sozlesmesi" underline="none">
                         {"Gizlilik Sözleşmesi"}
                       </FooterLink>
-                      <FooterLink href="/mesafeli-satis-sozlesmesi" target="_blank" underline="none">
+                      <FooterLink href="/mesafeli-satis-sozlesmesi" underline="none">
                         {"Mesafeli Satış Sözleşmesi"}
                       </FooterLink>
                     </Stack>
@@ -97,10 +97,10 @@ export default function FooterBlock({ isFull }: showProps) {
                   <Stack spacing={3}>
                     <Typography variant="h5">Klinik Ease</Typography>
                     <Stack spacing={{ xs: 1.5, md: 2.5 }}>
-                      <FooterLink href="/hakkimizda" target="_blank" underline="none">
+                      <FooterLink href="/hakkimizda" underline="none">
                         {"Hakkımızda"}
                       </FooterLink>
-                      <FooterLink href="/iletisim" target="_blank" underline="none">
+                      <FooterLink href="/iletisim" underline="none">
                         {"İletişim"}
                       </FooterLink>
                     </Stack>
@@ -113,7 +113,7 @@ export default function FooterBlock({ isFull }: showProps) {
                       <FooterLink href="/tanitim-ve-ozellikler" underline="none">
                         {"Öne Çıkan Özellikler"}
                       </FooterLink>
-                      <FooterLink href="#" target="_blank" underline="none">
+                      <FooterLink href="/blog" underline="none">
                         {"Blog"}
                       </FooterLink>
                     </Stack>

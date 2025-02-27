@@ -119,7 +119,7 @@ export default function Header() {
                 sx={{ ml: theme.direction === ThemeDirection.RTL ? 3 : 0 }}
                 color="secondary.main"
                 component={Link}
-                href="/landing"
+                href="/"
                 underline="none"
               >
                 Ana Sayfa
@@ -194,7 +194,7 @@ export default function Header() {
                   onKeyDown={drawerToggler(false)}
                 >
                   <List>
-                    <Links sx={linksSx} href="/landing">
+                    <Links sx={linksSx} href="/">
                       <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />

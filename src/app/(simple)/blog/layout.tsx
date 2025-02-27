@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 // ==============================|| DASHBOARD LAYOUT ||============================== //
 
 export const metadata: Metadata = {
-  title: 'Tanıtım ve Özellikler',
+  title: 'Blog',
   description:
-      "Klinik yazılımı olan Klinik Ease için tanıtım ve özelliklerini içerir.",
+      "Sağlık bilgilendirme makalelerini ve klinik yazılımları üzerine blog yazılarını içerir.",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

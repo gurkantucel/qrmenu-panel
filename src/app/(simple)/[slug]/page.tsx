@@ -1,7 +1,6 @@
 import { Box, Container, Grid, Typography } from '@mui/material'
 import Breadcrumbs from 'components/@extended/Breadcrumbs'
 import MainCard from 'components/MainCard'
-import { APP_DEFAULT_PATH } from 'config';
 import React from 'react'
 import { getStaticPage } from './actions';
 import { Metadata } from 'next';
@@ -30,10 +29,12 @@ const BlogPage = async ({ params }: Params) => {
         <Box sx={{ pt: 15, pb: 10.5 }}>
             <Container>
                 {result && result.data && <Grid container spacing={2}>
-                    <Breadcrumbs custom links={[
-                        { title: 'Ana Sayfa', to: APP_DEFAULT_PATH },
-                        { title: result.data.data.title }
-                    ]} />
+                    <Grid item xs={12}>
+                        <Breadcrumbs custom links={[
+                            { title: 'Ana Sayfa', to: "/" },
+                            { title: result.data.data.title }
+                        ]} />
+                    </Grid>
                     <Grid item xs={12}>
                         <MainCard
                             title={result.data.title}

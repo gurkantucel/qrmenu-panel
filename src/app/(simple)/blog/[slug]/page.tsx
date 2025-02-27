@@ -1,7 +1,6 @@
 import { Box, Container, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
 import Breadcrumbs from 'components/@extended/Breadcrumbs'
 import MainCard from 'components/MainCard'
-import { APP_DEFAULT_PATH } from 'config';
 import React from 'react'
 import { getBlogDetail, getBlogExcludeSlug } from './actions';
 import { Metadata } from 'next';
@@ -32,15 +31,17 @@ const BlogDetail = async ({ params }: Params) => {
         <Box sx={{ pt: 15, pb: 10.5 }}>
             <Container>
                 {result && result.data && <Grid container spacing={2}>
+                    <Grid item xs={12}>
                     <Breadcrumbs custom links={[
-                        { title: 'Ana Sayfa', to: APP_DEFAULT_PATH },
+                        { title: 'Ana Sayfa', to: "/" },
                         { title: 'Blog', to: "/blog" },
                         { title: result.data.data.title }
                     ]} />
-                    <Grid item xs={8}>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
                         <MainCard
-                            title={result.data.title}
                         >
+                            <Typography variant="h1" sx={{fontSize: 20}}>{result.data.data.title ?? "-"}</Typography>
                             <Typography variant="body1">
                                 <div
                                     dangerouslySetInnerHTML={{ __html: result.data.data.content ?? "" }}
@@ -48,13 +49,13 @@ const BlogDetail = async ({ params }: Params) => {
                             </Typography>
                         </MainCard>
                     </Grid>
-                    {blogs && blogs.data && blogs.data.data?.length > 0 && <Grid item xs={4}>
+                    {blogs && blogs.data && blogs.data.data?.length > 0 && <Grid item xs={12} md={4}>
                         <MainCard
                             title="Bağlantılar"
                         >
                             <List sx={{ p: 0 }}>
                                 {blogs.data.data.map((item: any, index: number) => (
-                                    <Link href={`/blog/${item.slug}`} key={`blog-${index}`}>
+                                    <Link href={`/blog/${item.slug}`} key={`blog-${index}`} style={{ textDecoration: "none" }}>
                                         <ListItem disablePadding divider>
                                             <ListItemButton>
                                                 <ListItemText primary={item.title ?? ""} />

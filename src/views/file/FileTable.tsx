@@ -63,6 +63,7 @@ const FileTable = () => {
                         }),
                     }}
                     onChange={(value,actionMeta) => {
+                        console.log(actionMeta);
                         if(actionMeta.action == "select-option"){
                             setPatientId(`${value?.value}`);
                         }

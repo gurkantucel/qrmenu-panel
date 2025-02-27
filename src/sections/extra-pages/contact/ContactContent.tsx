@@ -60,7 +60,7 @@ const ContactContent = () => {
                         <Card sx={{ padding: 2 }}>
                             <Whatsapp size={42} color="#128c7e" />
                             <Typography variant="body1" color={"GrayText"}>{"WhatsApp Destek Hattı"}</Typography>
-                            <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 2 }}>{"510 XXX XX XX"}</Typography>
+                            <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 2 }}>{"850 308 12 37"}</Typography>
                             <Typography variant="body1" color={"GrayText"} sx={{ marginTop: 1 }}>{"Sorularınıza hızlıca yanıt alabilmeniz için WhatsApp destek hattını kullanabilirsiniz."}</Typography>
                         </Card>
                     </Grid>
