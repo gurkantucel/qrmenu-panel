@@ -535,7 +535,7 @@ export default function AuthRegister() {
                     name='membership_package_id'
                     placeholder="Seçim yapınız..."
                     isLoading={getPackagesLoading}
-                    zIndex={995}
+                    zIndex={992}
                     options={getPackagesList?.data?.map((item) => ({
                       value: item.membership_package_id,
                       label: item.name

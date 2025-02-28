@@ -145,7 +145,8 @@ export async function POST(req: NextRequest) {
             total: model.total,
             coupon_code: model.coupon_code,
             coupon_discount_percentage: model.coupon_discount_percentage,
-            product_name: model.product_name
+            product_name: model.product_name,
+            order_kind_name: model.order_kind_name,
         }
 
         console.log(responseJsonResponse);

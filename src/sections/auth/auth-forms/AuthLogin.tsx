@@ -93,6 +93,20 @@ export default function AuthLogin({ providers, csrfToken }: any) {
     }
     if (loginError) {
       var error = loginError as any;
+      if (error.data?.messageCode == "LOGIN_REQUIRED_PAYMENT") {
+        enqueueSnackbar(error?.data?.message ?? "Hata", {
+          variant: 'error', anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right'
+          }
+        },)
+        if (error.data.data) {
+          setTimeout(() => {
+            router.push(`/app/auth/pay-form/${error.data.data[0]}`)
+          }, 200)
+        }
+        return;
+      }
       enqueueSnackbar(error.data?.message ?? "Hata", {
         variant: 'error', anchorOrigin: {
           vertical: 'bottom',
@@ -181,7 +195,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                 </Stack>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant='caption' sx={{fontSize: 10, color: "#999"}}>Bu site reCAPTCHA tarafından korunmaktadır ve <a rel="nofollow" target='_blank' href="https://policies.google.com/privacy" style={{color: "#999"}}>Google Gizlilik Politikası</a> ile <a rel="nofollow" target='_blank' href="https://policies.google.com/terms" style={{color: "#999"}}>Hizmet Şartları</a> geçerlidir.</Typography>
+                <Typography variant='caption' sx={{ fontSize: 10, color: "#999" }}>Bu site reCAPTCHA tarafından korunmaktadır ve <a rel="nofollow" target='_blank' href="https://policies.google.com/privacy" style={{ color: "#999" }}>Google Gizlilik Politikası</a> ile <a rel="nofollow" target='_blank' href="https://policies.google.com/terms" style={{ color: "#999" }}>Hizmet Şartları</a> geçerlidir.</Typography>
               </Grid>
               <Grid item xs={12}>
                 <AnimateButton>

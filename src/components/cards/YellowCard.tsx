@@ -46,7 +46,7 @@ const YellowCard = (props: Props) => {
                     <Grid item>
                         <Stack spacing={1} alignItems="flex-end">
                             <Typography variant="h5" color="common.white" sx={{ fontWeight: 500 }}>
-                                {props.title ?? "Yeni Abonelik Paketi"}
+                                {props.title ?? ""}
                             </Typography>
                         </Stack>
                     </Grid>

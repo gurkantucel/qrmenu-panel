@@ -71,7 +71,7 @@ export default function AuthPayForm() {
                             <Alert color="secondary" icon={<Bill />} sx={{ marginBottom: 2 }}>
                                 {"Ödeme adımını tamamlayarak hesabınızı aktifleştirebilirsiniz."}
                             </Alert>
-                            {result && <YellowCard title='Yeni Abonelik Paketi' iconPrimary={ShoppingCart}
+                            {result && <YellowCard title={result?.packageData?.order_kind_name} iconPrimary={ShoppingCart}
                                 content={[
                                     `${intl.formatMessage({ id: "amount" })}: ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: result?.packageData?.currency_code }).format(Number(result?.packageData?.amount))}`,
                                     `${intl.formatMessage({ id: "vat" })} (%${result?.packageData?.vat}): ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: result?.packageData?.currency_code }).format(Number(result?.packageData?.vat_amount))}`,
