@@ -51,7 +51,8 @@ export enum ModalEnum {
     deleteMakeAnOffer,
     aydinlatmaMetni,
     uyelikSozlesmesi,
-    kvkk
+    kvkk,
+    viewOrder
 }
 
 type Model = {

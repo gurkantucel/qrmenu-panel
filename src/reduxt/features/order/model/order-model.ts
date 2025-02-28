@@ -49,3 +49,44 @@ export interface OrderQueryModel {
     total: string
   }
   
+  export interface OrderListModel {
+    requestId: string
+    status: boolean
+    messageCode: string
+    message: string
+    page: number
+    pageSize: number
+    totalCount: number
+    totalPage: number
+    data: OrderListData[]
+  }
+  
+  export interface OrderListData {
+    order_id: string
+    current_account_id: string
+    current_account_name: string
+    coupon_id: any
+    coupon_code: any
+    basket_id: string
+    order_kind_id: string
+    order_kind_code: string
+    order_kind_name: string
+    order_status_id: string
+    order_status_code: string
+    order_status_name: string
+    payment_method_id: string
+    payment_method_code: string
+    payment_method_name: string
+    order_number: string
+    currency_code?:string
+    total: string
+    created_at: string
+    updated_at: string
+    created_by: string
+    created_person: string
+    updated_by: any
+    updated_person: any
+    status: boolean
+    islemler?:string
+  }
+  

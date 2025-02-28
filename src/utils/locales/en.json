@@ -213,5 +213,11 @@
   "amountToBePaid": "Amount To Be Paid",
   "quoteNote": "Quote Note",
   "expiration": "Expiration",
-  "note" : "Note"
+  "note": "Note",
+  "discountText": "Discount\n({coupon_code} - %{discount_percentage}):",
+  "orders": "Orders",
+  "order": "Order",
+  "orderNumber": "OrderNumber",
+  "paymentMethodName": "Payment Method Name",
+  "myOrders": "My Orders"
 }

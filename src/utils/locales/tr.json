@@ -216,5 +216,10 @@
     "quoteNote" : "Teklif Notu",
     "expiration" : "Son Kullanma Tarihi",
     "note" : "Not",
-    "discountText" : "İndirim\n({coupon_code} - %{discount_percentage}):"
+    "discountText" : "İndirim\n({coupon_code} - %{discount_percentage}):",
+    "orders" : "Siparişler",
+    "order" : "Sipariş",
+    "orderNumber" : "Sipariş Numarası",
+    "paymentMethodName": "Ödeme Yöntemi",
+    "myOrders": "Siparişlerim"
 }

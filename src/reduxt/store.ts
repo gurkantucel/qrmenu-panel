@@ -26,6 +26,7 @@ import makeAnOfferApi from './features/make-an-offer/make-an-offer-api'
 import allergyHistoryApi from './features/patient/allergy-history-api'
 import couponApi from './features/coupon/coupon-api'
 import staticPageApi from './features/static-page/static-page-api'
+import orderApi from './features/order/order-api'
 
 export const store = configureStore({
   reducer: {
@@ -56,6 +57,7 @@ export const store = configureStore({
     [makeAnOfferApi.reducerPath] : makeAnOfferApi.reducer,
     [couponApi.reducerPath] : couponApi.reducer,
     [staticPageApi.reducerPath] : staticPageApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -80,7 +82,8 @@ export const store = configureStore({
     personTypeApi.middleware,
     makeAnOfferApi.middleware,
     couponApi.middleware,
-    staticPageApi.middleware
+    staticPageApi.middleware,
+    orderApi.middleware
   ]),
 })
 

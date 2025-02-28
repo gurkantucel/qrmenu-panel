@@ -92,6 +92,14 @@ const PersonTable = () => {
         filterVariant: 'select',
       },
     }),
+    columnHelper.accessor('status', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'select',
+      },
+    }),
     columnHelper.accessor('islemler', {
       header: intl.formatMessage({ id: "actions" }),
       size: 10,

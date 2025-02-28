@@ -80,7 +80,7 @@ const AddPersonModal = () => {
                 password: undefined,
                 authorizations: readPersonData.data.person_authorizations?.map((item) => item.module_id) ?? [],
                 accepting_appointment: readPersonData.data?.accepting_appointment,
-                status: true
+                status: readPersonData.data.status
             }
             setInitialData(model);
         }
@@ -368,6 +368,13 @@ const AddPersonModal = () => {
                                             value={values.accepting_appointment} onChange={(e, checked) => {
                                                 setFieldValue("accepting_appointment", checked);
                                             }} />} label={intl.formatMessage({ id: "acceptingAppointment" })} />
+                                    </Grid>
+                                    <Grid item xs={12} sx={{paddingTop: "5px !important"}}>
+                                        <FormControlLabel control={<Switch
+                                            checked={values.status}
+                                            value={values.status} onChange={(e, checked) => {
+                                                setFieldValue("status", checked);
+                                            }} />} label={intl.formatMessage({ id: values.status ? "active" : "passive" })} />
                                     </Grid>
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>

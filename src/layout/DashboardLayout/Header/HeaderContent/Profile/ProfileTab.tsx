@@ -1,3 +1,4 @@
+"use client"
 // material-ui
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -5,7 +6,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 // assets
-import { Logout } from 'iconsax-react';
+import { Card, Logout } from 'iconsax-react';
+import { useRouter } from 'next/navigation';
+import { useIntl } from 'react-intl';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
@@ -18,6 +21,8 @@ export default function ProfileTab({ handleLogout }: Props) {
   /*const handleListItemClick = (event: MouseEvent<HTMLDivElement>, index: number) => {
     setSelectedIndex(index);
   };*/
+  const router = useRouter();
+  const intl = useIntl()
 
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
@@ -27,12 +32,12 @@ export default function ProfileTab({ handleLogout }: Props) {
         </ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>*/}
-      {/*<ListItemButton selected={selectedIndex === 4} onClick={(event: MouseEvent<HTMLDivElement>) => handleListItemClick(event, 4)}>
+      <ListItemButton onClick={()=>{router.push("/app/order-list")}}>
         <ListItemIcon>
           <Card variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Billing" />
-      </ListItemButton>*/}
+        <ListItemText primary={intl.formatMessage({ id: "myOrders" })} />
+      </ListItemButton>
       <ListItemButton onClick={handleLogout}>
         <ListItemIcon>
           <Logout variant="Bulk" size={18} />
