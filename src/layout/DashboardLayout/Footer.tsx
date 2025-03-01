@@ -22,7 +22,7 @@ export default function Footer() {
         <Links component={Link} href="#" target="_blank" variant="caption" color="text.primary">
         {intl.formatMessage({id: "helpfulVideos"})}
         </Links>
-        <Links component={Link} href="#" target="_blank" variant="caption" color="text.primary">
+        <Links component={Link} href="https://www.klinikease.com/iletisim" target="_blank" variant="caption" color="text.primary">
         {intl.formatMessage({id: "contact"})}
         </Links>
       </Stack>

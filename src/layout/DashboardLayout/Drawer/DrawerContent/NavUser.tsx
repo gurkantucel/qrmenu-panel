@@ -16,7 +16,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 
 // project-imports
-import Avatar from 'components/@extended/Avatar';
 import useUser from 'hooks/useUser';
 import { useGetMenuMaster } from 'api/menu';
 
@@ -28,8 +27,7 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import dayjs from 'dayjs';
 import { Chip } from '@mui/material';
-
-const avatar1 = '/assets/images/users/avatar-6.png';
+import NameAvatar from 'components/NameAvatar';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -116,11 +114,11 @@ export default function UserList() {
           }}
         >
           <ListItemAvatar>
-            <Avatar alt="Avatar" src={avatar1} sx={{ ...(drawerOpen && { width: 46, height: 46 }) }} />
+            <NameAvatar fullName={user ? user.name : ""} />
           </ListItemAvatar>
           <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? <>
             <Chip size='small' variant="combined"
-              color="primary" sx={{paddingLeft: 1}} label={<Chip size='small' color="info" label={diffInDays(user.membership.membership_end_date)} />} avatar={
+              color="primary" sx={{ paddingLeft: 1 }} label={<Chip size='small' color="info" label={diffInDays(user.membership.membership_end_date)} />} avatar={
                 <>{user.membership.membership_package_name}</>
               } />
           </> : <>{'-'}</>} />
@@ -135,13 +133,10 @@ export default function UserList() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
+        <MenuItem component={Link} href="/app/order-list" onClick={handleClose}>
+          {intl.formatMessage({id: "myOrders"})}
+        </MenuItem>
         <MenuItem onClick={handleLogout}>{intl.formatMessage({ id: "logout" })}</MenuItem>
-        <MenuItem component={Link} href="#" onClick={handleClose}>
-          Profile
-        </MenuItem>
-        <MenuItem component={Link} href="#" onClick={handleClose}>
-          My account
-        </MenuItem>
       </Menu>
     </Box>
   );

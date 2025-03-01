@@ -21,7 +21,6 @@ import Box from '@mui/material/Box';
 // project-imports
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
-import Avatar from 'components/@extended/Avatar';
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import IconButton from 'components/@extended/IconButton';
@@ -29,11 +28,11 @@ import useUser from 'hooks/useUser';
 import { ThemeMode } from 'config';
 
 // assets
-const avatar1 = '/assets/images/users/avatar-6.png';
 import { Profile, Logout } from 'iconsax-react';
 import { deleteCookie} from 'cookies-next';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
+import NameAvatar from 'components/NameAvatar';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -118,7 +117,7 @@ export default function ProfilePage() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Avatar alt="profile user" src={avatar1} />
+        <NameAvatar fullName={user ? user.name : ""} />
       </ButtonBase>
       <Popper
         placement="bottom-end"
@@ -158,7 +157,7 @@ export default function ProfilePage() {
                     <Grid container justifyContent="space-between" alignItems="center">
                       <Grid item>
                         <Stack direction="row" spacing={1.25} alignItems="center">
-                          <Avatar alt="profile user" src={avatar1} />
+                          <NameAvatar fullName={user ? user.name : ""} />
                           <Stack>
                             <Typography variant="subtitle1">{user ? user?.name : ''}</Typography>
                             <Typography variant="body2" color="secondary">
