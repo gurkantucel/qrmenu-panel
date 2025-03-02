@@ -219,5 +219,7 @@
   "order": "Order",
   "orderNumber": "OrderNumber",
   "paymentMethodName": "Payment Method Name",
-  "myOrders": "My Orders"
+  "myOrders": "My Orders",
+  "storage": "Storage",
+  "more" : "more"
 }

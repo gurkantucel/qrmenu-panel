@@ -49,3 +49,7 @@ a.custom-link:hover {
 .fc-timegrid-slots td {
   height: 40px !important;
 }
+
+.fc-timegrid-event .fc-event-main {
+  overflow: hidden;
+}

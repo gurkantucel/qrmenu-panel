@@ -221,5 +221,7 @@
     "order" : "Sipariş",
     "orderNumber" : "Sipariş Numarası",
     "paymentMethodName": "Ödeme Yöntemi",
-    "myOrders": "Siparişlerim"
+    "myOrders": "Siparişlerim",
+    "storage": "Depolama",
+    "more" : "daha"
 }

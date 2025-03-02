@@ -186,6 +186,7 @@ const HomeAppointmentCalendarView = () => {
                                 allDayText='Tüm'
                                 scrollTime={"08:00:00"}
                                 noEventsText={intl.formatMessage({ id: "noEventsText" })}
+                                moreLinkText={intl.formatMessage({ id: "more" })}
                                 dayMaxEventRows={3}
                                 eventDisplay="block"
                                 headerToolbar={false}
@@ -227,16 +228,18 @@ export default HomeAppointmentCalendarView
 function renderEventContent(eventInfo: EventContentArg) {
     if (eventInfo.view.type == "listWeek") {
         return (
-            <div style={{textDecoration: eventInfo.backgroundColor == "#2ca87f" ? "line-through": "none"}}>
+            <div style={{ textDecoration: eventInfo.backgroundColor == "#2ca87f" ? "line-through" : "none" }}>
                 <b>{eventInfo.timeText}</b>
                 <label>{eventInfo.event.title}</label>
             </div>
         )
     }
     return (
-        <>
-            <b>{eventInfo.timeText}</b>
-            <label>{eventInfo.event.title}</label>
-        </>
+        <Tooltip title="Delete">
+            <>
+                <b style={{marginRight: "2px"}}>{eventInfo.timeText}</b>
+                <label>{eventInfo.event.title}</label>
+            </>
+        </Tooltip>
     )
 }

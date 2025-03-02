@@ -12,7 +12,7 @@ const nextConfig = {
             protocol: 'https',
             hostname: 'storage.googleapis.com',
             port: '',
-            pathname: '/klinikease/**',
+            pathname: '/klinik_ease/**',
           },
         ],
       }
