@@ -221,5 +221,20 @@
   "paymentMethodName": "Payment Method Name",
   "myOrders": "My Orders",
   "storage": "Storage",
-  "more" : "more"
+  "more" : "more",
+  "numberOfAppointments": "Number Of Appointments",
+  "numberOfPatients": "Number Of Patients",
+  "thisMonth" : "This Month",
+  "janM": "Jan",
+  "febM": "Feb",
+  "marM": "Mar",
+  "aprM": "Apr",
+  "mayM": "May",
+  "junM": "Jun",
+  "julM": "Jul",
+  "augM": "Aug",
+  "sepM": "Sep",
+  "octM": "Oct",
+  "novM": "Nov",
+  "decM": "Dec"
 }

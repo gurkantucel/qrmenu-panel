@@ -9,11 +9,12 @@ import { Mutex } from 'async-mutex'
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { RefreshTokenResultModel } from 'reduxt/features/auth/models/refresh-token-result-model';
 import { resetTokenState, setToken } from 'reduxt/features/auth/tokenSlice';
+import Constants from './Constants';
 
 const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+    baseUrl: `${Constants.APIURL()}/api`,
     prepareHeaders(headers) {
         const token = getCookie("token");
         if (token) {

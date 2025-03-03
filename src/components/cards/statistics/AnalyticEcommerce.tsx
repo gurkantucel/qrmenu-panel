@@ -1,3 +1,4 @@
+"use client"
 // material-ui
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -10,8 +11,9 @@ import MainCard from 'components/MainCard';
 
 // assets
 import { ArrowRight, ArrowUp } from 'iconsax-react';
+import { useIntl } from 'react-intl';
 
-// ==============================|| STATISTICS - ECOMMERCE CARD  ||============================== //
+// ==============================|| STATISTICS - ECOMMERCE CARD  ||==========================//
 
 interface Props {
   title: string;
@@ -20,10 +22,12 @@ interface Props {
   isLoss?: boolean;
   color?: ChipProps['color'];
   extra: string;
-  extra2: string
 }
 
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra, extra2 }: Props) {
+export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra}: Props) {
+
+  const intl = useIntl()
+
   return (
     <MainCard contentSX={{ p: 2.25 }}>
       <Stack spacing={0.5}>
@@ -36,12 +40,12 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
               {count}
             </Typography>
           </Grid>
-          {percentage && (
+          {percentage != null && (
             <Grid item>
               <Chip
                 variant="combined"
-                color={color}
-                icon={isLoss == true ? <ArrowUp style={{ transform: 'rotate(45deg)' }} /> : <ArrowRight style={{ transform: 'rotate(45deg)' }} />
+                color={percentage == 0 ? "warning" : percentage > 0 ? "success" : "error"}
+                icon={percentage == 0 ? <></> : percentage > 0 ? <ArrowUp style={{ transform: 'rotate(45deg)' }} /> : <ArrowRight style={{ transform: 'rotate(45deg)' }} />
                 }
                 label={`${percentage}%`}
                 sx={{ ml: 1.25, pl: 1, borderRadius: 1 }}
@@ -53,11 +57,10 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
       </Stack>
       <Box sx={{ pt: 2.25 }}>
         <Typography variant="caption" color="text.secondary">
-          Bir önceki aya göre {' '}
+          {intl.formatMessage({ id: "thisMonth" })} {' '}
           <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
             {extra}
-          </Typography>{' '}
-          {extra2}
+          </Typography>
         </Typography>
       </Box>
     </MainCard>

@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { LoginBodyModel, LoginResultModel, RegisterBodyModel, ResetPasswordBodyModel, UsernameBodyModel } from './models/auth-models';
 import { CreateResultModel } from 'utils/models/create-result-model';
+import Constants from 'utils/Constants';
 
 const authApi = createApi({
     reducerPath: "authApi",
     tagTypes: ["auth_api"],
     baseQuery: fetchBaseQuery({ 
-        baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api/app`,
+        baseUrl: `${Constants.APIURL()}/api/app`,
         headers:{
             "Access-Control-Allow-Origin" : "*"
         }

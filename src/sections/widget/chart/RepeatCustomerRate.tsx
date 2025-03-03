@@ -1,38 +1,44 @@
 "use client"
-import { useState, MouseEvent } from 'react';
+//import { useState, MouseEvent } from 'react';
 
 // material-ui
-import Menu from '@mui/material/Menu';
+//import Menu from '@mui/material/Menu';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import ListItemButton from '@mui/material/ListItemButton';
+//import ListItemButton from '@mui/material/ListItemButton';
 
 // project-imports
 import MainCard from 'components/MainCard';
-import MoreIcon from 'components/@extended/MoreIcon';
-import IconButton from 'components/@extended/IconButton';
+//import MoreIcon from 'components/@extended/MoreIcon';
+//import IconButton from 'components/@extended/IconButton';
 import RepeatCustomerChart from './RepeatCustomerChart';
+import { DropdownListData } from 'utils/models/dropdown-list-model';
 
 // ==============================|| CHART - REPEAT CUSTOMER RATE ||============================== //
 
-export default function RepeatCustomerRate() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+type Props = {
+  title:string
+  data: DropdownListData[]
+}
 
-  const open = Boolean(anchorEl);
+export default function RepeatCustomerRate({title,data}: Props) {
+  //const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  //const open = Boolean(anchorEl);
+
+  /*const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
+  };*/
 
   return (
     <MainCard>
       <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
         <Typography variant="h5">Randevu Sayısı</Typography>
-        <IconButton
+        {/*<IconButton
           color="secondary"
           id="wallet-button"
           aria-controls={open ? 'wallet-menu' : undefined}
@@ -64,9 +70,9 @@ export default function RepeatCustomerRate() {
           <ListItemButton onClick={handleClose}>Today</ListItemButton>
           <ListItemButton onClick={handleClose}>Weekly</ListItemButton>
           <ListItemButton onClick={handleClose}>Monthly</ListItemButton>
-        </Menu>
+        </Menu>*/}
       </Stack>
-      <RepeatCustomerChart />
+      <RepeatCustomerChart title='Randevu Sayısı' data={data}  />
     </MainCard>
   );
 }
