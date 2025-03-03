@@ -236,5 +236,6 @@
   "sepM": "Sep",
   "octM": "Oct",
   "novM": "Nov",
-  "decM": "Dec"
+  "decM": "Dec",
+  "numberOfOffers" : "Number Of Offers"
 }

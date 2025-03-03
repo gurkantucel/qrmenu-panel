@@ -24,7 +24,7 @@ interface Props {
   extra: string;
 }
 
-export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra}: Props) {
+export default function AnalyticEcommerce({ color = 'primary', title, count, percentage, isLoss, extra }: Props) {
 
   const intl = useIntl()
 
@@ -56,9 +56,9 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
         </Grid>
       </Stack>
       <Box sx={{ pt: 2.25 }}>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="body1" color="text.secondary">
           {intl.formatMessage({ id: "thisMonth" })} {' '}
-          <Typography variant="caption" sx={{ color: `${color || 'primary'}.main` }}>
+          <Typography variant="caption" sx={{ color: `${percentage == 0 ? "warning" : (percentage ?? 0) > 0 ? "success" : "error"}.main` }}>
             {extra}
           </Typography>
         </Typography>

@@ -238,5 +238,6 @@
     "sepM": "Eylül",
     "octM": "Ekim",
     "novM": "Kasım",
-    "decM": "Aralık"
+    "decM": "Aralık",
+    "numberOfOffers" : "Teklif Sayısı"
 }

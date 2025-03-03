@@ -3,12 +3,12 @@ export interface StatisticReadModel {
   status: boolean
   messageCode: string
   message: string
-  data: StatisticData
+  data: StaticReadData
 }
 
-export interface StatisticData {
+export interface StaticReadData {
   appointmentStats: AppointmentStats
-  readVenue: any
+  readVenue: ReadVenue[]
   patientStats: PatientStats
   quoteStats: QuoteStats
   mostAppointmentProcess: MostAppointmentProcess
@@ -22,6 +22,13 @@ export interface AppointmentStats {
   increase: number
 }
 
+export interface ReadVenue {
+  currency_code: string
+  amount: number
+  increase: number
+  this_month: number
+}
+
 export interface PatientStats {
   total: number
   this_month: number
@@ -32,22 +39,22 @@ export interface QuoteStats {
   total: number
   this_month: number
   last_month: number
+  increase: number
 }
 
 export interface MostAppointmentProcess {
-  total: number
-  this_month: number
-  last_month: number
+  process_name: string
+  start_date: string
+  end_date: string
 }
 
 export interface MostPerson {
-  total: number
-  this_month: number
-  last_month: number
+  person_name: string
+  start_date: string
+  end_date: string
 }
 
 export interface MostProcessDay {
-  total: number
-  this_month: number
-  last_month: number
+  count: number
+  date: string
 }

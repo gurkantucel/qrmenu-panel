@@ -30,10 +30,10 @@ export default function RoundIconCard({ primary, secondary, content, iconPrimary
       <Grid container alignItems="center" spacing={0} justifyContent="space-between">
         <Grid item>
           <Stack spacing={1}>
-            <Typography variant="h5" color="inherit">
+            <Typography variant="h6" color="inherit">
               {primary}
             </Typography>
-            <Typography variant="h4">{secondary}</Typography>
+            <Typography variant="h5">{secondary}</Typography>
             <Typography variant="subtitle2" color="inherit">
               {content}
             </Typography>
