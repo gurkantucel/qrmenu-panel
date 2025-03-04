@@ -72,20 +72,20 @@ const permissionControlMenu = () => {
             },
             {
                 id: 'payment',
-                code: "00006",
+                code: "00046",
                 title: "Ödemeler",
                 type: 'item',
                 url: '/app/payment',
                 icon: ""
             },
-            {
+            /*{
                 id: 'sms-transactions',
                 code: "00042",
                 title: "SMS İşlemleri",
                 type: 'item',
                 url: '/app/sms-transactions',
                 icon: ""
-            },
+            },*/
             {
                 id: 'statistics',
                 code: "00049",

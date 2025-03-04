@@ -221,10 +221,10 @@
   "paymentMethodName": "Payment Method Name",
   "myOrders": "My Orders",
   "storage": "Storage",
-  "more" : "more",
+  "more": "more",
   "numberOfAppointments": "Number Of Appointments",
   "numberOfPatients": "Number Of Patients",
-  "thisMonth" : "This Month",
+  "thisMonth": "This Month",
   "janM": "Jan",
   "febM": "Feb",
   "marM": "Mar",
@@ -237,5 +237,8 @@
   "octM": "Oct",
   "novM": "Nov",
   "decM": "Dec",
-  "numberOfOffers" : "Number Of Offers"
+  "numberOfOffers": "Number Of Offers",
+  "mostTransactions": "Most Transactions",
+  "mostTransactionsMadeEmployee": "Most Transactions Made Employee",
+  "mostTransactionsMadeDay": "Most Transactions Made Day"
 }

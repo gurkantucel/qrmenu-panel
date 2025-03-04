@@ -25,12 +25,22 @@ const statisticApi = createApi({
             },
             providesTags: ["statistic"]
         }),
+        getStatisticPatient: builder.query<DropdownListModel, { daily: boolean, start_date: string, end_date: string }>({
+            query: (params) => {
+                return {
+                    url: `app/statistics/patient`,
+                    params: params
+                }
+            },
+            providesTags: ["statistic"]
+        }),
     })
 })
 
 export const {
     useGetStatisticReadQuery,
-    useGetStatisticAppointmentQuery
+    useGetStatisticAppointmentQuery,
+    useGetStatisticPatientQuery
 } = statisticApi
 
 export default statisticApi;

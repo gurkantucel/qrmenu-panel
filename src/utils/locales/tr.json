@@ -239,5 +239,8 @@
     "octM": "Ekim",
     "novM": "Kasım",
     "decM": "Aralık",
-    "numberOfOffers" : "Teklif Sayısı"
+    "numberOfOffers" : "Teklif Sayısı",
+    "mostTransactions": "En Çok Yapılan İşlem",
+    "mostTransactionsMadeEmployee": "En Çok İşlem Yapan Çalışan",
+    "mostTransactionsMadeDay": "En Çok İşlem Yapılan Gün"
 }

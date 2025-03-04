@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 // project-imports
-import { APP_DEFAULT_PATH } from 'config';
+import { HOME_DEFAULT_PATH } from 'config';
 import { useIntl } from 'react-intl';
 
 // assets
@@ -60,7 +60,7 @@ export default function Error404Page() {
           <Typography color="text.secondary" align="center" sx={{ width: { xs: '73%', sm: '61%' } }}>
           {intl.formatMessage({id: "pageNotFound1"})}
           </Typography>
-          <Button component={Link} href={APP_DEFAULT_PATH} variant="contained">
+          <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained">
           {intl.formatMessage({id: "backToHome"})}
           </Button>
         </Stack>

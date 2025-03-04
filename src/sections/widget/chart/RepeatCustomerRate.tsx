@@ -37,7 +37,7 @@ export default function RepeatCustomerRate({title,data}: Props) {
   return (
     <MainCard>
       <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-        <Typography variant="h5">Randevu Sayısı</Typography>
+        <Typography variant="h5">{title}</Typography>
         {/*<IconButton
           color="secondary"
           id="wallet-button"
@@ -72,7 +72,7 @@ export default function RepeatCustomerRate({title,data}: Props) {
           <ListItemButton onClick={handleClose}>Monthly</ListItemButton>
         </Menu>*/}
       </Stack>
-      <RepeatCustomerChart title='Randevu Sayısı' data={data}  />
+      <RepeatCustomerChart title={title} data={data}  />
     </MainCard>
   );
 }
