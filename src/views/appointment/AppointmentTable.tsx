@@ -200,7 +200,7 @@ const AppointmentTable = () => {
           <Tooltip title={intl.formatMessage({ id: "delete" })}>
             <IconButton
               color="error"
-              disabled={info.row.original.appointment_status_id != 1}
+              disabled={info.row.original.appointment_status_code == "00002"}
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
@@ -313,7 +313,7 @@ const AppointmentTable = () => {
               <TableBody>
                 {isAppointmentFetching || isAppointmentLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                   <TableRow key={item}>
-                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                    {[0, 1, 2, 3, 4, 5,6].map((col: number) => (
                       <TableCell key={col}>
                         <Skeleton animation="wave" />
                       </TableCell>

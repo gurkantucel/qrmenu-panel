@@ -33,6 +33,7 @@ import { useGetSmsTemplateListQuery } from 'reduxt/features/sms-template/sms-tem
 import UpdateStatusSmsTemplateModal from './UpdateStatusSmsTemplateModal';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
+import SmsInfoNotFound from 'sections/current-account/SmsInfoNotFound';
 
 
 const columnHelper = createColumnHelper<SmsTemplateData>()
@@ -111,7 +112,7 @@ const SmsTemplateTable = () => {
     pageSize: 10,
   })
 
-  const { data: getSmsTemplateListData, isLoading: isSmsTemplateLoading, isFetching: isSmsTemplateFetching } = useGetSmsTemplateListQuery({
+  const { data: getSmsTemplateListData, isLoading: isSmsTemplateLoading, isFetching: isSmsTemplateFetching, error: getSmsTemplateError, isError: isGetSmsTemplateError } = useGetSmsTemplateListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
@@ -137,85 +138,86 @@ const SmsTemplateTable = () => {
   return (
     <>
       <Breadcrumbs custom heading={`${intl.formatMessage({ id: "smsTemplates" })}`} links={breadcrumbLinks} />
-      <MainCard content={false}>
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-          <UpdateStatusSmsTemplateModal />
-        </Stack>
-        <ScrollX>
-          <TableContainer component={Paper}>
-            <Table size='small'>
-              <TableHead>
-                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                  <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 58 } }}>
-                    {headerGroup.headers.map((header) => (
-                      <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHead>
-              <TableHead>
-                {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableCell key={header.id} {...header.column.columnDef.meta}>
-                        {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHead>
-              <TableBody>
-                {isSmsTemplateFetching || isSmsTemplateLoading ? [0, 1, 2, 3, 4].map((item: number) => (
-                  <TableRow key={item}>
-                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
-                      <TableCell key={col}>
-                        <Skeleton animation="wave" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                )) :
-                  table.getRowModel().rows.length > 0 ? (
-                    table.getRowModel().rows.map((row) => (
-                      <Fragment key={row.id}>
-                        <TableRow key={row.id}>
-                          {row.getVisibleCells().map((cell) => (
-                            <TableCell key={cell.id} {...cell.column.columnDef.meta}>
-                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </Fragment>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={table.getAllColumns().length}>
-                        <EmptyTable msg={isSmsTemplateFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
-                      </TableCell>
+      {isGetSmsTemplateError && (getSmsTemplateError as any)?.data?.messageCode === "SMS_INFO_NOT_FOUND" ? <SmsInfoNotFound /> :
+        <MainCard content={false}>
+          <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
+            <UpdateStatusSmsTemplateModal />
+          </Stack>
+          <ScrollX>
+            <TableContainer component={Paper}>
+              <Table size='small'>
+                <TableHead>
+                  {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                    <TableRow key={headerGroup.id} sx={{ '& > th:first-of-type': { width: 58 } }}>
+                      {headerGroup.headers.map((header) => (
+                        <TableCell key={header.id} {...header.column.columnDef.meta}>
+                          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  )
-                }
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <>
-            <Divider />
-            <Box sx={{ p: 2 }}>
-              <TablePagination
-                {...{
-                  setPageSize: table.setPageSize,
-                  setPageIndex: table.setPageIndex,
-                  getState: table.getState,
-                  getPageCount: table.getPageCount,
-                  selectRowLength: table.getRowModel().rows.length,
-                  totalCount: table.getRowCount()
-                }}
-              />
-            </Box>
-          </>
-        </ScrollX>
-      </MainCard>
+                  ))}
+                </TableHead>
+                <TableHead>
+                  {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <TableCell key={header.id} {...header.column.columnDef.meta}>
+                          {header.column.getCanFilter() && <Filter column={header.column} table={table} />}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHead>
+                <TableBody>
+                  {isSmsTemplateFetching || isSmsTemplateLoading ? [0, 1, 2, 3, 4].map((item: number) => (
+                    <TableRow key={item}>
+                      {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                        <TableCell key={col}>
+                          <Skeleton animation="wave" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  )) :
+                    table.getRowModel().rows.length > 0 ? (
+                      table.getRowModel().rows.map((row) => (
+                        <Fragment key={row.id}>
+                          <TableRow key={row.id}>
+                            {row.getVisibleCells().map((cell) => (
+                              <TableCell key={cell.id} {...cell.column.columnDef.meta}>
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        </Fragment>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={table.getAllColumns().length}>
+                          <EmptyTable msg={isSmsTemplateFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                        </TableCell>
+                      </TableRow>
+                    )
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <TablePagination
+                  {...{
+                    setPageSize: table.setPageSize,
+                    setPageIndex: table.setPageIndex,
+                    getState: table.getState,
+                    getPageCount: table.getPageCount,
+                    selectRowLength: table.getRowModel().rows.length,
+                    totalCount: table.getRowCount()
+                  }}
+                />
+              </Box>
+            </>
+          </ScrollX>
+        </MainCard>}
     </>
   )
 }
