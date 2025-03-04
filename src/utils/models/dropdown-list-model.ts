@@ -8,5 +8,6 @@ export interface DropdownListModel {
   export interface DropdownListData {
     value: string
     label: string
+    field?: string
   }
   

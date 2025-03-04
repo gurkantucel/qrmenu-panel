@@ -115,7 +115,7 @@ export interface AppointmentListResultModel {
   export interface AppointmentUpdateStatusBodyModel {
     appointment_id: number | null | string
     patient_id: number | null | string
-    appointment_status_id: number | null | string
+    appointment_status_id?: number | null | string
     status: boolean
   }
   
