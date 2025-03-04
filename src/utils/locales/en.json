@@ -157,6 +157,7 @@
   "updatedBy": "Updated by",
   "completeAppointment": "Complete Appointment",
   "completeAppointmentText": "The appointment status will be set to Completed. ",
+  "changeStatusAppointmentText": "The appointment status will be set to {status}. ",
   "appointmentCompleted": "Appointment Completed",
   "helpfulVideos": "Helpful Videos",
   "contact": "Communication",

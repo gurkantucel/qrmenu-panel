@@ -159,6 +159,7 @@
     "updatedBy": "Güncelleyen",
     "completeAppointment": "Randevuyu Tamamla",
     "completeAppointmentText": "Randevu durumu Tamamlandı olarak ayarlanacak. Onaylıyor musunuz?",
+    "changeStatusAppointmentText": "Randevu durumu {status} olarak ayarlanacak. Onaylıyor musunuz?",
     "appointmentCompleted": "Randevu Tamamlandı",
     "helpfulVideos": "Yardımcı Videolar",
     "contact": "İletişim",
