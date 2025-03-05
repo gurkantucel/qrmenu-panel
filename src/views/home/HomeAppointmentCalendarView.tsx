@@ -4,11 +4,11 @@ import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
-import { Box, SpeedDial, Tooltip, Typography, useMediaQuery } from '@mui/material';
+import { Box, SpeedDial, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
 import { EventContentArg, EventSourceInput } from '@fullcalendar/core';
-import { Theme } from '@mui/material/styles';
+//import { Theme } from '@mui/material/styles';
 import { useIntl } from 'react-intl';
 import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
 import Toolbar from 'sections/apps/calendar/Toolbar';
@@ -24,7 +24,7 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 
 const HomeAppointmentCalendarView = () => {
-    const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    //const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
     const [personId, setPersonId] = useState<string | null>()
 
@@ -163,7 +163,7 @@ const HomeAppointmentCalendarView = () => {
                 }
             >
                 {appointmentCalendarLoading || appointmentCalendarFetching || getAcceptingAppointmentListLoading ? <CustomScaleLoader /> :
-                    <Box sx={{ px: 3, pb: 2 }}>
+                    <Box sx={{ px: 0, pb: 2 }}>
                         <CalendarStyled>
                             <Toolbar
                                 date={date}
@@ -200,7 +200,8 @@ const HomeAppointmentCalendarView = () => {
                                 //eventClick={handleEventSelect}
                                 //eventResize={handleEventUpdate}
                                 //height={matchDownSM ? 'auto' : 720}
-                                height={matchDownSM ? 'auto' : 600}
+                                //height={matchDownSM ? 'auto' : 'auto'}
+                                height={'auto'}
                                 plugins={[listPlugin, dayGridPlugin, timelinePlugin, timeGridPlugin, interactionPlugin]}
                             />
                         </CalendarStyled>

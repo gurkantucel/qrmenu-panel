@@ -11,7 +11,15 @@ const tenantPaymentApi = createApi({
         getTenantPaymentList: builder.query<TenantPaymentListResultModel, { filterSearch?: string, page?: number, pageSize?: number, patientId?: number | string }>({
             query: (args?: { filterSearch?: string, page?: number, pageSize?: number, patientId?: number | string }) => {
                 return {
-                    url: `app/tenant-payment/list?patient_id=${args?.patientId}&page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
+                    url: `app/tenant-payment/list?patient_id=${args?.patientId ?? null}&page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
+                }
+            },
+            providesTags: ["tenant-payment"]
+        }),
+        getTenantPaymentList2: builder.query<TenantPaymentListResultModel, { filterSearch?: string, page?: number, pageSize?: number}>({
+            query: (args?: { filterSearch?: string, page?: number, pageSize?: number}) => {
+                return {
+                    url: `app/tenant-payment/list?page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
                 }
             },
             providesTags: ["tenant-payment"]
@@ -61,6 +69,7 @@ const tenantPaymentApi = createApi({
 export const {
     useGetTenantPaymentListQuery,
     useLazyGetTenantPaymentListQuery,
+    useGetTenantPaymentList2Query,
     useCreateTenantPaymentMutation,
     useUpdateTenantPaymentMutation,
     useDeleteTenantPaymentMutation,
