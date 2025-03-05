@@ -31,7 +31,7 @@ import CustomScaleLoader from 'components/CustomScaleLoader';
 import dayjs from 'dayjs';
 import AddPatientPaymentHistoryModal from './AddPatientPaymentHistoryModal';
 import DeletePatientPaymentHistoryModal from './DeletePatientPaymentHistoryModal';
-import { useGetTenantPaymentListQuery } from 'reduxt/features/patient/tenant-payment-api';
+import { useGetTenantPaymentList2Query } from 'reduxt/features/patient/tenant-payment-api';
 import { TenantPaymentListData } from 'reduxt/features/patient/models/tenant-payment-model';
 import ViewPatientPaymentHistoryModal from './ViewPatientPaymentHistoryModal';
 import { APP_DEFAULT_PATH } from 'config';
@@ -162,7 +162,7 @@ const PaymentTable = () => {
     data: getPatientPaymentHistoryListData,
     isFetching: isPatientPaymentHistoryFetching,
     isLoading: isPatientPaymentHistoryLoading
-  } = useGetTenantPaymentListQuery({
+  } = useGetTenantPaymentList2Query({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')

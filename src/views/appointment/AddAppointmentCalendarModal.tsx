@@ -19,6 +19,7 @@ import CustomScaleLoader from 'components/CustomScaleLoader';
 import Toolbar from 'sections/apps/calendar/Toolbar';
 import Select from 'react-select'
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
+import { useIntl } from 'react-intl';
 
 const durationCalc = (startStr: string, endStr: string) => {
     const startDate = dayjs(startStr);
@@ -32,7 +33,8 @@ const AddAppointmentCalendarModal = () => {
 
     const dispatch = useAppDispatch();
     const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
-
+    const intl = useIntl()
+    
     const [calendarView, setCalendarView] = useState<string>("timeGridWeek");
     const [date, setDate] = useState(new Date());
     const calendarRef = useRef<FullCalendar>(null);
@@ -180,6 +182,8 @@ const AddAppointmentCalendarModal = () => {
                         allDayMaintainDuration
                         eventResizableFromStart
                         scrollTime={"08:00:00"}
+                        noEventsText={intl.formatMessage({ id: "noEventsText" })}
+                        moreLinkText={intl.formatMessage({ id: "more" })}
                         locale={"tr"}
                         select={(val) => {
                             setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm:ss'));
@@ -191,7 +195,8 @@ const AddAppointmentCalendarModal = () => {
                         //eventClick={handleEventSelect}
                         //eventResize={handleEventUpdate}
                         //height={matchDownSM ? 'auto' : 720}
-                        height={"78vh"}
+                        //height={"78vh"}
+                        height={'auto'}
                         plugins={[listPlugin, dayGridPlugin, timelinePlugin, timeGridPlugin, interactionPlugin]}
                     />
                 </CalendarStyled>

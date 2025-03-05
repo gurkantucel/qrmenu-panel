@@ -337,7 +337,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                         placeholder={intl.formatMessage({ id: "selectAppointmentProcess" })}
                                                                         isClearable={true}
                                                                         isLoading={getAppointmentProcessDropdownLoading}
-                                                                        zIndex={999 - index}
+                                                                        zIndex={997 - index}
                                                                         value={
                                                                             values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
                                                                         onChange={(val: any) => {
