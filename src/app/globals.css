@@ -53,3 +53,7 @@ a.custom-link:hover {
 .fc-timegrid-event .fc-event-main {
   overflow: hidden;
 }
+
+main#blog {
+  background-color: #F8F9FA;
+}

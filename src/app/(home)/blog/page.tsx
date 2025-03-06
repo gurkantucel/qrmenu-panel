@@ -9,9 +9,11 @@ const PricePage = async () => {
         return notFound();
     }
     return (
-        <Grid container justifyContent="center" alignItems="center" sx={{ pt: 5, pb: 10.5 }}>
-            <BlogListView data={result.data.data} />
-        </Grid>
+        <>
+            <Grid container justifyContent="center" alignItems="center" sx={{ pt: 5, pb: 10.5 }}>
+                <BlogListView data={result.data.data} />
+            </Grid>
+        </>
     )
 }
 

@@ -15,7 +15,6 @@ import Box from '@mui/material/Box';
 
 // project-imports
 import { HOME_DEFAULT_PATH } from 'config';
-import { useIntl } from 'react-intl';
 
 // assets
 const error404 = '/assets/images/maintenance/img-error-404.svg';
@@ -25,8 +24,7 @@ const error404 = '/assets/images/maintenance/img-error-404.svg';
 export default function Error404Page() {
   const theme = useTheme();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const intl = useIntl()
-  
+
   return (
     <Grid
       container
@@ -56,12 +54,12 @@ export default function Error404Page() {
       </Grid>
       <Grid item xs={12}>
         <Stack spacing={2} justifyContent="center" alignItems="center">
-          <Typography variant="h1">{intl.formatMessage({id: "pageNotFound"})}</Typography>
+          <Typography variant="h1">{"Sayfa Bulunamadı"}</Typography>
           <Typography color="text.secondary" align="center" sx={{ width: { xs: '73%', sm: '61%' } }}>
-          {intl.formatMessage({id: "pageNotFound1"})}
+            {"Aradığınız sayfa taşındı, kaldırıldı, yeniden adlandırıldı veya hiç var olmayabilir!"}
           </Typography>
-          <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained">
-          {intl.formatMessage({id: "backToHome"})}
+          <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained" sx={{ bgcolor: "#60d99d", textTransform: "capitalize"}}>
+            {"Ana Sayfaya Dön"}
           </Button>
         </Stack>
       </Grid>

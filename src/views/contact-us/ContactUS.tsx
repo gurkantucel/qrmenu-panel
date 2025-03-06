@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import ContactHeader from 'sections/extra-pages/contact/ContactHeader';
 import ContactContent from 'sections/extra-pages/contact/ContactContent';
 import FaqLandingPage from 'sections/landing/Faq';
-import { getHomeFaq } from 'app/(simple)/landing/actions';
+import { getHomeFaq } from 'app/(home)/landing/actions';
 
 // ==============================|| CONTACT US - MAIN ||============================== //
 

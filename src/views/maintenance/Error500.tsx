@@ -47,7 +47,7 @@ export default function Error500Page() {
             <Typography color="text.secondary" variant="body2" align="center" sx={{ width: { xs: '73%', sm: '70%' }, mt: 1 }}>
               Server error 500. we fixing the problem. please try again at a later stage.
             </Typography>
-            <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
+            <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained" sx={{ textTransform: 'none', mt: 4, bgcolor: "#60d99d" }}>
               Back To Home
             </Button>
           </Stack>

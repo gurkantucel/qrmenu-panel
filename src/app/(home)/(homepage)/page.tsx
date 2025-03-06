@@ -3,7 +3,7 @@ import FaqLandingPage from 'sections/landing/Faq'
 import FeaturesPage from 'sections/landing/Features'
 import Hero from 'sections/landing/Hero'
 import PriceLandingPage from 'sections/landing/Price'
-import { getHomeFaq, getHomeMembershipPackages } from './actions'
+import { getHomeFaq, getHomeMembershipPackages } from '../actions'
 
 const LandingPage = async () => {
   const result = await getHomeMembershipPackages();

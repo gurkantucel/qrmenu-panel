@@ -85,7 +85,7 @@ export default function Breadcrumbs({
   };
 
   let customLocation = location;
-  
+
   // only used for component demo breadcrumbs
   if (customLocation.includes('/components-overview/breadcrumbs')) {
     customLocation = '/apps/customer/customer-card';
@@ -137,7 +137,7 @@ export default function Breadcrumbs({
   let CollapseIcon;
   let ItemIcon;
 
-  if(location == "/app/home"){
+  if (location == "/app/home") {
     return (<></>)
   }
 
@@ -172,7 +172,7 @@ export default function Breadcrumbs({
           spacing={0.5}
         >
           <Grid item>
-            <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
+            <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon} sx={{fontFamily: 'var(--font-poppins)'}}>
               <NextLink href="/app/home" passHref legacyBehavior>
                 <Typography
                   variant="body1"
@@ -232,7 +232,7 @@ export default function Breadcrumbs({
 
     if (custom && links && links?.length > 0) {
       tempContent = (
-        <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
+        <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon} sx={{fontFamily: 'var(--font-poppins)'}}>
           {links?.map((link: BreadcrumbLinkProps, index: number) => {
             CollapseIcon = link.icon ? link.icon : Buildings2;
             const key = index.toString();
@@ -240,7 +240,7 @@ export default function Breadcrumbs({
               <Typography
                 key={index}
                 variant="body1"
-                sx={{ textDecoration: 'none', fontWeight: 500, ...(link.to && { fontWeight: 400, cursor: 'pointer' }) }}
+                sx={{ fontFamily: 'var(--font-poppins)', fontSize: "0.875rem", textDecoration: 'none', fontWeight: 500, ...(link.to && { fontWeight: 400, cursor: 'pointer' }) }}
                 color={link.to ? 'text.secondary' : 'text.primary'}
               >
                 {link.icon && <CollapseIcon style={iconSX} />}
@@ -279,7 +279,7 @@ export default function Breadcrumbs({
           >
             {title && !titleBottom && (
               <Grid item>
-                <Typography variant="h2" sx={{ fontWeight: 700 }}>
+                <Typography variant="h2" sx={{ fontFamily: 'var(--font-poppins)', fontWeight: 700 }}>
                   {custom ? heading : item?.title}
                 </Typography>
               </Grid>
@@ -287,7 +287,7 @@ export default function Breadcrumbs({
             <Grid item>{tempContent}</Grid>
             {title && titleBottom && (
               <Grid item sx={{ mt: card === false ? 0 : 1 }}>
-                <Typography variant="h2" sx={{ fontWeight: 700 }}>
+                <Typography variant="h2" sx={{ fontFamily: 'var(--font-poppins)', fontWeight: 700 }}>
                   {custom ? heading : item?.title}
                 </Typography>
               </Grid>

@@ -15,7 +15,6 @@ import Box from '@mui/material/Box';
 
 // project-imports
 import { HOME_DEFAULT_PATH } from '../config';
-import { useIntl } from 'react-intl';
 
 // assets
 const error500 = '/assets/images/maintenance/img-error-500.svg';
@@ -25,7 +24,6 @@ const error500 = '/assets/images/maintenance/img-error-500.svg';
 export default function Error500() {
   const theme = useTheme();
   const downSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const intl = useIntl()
   
   return (
     <Grid container direction="column" alignItems="center" justifyContent="center" sx={{ minHeight: '100vh' }} spacing={3}>
@@ -46,13 +44,13 @@ export default function Error500() {
       <Grid item xs={12}>
         <Stack justifyContent="center" alignItems="center">
           <Typography align="center" variant={downSM ? 'h2' : 'h1'}>
-          {intl.formatMessage({id: "internalServerError"})}
+          {"Dahili Sunucu Hatası"}
           </Typography>
           <Typography color="text.secondary" variant="body2" align="center" sx={{ width: { xs: '73%', sm: '70%' }, mt: 1 }}>
-          {intl.formatMessage({id: "internalServerError1"})}
+          {"Sunucu hatası 500. Sorunu düzeltiyoruz. Lütfen daha sonra tekrar deneyin."}
           </Typography>
           <Button component={Link} href={HOME_DEFAULT_PATH} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
-          {intl.formatMessage({id: "backToHome"})}
+          {"Ana Sayfaya Dön"}
           </Button>
         </Stack>
       </Grid>

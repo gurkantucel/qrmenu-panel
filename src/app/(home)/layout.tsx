@@ -1,5 +1,4 @@
 // project-imports
-import SimpleLayout from 'layout/SimpleLayout';
 import { Metadata } from 'next';
 
 // ================================|| SIMPLE LAYOUT ||================================ //
@@ -13,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <SimpleLayout>{children}</SimpleLayout>;
+  return <>{children}</>;
 }

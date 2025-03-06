@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, Container, Grid } from '@mui/material'
 import Breadcrumbs from 'components/@extended/Breadcrumbs'
 import MainCard from 'components/MainCard'
 import React from 'react'
@@ -39,11 +39,13 @@ const BlogPage = async ({ params }: Params) => {
                         <MainCard
                             title={result.data.title}
                         >
-                            <Typography variant="body1">
-                                <div
+                            <div
+                                    style={{
+                                        fontFamily: 'var(--font-poppins)', fontSize: '0.875rem',
+                                        lineHeight: 1.57
+                                    }}
                                     dangerouslySetInnerHTML={{ __html: result.data.data.content ?? "" }}
                                 />
-                            </Typography>
                         </MainCard>
 
                     </Grid>

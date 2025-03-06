@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 
 // project-imports
-import MainCard from 'components/MainCard';
+import MainCard2 from 'components/MainCard2';
 
 // assets
 import { BlogData } from 'reduxt/features/definition/models/blog-model';
@@ -33,7 +33,6 @@ function metniKisalt(metin: string, maksimumUzunluk: number) {
 }
 
 export default function BlogListView(props: Props) {
-
   return (
     <Container>
       <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ mt: { md: 15, xs: 2.5 }, mb: { md: 10, xs: 2.5 } }}>
@@ -50,7 +49,7 @@ export default function BlogListView(props: Props) {
                   delay: 0.2
                 }}
               >
-                <Typography variant="h2">Blog</Typography>
+                <Typography variant="h2" sx={{ fontFamily: 'var(--font-poppins)', fontWeight: 600, fontSize: "1.875rem", lineHeight: 1.27 }}>Blog</Typography>
               </motion.div>
             </Grid>
             <Grid item xs={12}>
@@ -64,7 +63,10 @@ export default function BlogListView(props: Props) {
                   delay: 0.4
                 }}
               >
-                <Typography>{"Sağlık bilgilendirme ve klinik yazılımları üzerine..."}</Typography>
+                <Typography sx={{
+                  fontFamily: 'var(--font-poppins)', fontSize: '0.875rem',
+                  lineHeight: 1.57
+                }}>{"Sağlık bilgilendirme ve klinik yazılımları üzerine..."}</Typography>
               </motion.div>
             </Grid>
           </Grid>
@@ -73,21 +75,30 @@ export default function BlogListView(props: Props) {
           <Grid container spacing={3} alignItems="center" justifyContent="center">
             {props.data?.map((item, index) => (
               <Grid item xs={12} md={6} lg={6} key={index}>
-                <MainCard>
+                <MainCard2>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       {item.thumb && <CardMedia component="img" image={item.thumb} alt={item.title} />}
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="h4" component={Link} color={"primary"} sx={{ textDecoration: "none" }} href={`/blog/${item.slug}`}>{item.title}</Typography>
+                      <Typography variant="h4" component={Link} color={"primary"} sx={{
+                        fontFamily: 'var(--font-poppins)',
+                        textDecoration: "none", 
+                        fontWeight: 600,
+                        fontSize: '1.25rem',
+                        lineHeight: 1.4,
+                        color: '#60d99d'
+                      }} href={`/blog/${item.slug}`} title={item.title}>{item.title}</Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography><div
+                      <div
+                        style={{fontFamily: 'var(--font-poppins)',fontSize: '0.875rem',
+                          lineHeight: 1.57}}
                         dangerouslySetInnerHTML={{ __html: metniKisalt(item.content, 200) }}
-                      /></Typography>
+                      />
                     </Grid>
                   </Grid>
-                </MainCard>
+                </MainCard2>
               </Grid>
             ))}
           </Grid>
