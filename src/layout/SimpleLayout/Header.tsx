@@ -124,11 +124,11 @@ export default function Header() {
               >
                 Ana Sayfa
               </Links>
-              <Links 
+              <Links
                 className={pathname == "/hakkimizda" ? "header-link-active" : "header-link"}
-                color="secondary.main" 
-                component={Link} 
-                href="/hakkimizda" 
+                color="secondary.main"
+                component={Link}
+                href="/hakkimizda"
                 underline="none">
                 Hakkımızda
               </Links>
@@ -203,7 +203,7 @@ export default function Header() {
                       </ListItemButton>
                     </Links>
                     <Links sx={linksSx} href="/hakkimizda">
-                      <ListItemButton>  
+                      <ListItemButton>
                         <ListItemIcon>
                           <Minus color={theme.palette.secondary.main} />
                         </ListItemIcon>
@@ -227,6 +227,22 @@ export default function Header() {
                       </ListItemButton>
                     </Links>
                   </List>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: "5px" }}>
+                    <AnimateButton>
+                      <Button
+                        component={Links}
+                        href={url}
+                        target="_blank"
+                        disableElevation
+                        startIcon={<ExportSquare />}
+                        color="success"
+                        size="large"
+                        variant="contained"
+                      >
+                        {"Giriş Yap"}
+                      </Button>
+                    </AnimateButton>
+                  </Box>
                 </Box>
               </Drawer>
             </Box>
