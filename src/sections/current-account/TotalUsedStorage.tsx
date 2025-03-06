@@ -52,7 +52,7 @@ export default function TotalUsedStorage({ currentAccountData, isCurrentAccountL
         <Grid item xs={12}>
           <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
             <Typography variant="h5">{intl.formatMessage({id: "storage"})}</Typography>
-            <Typography variant="h4">{isCurrentAccountLoading ? "...." : currentAccountData?.data.total_storage} GB</Typography>
+            <Typography variant="h4">{isCurrentAccountLoading ? "...." : currentAccountData?.data.total_storage}</Typography>
           </Stack>
           <Avatar color="secondary" variant="rounded" sx={{ mt: 0.75, bgcolor: 'secondary.dark' }}>
             <Cloud color={theme.palette.secondary.light} />
@@ -60,10 +60,10 @@ export default function TotalUsedStorage({ currentAccountData, isCurrentAccountL
         </Grid>
         <Grid item xs={12}>
           <Stack spacing={0.75}>
-            <Typography variant="caption">{`${currentAccountData?.data.total_used_storage ?? 0} GB/10 GB`}</Typography>
+            <Typography variant="caption">{`${currentAccountData?.data.total_used_storage ?? 0}/${currentAccountData?.data.total_storage ?? 0}`}</Typography>
             <Box sx={{ display: 'flex' }}>
-              <LinearProgress variant="determinate" value={100} color="error" sx={{ width: '15%' }} />
-              <LinearProgress variant="determinate" value={100} color="success" sx={{ width: '85%', right: 8 }} />
+              <LinearProgress variant="determinate" value={100} color="error" sx={{ width: `${currentAccountData?.data.total_usage_percentage ?? 0}%` }} />
+              <LinearProgress variant="determinate" value={100} color="success" sx={{ width: `${100-Number((currentAccountData?.data.total_usage_percentage ?? 0))}%`, right: 8 }} />
             </Box>
           </Stack>
         </Grid>
