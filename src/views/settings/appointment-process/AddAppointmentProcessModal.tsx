@@ -244,16 +244,18 @@ const AddAppointmentProcessModal = () => {
                                                 zIndex={9999}
                                                 options={getAppointmentProcessTypeData?.data?.map((item) => ({
                                                     value: item.value,
-                                                    label: item.label
+                                                    label: item.label,
+                                                    field: item.field
                                                 }))}
                                                 value={
                                                     values.appointment_process_type_id ? { label: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.label ?? "", value: getAppointmentProcessTypeData?.data?.find((item) => item.value == values.appointment_process_type_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
+                                                    console.log(val);
                                                     setFieldValue("appointment_process_type_id", val?.value ?? 0);
-                                                    if (val?.value == "305ee410-8284-408e-99c7-9c2ee07f7297") {
+                                                    if (val?.field == "00003") {
                                                         //paket ise getir.
                                                         getAppointmentProcessDropdown({
-                                                            include_packages: val?.value == "305ee410-8284-408e-99c7-9c2ee07f7297" ? false : true,
+                                                            include_packages: val?.field == "00003" ? false : true,
                                                             //excluded_appointment_process_id: values.appointment_process_id
                                                         });
                                                     } else {
@@ -384,7 +386,7 @@ const AddAppointmentProcessModal = () => {
                                                 isLoading={getAppointmentProcessDropdownLoading}
                                                 zIndex={9997}
                                                 isMulti={true}
-                                                isDisabled={values.appointment_process_type_id != "305ee410-8284-408e-99c7-9c2ee07f7297"}
+                                                isDisabled={values.appointment_process_type_id != getAppointmentProcessTypeData?.data?.find((item) => item.field == "00003")?.value}
                                                 options={getAppointmentProcessDropdownData?.data?.map((item) => ({
                                                     value: item.value,
                                                     label: item.label

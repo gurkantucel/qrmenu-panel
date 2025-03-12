@@ -157,7 +157,7 @@ const PastAppointmentTable = () => {
             header: intl.formatMessage({ id: "status" }),
             //cell: info => info.renderValue() == null ? "-" : info.renderValue(),
             cell: (info) => {
-                return <Chip color={info.row.original.appointment_status_id == 1 ? "warning" : info.row.original.appointment_status_id == 2 ? "success" : info.row.original.appointment_status_id == 3 ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
+                <Chip color={info.row.original.appointment_status_code == "00001" ? "warning" : info.row.original.appointment_status_code == "00002" ? "success" : info.row.original.appointment_status_code == "00003" ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
             },
             footer: info => info.column.id,
         }),

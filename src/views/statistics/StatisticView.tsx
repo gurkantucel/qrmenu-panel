@@ -41,7 +41,7 @@ const StatisticView = () => {
                         <AnalyticEcommerce title={intl.formatMessage({ id: "numberOfAppointments" })} count={getStatisticData.data.appointmentStats.total.toString() ?? "0"} percentage={getStatisticData.data.appointmentStats.increase} extra={getStatisticData.data?.appointmentStats?.this_month?.toString() ?? "0"} isLoss={true} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={4} lg={3}>
-                        <StaticReadVenue title="Kazanç" color="success" data={getStatisticData.data.readVenue} />
+                        <StaticReadVenue title="Kazanç" color="success" data={getStatisticData.data.readVenue ?? []} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={4} lg={3}>
                         <AnalyticEcommerce title={intl.formatMessage({ id: "numberOfPatients" })} count={getStatisticData.data.patientStats.total.toString() ?? "0"} percentage={getStatisticData.data.patientStats.increase} isLoss={true} extra={getStatisticData.data?.patientStats?.this_month?.toString() ?? "0"} />

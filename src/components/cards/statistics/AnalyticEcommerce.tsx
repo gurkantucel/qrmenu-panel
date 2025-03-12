@@ -47,7 +47,7 @@ export default function AnalyticEcommerce({ color = 'primary', title, count, per
                 color={percentage == 0 ? "warning" : percentage > 0 ? "success" : "error"}
                 icon={percentage == 0 ? <></> : percentage > 0 ? <ArrowUp style={{ transform: 'rotate(45deg)' }} /> : <ArrowRight style={{ transform: 'rotate(45deg)' }} />
                 }
-                label={`${percentage}%`}
+                label={`${percentage.toFixed(0)}%`}
                 sx={{ ml: 1.25, pl: 1, borderRadius: 1 }}
                 size="small"
               />

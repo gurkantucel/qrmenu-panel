@@ -24,9 +24,9 @@ export interface AppointmentStats {
 
 export interface ReadVenue {
   currency_code: string
-  amount: number
+  total: string
   increase: number
-  this_month: number
+  this_month: string
 }
 
 export interface PatientStats {

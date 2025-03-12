@@ -145,6 +145,7 @@ export interface AppointmentListResultModel {
     person_full_name: string
     appointment_status_id: number
     appointment_status_name: string
+    appointment_status_code: string
     background_color: string
     font_color: string
     all_day: boolean
