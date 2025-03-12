@@ -82,7 +82,7 @@ const AppointmentTable = () => {
       header: intl.formatMessage({ id: "status" }),
       //cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       cell: (info) => {
-        return <Chip color={info.row.original.appointment_status_code == "00001" ? "warning" : info.row.original.appointment_status_code == "00002" ? "success" : info.row.original.appointment_status_code == "00003" ? "error" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
+        return <Chip color={info.row.original.appointment_status_code == "00001" ? "warning" : info.row.original.appointment_status_code == "00002" ? "success" : info.row.original.appointment_status_code == "00003" ? "error" : info.row.original.appointment_status_code == "00004" ? "info" : "info"} label={info.row.original.appointment_status_name} size="small" variant="light" />
       },
       footer: info => info.column.id,
       meta: {
