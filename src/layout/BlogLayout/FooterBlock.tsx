@@ -45,7 +45,7 @@ export default function FooterBlock({ isFull }: showProps) {
                 'a': {
                   color: "#1D2630",
                 },
-                'a:hover' : {
+                'a:hover': {
                   color: "#60d99d"
                 }
               }}>
@@ -83,6 +83,12 @@ export default function FooterBlock({ isFull }: showProps) {
                       </Link>
                       <Link href="/iletisim" underline="none">
                         {"İletişim"}
+                      </Link>
+                      <Link href="https://play.google.com/store/apps/details?id=com.tuceldev.klinik_ease" underline="none" target='_blank' title={"Klinik Ease Play Store"}>
+                        {"Play Store"}
+                      </Link>
+                      <Link href="https://apps.apple.com/app/klinik-ease/id6743171410" underline="none" target='_blank' title={"Klinik Ease App Store"}>
+                        {"App Store"}
                       </Link>
                     </Stack>
                   </Stack>

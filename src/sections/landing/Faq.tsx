@@ -2,6 +2,8 @@
 
 import { Accordion, AccordionDetails, AccordionSummary, Box, Container, Grid, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 
 type Props = {
@@ -78,6 +80,24 @@ const FaqLandingPage = (props: Props) => {
                         </AccordionDetails>
                     </Accordion>
                 ))}
+                <Grid container justifyContent={"center"} marginTop={5}>
+                <Link href={"https://play.google.com/store/apps/details?id=com.tuceldev.klinik_ease"} title={"Klinik Ease Android Uygulamasını Play Store'dan İndirin"} target='_blank'><Image src={"/assets/images/download-googleplay.svg"} width={134} height={43} alt='Klinik Ease Android' style={{
+                    background: "#60d99d",
+                    padding: "10px 20px",
+                    borderRadius: "17px",
+                    width: "max-content",
+                    height: "55px",
+                    marginRight: "10px",
+                }} /></Link>
+                <Link href={"https://apps.apple.com/app/klinik-ease/id6743171410"} title={"Klinik Ease iOS Uygulamasını App Store'dan İndirin"} target='_blank'><Image src={"/assets/images/download-appstore.svg"} width={134} height={43} alt='Klinik Ease iOS' style={{
+                    background: "#60d99d",
+                    padding: "10px 20px",
+                    borderRadius: "17px",
+                    width: "max-content",
+                    height: "55px"
+                }} /></Link>
+                </Grid>
+                
             </Container>
         </Box >
     )
