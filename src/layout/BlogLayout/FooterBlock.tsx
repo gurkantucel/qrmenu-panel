@@ -140,7 +140,7 @@ export default function FooterBlock({ isFull }: showProps) {
                 </Grid>
                 <Grid item>
                   <Tooltip title="Youtube">
-                    <Link href="#" underline="none" target="_blank" sx={linkSX}>
+                    <Link href="https://www.youtube.com/@KlinikEase" rel="nofollow" underline="none" target="_blank" sx={linkSX}>
                       <Youtube variant="Bold" size={20} />
                     </Link>
                   </Tooltip>

@@ -23,6 +23,7 @@ export interface AppointmentProcessListData {
     description: any
     amount: string | number
     vat: number
+    vat_included: boolean
     detail?: Detail[]
     created_at: string
     updated_at: string

@@ -370,7 +370,7 @@ const AddAppointmentProcessModal = () => {
                                     <Grid item xs={12}>
                                         <FormControlLabel control={<Switch
                                             checked={values.vat_included}
-                                            value={values.status} onChange={(e, checked) => {
+                                            value={values.vat_included} onChange={(e, checked) => {
                                                 setFieldValue("vat_included", checked);
                                             }} />} label={intl.formatMessage({ id: "vatIncluded" })} />
                                     </Grid>

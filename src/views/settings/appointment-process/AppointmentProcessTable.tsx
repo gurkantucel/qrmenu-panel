@@ -219,6 +219,7 @@ const AppointmentProcessTable = () => {
                     description: info.row.original.description,
                     amount: info.row.original.amount,
                     vat: info.row.original.vat,
+                    vat_included: info.row.original.vat_included,
                     sub_appointment_process: info.row.original.detail?.map((item) => (item.appointment_process_id)),
                     status: info.row.original.status
                   }
