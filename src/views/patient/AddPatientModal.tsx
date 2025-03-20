@@ -62,7 +62,6 @@ const AddPatientModal = () => {
         isLoading: getDistrictListLoading
     }] = useLazyGetDistrictDropdownQuery();
 
-
     const [getPatientReferenceList, {
         data: getPatientReferenceListData,
         isLoading: getPatientReferenceListLoading
