@@ -24,7 +24,7 @@ const smsTemplateApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["smsTemplate"]
+            invalidatesTags: (result) => result?.status ? ["smsTemplate"] : [],
         }),
     })
 })

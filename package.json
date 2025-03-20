@@ -26,6 +26,7 @@
     "@mui/material": "^5.16.6",
     "@mui/system": "^5.16.6",
     "@mui/x-date-pickers": "^7.23.0",
+    "@next/third-parties": "^15.2.3",
     "@reduxjs/toolkit": "^2.5.0",
     "@svgr/webpack": "^8.1.0",
     "@tanstack/match-sorter-utils": "^8.19.4",

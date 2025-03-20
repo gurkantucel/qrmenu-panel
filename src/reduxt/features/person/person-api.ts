@@ -26,7 +26,7 @@ const personApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["person"]
+            invalidatesTags: (result) => result?.status ? ["person"] : [],
         }),
         updatePerson: builder.mutation<CreateResultModel, PersonCreateBodyModel>({
             query: (body) => {
@@ -36,7 +36,7 @@ const personApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["person"]
+            invalidatesTags: (result) => result?.status ? ["person"] : [],
         }),
         deletePerson: builder.mutation<CreateResultModel, { person_id: number | string }>({
             query: (args) => {
@@ -46,7 +46,7 @@ const personApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["person"]
+            invalidatesTags: (result) => result?.status ? ["person"] : [],
         }),
         readPerson: builder.query<PersonReadResultModel, { person_id?: number | string }>({
             query: (args?: { person_id?: number | string }) => {

@@ -26,7 +26,7 @@ const appointmentApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointment"]
+            invalidatesTags: (result) => result?.status ? ["appointment"] : [],
         }),
         updateAppointment: builder.mutation<CreateResultModel, AppointmentCreateBodyModel>({
             query: (body) => {
@@ -36,7 +36,7 @@ const appointmentApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointment"]
+            invalidatesTags: (result) => result?.status ? ["appointment"] : [],
         }),
         deleteAppointment: builder.mutation<CreateResultModel, { appointment_id: number | string, patient_id: number | string }>({
             query: (args) => {
@@ -46,7 +46,7 @@ const appointmentApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["appointment"]
+            invalidatesTags: (result) => result?.status ? ["appointment"] : [],
         }),
         readAppointment: builder.query<AppointmentReadResultModel, { appointment_id?: number | string, patient_id?: number | string }>({
             query: (args) => {
@@ -83,7 +83,7 @@ const appointmentApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointment"]
+            invalidatesTags: (result) => result?.status ? ["appointment"] : [],
         }),
         listAppointmentHistory: builder.query<AppointmentHistoryListResultModel, { appointment_id?: number | string, patient_id?: number | string, filterSearch?: string, page?: number, pageSize?: number }>({
             query: (args?: { appointment_id?: number | string, patient_id?: number | string, filterSearch?: string, page?: number, pageSize?: number }) => {

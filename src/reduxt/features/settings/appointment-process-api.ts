@@ -25,7 +25,7 @@ const appointmentProcessApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointmentProcess"]
+            invalidatesTags: (result) => result?.status ? ["appointmentProcess"] : [],
         }),
         updateAppointmentProcess: builder.mutation<CreateResultModel, CreateAppointmentProcessBodyModel>({
             query: (body) => {
@@ -35,7 +35,7 @@ const appointmentProcessApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointmentProcess"]
+            invalidatesTags: (result) => result?.status ? ["appointmentProcess"] : [],
         }),
         deleteAppointmentProcess: builder.mutation<CreateResultModel, { appointment_process_id: number | string }>({
             query: (args) => {
@@ -45,7 +45,7 @@ const appointmentProcessApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["appointmentProcess"]
+            invalidatesTags: (result) => result?.status ? ["appointmentProcess"] : [],
         }),
         getAppointmentProcessDropdown: builder.query<DropdownListModel, { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }>({
             query: (args?: { label?: string, include_packages?: boolean, excluded_appointment_process_id?: number | string | null }) => {

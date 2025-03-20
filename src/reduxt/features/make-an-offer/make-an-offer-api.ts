@@ -25,7 +25,7 @@ const makeAnOfferApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["quote"]
+            invalidatesTags: (result) => result?.status ? ["quote"] : [],
         }),
         updateMakeAnOffer: builder.mutation<CreateResultModel, MakeAnOfferCreateBodyModel>({
             query: (body) => {
@@ -35,7 +35,7 @@ const makeAnOfferApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["quote"]
+            invalidatesTags: (result) => result?.status ? ["quote"] : [],
         }),
         deleteMakeAnOffer: builder.mutation<CreateResultModel, { quote_id: number | string }>({
             query: (args) => {
@@ -45,7 +45,7 @@ const makeAnOfferApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["quote"]
+            invalidatesTags: (result) => result?.status ? ["quote"] : [],
         }),
         readMakeAnOffer: builder.query<MakeAnOfferReadResultModel, { quote_id?: number | string }>({
             query: (args) => {
