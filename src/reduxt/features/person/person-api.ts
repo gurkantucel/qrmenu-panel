@@ -26,8 +26,7 @@ const personApi = createApi({
                     body: body
                 }
             },
-            //invalidatesTags: ["person"]
-            invalidatesTags: (result) => result?.status ? ["person"] : [],
+            invalidatesTags: ["person"]
         }),
         updatePerson: builder.mutation<CreateResultModel, PersonCreateBodyModel>({
             query: (body) => {
