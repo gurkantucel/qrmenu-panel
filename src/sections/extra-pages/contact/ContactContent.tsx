@@ -2,7 +2,7 @@
 
 import { Box, Card, Container, Grid, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
-import { Message, Whatsapp, Location } from 'iconsax-react';
+import { Message, Call, Location } from 'iconsax-react';
 import React from 'react'
 
 const ContactContent = () => {
@@ -58,10 +58,10 @@ const ContactContent = () => {
                 <Grid container sx={{ paddingLeft: 4, paddingRight: 4, paddingTop: 4 }} spacing={8}>
                     <Grid item xs={6}>
                         <Card sx={{ padding: 2 }}>
-                            <Whatsapp size={42} color="#128c7e" />
-                            <Typography variant="body1" color={"GrayText"}>{"WhatsApp Destek Hattı"}</Typography>
+                            <Call size={42} color="#128c7e" />
+                            <Typography variant="body1" color={"GrayText"}>{"İletişim Hattı"}</Typography>
                             <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 2 }}>{"850 308 12 37"}</Typography>
-                            <Typography variant="body1" color={"GrayText"} sx={{ marginTop: 1 }}>{"Sorularınıza hızlıca yanıt alabilmeniz için WhatsApp destek hattını kullanabilirsiniz."}</Typography>
+                            <Typography variant="body1" color={"GrayText"} sx={{ marginTop: 1 }}>{"Sorularınıza hızlıca yanıt alabilmeniz için iletişim kanallarımızı kullanabilirsiniz."}</Typography>
                         </Card>
                     </Grid>
                     <Grid item xs={6}>
