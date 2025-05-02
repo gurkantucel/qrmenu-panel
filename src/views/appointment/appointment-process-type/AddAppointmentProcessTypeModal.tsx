@@ -375,7 +375,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     disabled
                                                                     fullWidth
                                                                     startAdornment={<>{values.data[index].currency_code ?? ""}</>}
-                                                                    error={Boolean((touched.data && touched.data[index]?.vat_amount) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.total))}
+                                                                    error={Boolean((touched.data && touched.data[index]?.total) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.total))}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.total) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.total) && (

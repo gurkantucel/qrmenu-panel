@@ -34,7 +34,7 @@ const AddAppointmentCalendarModal = () => {
     const dispatch = useAppDispatch();
     const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
     const intl = useIntl()
-    
+
     const [calendarView, setCalendarView] = useState<string>("timeGridWeek");
     const [date, setDate] = useState(new Date());
     const calendarRef = useRef<FullCalendar>(null);
@@ -103,6 +103,12 @@ const AddAppointmentCalendarModal = () => {
             getAppointmentCalendarList({ person_id: id });
         }
     }, [open, id])
+
+    useEffect(() => {
+        return () => {
+            handleClose()
+        }
+    }, [])
 
     return (
         <Dialog open={open && modalType == AppointmentCalendarModalEnum.appointmentCalendar} onClose={handleClose} fullScreen>

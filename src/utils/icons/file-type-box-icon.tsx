@@ -8,12 +8,12 @@ import FileBoxIcon from 'utils/icons/file-box-icon';
 import Image from 'next/image';
 
 type Props = {
-    objectMime: string, 
-    imageUrl?: string, 
+    objectMime: string,
+    imageUrl?: string,
     alt?: string
 }
 
-export const FileTypeBoxIcon = (props:Props) => {
+export const FileTypeBoxIcon = (props: Props) => {
     switch (props.objectMime) {
         case 'doc':
         case 'docx':
@@ -35,7 +35,8 @@ export const FileTypeBoxIcon = (props:Props) => {
         case 'png':
         case 'gif':
         case 'bmp':
-            return props.imageUrl !=null ? <Image src={props.imageUrl ?? "#"} alt={props.alt ?? ""} width={128} height={128} style={{ objectFit: "none" }} /> : <></>
+        case 'webp':
+            return props.imageUrl != null ? <Image src={props.imageUrl ?? "#"} alt={props.alt ?? ""} width={128} height={128} style={{ objectFit: "none" }} /> : <></>
         case 'mp4':
         case 'mov':
         case 'avi':
