@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { Form, Formik } from 'formik';
+import { Form, Formik, useFormikContext } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
@@ -24,7 +24,10 @@ import { AppointmentCalendarModalEnum, setCalendarModal } from "reduxt/features/
 import { AppointmentCreateBodyModel } from "reduxt/features/appointment/models/appointment-list-model";
 import { useCreateAppointmentMutation } from "reduxt/features/appointment/appointment-api";
 import { newAppointmentSchema } from "utils/schemas/appointment-validation-schema";
-import { useLazyGetAppointmentStatusDropdownQuery, useLazyGetAppointmentTypeDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetAppointmentStatusDropdownQuery, useGetAppointmentTypeDropdownQuery } from "reduxt/features/definition/definition-api";
+import { DropdownListModel } from "utils/models/dropdown-list-model";
+import { getCookie } from "cookies-next";
+import { Person } from "reduxt/features/auth/models/auth-models";
 
 type Props = {
     page?: string
@@ -50,9 +53,9 @@ const AddAppointmentModal = (props: Props) => {
 
     const [getPatientDropdown, { isLoading: getPatientDropdownLoading }] = useLazyGetPatientDropdownQuery();
 
-    const [getAppointmentStatusDropdown, { isLoading: getAppointmentStatusDropdownLoading, data: getAppointmentStatusData }] = useLazyGetAppointmentStatusDropdownQuery();
+    const { isLoading: getAppointmentStatusDropdownLoading, data: getAppointmentStatusData } = useGetAppointmentStatusDropdownQuery()
 
-    const [getAppointmentTypeDropdown, { isLoading: getAppointmentTypeDropdownLoading, data: getAppointmentTypeData }] = useLazyGetAppointmentTypeDropdownQuery();
+    const { isLoading: getAppointmentTypeDropdownLoading, data: getAppointmentTypeData } = useGetAppointmentTypeDropdownQuery()
 
     const getPatientDropdownOptions = async (inputValue: string) => {
 
@@ -73,8 +76,8 @@ const AddAppointmentModal = (props: Props) => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointment) {
             getAcceptingAppointmentDropDownList({});
-            getAppointmentStatusDropdown();
-            getAppointmentTypeDropdown();
+            //getAppointmentStatusDropdown();
+            //getAppointmentTypeDropdown();
         }
     }, [open, id])
 
@@ -327,27 +330,7 @@ const AddAppointmentModal = (props: Props) => {
                                         </AuthDivider>
                                     </Grid>
                                     <Grid item xs={12} sm={6} sx={{ paddingTop: "10px !important" }}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="person_id">{`${intl.formatMessage({ id: "doctorPerson" })}*`}</InputLabel>
-                                            <CustomFormikSelect
-                                                name='person_id'
-                                                placeholder="Doktor/Çalışan Seçin"
-                                                isClearable={true}
-                                                isLoading={getAcceptingAppointmentListLoading}
-                                                zIndex={997}
-                                                value={
-                                                    values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? 0 } : null}
-                                                onChange={(val: any) => {
-                                                    setFieldValue("person_id", val?.value);
-                                                    setPersonName(val?.label);
-                                                }}
-
-                                                options={getAcceptingAppointmentListData?.data?.map((item) => ({
-                                                    value: item.value,
-                                                    label: item.label
-                                                }))}
-                                            />
-                                        </Stack>
+                                        <DoctorPersonInput getAcceptingAppointmentListData={getAcceptingAppointmentListData} getAcceptingAppointmentListLoading={getAcceptingAppointmentListLoading} setPersonName={setPersonName} />
                                     </Grid>
                                     <Grid item xs={12} sm={6} sx={{ paddingTop: "10px !important" }}>
                                         <Stack spacing={1}>
@@ -497,5 +480,61 @@ const AddAppointmentModal = (props: Props) => {
         </>
     )
 }
+
+type DoctorPersonInputType = {
+    getAcceptingAppointmentListData?: DropdownListModel
+    getAcceptingAppointmentListLoading: boolean
+    setPersonName: any
+}
+
+const DoctorPersonInput = ({ getAcceptingAppointmentListData, getAcceptingAppointmentListLoading, setPersonName }: DoctorPersonInputType) => {
+    const { values, setFieldValue, touched, errors } = useFormikContext<any>();
+    const intl = useIntl()
+
+    useEffect(() => {
+        if (getAcceptingAppointmentListData?.status && getAcceptingAppointmentListData.data != null) {
+            const cookieValue = getCookie("person");
+            if (cookieValue != null) {
+                var personCookieValue = JSON.parse(cookieValue) as Person;
+                var personFilter = getAcceptingAppointmentListData?.data.find((item) => item.value == personCookieValue.person_id)
+                if (personFilter != null) {
+                    setFieldValue("person_id", personFilter.value);
+                    setPersonName(personFilter.label)
+                } else {
+                    setFieldValue("person_id", getAcceptingAppointmentListData?.data[0].value);
+                    setPersonName(getAcceptingAppointmentListData?.data[0].label)
+                }
+            } else {
+                setFieldValue("person_id", getAcceptingAppointmentListData?.data[0].value);
+                setPersonName(getAcceptingAppointmentListData?.data[0].label)
+            }
+        }
+    }, [getAcceptingAppointmentListData])
+
+    return (
+        <Stack spacing={1}>
+            <InputLabel htmlFor="person_id">{`${intl.formatMessage({ id: "doctorPerson" })}*`}</InputLabel>
+            <CustomFormikSelect
+                name='person_id'
+                placeholder="Doktor/Çalışan Seçin"
+                isClearable={true}
+                isLoading={getAcceptingAppointmentListLoading}
+                zIndex={997}
+                value={
+                    values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? 0 } : null}
+                onChange={(val: any) => {
+                    setFieldValue("person_id", val?.value);
+                    setPersonName(val?.label);
+                }}
+
+                options={getAcceptingAppointmentListData?.data?.map((item) => ({
+                    value: item.value,
+                    label: item.label
+                }))}
+            />
+        </Stack>
+    )
+}
+
 
 export default AddAppointmentModal

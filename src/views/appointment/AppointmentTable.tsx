@@ -223,10 +223,7 @@ const AppointmentTable = () => {
     }),
   ], [])
 
-  const [columnFilters, setColumnFilters] = useState<any[]>([{
-    "id": "appointment_start",
-    "value": dayjs().format("YYYY-MM-DD")
-  }]);
+  const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,

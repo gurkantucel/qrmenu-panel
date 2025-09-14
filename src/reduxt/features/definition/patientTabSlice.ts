@@ -6,6 +6,7 @@ export enum PatientTabEnum {
     saglik_bilgileri,
     dosyalar,
     odemeler,
+    olcumler,
     randevular
 }
 

@@ -44,7 +44,7 @@ const ViewAppointmentProcessModal = () => {
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "type" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.appointment_process_type_name ?? "-"}</Typography>} />
                 </ListItem>
                 <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "amount" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.amount ?? "-"} {data?.currency_code ?? "-"}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "amount" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.total ?? "-"} {data?.currency_code ?? "-"}</Typography>} />
                 </ListItem>
                 <ListItem divider>
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "vat" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.vat ?? "-"}</Typography>} />

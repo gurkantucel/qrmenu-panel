@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect } from "react";
@@ -15,6 +15,7 @@ import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { updateAppointmentProcessTypeSchema } from "utils/schemas/appointment-validation-schema";
 import { useUpdateAppointmentProcessTypeMutation } from "reduxt/features/appointment/appointment-process-type-api";
+import CurrencyInput from "react-currency-input-field";
 
 const UpdateAppointmentProcessTypeModal = () => {
 
@@ -127,7 +128,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 placeholder={intl.formatMessage({ id: "quantity" })}
                                                 fullWidth
                                                 error={Boolean(touched.quantity && errors.quantity)}
-                                                inputProps={{min: 0,step: "0.5"}}
+                                                inputProps={{ min: 0, step: "0.5" }}
                                             />
                                         </Stack>
                                         {touched.quantity && errors.quantity && (
@@ -140,19 +141,30 @@ const UpdateAppointmentProcessTypeModal = () => {
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="unitPrice">
                                                 {`${intl.formatMessage({ id: "unitPrice" })}*`}</InputLabel>
-                                            <OutlinedInput
-                                                id="name"
-                                                type="number"
-                                                value={values.amount}
-                                                name={`amount`}
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "unitPrice" })}
-                                                fullWidth
-                                                startAdornment={<>{data?.currency_code ?? ""}</>}
-                                                error={Boolean(touched.amount && errors.amount)}
-                                                inputProps={{min: 0}}
-                                            />
+                                            <Field name={"amount"}>
+                                                {({ field, form, meta }: any) => (
+                                                    <CurrencyInput
+                                                        id="amount"
+                                                        name={`amount`}
+                                                        placeholder={intl.formatMessage({ id: "amount" })}
+                                                        value={values.amount}
+                                                        //decimalsLimit={2}
+                                                        onValueChange={(value, name, values2) => {
+                                                            setFieldValue(`amount`, values2?.value)
+                                                        }}
+                                                        style={{
+                                                            padding: 14,
+                                                            border: `1px solid ${(touched.quantity && (errors.quantity)) ? "#F04134" : "#BEC8D0"}`,
+                                                            borderRadius: 8,
+                                                            color: "#1D2630",
+                                                            fontSize: "0.875rem",
+                                                            boxSizing: "content-box",
+                                                            height: "1.4375em",
+                                                            font: "inherit"
+                                                        }}
+                                                    />
+                                                )}
+                                            </Field>
                                         </Stack>
                                         {touched.amount && errors.amount && (
                                             <FormHelperText error id="helper-text-firstname-signup">
@@ -174,7 +186,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 placeholder={intl.formatMessage({ id: "discount" })}
                                                 fullWidth
                                                 error={Boolean(touched.discount_percentage && errors.discount_percentage)}
-                                                inputProps={{min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.quantity && errors.quantity && (
@@ -190,7 +202,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                             <OutlinedInput
                                                 id="discount_amount"
                                                 type="number"
-                                                value={(values.quantity * values.amount * values.discount_percentage) / 100}
+                                                value={((values.quantity * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100).toFixed(2)}
                                                 disabled
                                                 name={`discount_amount`}
                                                 onBlur={handleBlur}
@@ -199,7 +211,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 fullWidth
                                                 startAdornment={<>{data?.currency_code ?? ""}</>}
                                                 error={Boolean(touched.discount_amount && errors.discount_amount)}
-                                                inputProps={{min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.discount_amount && errors.discount_amount && (
@@ -222,7 +234,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 placeholder={intl.formatMessage({ id: "vat" })}
                                                 fullWidth
                                                 error={Boolean(touched.vat && errors.vat)}
-                                                inputProps={{min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.vat && errors.vat && (
@@ -239,9 +251,9 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 id="vat_amount"
                                                 type="number"
                                                 value={
-                                                    (values.quantity * values.amount -
-                                                        (values.quantity * values.amount * values.discount_percentage) / 100) *
-                                                    (values.vat / 100)
+                                                    (((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                        (values.quantity * parseFloat(values.amount?.replace(',', '.') ?? "0") * (values.discount_percentage ?? 0)) / 100) *
+                                                        ((values.vat ?? 0) / 100)).toFixed(2)
                                                 }
                                                 disabled
                                                 name={`vat_amount`}
@@ -251,7 +263,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 fullWidth
                                                 startAdornment={<>{data?.currency_code ?? ""}</>}
                                                 error={Boolean(touched.vat_amount && errors.vat_amount)}
-                                                inputProps={{min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.vat_amount && errors.vat_amount && (
@@ -268,11 +280,11 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 id="total"
                                                 type="number"
                                                 value={
-                                                    values.quantity * values.amount -
-                                                    (values.quantity * values.amount * values.discount_percentage) / 100 +
-                                                    (values.quantity * values.amount -
-                                                        (values.quantity * values.amount * values.discount_percentage) / 100) *
-                                                    (values.vat / 100)
+                                                    ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                        ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100 +
+                                                        ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                            ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100) *
+                                                        ((values.vat ?? 0) / 100)).toFixed(2)
                                                 }
                                                 disabled
                                                 name={`total`}
@@ -282,7 +294,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 fullWidth
                                                 startAdornment={<>{data?.currency_code ?? ""}</>}
                                                 error={Boolean(touched.total && errors.total)}
-                                                inputProps={{min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.vat_amount && errors.vat_amount && (

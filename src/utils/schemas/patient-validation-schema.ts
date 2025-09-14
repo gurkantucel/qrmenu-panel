@@ -123,4 +123,13 @@ const newPatientPaymentHistorySchema = Yup.object({
     }))
 })
 
-export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema }
+const newDieticianPatientMeasurementValidationSchema = Yup.object({
+    weight: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    height: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    waist: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    hip: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    chest: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    measurement_date: Yup.string().trim().min(1).required("Bu alan zorunlu"),
+})
+
+export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema, newDieticianPatientMeasurementValidationSchema }

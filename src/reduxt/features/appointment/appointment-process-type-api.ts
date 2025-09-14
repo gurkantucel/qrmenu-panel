@@ -65,7 +65,8 @@ const appointmentProcessTypeApi = createApi({
                 responseHandler: async (response: Response) => {
                     const blobUrl = window.URL.createObjectURL(await response.blob());
                     console.log(JSON.stringify(response.headers));
-                    const fileName = response.headers.get("content-disposition")?.split('filename=')[1].split(';')[0];
+                    let fileName = response.headers.get("content-disposition")?.split('filename=')[1].split(';')[0];
+                    fileName = decodeURIComponent(fileName ?? "download.pdf");
                     const a = document.createElement('a');
                     a.href = blobUrl;
                     a.download = fileName ?? "download.pdf";

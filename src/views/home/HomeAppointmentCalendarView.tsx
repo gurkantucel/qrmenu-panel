@@ -22,6 +22,7 @@ import { Add } from 'iconsax-react';
 import AddAppointmentModal from 'views/appointment/AddAppointmentModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
+import { useRouter } from 'next/navigation';
 
 const HomeAppointmentCalendarView = () => {
     //const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -33,6 +34,8 @@ const HomeAppointmentCalendarView = () => {
     const [calendarView, setCalendarView] = useState<string>("dayGridMonth");
     const [date, setDate] = useState(new Date());
     const calendarRef = useRef<FullCalendar>(null);
+
+    const navigate = useRouter();
 
     const [getAcceptingAppointmentDropDownList, {
         data: getAcceptingAppointmentListData,
@@ -82,6 +85,15 @@ const HomeAppointmentCalendarView = () => {
             setDate(calendarApi.getDate());
         }
     };
+
+    const handleEventClick = (clickInfo: any) => {
+        if (clickInfo.event != null) {
+            const appointmentId = clickInfo.event.id;
+            const patientId = clickInfo.event.extendedProps.patient_id;
+            //console.log(`dietician/app/appointments/${appointmentId}?patient=${patientId}`);
+            navigate.push(`appointment/${appointmentId}?patient=${patientId}`)
+        }
+    }
 
     const [getAppointmentCalendarList, {
         data: appointmentCalendarData,
@@ -197,7 +209,7 @@ const HomeAppointmentCalendarView = () => {
                                 select={(val) => {
                                 }}
                                 //eventDrop={handleEventUpdate}
-                                //eventClick={handleEventSelect}
+                                eventClick={handleEventClick}
                                 //eventResize={handleEventUpdate}
                                 //height={matchDownSM ? 'auto' : 720}
                                 //height={matchDownSM ? 'auto' : 'auto'}
@@ -238,7 +250,7 @@ function renderEventContent(eventInfo: EventContentArg) {
     return (
         <Tooltip title="Delete">
             <>
-                <b style={{marginRight: "2px"}}>{eventInfo.timeText}</b>
+                <b style={{ marginRight: "2px" }}>{eventInfo.timeText}</b>
                 <label>{eventInfo.event.title}</label>
             </>
         </Tooltip>

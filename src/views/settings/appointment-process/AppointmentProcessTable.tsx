@@ -62,7 +62,7 @@ const SubTable = (props: SubTableProps) => {
     }),
     subColumnHelper.accessor('amount', {
       header: intl.formatMessage({ id: "amount" }),
-      cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
+      cell: info => <span>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? "TRY" }).format(Number(info.row.original.amount))}`}</span>,
       footer: info => info.column.id,
     }),
     subColumnHelper.accessor('created_at', {
@@ -158,7 +158,7 @@ const AppointmentProcessTable = () => {
     }),
     columnHelper.accessor('amount', {
       header: intl.formatMessage({ id: "amount" }),
-      cell: info => info.renderValue() == null ? "-" : `${info.row.original.amount} ${info.row.original.currency_code}`,
+      cell: info => <span>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? "TRY" }).format(Number(info.row.original.total))}`}</span>,
       footer: info => info.column.id,
     }),
     columnHelper.accessor('created_at', {
@@ -218,6 +218,7 @@ const AppointmentProcessTable = () => {
                     name: info.row.original.name,
                     description: info.row.original.description,
                     amount: info.row.original.amount,
+                    total: info.row.original.total,
                     vat: info.row.original.vat,
                     vat_included: info.row.original.vat_included,
                     sub_appointment_process: info.row.original.detail?.map((item) => (item.appointment_process_id)),

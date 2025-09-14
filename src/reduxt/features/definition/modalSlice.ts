@@ -52,7 +52,13 @@ export enum ModalEnum {
     aydinlatmaMetni,
     uyelikSozlesmesi,
     kvkk,
-    viewOrder
+    viewOrder,
+    newDietTemplate,
+    deleteDietTemplate,
+    viewDietTemplate,
+    newMeasurement,
+    deleteMeasurement,
+    viewMeasurement,
 }
 
 type Model = {

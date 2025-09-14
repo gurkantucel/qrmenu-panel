@@ -131,7 +131,7 @@ export interface MakeAnOfferDetail {
   appointment_process_description?: string | null
   currency_code: string | null
   currency_name: string | null
-  amount: number
+  amount: string
   quantity: number
   discount_percentage: number
   discount_amount: number

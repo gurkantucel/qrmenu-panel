@@ -157,7 +157,10 @@ const AppointmentProcessTypeTable = () => {
         }),
         columnHelper.accessor('quantity', {
             header: intl.formatMessage({ id: "quantity" }),
-            cell: info => info.renderValue() == null ? "-" : info.renderValue(),
+            cell: info => {
+                const value = info.renderValue();
+                return value == null ? "-" : parseFloat(value).toString();
+            },
             footer: info => info.column.id,
         }),
         columnHelper.accessor('discount_percentage', {

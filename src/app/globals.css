@@ -32,7 +32,7 @@ a.custom-link:hover {
 }
 
 .grecaptcha-badge {
-	visibility: hidden;
+  visibility: hidden;
 }
 
 .blog-image {
@@ -56,4 +56,48 @@ a.custom-link:hover {
 
 main#blog {
   background-color: #F8F9FA;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-spacing: 2px;
+  border-color: #e2e7f1;
+}
+
+.mt-2 {
+  margin-top: 0.75rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.75rem !important;
+}
+
+td.table-mobil {
+  width: 140px;
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+
+  /* Targets extra small and small devices (Bootstrap's 'sm' breakpoint) */
+  .form-control-mobil {
+    min-width: 200px;
+  }
+
+  .form-select-mobil {
+    min-width: 162px;
+  }
+
+  .mobil-btn {
+    padding: 3px 10px;
+  }
+
+  td.table-mobil {
+    width: 100px;
+    text-align: center;
+  }
 }

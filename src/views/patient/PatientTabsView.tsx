@@ -10,6 +10,7 @@ import { PatientHealthHistory } from './PatientHealthHistory';
 import HealthInformationView from './health-information/HealthInformationView';
 import PatientFileTable from './patient-file/PatientFileTable';
 import PatientPaymentHistoryTable from './payment-history/PatientPaymentHistoryTable';
+import PatientMeasurementTable from './measurement/PatientMeasurementTable';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -40,6 +41,7 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                 <Typography variant='h5' margin={1}>{"Danışan Detay"}</Typography>
                 <Tabs value={selectTab} onChange={handleChange} aria-label="basic tabs example">
                     <Tab value={PatientTabEnum.kisisel_bilgiler} label="Kişisel Bilgiler" />
+                    <Tab value={PatientTabEnum.olcumler} label="Ölçümler" />
                     <Tab value={PatientTabEnum.saglik_gecmisi} label="Sağlık Geçmişi" />
                     <Tab value={PatientTabEnum.saglik_bilgileri} label="Sağlık Bilgileri" />
                     <Tab value={PatientTabEnum.dosyalar} label="Dosyalar" />
@@ -47,6 +49,9 @@ const PatientTabsView = ({ params }: { params: { slug: string } }) => {
                 </Tabs>
                 <TabPanel value={selectTab} index={PatientTabEnum.kisisel_bilgiler}>
                     <PatientPersonalInformation params={params} />
+                </TabPanel>
+                <TabPanel value={selectTab} index={PatientTabEnum.olcumler}>
+                    <PatientMeasurementTable params={params} />
                 </TabPanel>
                 <TabPanel value={selectTab} index={PatientTabEnum.saglik_gecmisi}>
                     <PatientHealthHistory params={params} />

@@ -71,6 +71,7 @@ const AddAppointmentProcessModal = () => {
                 name: data.name,
                 description: data.description,
                 amount: data.amount,
+                total: data.total,
                 vat: data.vat,
                 vat_included: data.vat_included,
                 sub_appointment_process: data.sub_appointment_process,
@@ -152,6 +153,7 @@ const AddAppointmentProcessModal = () => {
                         name: '',
                         description: null,
                         amount: undefined,
+                        total: "0",
                         vat: 0,
                         sub_appointment_process: null,
                         vat_included: false,
@@ -160,10 +162,11 @@ const AddAppointmentProcessModal = () => {
                     enableReinitialize
                     validationSchema={newAppointmentProcessSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.amount && typeof values.amount == "number") {
-                            values.amount = values.amount.toFixed(2);
+                        if (values.total && typeof values.total == "number" && values.amount && typeof values.amount == "number") {
+                            values.amount = values.total.toFixed(2);
                         }
                         if (values.appointment_process_id != null) {
+                            values.amount = values.total?.toString();
                             updateAppointmentProcess(values);
                         } else {
                             createAppointmentProcess(values);
@@ -313,20 +316,21 @@ const AddAppointmentProcessModal = () => {
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="person_id">
                                                 {`${intl.formatMessage({ id: "amount" })}*`}</InputLabel>
-                                            <Field name={"amount"}>
+                                            <Field name={"total"}>
                                                 {({ field, form, meta }: any) => (
                                                     <CurrencyInput
-                                                        id="amount"
-                                                        name={`amount`}
-                                                        placeholder={intl.formatMessage({ id: "amount" })}
-                                                        value={values.amount ?? undefined}
+                                                        id="total"
+                                                        name={`total`}
+                                                        placeholder={intl.formatMessage({ id: "total" })}
+                                                        value={values.total ?? undefined}
                                                         decimalsLimit={2}
                                                         onValueChange={(value, name, values) => {
+                                                            setFieldValue("total", values?.float)
                                                             setFieldValue("amount", values?.float)
                                                         }}
                                                         style={{
                                                             padding: 14,
-                                                            border: `1px solid ${touched.amount && errors.amount ? "#F04134" : "#BEC8D0"}`,
+                                                            border: `1px solid ${touched.total && errors.total ? "#F04134" : "#BEC8D0"}`,
                                                             borderRadius: 8,
                                                             color: "#1D2630",
                                                             fontSize: "0.875rem",
@@ -338,9 +342,9 @@ const AddAppointmentProcessModal = () => {
                                                 )}
                                             </Field>
                                         </Stack>
-                                        {touched.amount && errors.amount && (
+                                        {touched.total && errors.total && (
                                             <FormHelperText error id="helper-text-firstname-signup">
-                                                {`${errors.amount}`}
+                                                {`${errors.total}`}
                                             </FormHelperText>
                                         )}
                                     </Grid>

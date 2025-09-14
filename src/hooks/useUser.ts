@@ -2,6 +2,7 @@ import { getCookie } from "cookies-next";
 import { Membership, Person } from "reduxt/features/auth/models/auth-models";
 
 interface UserProps {
+  id: string
   name: string;
   email: string;
   avatar: string;
@@ -18,6 +19,7 @@ export default function useUser() {
     var session = JSON.parse(cookieValue) as Person;
     var membership = JSON.parse(membershipCookieValue) as Membership;
     const newUser: UserProps = {
+      id: session.person_id,
       name: session.full_name,
       email: session.email,
       avatar: '/assets/images/users/avatar-1.png',

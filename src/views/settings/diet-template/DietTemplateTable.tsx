@@ -21,70 +21,55 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { Box, Divider, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Trash } from 'iconsax-react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Edit, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import CustomScaleLoader from 'components/CustomScaleLoader';
-import dayjs from 'dayjs';
-import AddPatientPaymentHistoryModal from './AddPatientPaymentHistoryModal';
-import DeletePatientPaymentHistoryModal from './DeletePatientPaymentHistoryModal';
-import { useGetTenantPaymentList2Query } from 'reduxt/features/patient/tenant-payment-api';
-import { TenantPaymentListData } from 'reduxt/features/patient/models/tenant-payment-model';
-import ViewPatientPaymentHistoryModal from './ViewPatientPaymentHistoryModal';
-import { APP_DEFAULT_PATH } from 'config';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
-import Link from 'next/link';
+import { APP_DEFAULT_PATH } from 'config';
+import AddDietTemplateListModal from './AddDietTemplateListModal';
+import DeleteDietTemplateModal from './DeleteDietTemplateModal';
+import { useGetDieticianDietTemplateListQuery } from 'reduxt/features/settings/diet-template-api';
+import { DieticianDietTemplateListData } from 'reduxt/features/settings/models/diet-template-list-model';
 
-const columnHelper = createColumnHelper<TenantPaymentListData>()
+const columnHelper = createColumnHelper<DieticianDietTemplateListData>()
 
-const PaymentTable = () => {
+const PersonTypeTable = () => {
 
   const intl = useIntl()
 
   let breadcrumbLinks = [
     { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
-    { title: `${intl.formatMessage({ id: "payments" })}` },
+    { title: `${intl.formatMessage({ id: "settings" })}` },
+    { title: `${intl.formatMessage({ id: "dietTemplates" })}` },
   ];
 
   const dispatch = useAppDispatch();
 
-  const columns = useMemo<ColumnDef<TenantPaymentListData, any>[]>(() => [
-    columnHelper.accessor('patient_full_name', {
-      header: intl.formatMessage({ id: "patientNameSurname" }),
-      cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`} className='custom-link'>
-        {`${info.renderValue()}`}
-      </Link>,
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('payment_method_name', {
-      header: intl.formatMessage({ id: "paymentMethod" }),
+  const columns = useMemo<ColumnDef<DieticianDietTemplateListData, any>[]>(() => [
+    columnHelper.accessor('code', {
+      header: intl.formatMessage({ id: "code" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
-    /*columnHelper.accessor('quantity', {
-      header: intl.formatMessage({ id: "quantity" }),
+    columnHelper.accessor('name', {
+      header: intl.formatMessage({ id: "name" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
-    }),*/
-    /*columnHelper.accessor('amount', {
-      header: intl.formatMessage({ id: "amount" }),
-      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.amount))}`,
-      footer: info => info.column.id,
-    }),*/
-    columnHelper.accessor('total', {
-      header: intl.formatMessage({ id: "total" }),
-      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
+    }),
+    columnHelper.accessor('created_by', {
+      header: intl.formatMessage({ id: "createdBy" }),
+      cell: info => info.renderValue() != null ? info.row.original.created_user : "-",
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('payment_date', {
-      header: intl.formatMessage({ id: "date" }),
-      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+    columnHelper.accessor('status', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? <FormattedMessage id='active' /> : <FormattedMessage id='passive' />} size="small" variant="light" />,
       footer: info => info.column.id,
       meta: {
-        filterVariant: 'date',
+        filterVariant: 'select',
       },
     }),
     columnHelper.accessor('islemler', {
@@ -93,33 +78,22 @@ const PaymentTable = () => {
       enableColumnFilter: false,
       cell: (info) => {
         return <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
-          <Tooltip title={intl.formatMessage({ id: "view" })}>
-            <IconButton
-              color="secondary"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true,
-                  modalType: ModalEnum.viewPatientPaymentHistory,
-                  id: info.row.original.payment_id,
-                  title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`,
-                  data: info.row.original
-                }))
-              }}
-            >
-              <Eye />
-            </IconButton>
-          </Tooltip>
           <Tooltip title={intl.formatMessage({ id: "edit" })}>
             <IconButton
               color="primary"
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.newPatientPaymentHistory,
-                  id: info.row.original.payment_id,
-                  data: info.row.original,
-                  title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
+                  open: true, modalType: ModalEnum.newDietTemplate,
+                  id: info.row.original.diet_template_id,
+                  title: `${info.row.original.code} - ${info.row.original.name}`,
+                  data: {
+                    person_type_id: info.row.original.diet_template_id,
+                    code: info.row.original.code,
+                    name: info.row.original.name,
+                    description: info.row.original.description,
+                    status: info.row.original.status
+                  }
                 }))
               }}
             >
@@ -132,10 +106,9 @@ const PaymentTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.deletePatientPaymentHistory,
-                  id: info.row.original.patient_id,
-                  title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`,
-                  data: info.row.original
+                  open: true, modalType: ModalEnum.deleteDietTemplate,
+                  id: info.row.original.diet_template_id,
+                  title: `${info.row.original.code} - ${info.row.original.name}`,
                 }))
               }}
             >
@@ -158,26 +131,20 @@ const PaymentTable = () => {
     pageSize: 10,
   })
 
-  const {
-    data: getPatientPaymentHistoryListData,
-    isFetching: isPatientPaymentHistoryFetching,
-    isLoading: isPatientPaymentHistoryLoading
-  } = useGetTenantPaymentList2Query({
+  const { data: getDietTemplateListData, isLoading: isDietTemplateLoading, isFetching: isDietTemplateFetching } = useGetDieticianDietTemplateListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
-    //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
     filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
-  });
+  })
 
-  const tableData = useMemo(() => getPatientPaymentHistoryListData?.data ?? [], [getPatientPaymentHistoryListData?.data]);
-
+  const tableData = useMemo(() => getDietTemplateListData?.data ?? [], [getDietTemplateListData?.data]);
 
   const table = useReactTable({
     data: tableData,
     columns,
     onPaginationChange: setPagination,
     state: { columnFilters, pagination },
-    rowCount: getPatientPaymentHistoryListData?.totalCount,
+    rowCount: getDietTemplateListData?.totalCount,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualFiltering: false,
@@ -186,21 +153,20 @@ const PaymentTable = () => {
 
   return (
     <>
-      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "payments" })}`} links={breadcrumbLinks} />
-      <MainCard content={false} >
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "dietTemplates" })}`} links={breadcrumbLinks} />
+      <MainCard content={false}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-          <AddPatientPaymentHistoryModal />
-          <DeletePatientPaymentHistoryModal />
-          <ViewPatientPaymentHistoryModal />
+          <AddDietTemplateListModal />
+          <DeleteDietTemplateModal />
         </Stack>
         <ScrollX>
           <TableContainer component={Paper}>
-            <Table size='small'>
+            <Table>
               <TableHead>
                 {table.getHeaderGroups().map((headerGroup: HeaderGroup<any>) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <TableCell key={header.id} {...header.column.columnDef.meta} style={{ width: `${header.getSize()}px` }}>
+                      <TableCell key={header.id} {...header.column.columnDef.meta}>
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                       </TableCell>
                     ))}
@@ -219,11 +185,15 @@ const PaymentTable = () => {
                 ))}
               </TableHead>
               <TableBody>
-                {isPatientPaymentHistoryFetching || isPatientPaymentHistoryLoading ? <TableRow>
-                  <TableCell colSpan={table.getAllColumns().length}>
-                    <CustomScaleLoader />
-                  </TableCell>
-                </TableRow> :
+                {isDietTemplateLoading || isDietTemplateFetching ? [0, 1, 2].map((item: number) => (
+                  <TableRow key={item}>
+                    {[0, 1, 2, 3, 4, 5].map((col: number) => (
+                      <TableCell key={col}>
+                        <Skeleton animation="wave" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )) :
                   table.getRowModel().rows.length > 0 ? (
                     table.getRowModel().rows.map((row) => (
                       <TableRow key={row.id}>
@@ -237,7 +207,7 @@ const PaymentTable = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={table.getAllColumns().length}>
-                        <EmptyTable msg={isPatientPaymentHistoryFetching ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "noData" })} />
+                        <EmptyTable msg={isDietTemplateFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
                       </TableCell>
                     </TableRow>
                   )
@@ -253,7 +223,9 @@ const PaymentTable = () => {
                   setPageSize: table.setPageSize,
                   setPageIndex: table.setPageIndex,
                   getState: table.getState,
-                  getPageCount: table.getPageCount
+                  getPageCount: table.getPageCount,
+                  selectRowLength: table.getRowModel().rows.length,
+                  totalCount: table.getRowCount()
                 }}
               />
             </Box>
@@ -264,4 +236,4 @@ const PaymentTable = () => {
   )
 }
 
-export default PaymentTable
+export default PersonTypeTable

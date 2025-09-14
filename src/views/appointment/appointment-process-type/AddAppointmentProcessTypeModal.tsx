@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { FieldArray, Form, Formik, FormikErrors } from 'formik';
+import { Field, FieldArray, Form, Formik, FormikErrors } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect } from "react";
@@ -16,6 +16,7 @@ import { enqueueSnackbar } from "notistack";
 import CustomScaleLoader from "components/CustomScaleLoader";
 import { newAppointmentProcessTypeSchema } from "utils/schemas/appointment-validation-schema";
 import { useCreateAppointmentProcessTypeMutation, useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
+import CurrencyInput from "react-currency-input-field";
 
 type ProcessType = {
     appointment_id: number;
@@ -86,7 +87,7 @@ const AddAppointmentProcessTypeModal = () => {
                             patient_id: data?.patient_id,
                             appointment_process_id: null,
                             quantity: 1,
-                            amount: 0,
+                            amount: "0",
                             discount_percentage: 0,
                             discount_amount: 0,
                             vat: 0,
@@ -148,7 +149,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                                 patient_id: data.patient_id,
                                                                                 appointment_process_id: null,
                                                                                 quantity: 1,
-                                                                                amount: 0,
+                                                                                amount: "0",
                                                                                 discount_percentage: 0,
                                                                                 discount_amount: 0,
                                                                                 vat: 0,
@@ -195,7 +196,18 @@ const AddAppointmentProcessTypeModal = () => {
                                                                             return;
                                                                         }
                                                                         setFieldValue(`data[${index}].appointment_process_id`, val?.value.value);
-                                                                        setFieldValue(`data[${index}].amount`, val?.value?.amount);
+
+                                                                        if (val?.value?.vat_included == true) {
+                                                                            const amount = parseFloat(val?.value?.amount);
+                                                                            const vatRate = parseFloat(val?.value?.vat) / 100;
+                                                                            const exclAmount = amount / (1 + vatRate);
+                                                                            setFieldValue(`data[${index}].amount`, exclAmount.toFixed(2));
+                                                                            //setFieldValue(`detail[${index}].amount`, (val?.value?.amount));
+                                                                        } else {
+                                                                            setFieldValue(`data[${index}].amount`, val?.value?.amount)
+                                                                        }
+
+                                                                        //setFieldValue(`data[${index}].amount`, val?.value?.amount);
                                                                         setFieldValue(`data[${index}].vat`, val?.value?.vat);
                                                                         setFieldValue(`data[${index}].vat_included`, val?.value?.vat_included);
                                                                         setFieldValue(`data[${index}].currency_code`, val?.value?.currency_code);
@@ -222,7 +234,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     placeholder={intl.formatMessage({ id: "quantity" })}
                                                                     fullWidth
                                                                     error={Boolean((touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity))}
-                                                                    inputProps={{min: 0,step: "0.5"}}
+                                                                    inputProps={{ min: 0, step: "0.5" }}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity) && (
@@ -236,17 +248,30 @@ const AddAppointmentProcessTypeModal = () => {
                                                             <Stack spacing={1}>
                                                                 <InputLabel htmlFor="unitPrice">
                                                                     {`${intl.formatMessage({ id: "unitPrice" })}*`}</InputLabel>
-                                                                <OutlinedInput
-                                                                    id="name"
-                                                                    type="number"
-                                                                    value={values.data[index].amount}
-                                                                    name={`data[${index}].amount`}
-                                                                    onBlur={handleBlur}
-                                                                    onChange={handleChange}
-                                                                    placeholder={intl.formatMessage({ id: "amount" })}
-                                                                    fullWidth
-                                                                    error={Boolean((touched.data && touched.data[index]?.amount) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.amount))}
-                                                                />
+                                                                <Field name={"amount"}>
+                                                                    {({ field, form, meta }: any) => (
+                                                                        <CurrencyInput
+                                                                            id="amount"
+                                                                            name={`amount`}
+                                                                            placeholder={intl.formatMessage({ id: "amount" })}
+                                                                            value={values.data[index].amount}
+                                                                            //decimalsLimit={2}
+                                                                            onValueChange={(value, name, values2) => {
+                                                                                setFieldValue(`data[${index}].amount`, values2?.value)
+                                                                            }}
+                                                                            style={{
+                                                                                padding: 14,
+                                                                                border: `1px solid ${(touched.data && touched.data[index]?.amount) && (errors.data && (errors.data as FormikErrors<any>[])[0]?.amount) ? "#F04134" : "#BEC8D0"}`,
+                                                                                borderRadius: 8,
+                                                                                color: "#1D2630",
+                                                                                fontSize: "0.875rem",
+                                                                                boxSizing: "content-box",
+                                                                                height: "1.4375em",
+                                                                                font: "inherit"
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                </Field>
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.amount) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.amount) && (
                                                                 <FormHelperText error id="helper-text-firstname-signup">
@@ -269,7 +294,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     placeholder={intl.formatMessage({ id: "discount" })}
                                                                     fullWidth
                                                                     error={Boolean((touched.data && touched.data[index]?.discount_percentage) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.discount_percentage))}
-                                                                    inputProps={{min: 0}}
+                                                                    inputProps={{ min: 0 }}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.discount_percentage) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.discount_percentage) && (
@@ -286,7 +311,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                 <OutlinedInput
                                                                     id="name"
                                                                     type="number"
-                                                                    value={(item.quantity * item.amount * item.discount_percentage) / 100}
+                                                                    value={((item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100).toFixed(2)}
                                                                     disabled
                                                                     name={`data[${index}].discount_amount`}
                                                                     onBlur={handleBlur}
@@ -317,7 +342,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     placeholder={intl.formatMessage({ id: "vat" })}
                                                                     fullWidth
                                                                     error={Boolean((touched.data && touched.data[index]?.vat) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.vat))}
-                                                                    inputProps={{min: 0}}
+                                                                    inputProps={{ min: 0 }}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.vat) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.vat) && (
@@ -335,9 +360,9 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     id="name"
                                                                     type="text"
                                                                     value={
-                                                                        (item.quantity * item.amount -
-                                                                            (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                        (item.vat / 100)
+                                                                        (((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                            (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * (item.discount_percentage ?? 0)) / 100) *
+                                                                            ((item.vat ?? 0) / 100)).toFixed(2)
                                                                     }
                                                                     disabled
                                                                     name={`data[${index}].vat_amount`}
@@ -363,11 +388,11 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     id="name"
                                                                     type="text"
                                                                     value={
-                                                                        item.quantity * item.amount -
-                                                                        (item.quantity * item.amount * item.discount_percentage) / 100 +
-                                                                        (item.quantity * item.amount -
-                                                                            (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                        (item.vat / 100)
+                                                                        ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                            ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100 +
+                                                                            ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100) *
+                                                                            ((item.vat ?? 0) / 100)).toFixed(2)
                                                                     }
                                                                     onBlur={handleBlur}
                                                                     onChange={handleChange}
@@ -396,8 +421,8 @@ const AddAppointmentProcessTypeModal = () => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
                                                 <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
                                                     values.data.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        return sum + item.quantity * item.amount - iskontoTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari;
                                                     }, 0)
                                                 )}`}</Typography>
                                             </Stack>
@@ -405,7 +430,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalDiscount" })}:`}</Typography>
                                                 <Typography variant="h6" color="success.main">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
-                                                        values.data.reduce((sum, item) => sum + (item.quantity * item.amount * item.discount_percentage) / 100, 0)
+                                                        values.data.reduce((sum, item) => sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100, 0)
                                                     )}`}
                                                 </Typography>
                                             </Stack>
@@ -414,8 +439,8 @@ const AddAppointmentProcessTypeModal = () => {
                                                 <Typography>
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(
                                                         values.data.reduce((sum, item) => {
-                                                            const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                            return sum + (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
+                                                            const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                            return sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
                                                         }, 0)
                                                     )}`}</Typography>
                                             </Stack>
@@ -423,9 +448,9 @@ const AddAppointmentProcessTypeModal = () => {
                                                 <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>
                                                 <Typography variant="subtitle1">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.data[0].currency_code ?? 'TRY' }).format(values.data.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        const kdvTutari = (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
-                                                        return sum + item.quantity * item.amount - iskontoTutari + kdvTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        const kdvTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari + kdvTutari;
                                                     }, 0)
                                                     )}`}
                                                 </Typography>

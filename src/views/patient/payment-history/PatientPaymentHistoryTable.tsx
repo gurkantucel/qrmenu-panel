@@ -52,7 +52,7 @@ const PatientPaymentHistoryTable = () => {
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('quantity', {
+    /*columnHelper.accessor('quantity', {
       header: intl.formatMessage({ id: "quantity" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
@@ -61,10 +61,10 @@ const PatientPaymentHistoryTable = () => {
       header: intl.formatMessage({ id: "amount" }),
       cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.amount))}`,
       footer: info => info.column.id,
-    }),
+    }),*/
     columnHelper.accessor('total', {
-      header: intl.formatMessage({ id: "total" }),
-      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.amount))}`,
+      header: intl.formatMessage({ id: "amountToBePaid" }),
+      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
       footer: info => info.column.id,
     }),
     columnHelper.accessor('payment_date', {

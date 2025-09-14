@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { FieldArray, Form, Formik, FormikErrors } from 'formik';
+import { Field, FieldArray, Form, Formik, FormikErrors } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appoi
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateMakeAnOfferMutation } from "reduxt/features/make-an-offer/make-an-offer-api";
 import { newMakeAnOfferSchema } from "utils/schemas/make-an-offer-validation-schema";
+import CurrencyInput from "react-currency-input-field";
 
 type Props = {
     page?: string
@@ -130,7 +131,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                             appointment_process_description: null,
                             currency_code: null,
                             currency_name: null,
-                            amount: 0,
+                            amount: "0",
                             quantity: 1,
                             discount_percentage: 0,
                             discount_amount: 0,
@@ -162,7 +163,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 1 }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4">{intl.formatMessage({ id:  "makeAnOffer" })}</Typography>
+                                        <Typography variant="h4">{intl.formatMessage({ id: "makeAnOffer" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -329,7 +330,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                                     appointment_process_description: null,
                                                                                     currency_code: null,
                                                                                     currency_name: null,
-                                                                                    amount: 0,
+                                                                                    amount: "0",
                                                                                     quantity: 1,
                                                                                     discount_percentage: 0,
                                                                                     discount_amount: 0,
@@ -364,7 +365,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                         isLoading={getAppointmentProcessDropdownLoading}
                                                                         zIndex={999 - index}
                                                                         value={
-                                                                            values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code== values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code== values.detail[index].appointment_process_code)?.value ?? 0 } : null}
+                                                                            values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
                                                                         onChange={(val: any) => {
                                                                             if (values.detail.length > 1 && !values.detail.some(item => item.currency_code == val?.value?.currency_code)) {
                                                                                 enqueueSnackbar("Seçilen randevu işlemlerinde farklı para birimleri tanımlı. ", {
@@ -380,7 +381,18 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                             setFieldValue(`detail[${index}].appointment_process_code`, val?.value.appointment_process_code);
                                                                             setFieldValue(`detail[${index}].appointment_process_name`, val?.value.appointment_process_name);
                                                                             setFieldValue(`detail[${index}].appointment_process_description`, val?.value.appointment_process_description);
-                                                                            setFieldValue(`detail[${index}].amount`, val?.value?.amount);
+
+                                                                            if (val?.value?.vat_included == true) {
+                                                                                const amount = parseFloat(val?.value?.amount);
+                                                                                const vatRate = parseFloat(val?.value?.vat) / 100;
+                                                                                const exclAmount = amount / (1 + vatRate);
+                                                                                setFieldValue(`detail[${index}].amount`, exclAmount.toFixed(2));
+                                                                                //setFieldValue(`detail[${index}].amount`, (val?.value?.amount));
+                                                                            } else {
+                                                                                setFieldValue(`detail[${index}].amount`, val?.value?.amount)
+                                                                            }
+
+                                                                            //setFieldValue(`detail[${index}].amount`, val?.value?.amount);
                                                                             setFieldValue(`detail[${index}].vat`, val?.value?.vat);
                                                                             setFieldValue(`detail[${index}].vat_included`, val?.value?.vat_included);
                                                                             setFieldValue(`detail[${index}].currency_code`, val?.value?.currency_code);
@@ -421,18 +433,32 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                             <Grid item xs={12} md={1.5}>
                                                                 <Stack spacing={1}>
                                                                     <InputLabel htmlFor="unitPrice">
-                                                                        {`${intl.formatMessage({ id: "unitPrice" })}*`}</InputLabel>
-                                                                    <OutlinedInput
-                                                                        id="name"
-                                                                        type="number"
-                                                                        value={values.detail[index].amount}
-                                                                        name={`detail[${index}].amount`}
-                                                                        onBlur={handleBlur}
-                                                                        onChange={handleChange}
-                                                                        placeholder={intl.formatMessage({ id: "amount" })}
-                                                                        fullWidth
-                                                                        error={Boolean((touched.detail && touched.detail[index]?.amount) && (errors.detail && (errors.detail as FormikErrors<MakeAnOfferDetail>[])[0]?.amount))}
-                                                                    />
+                                                                        {`${intl.formatMessage({ id: "unitPrice" })}*`}
+                                                                    </InputLabel>
+                                                                    <Field name={"amount"}>
+                                                                        {({ field, form, meta }: any) => (
+                                                                            <CurrencyInput
+                                                                                id="amount"
+                                                                                name={`amount`}
+                                                                                placeholder={intl.formatMessage({ id: "amount" })}
+                                                                                value={values.detail[index].amount}
+                                                                                //decimalsLimit={2}
+                                                                                onValueChange={(value, name, values2) => {
+                                                                                    setFieldValue(`detail[${index}].amount`, values2?.value)
+                                                                                }}
+                                                                                style={{
+                                                                                    padding: 14,
+                                                                                    border: `1px solid ${(touched.detail && touched.detail[index]?.amount) && (errors.detail && (errors.detail as FormikErrors<any>[])[0]?.amount) ? "#F04134" : "#BEC8D0"}`,
+                                                                                    borderRadius: 8,
+                                                                                    color: "#1D2630",
+                                                                                    fontSize: "0.875rem",
+                                                                                    boxSizing: "content-box",
+                                                                                    height: "1.4375em",
+                                                                                    font: "inherit"
+                                                                                }}
+                                                                            />
+                                                                        )}
+                                                                    </Field>
                                                                 </Stack>
                                                                 {(touched.detail && touched.detail[index]?.amount) && (errors.detail && (errors.detail as FormikErrors<MakeAnOfferDetail>[])[0]?.amount) && (
                                                                     <FormHelperText error id="helper-text-firstname-signup">
@@ -472,7 +498,8 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                     <OutlinedInput
                                                                         id="name"
                                                                         type="number"
-                                                                        value={(item.quantity * item.amount * item.discount_percentage) / 100}
+                                                                        //value={(item.quantity * item.amount * item.discount_percentage) / 100}
+                                                                        value={((item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100).toFixed(2)}
                                                                         disabled
                                                                         name={`detail[${index}].discount_amount`}
                                                                         onBlur={handleBlur}
@@ -521,9 +548,9 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                         id="name"
                                                                         type="text"
                                                                         value={
-                                                                            (item.quantity * item.amount -
-                                                                                (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                            (item.vat / 100)
+                                                                            (((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * (item.discount_percentage ?? 0)) / 100) *
+                                                                                ((item.vat ?? 0) / 100)).toFixed(2)
                                                                         }
                                                                         disabled
                                                                         name={`detail[${index}].vat_amount`}
@@ -549,11 +576,11 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                         id="name"
                                                                         type="text"
                                                                         value={
-                                                                            item.quantity * item.amount -
-                                                                            (item.quantity * item.amount * item.discount_percentage) / 100 +
-                                                                            (item.quantity * item.amount -
-                                                                                (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                            (item.vat / 100)
+                                                                            ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100 +
+                                                                                ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                    ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100) *
+                                                                                ((item.vat ?? 0) / 100)).toFixed(2)
                                                                         }
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
@@ -583,8 +610,8 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
                                                 <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
                                                     values.detail.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        return sum + item.quantity * item.amount - iskontoTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari;
                                                     }, 0)
                                                 )}`}</Typography>
                                             </Stack>
@@ -592,7 +619,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalDiscount" })}:`}</Typography>
                                                 <Typography variant="h6" color="success.main">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
-                                                        values.detail.reduce((sum, item) => sum + (item.quantity * item.amount * item.discount_percentage) / 100, 0)
+                                                        values.detail.reduce((sum, item) => sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100, 0)
                                                     )}`}
                                                 </Typography>
                                             </Stack>
@@ -601,8 +628,8 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                 <Typography>
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
                                                         values.detail.reduce((sum, item) => {
-                                                            const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                            return sum + (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
+                                                            const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                            return sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
                                                         }, 0)
                                                     )}`}</Typography>
                                             </Stack>
@@ -610,9 +637,9 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                 <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>
                                                 <Typography variant="subtitle1">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(values.detail.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        const kdvTutari = (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
-                                                        return sum + item.quantity * item.amount - iskontoTutari + kdvTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        const kdvTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari + kdvTutari;
                                                     }, 0)
                                                     )}`}
                                                 </Typography>

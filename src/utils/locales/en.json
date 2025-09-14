@@ -241,5 +241,16 @@
   "numberOfOffers": "Number Of Offers",
   "mostTransactions": "Most Transactions",
   "mostTransactionsMadeEmployee": "Most Transactions Made Employee",
-  "mostTransactionsMadeDay": "Most Transactions Made Day"
+  "mostTransactionsMadeDay": "Most Transactions Made Day",
+  "dietTemplates": "Diet Templates",
+  "newDietTemplate": "New Diet Template",
+  "updateDietTemplate": "Update Diet Template",
+  "calorie": "Calorie",
+  "measurements": "Measurements",
+  "newMeasurement": "Add New Measurement",
+  "updateMeasurement": "Update Measurement",
+  "waist": "Waist",
+  "hip": "Hip",
+  "chest": "Chest",
+  "measurementDate" : "Measurement Date"
 }

@@ -243,5 +243,16 @@
     "numberOfOffers" : "Teklif Sayısı",
     "mostTransactions": "En Çok Yapılan İşlem",
     "mostTransactionsMadeEmployee": "En Çok İşlem Yapan Çalışan",
-    "mostTransactionsMadeDay": "En Çok İşlem Yapılan Gün"
+    "mostTransactionsMadeDay": "En Çok İşlem Yapılan Gün",
+    "dietTemplates": "Diyet Şablonları",
+    "newDietTemplate" : "Yeni Diyet Şablonu Ekle",
+    "updateDietTemplate" : "Diyet Şablonu Düzenle",
+    "calorie" : "Kalori",
+    "measurements" : "Ölçümler",
+    "newMeasurement" : "Yeni Ölçüm Ekle",
+    "updateMeasurement" : "Ölçüm Düzenle",
+    "waist" : "Bel",
+    "hip" : "Kalça",
+    "chest" : "Göğüs",
+    "measurementDate" : "Ölçüm Tarihi"
 }

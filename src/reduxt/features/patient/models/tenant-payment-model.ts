@@ -87,7 +87,7 @@ export interface TenantPaymentReadDataDetail {
   appointment_process_description: any
   currency_code: string
   currency_name: string
-  amount: number
+  amount: string
   quantity: number
   discount_percentage: number
   discount_amount: number
@@ -118,7 +118,7 @@ export interface TenantPaymentCreateDetail {
   appointment_process_description: string | null 
   currency_code: string | null
   currency_name: string | null
-  amount: number
+  amount: string
   quantity: number
   discount_percentage: number
   discount_amount: any

@@ -11,7 +11,7 @@ export interface AppointmentProcessListResultModel {
 }
 
 export interface AppointmentProcessListData {
-    expander?:string
+    expander?: string
     appointment_process_id: string
     currency_id: string
     currency_name: string
@@ -22,6 +22,7 @@ export interface AppointmentProcessListData {
     name: string
     description: any
     amount: string | number
+    total: string | number
     vat: number
     vat_included: boolean
     detail?: Detail[]
@@ -33,11 +34,11 @@ export interface AppointmentProcessListData {
     updated_by: any
     updated_person: any
     status: boolean
-    islemler?:string
+    islemler?: string
 }
 
 export interface Detail {
-    expander?:string
+    expander?: string
     appointment_process_id: string
     currency_id: string
     currency_name: string
@@ -58,7 +59,7 @@ export interface Detail {
     updated_by: string
     updated_person: any
     status: boolean
-    islemler?:string
+    islemler?: string
 }
 
 export interface CreateAppointmentProcessBodyModel {
@@ -68,8 +69,9 @@ export interface CreateAppointmentProcessBodyModel {
     code: string | null
     name: string | null
     description: string | null
-    amount?: number | string | null
-    vat: number | null | string
+    amount?: number | string | null
+    total?: number | string | null
+    vat: number | null | string
     vat_included: boolean
     sub_appointment_process: string[] | null
     status: boolean

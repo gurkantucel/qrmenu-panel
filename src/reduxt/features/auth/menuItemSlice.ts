@@ -108,6 +108,13 @@ const permissionControlMenu = () => {
                         type: 'item',
                         url: '/app/settings/appointment-process',
                     },
+                    /*{
+                        id: 'sms-template',
+                        code: "00052",
+                        title: "Diyet Şablonları",
+                        type: 'item',
+                        url: '/app/settings/diet-template',
+                    },*/
                     {
                         id: 'sms-template',
                         code: "00048",
