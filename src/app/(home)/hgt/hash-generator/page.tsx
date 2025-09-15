@@ -1,5 +1,4 @@
 import { Box, Container } from '@mui/material'
-import React from 'react'
 import HashGeneratorView from 'views/hash-generator/HashGeneratorView'
 
 const HashGeneratorPage = () => {

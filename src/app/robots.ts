@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ["/app","/app/register","/app/login","/gizlilik-sozlesmesi","/uyelik-sozlesmesi","/mesafeli-satis-sozlesmesi","/teslimat-ve-iade-sartlari"]
+      disallow: ["/app","/app/register","/app/login","/hgt/","/gizlilik-sozlesmesi","/uyelik-sozlesmesi","/mesafeli-satis-sozlesmesi","/teslimat-ve-iade-sartlari"]
     },
     sitemap: 'https://www.klinikease.com/sitemap.xml',
   }
