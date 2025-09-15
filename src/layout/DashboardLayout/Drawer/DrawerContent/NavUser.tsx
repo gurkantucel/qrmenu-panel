@@ -1,18 +1,8 @@
-import { useState, MouseEvent } from 'react';
-
-// next
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-
 // material-ui
-import { styled, useTheme } from '@mui/material/styles';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 
 // project-imports
@@ -20,19 +10,14 @@ import useUser from 'hooks/useUser';
 import { useGetMenuMaster } from 'api/menu';
 
 // assets
-import { ArrowRight2 } from 'iconsax-react';
-import { deleteCookie } from 'cookies-next';
-import { useIntl } from 'react-intl';
-import { useAppDispatch } from 'reduxt/hooks';
-import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import dayjs from 'dayjs';
 import { Chip } from '@mui/material';
 import NameAvatar from 'components/NameAvatar';
 
-interface ExpandMoreProps extends IconButtonProps {
+/*interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
   drawerOpen: boolean;
-}
+}*/
 
 const diffInDays = (endDate: string) => {
   const today = dayjs();
@@ -41,7 +26,7 @@ const diffInDays = (endDate: string) => {
   return `${diffInDays.toString()} Gün`;
 }
 
-const ExpandMore = styled(({ expand, drawerOpen, ...other }: ExpandMoreProps) => {
+/*const ExpandMore = styled(({ expand, drawerOpen, ...other }: ExpandMoreProps) => {
   return <IconButton size="small" {...other} />;
 })(({ theme, expand, drawerOpen }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(-90deg)',
@@ -55,37 +40,37 @@ const ExpandMore = styled(({ expand, drawerOpen, ...other }: ExpandMoreProps) =>
     width: 50,
     height: 50
   })
-}));
+}));*/
 
 // ==============================|| LIST - USER ||============================== //
 
 export default function UserList() {
-  const theme = useTheme();
-  const router = useRouter();
+  //const theme = useTheme();
+  //const router = useRouter();
   const user = useUser();
-  const intl = useIntl()
-  const dispatch = useAppDispatch();
+ // const intl = useIntl()
+  //const dispatch = useAppDispatch();
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
-  const handleLogout = () => {
+  /*const handleLogout = () => {
     deleteCookie("token");
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");
     deleteCookie("membership");
     dispatch(resetMenuItemState());
     router.push('/app/auth/login');
-  };
+  };*/
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  //const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  /*const open = Boolean(anchorEl);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
+  };*/
 
   return (
     <Box sx={{ p: 1.25, px: !drawerOpen ? 1.25 : 3, borderTop: '2px solid ', borderTopColor: 'divider' }}>
