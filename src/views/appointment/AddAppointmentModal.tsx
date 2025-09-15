@@ -488,7 +488,7 @@ type DoctorPersonInputType = {
 }
 
 const DoctorPersonInput = ({ getAcceptingAppointmentListData, getAcceptingAppointmentListLoading, setPersonName }: DoctorPersonInputType) => {
-    const { values, setFieldValue, touched, errors } = useFormikContext<any>();
+    const { values, setFieldValue} = useFormikContext<any>();
     const intl = useIntl()
 
     useEffect(() => {

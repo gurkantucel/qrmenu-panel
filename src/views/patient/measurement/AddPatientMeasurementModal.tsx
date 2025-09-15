@@ -22,7 +22,7 @@ import { useCreateDieticianPatientMeasurementMutation, useUpdateDieticianPatient
 const AddPatientMeasurementModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, data, id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const user = useUser();

@@ -10,7 +10,7 @@ import { RootState } from "reduxt/store";
 
 const DeletePatientMeasurementModal = () => {
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, title, data, id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, title, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const [deleteMeasurement, { isLoading: deleteMeasurementIsLoading, data: deleteMeasurementResponse, error: deleteMeasurementError }] = useDeleteDieticianMeasurementMutation();

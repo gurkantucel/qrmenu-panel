@@ -42,7 +42,7 @@ export const dayName = (day: number) => {
 const AddDietTemplateListModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const user = useUser();

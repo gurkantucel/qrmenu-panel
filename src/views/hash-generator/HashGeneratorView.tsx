@@ -25,7 +25,7 @@ const HashGeneratorView = () => {
 
 
                 const keyStr = `${process.env.NEXT_PUBLIC_MANUEL_HOOK_KEY_STR}`; // 32 karakter = AES-256
-                const ivStr = 'uYm+7eJflmQyL1RxURWyDQ=='; // base64 IV
+                //const ivStr = 'uYm+7eJflmQyL1RxURWyDQ=='; // base64 IV
 
                 const decryptedKeyText = encryptData(values.key, keyStr);
                 const decryptedOrderIdText = encryptData(values.paymentConversationId, keyStr);

@@ -17,7 +17,6 @@ import {
     createColumnHelper,
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
     HeaderGroup,
     PaginationState,
     useReactTable,

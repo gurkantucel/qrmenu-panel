@@ -67,7 +67,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                     appointment_process_description: item.appointment_process_description,
                     currency_code: item.currency_code,
                     currency_name: item.currency_name,
-                    amount: item.amount,
+                    amount: item.amount.toString(),
                     quantity: item.quantity,
                     discount_percentage: item.discount_percentage,
                     discount_amount: item.discount_amount,
@@ -111,7 +111,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                             appointment_process_description: null,
                             currency_code: null,
                             currency_name: null,
-                            amount: 0,
+                            amount: "0",
                             quantity: 1,
                             discount_percentage: 0,
                             discount_amount: 0,
@@ -270,7 +270,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                                     <OutlinedInput
                                                                         id="name"
                                                                         type="number"
-                                                                        value={(item.quantity * item.amount * item.discount_percentage) / 100}
+                                                                        value={((item.quantity * parseFloat(item.amount?.toString().replace(',', '.') ?? "0") * item.discount_percentage) / 100).toFixed(2)}
                                                                         disabled
                                                                         name={`detail[${index}].discount_amount`}
                                                                         onBlur={handleBlur}
@@ -320,9 +320,9 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                                         id="name"
                                                                         type="text"
                                                                         value={
-                                                                            (item.quantity * item.amount -
-                                                                                (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                            (item.vat / 100)
+                                                                            (((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * (item.discount_percentage ?? 0)) / 100) *
+                                                                                ((item.vat ?? 0) / 100)).toFixed(2)
                                                                         }
                                                                         disabled
                                                                         name={`detail[${index}].vat_amount`}
@@ -348,11 +348,11 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                                         id="name"
                                                                         type="text"
                                                                         value={
-                                                                            item.quantity * item.amount -
-                                                                            (item.quantity * item.amount * item.discount_percentage) / 100 +
-                                                                            (item.quantity * item.amount -
-                                                                                (item.quantity * item.amount * item.discount_percentage) / 100) *
-                                                                            (item.vat / 100)
+                                                                            ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100 +
+                                                                                ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") -
+                                                                                    ((item.quantity ?? 0) * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100) *
+                                                                                ((item.vat ?? 0) / 100)).toFixed(2)
                                                                         }
                                                                         onBlur={handleBlur}
                                                                         onChange={handleChange}
@@ -382,8 +382,8 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalAmount" })}:`}</Typography>
                                                 <Typography>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
                                                     values.detail.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        return sum + item.quantity * item.amount - iskontoTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari;
                                                     }, 0)
                                                 )}`}</Typography>
                                             </Stack>
@@ -391,7 +391,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                 <Typography color="grey.500">{`${intl.formatMessage({ id: "totalDiscount" })}:`}</Typography>
                                                 <Typography variant="h6" color="success.main">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
-                                                        values.detail.reduce((sum, item) => sum + (item.quantity * item.amount * item.discount_percentage) / 100, 0)
+                                                        values.detail.reduce((sum, item) => sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100, 0)
                                                     )}`}
                                                 </Typography>
                                             </Stack>
@@ -400,8 +400,8 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                 <Typography>
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(
                                                         values.detail.reduce((sum, item) => {
-                                                            const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                            return sum + (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
+                                                            const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                            return sum + (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
                                                         }, 0)
                                                     )}`}</Typography>
                                             </Stack>
@@ -409,9 +409,9 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                                 <Typography variant="subtitle1">{`${intl.formatMessage({ id: "amountToBePaid" })}:`}</Typography>
                                                 <Typography variant="subtitle1">
                                                     {`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: values.detail[0].currency_code ?? 'TRY' }).format(values.detail.reduce((sum, item) => {
-                                                        const iskontoTutari = (item.quantity * item.amount * item.discount_percentage) / 100;
-                                                        const kdvTutari = (item.quantity * item.amount - iskontoTutari) * (item.vat / 100);
-                                                        return sum + item.quantity * item.amount - iskontoTutari + kdvTutari;
+                                                        const iskontoTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") * item.discount_percentage) / 100;
+                                                        const kdvTutari = (item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari) * ((item.vat ?? 0) / 100);
+                                                        return sum + item.quantity * parseFloat(item.amount?.replace(',', '.') ?? "0") - iskontoTutari + kdvTutari;
                                                     }, 0)
                                                     )}`}
                                                 </Typography>
