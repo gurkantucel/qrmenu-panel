@@ -254,5 +254,9 @@
     "waist" : "Bel",
     "hip" : "Kalça",
     "chest" : "Göğüs",
-    "measurementDate" : "Ölçüm Tarihi"
+    "measurementDate" : "Ölçüm Tarihi",
+    "smsIntegration" : "SMS Entegrasyonu",
+    "smsHeader" : "SMS Başlığı",
+    "smsHeaderText" : "SMS gönderimi için gerekli entegrasyon sayfasıdır. Teknik bilgisi yüksek bir konu olduğu için değişiklik yaparken lütfen dikkatli olun. NETGSM'den alınan bilgileri girin.",
+    "smsHeaderText2" : "SMS Entegrasyonu başarılı olmadığı sürece SMS gönderimi yapılamayacaktır."
 }

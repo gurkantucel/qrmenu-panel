@@ -25,7 +25,7 @@ const medicineHistoryApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["medicineHistory"]
+            invalidatesTags: (result) => result?.status ? ["medicineHistory"] : [],
         }),
         updatePatientMedicineHistory: builder.mutation<CreateResultModel, PatientMedicineHistoryCreateBodyModel>({
             query: (body) => {
@@ -35,7 +35,7 @@ const medicineHistoryApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["medicineHistory"]
+            invalidatesTags: (result) => result?.status ? ["medicineHistory"] : [],
         }),
         deletePatientMedicineHistory: builder.mutation<CreateResultModel, { patient_medicine_history_id: number | string, patient_id: number | string }>({
             query: (args) => {
@@ -45,7 +45,7 @@ const medicineHistoryApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["medicineHistory"]
+            invalidatesTags: (result) => result?.status ? ["medicineHistory"] : [],
         }),
     })
 })

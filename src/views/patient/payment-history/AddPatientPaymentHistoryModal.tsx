@@ -274,7 +274,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                                                                     appointment_process_description: null,
                                                                                     currency_code: null,
                                                                                     currency_name: null,
-                                                                                    amount: 0,
+                                                                                    amount: "0",
                                                                                     quantity: 1,
                                                                                     discount_percentage: 0,
                                                                                     discount_amount: 0,

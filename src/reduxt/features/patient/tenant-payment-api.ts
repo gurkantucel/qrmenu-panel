@@ -16,8 +16,8 @@ const tenantPaymentApi = createApi({
             },
             providesTags: ["tenant-payment"]
         }),
-        getTenantPaymentList2: builder.query<TenantPaymentListResultModel, { filterSearch?: string, page?: number, pageSize?: number}>({
-            query: (args?: { filterSearch?: string, page?: number, pageSize?: number}) => {
+        getTenantPaymentList2: builder.query<TenantPaymentListResultModel, { filterSearch?: string, page?: number, pageSize?: number }>({
+            query: (args?: { filterSearch?: string, page?: number, pageSize?: number }) => {
                 return {
                     url: `app/tenant-payment/list?page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
                 }
@@ -32,7 +32,7 @@ const tenantPaymentApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["tenant-payment"]
+            invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
         }),
         updateTenantPayment: builder.mutation<CreateResultModel, TenantPaymentCreateBodyModel>({
             query: (body) => {
@@ -42,7 +42,7 @@ const tenantPaymentApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["tenant-payment"]
+            invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
         }),
         deleteTenantPayment: builder.mutation<CreateResultModel, { payment_id: number | string, patient_id: number | string }>({
             query: (args) => {
@@ -52,7 +52,7 @@ const tenantPaymentApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["tenant-payment"]
+            invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
         }),
         readTenantPayment: builder.query<TenantPaymentReadResultModel, { payment_id?: string, patient_id?: number | string }>({
             query: (args?: { patient_id?: number | string, payment_id?: string }) => {

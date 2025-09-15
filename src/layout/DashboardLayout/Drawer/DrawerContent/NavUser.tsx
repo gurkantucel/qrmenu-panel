@@ -92,7 +92,7 @@ export default function UserList() {
       <List disablePadding>
         <ListItem
           disablePadding
-          secondaryAction={
+          /*secondaryAction={
             <ExpandMore
               sx={{ svg: { height: 20, width: 20 } }}
               theme={theme}
@@ -107,7 +107,7 @@ export default function UserList() {
             >
               <ArrowRight2 style={{ fontSize: '0.625rem' }} />
             </ExpandMore>
-          }
+          }*/
           sx={{
             ...(!drawerOpen && { display: 'flex', justifyContent: 'flex-end' }),
             '& .MuiListItemSecondaryAction-root': { right: !drawerOpen ? 16 : -16 }
@@ -118,13 +118,23 @@ export default function UserList() {
           </ListItemAvatar>
           <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? <>
             <Chip size='small' variant="combined"
-              color="primary" sx={{ paddingLeft: 1 }} label={<Chip size='small' color="info" label={diffInDays(user.membership.membership_end_date)} />} avatar={
+              color="primary" sx={{ paddingLeft: 1,
+                "&.MuiChip-root": {
+                  justifyContent: "space-between",
+                  width: "100%",
+                  paddingLeft: "5px",
+                },
+                "& .MuiChip-label": {
+                  fontSize: "11px",
+                  padding: 0,
+                }
+              }} label={<Chip size='small' color="secondary" sx={{paddingLeft: 1, paddingRight: 1}} label={diffInDays(user.membership.membership_end_date)} />} avatar={
                 <>{user.membership.membership_package_name}</>
               } />
           </> : <>{'-'}</>} />
         </ListItem>
       </List>
-      <Menu
+      {/*<Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
@@ -137,7 +147,7 @@ export default function UserList() {
           {intl.formatMessage({id: "myOrders"})}
         </MenuItem>
         <MenuItem onClick={handleLogout}>{intl.formatMessage({ id: "logout" })}</MenuItem>
-      </Menu>
+      </Menu>*/}
     </Box>
   );
 }

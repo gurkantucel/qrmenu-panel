@@ -154,6 +154,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                         <Form>
+                            <p>{JSON.stringify(errors)}</p>
                             <Box sx={{ px: 3, py: 3 }}>
                                 <Grid
                                     container

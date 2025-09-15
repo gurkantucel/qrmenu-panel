@@ -177,11 +177,7 @@ const UpdateMakeAnOfferModal = (props: Props) => {
                     enableReinitialize
                     validationSchema={newMakeAnOfferSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        if (values.quote_id != null) {
-                            //updateAppointment(values);
-                        } else {
-                            updateMakeAnOffer(values);
-                        }
+                        updateMakeAnOffer(values);
                     }}
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
@@ -253,7 +249,7 @@ const UpdateMakeAnOfferModal = (props: Props) => {
                                                                                     appointment_process_description: null,
                                                                                     currency_code: null,
                                                                                     currency_name: null,
-                                                                                    amount: 0,
+                                                                                    amount: "0",
                                                                                     quantity: 1,
                                                                                     discount_percentage: 0,
                                                                                     discount_amount: 0,

@@ -24,7 +24,7 @@ const healthInformationApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["healthInformation"]
+            invalidatesTags: (result) => result?.status ? ["healthInformation"] : [],
         }),
     })
 })

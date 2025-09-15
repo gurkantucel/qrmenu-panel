@@ -88,7 +88,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
             {isPatientHealthInformationFetching || isPatientHealthInformationLoading ? <CustomScaleLoader /> : <Formik
                 initialValues={initialData ?? {
                     patient_health_information_id: null,
-                    patient_id: null,
+                    patient_id: params.slug,
                     blood_type_id: null,
                     height: null,
                     weight: null,

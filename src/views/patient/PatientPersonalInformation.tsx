@@ -131,9 +131,6 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
                     horizontal: 'right'
                 }
             },)
-            if (updatePatientResponse?.status == true) {
-                //getPatientList({});
-            }
         }
         if (updatePatientError) {
             var error = updatePatientError as any;

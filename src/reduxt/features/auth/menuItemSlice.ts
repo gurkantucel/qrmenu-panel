@@ -116,6 +116,13 @@ const permissionControlMenu = () => {
                         url: '/app/settings/diet-template',
                     },*/
                     {
+                        id: 'sms-integration',
+                        code: "00053",
+                        title: "SMS Entegrasyonu",
+                        type: 'item',
+                        url: '/app/settings/sms-integration',
+                    },
+                    {
                         id: 'sms-template',
                         code: "00048",
                         title: "SMS Şablonları",
