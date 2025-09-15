@@ -7,7 +7,7 @@ import timelinePlugin from '@fullcalendar/timeline';
 import { Box, SpeedDial, Tooltip, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
-import { EventContentArg, EventSourceInput } from '@fullcalendar/core';
+import { EventSourceInput } from '@fullcalendar/core';
 //import { Theme } from '@mui/material/styles';
 import { useIntl } from 'react-intl';
 import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
@@ -238,7 +238,7 @@ const HomeAppointmentCalendarView = () => {
 
 export default HomeAppointmentCalendarView
 
-function renderEventContent(eventInfo: EventContentArg) {
+/*function renderEventContent(eventInfo: EventContentArg) {
     if (eventInfo.view.type == "listWeek") {
         return (
             <div style={{ textDecoration: eventInfo.backgroundColor == "#2ca87f" ? "line-through" : "none" }}>
@@ -255,4 +255,4 @@ function renderEventContent(eventInfo: EventContentArg) {
             </>
         </Tooltip>
     )
-}
+}*/
