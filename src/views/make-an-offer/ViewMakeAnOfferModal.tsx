@@ -284,6 +284,7 @@ const ViewMakeAnOfferModal = () => {
                                                                                 name={`amount`}
                                                                                 placeholder={intl.formatMessage({ id: "amount" })}
                                                                                 value={values.detail[index].amount}
+                                                                                disabled
                                                                                 //decimalsLimit={2}
                                                                                 onValueChange={(value, name, values2) => {
                                                                                     setFieldValue(`detail[${index}].amount`, values2?.value)

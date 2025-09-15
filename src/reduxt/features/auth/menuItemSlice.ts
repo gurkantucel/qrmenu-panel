@@ -117,7 +117,7 @@ const permissionControlMenu = () => {
                     },*/
                     {
                         id: 'sms-integration',
-                        code: "00053",
+                        code: "00054",
                         title: "SMS Entegrasyonu",
                         type: 'item',
                         url: '/app/settings/sms-integration',

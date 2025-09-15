@@ -205,7 +205,7 @@ const HomeAppointmentCalendarView = () => {
                                 allDayMaintainDuration
                                 eventResizableFromStart
                                 locale={"tr"}
-                                eventContent={renderEventContent}
+                                //eventContent={renderEventContent}
                                 select={(val) => {
                                 }}
                                 //eventDrop={handleEventUpdate}

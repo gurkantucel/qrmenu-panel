@@ -190,6 +190,7 @@ const AddAppointmentCalendarModal = () => {
                         scrollTime={"08:00:00"}
                         noEventsText={intl.formatMessage({ id: "noEventsText" })}
                         moreLinkText={intl.formatMessage({ id: "more" })}
+                        allDayText='Tüm'
                         locale={"tr"}
                         select={(val) => {
                             setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm:ss'));
@@ -202,7 +203,7 @@ const AddAppointmentCalendarModal = () => {
                         //eventResize={handleEventUpdate}
                         //height={matchDownSM ? 'auto' : 720}
                         //height={"78vh"}
-                        height={'auto'}
+                        height={'100vh'}
                         plugins={[listPlugin, dayGridPlugin, timelinePlugin, timeGridPlugin, interactionPlugin]}
                     />
                 </CalendarStyled>

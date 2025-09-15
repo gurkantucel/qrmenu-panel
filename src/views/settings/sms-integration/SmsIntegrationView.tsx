@@ -136,7 +136,7 @@ const SmsIntegrationView = () => {
                 <Grid container spacing={3} marginTop={0.1}>
                   <Grid item xs={12} md={6}>
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="firstname-signup">{intl.formatMessage({ id: "name" })}{"*"}</InputLabel>
+                      <InputLabel htmlFor="firstname-signup">{intl.formatMessage({ id: "username" })}{"*"}</InputLabel>
                       <OutlinedInput
                         id="username"
                         type="text"
@@ -144,7 +144,7 @@ const SmsIntegrationView = () => {
                         name="username"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        placeholder={intl.formatMessage({ id: "name" })}
+                        placeholder={intl.formatMessage({ id: "username" })}
                         fullWidth
                         error={Boolean(touched.username && errors.username)}
                       />
