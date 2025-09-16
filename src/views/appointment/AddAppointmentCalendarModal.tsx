@@ -176,7 +176,9 @@ const AddAppointmentCalendarModal = () => {
                         weekends
                         editable={false}
                         droppable={false}
-                        selectable
+                        selectable={true}
+                        selectMirror={true}
+                        selectMinDistance={1}
                         events={appointmentCalendarData?.data as EventSourceInput ?? []}
                         ref={calendarRef}
                         rerenderDelay={10}
@@ -196,6 +198,11 @@ const AddAppointmentCalendarModal = () => {
                             setFieldValue("appointment_start", dayjs(val.startStr).format('YYYY-MM-DD HH:mm:ss'));
                             const calc = durationCalc(val.startStr, val.endStr);
                             setFieldValue("appointment_duration", calc);
+                            handleClose();
+                        }}
+                        dateClick={(val) => {
+                            setFieldValue("appointment_start", dayjs(val.dateStr).format('YYYY-MM-DD HH:mm:ss'));
+                            setFieldValue("appointment_duration", 30);
                             handleClose();
                         }}
                         //eventDrop={handleEventUpdate}
