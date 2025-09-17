@@ -1,6 +1,5 @@
 // project-imports
 import type { Metadata } from "next";
-import AuthGuard from 'utils/route-guard/AuthGuard';
 import ReduxWrapper from "reduxt/ReduxWrapper";
 import ProviderWrapper from "app/ProviderWrapper";
 import { cookies } from "next/headers";
