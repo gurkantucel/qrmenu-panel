@@ -1,175 +1,163 @@
 "use client"
 
 import { Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
-import { Add, CloseSquare } from "iconsax-react"
+import { CloseSquare } from "iconsax-react"
 import { useIntl } from "react-intl";
-import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
+import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import { FieldArray, Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { useGetMealTimeDropdownQuery } from "reduxt/features/definition/definition-api";
-import { useCreateDieticianDietTemplateMutation, useLazyReadDieticianDietTemplateQuery, useUpdateDieticianDietTemplateMutation } from "reduxt/features/settings/diet-template-api";
-import { CreateDieticianDietTemplateBodyModel } from "reduxt/features/settings/models/diet-template-list-model";
-import { newDietTemplateValidationSchema } from "utils/schemas/diet-template-validation-schema";
+import { useLazyGetDieticianDietTemplateDropdownQuery, useLazyReadDieticianDietTemplateQuery } from "reduxt/features/settings/diet-template-api";
+import { newDieticianPatientDietTemplateValidationSchema } from "utils/schemas/diet-template-validation-schema";
 import MainCard from "components/MainCard";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import useUser from "hooks/useUser";
 import CustomScaleLoader from "components/CustomScaleLoader";
+import { CreateDieticianPatientDietTemplateBodyModel, DieticianPatientDietTemplateDetail, DieticianPatientDietTemplateDetail2, DieticianPatientDietTemplateReadDetail } from "reduxt/features/patient/models/dietician-patient-diet-template-list-model";
+import { useCreateDieticianPatientDietTemplateMutation, useLazyReadDieticianPatientDietTemplateQuery, useUpdateDieticianPatientDietTemplateMutation } from "reduxt/features/patient/dietician-patient-diet-template-api";
+import { useParams } from "next/navigation";
+import dayjs from "dayjs";
+import { dayCalculator } from "utils/day-calculator";
 
-export const dayName = (day: number) => {
-    switch (day) {
-        case 1:
-            return "Pazartesi";
-        case 2:
-            return "Salı";
-        case 3:
-            return "Çarşamba";
-        case 4:
-            return "Perşembe";
-        case 5:
-            return "Cuma";
-        case 6:
-            return "Cumartesi";
-        case 7:
-            return "Pazar";
+function transformDietData(readData: DieticianPatientDietTemplateReadDetail[]): DieticianPatientDietTemplateDetail[] {
+    const transformedData: DieticianPatientDietTemplateDetail[] = [];
+    const groupedByDay: { [day: number]: DieticianPatientDietTemplateDetail2[] } = {};
+
+    // Read servisinden gelen veriyi günlere göre gruplandır
+    readData?.forEach(item => {
+        if (!groupedByDay[item.day]) {
+            groupedByDay[item.day] = [];
+        }
+        groupedByDay[item.day].push({
+            patient_diet_template_detail_id: item.patient_diet_template_detail_id,
+            meal_time_id: item.meal_time_id,
+            name: item.name,
+            calorie: item.calorie,
+            note: item.note,
+            status: true
+        });
+    });
+
+    // Gruplandırılmış veriyi istenen formata dönüştür
+    for (const day in groupedByDay) {
+        transformedData.push({
+            day: parseInt(day, 10),
+            detail: groupedByDay[parseInt(day, 10)]
+        });
     }
+
+    return transformedData;
 }
 
-const AddDietTemplateListModal = () => {
+const CreateDieticianPatientDietTemplateModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
-
     const user = useUser();
 
-    const { data: getmealTimeData, isLoading: ismealTimeLoading } = useGetMealTimeDropdownQuery(undefined,{ skip: modalType != ModalEnum.newDietTemplate })
+    const params = useParams<{ slug: string }>()
 
-    const [createDieticianDietTemplate, { isLoading: createDieticianDietTemplateIsLoading, data: createDieticianDietTemplateResponse, error: createDieticianDietTemplateError }] = useCreateDieticianDietTemplateMutation();
+    const [initialValues, setInitialValues] = useState<CreateDieticianPatientDietTemplateBodyModel>();
 
-    const [updateDieticianDietTemplate, { isLoading: updateDieticianDietTemplateIsLoading, data: updateDieticianDietTemplateResponse, error: updateDieticianDietTemplateError }] = useUpdateDieticianDietTemplateMutation();
+    const { data: getmealTimeData, isLoading: ismealTimeLoading } = useGetMealTimeDropdownQuery(undefined, { skip: modalType != ModalEnum.newDieticianPatientDietTemplate })
+
+    const [createDieticianPatientDietTemplate, { isLoading: createDieticianPatientDietTemplateIsLoading, data: createDieticianPatientDietTemplateResponse, error: createDieticianPatientDietTemplateError }] = useCreateDieticianPatientDietTemplateMutation();
+
+    const [updateDieticianPatientDietTemplate, { isLoading: updateDieticianPatientDietTemplateIsLoading, data: updateDieticianPatientDietTemplateResponse, error: updateDieticianPatientDietTemplateError }] = useUpdateDieticianPatientDietTemplateMutation();
+
+    const [getDieticianDietTemplateList, {
+        data: getDieticianDietTemplateListData,
+        isLoading: getDieticianDietTemplateListLoading
+    }] = useLazyGetDieticianDietTemplateDropdownQuery();
 
     const [readDieticianDietTemplate, {
-        data: readDieticianDietTemplateData,
         isLoading: readDieticianDietTemplateLoading,
         isFetching: readDieticianDietTemplateFetching
     }] = useLazyReadDieticianDietTemplateQuery();
 
-    const [initialValues, setInitialValues] = useState<CreateDieticianDietTemplateBodyModel | null>(null);
+    const [readDieticianPatientDietTemplate, {
+        data: readDieticianPatientDietTemplateData,
+        isLoading: readDieticianPatientDietTemplateLoading,
+        isFetching: readDieticianPatientDietTemplateFetching
+    }] = useLazyReadDieticianPatientDietTemplateQuery();
 
-    const handleSubmit = (values: CreateDieticianDietTemplateBodyModel) => {
-        if (values.diet_template_id != null) {
-            updateDieticianDietTemplate(values);
-        } else {
-            createDieticianDietTemplate(values);
+
+    useEffect(() => {
+        if (open == true && modalType == ModalEnum.newDieticianPatientDietTemplate) {
+            getDieticianDietTemplateList();
         }
-    };
+    }, [open, modalType])
 
-    const handleClose = () => {
+    useEffect(() => {
+        if (open == true && modalType == ModalEnum.newDieticianPatientDietTemplate && data != null) {
+            readDieticianPatientDietTemplate({ patient_diet_template_id: data?.patient_diet_template_id, patient_id: data?.patient_id, person_id: data?.person_id });
+        }
+    }, [open, id, data])
+
+    useEffect(() => {
+        if (open == true && modalType == ModalEnum.newDieticianPatientDietTemplate && data != null && readDieticianPatientDietTemplateData?.data != null) {
+            const model: CreateDieticianPatientDietTemplateBodyModel = {
+                patient_diet_template_id: data?.patient_diet_template_id,
+                diet_template_id: data?.diet_template_id,
+                person_id: data?.person_id,
+                patient_id: data?.patient_id,
+                start_date: data?.start_date,
+                end_date: data?.end_date,
+                detail: transformDietData(readDieticianPatientDietTemplateData.data?.detail),
+                status: data?.status
+            }
+            setInitialValues(model)
+        }
+    }, [open, data, readDieticianPatientDietTemplateData])
+
+    useEffect(() => {
+        if (createDieticianPatientDietTemplateResponse) {
+            enqueueSnackbar(createDieticianPatientDietTemplateResponse.message, { variant: createDieticianPatientDietTemplateResponse?.status == true ? 'success' : 'error' })
+            if (createDieticianPatientDietTemplateResponse?.status == true) {
+                toggle();
+            }
+        }
+        if (createDieticianPatientDietTemplateError) {
+            var error = createDieticianPatientDietTemplateError as any;
+            enqueueSnackbar(error.data?.message ?? "Hata", { variant: 'error' })
+        }
+    }, [createDieticianPatientDietTemplateResponse, createDieticianPatientDietTemplateError])
+
+    useEffect(() => {
+        if (updateDieticianPatientDietTemplateResponse) {
+            enqueueSnackbar(updateDieticianPatientDietTemplateResponse.message, { variant: updateDieticianPatientDietTemplateResponse?.status == true ? 'success' : 'error' })
+            if (updateDieticianPatientDietTemplateResponse?.status == true) {
+                toggle();
+            }
+        }
+        if (updateDieticianPatientDietTemplateError) {
+            var error = updateDieticianPatientDietTemplateError as any;
+            enqueueSnackbar(error.data?.message ?? "Hata", { variant: 'error' })
+        }
+    }, [updateDieticianPatientDietTemplateResponse, updateDieticianPatientDietTemplateError])
+
+    const toggle = useCallback(() => {
         dispatch(closeModal())
-        setInitialValues(null);
-    };
-
-    useEffect(() => {
-        if (open == true && modalType == ModalEnum.newDietTemplate) {
-            //getmealTime();
-            if (id != null) {
-                readDieticianDietTemplate({ diet_template_id: id })
-            }
-        }
-    }, [open, id])
-
-    useEffect(() => {
-        if (readDieticianDietTemplateData?.data != null) {
-            const model: CreateDieticianDietTemplateBodyModel = {
-                person_id: user ? user?.id : undefined,
-                diet_template_id: readDieticianDietTemplateData?.data?.diet_template_id,
-                code: readDieticianDietTemplateData?.data?.code,
-                name: readDieticianDietTemplateData?.data?.name,
-                description: readDieticianDietTemplateData?.data?.description,
-                detail: readDieticianDietTemplateData.data?.detail,
-                status: readDieticianDietTemplateData.data?.status
-            }
-            setInitialValues(model);
-        }
-    }, [readDieticianDietTemplateData])
-
-
-    useEffect(() => {
-        if (createDieticianDietTemplateResponse) {
-            enqueueSnackbar(createDieticianDietTemplateResponse.message, {
-                variant: createDieticianDietTemplateResponse?.status == true ? 'success' : 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-            if (createDieticianDietTemplateResponse?.status == true) {
-                handleClose();
-                //getPersonList({});
-            }
-        }
-        if (createDieticianDietTemplateError) {
-            var error = createDieticianDietTemplateError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-        }
-    }, [createDieticianDietTemplateResponse, createDieticianDietTemplateError])
-
-    useEffect(() => {
-        if (updateDieticianDietTemplateResponse) {
-            enqueueSnackbar(updateDieticianDietTemplateResponse.message, {
-                variant: updateDieticianDietTemplateResponse?.status == true ? 'success' : 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-            if (updateDieticianDietTemplateResponse?.status == true) {
-                handleClose();
-                //getPersonList({});
-            }
-        }
-        if (updateDieticianDietTemplateError) {
-            var error = updateDieticianDietTemplateError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-        }
-    }, [updateDieticianDietTemplateResponse, updateDieticianDietTemplateError])
-
-    useEffect(() => {
-        return () => {
-            handleClose()
-        }
-    }, [])
+        setInitialValues(undefined);
+    }, [open])
 
     return (
         <>
-            <Button variant="dashed" startIcon={<Add />} onClick={() => {
-                dispatch(setModal({
-                    open: true,
-                    modalType: ModalEnum.newDietTemplate
-                }))
-            }}>{intl.formatMessage({ id: "new" })}</Button>
-            <Dialog open={open && modalType == ModalEnum.newDietTemplate} onClose={handleClose} fullScreen>
-                {readDieticianDietTemplateLoading || readDieticianDietTemplateFetching ? <CustomScaleLoader /> : <Formik
+            <Dialog open={open && modalType == ModalEnum.newDieticianPatientDietTemplate} onClose={toggle} fullScreen>
+                {readDieticianPatientDietTemplateLoading || readDieticianPatientDietTemplateFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialValues ?? {
-                        diet_template_id: undefined,
-                        person_id: user ? user?.id : undefined,
-                        code: '',
-                        name: '',
-                        description: '',
+                        diet_template_id: "",
+                        person_id: user ? user?.id : "",
+                        patient_id: params.slug,
+                        start_date: null,
+                        end_date: null,
                         detail: [
                             {
                                 day: 1,
@@ -256,14 +244,39 @@ const AddDietTemplateListModal = () => {
                                 ],
                             },
                         ],
-                        status: true,
+                        status: true
                     }}
-                    validationSchema={newDietTemplateValidationSchema}
+                    validationSchema={newDieticianPatientDietTemplateValidationSchema}
                     enableReinitialize
-                    validateOnChange={false}
-                    validateOnMount={false}
-                    validateOnBlur={false}
-                    onSubmit={handleSubmit}>
+                    onSubmit={(values) => {
+                        const processedData = { ...values };
+                        values.detail = processedData.detail.map(dayEntry => {
+                            // Eğer detail dizisi boşsa, varsayılan öğeyi ekle
+                            if (dayEntry?.detail?.length === 0) {
+                                return {
+                                    ...dayEntry,
+                                    detail: [
+                                        {
+                                            patient_diet_template_detail_id: undefined,
+                                            meal_time_id: null,
+                                            name: null,
+                                            calorie: null,
+                                            note: null,
+                                            status: true,
+                                        },
+                                    ],
+                                };
+                            }
+                            // Boş değilse, olduğu gibi bırak
+                            return dayEntry;
+                        });
+                        if (values.patient_diet_template_id != null) {
+                            updateDieticianPatientDietTemplate(values);
+                        } else {
+                            createDieticianPatientDietTemplate(values);
+                        }
+
+                    }}>
                     {({ values, errors, touched, handleBlur, handleChange, setFieldValue }) => (
                         <Form>
                             <Box sx={{ px: 3, py: 5 }}>
@@ -278,84 +291,91 @@ const AddDietTemplateListModal = () => {
                                         <Typography variant="h4">{intl.formatMessage({ id: id != null ? "updateDietTemplate" : "newDietTemplate" })}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
-                                        <IconButton color="secondary" onClick={handleClose}>
+                                        <IconButton color="secondary" onClick={toggle}>
                                             <CloseSquare size={36} />
                                         </IconButton>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="firstname-signup">{`${intl.formatMessage({ id: "name" })}*`}</InputLabel>
-                                            <OutlinedInput
-                                                id="name"
-                                                type="text"
-                                                value={values.name}
-                                                name="name"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "name" })}
-                                                fullWidth
-                                                error={Boolean(touched.name && errors.name)}
-                                                inputProps={{ maxLength: 50 }}
+                                            <InputLabel htmlFor="template">{`${intl.formatMessage({ id: "template" })}*`}</InputLabel>
+                                            <CustomFormikSelect
+                                                name='diet_template_id'
+                                                placeholder="Şablon Seçin"
+                                                isClearable={true}
+                                                isLoading={getDieticianDietTemplateListLoading}
+                                                zIndex={9999}
+                                                value={
+                                                    values.diet_template_id ? { label: getDieticianDietTemplateListData?.data?.find((item) => item.value == values.diet_template_id)?.label ?? "", value: getDieticianDietTemplateListData?.data?.find((item) => item.value == values.diet_template_id)?.value ?? 0 } : null}
+                                                onChange={async (val: any) => {
+                                                    setFieldValue("diet_template_id", val?.value ?? 0);
+                                                    const dietTemplate = await readDieticianDietTemplate({ diet_template_id: val?.value, person_id: user ? user?.id : "" })
+                                                    if (dietTemplate.data != null) {
+                                                        setFieldValue('detail', dietTemplate?.data?.data?.detail);
+                                                    }
+                                                }}
+
+                                                options={getDieticianDietTemplateListData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
                                             />
                                         </Stack>
-                                        {touched.name && errors.name && (
-                                            <FormHelperText error id="helper-text-firstname-signup">
-                                                {errors.name}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="lastname-signup">{`${intl.formatMessage({ id: "code" })}*`}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.code && errors.code)}
-                                                id="code"
-                                                type="text"
-                                                value={values.code}
-                                                name="code"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "uniqueIdExample2" })}
-                                                inputProps={{ maxLength: 10 }}
-                                            />
-                                        </Stack>
-                                        {touched.code && errors.code && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.code}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="description">{intl.formatMessage({ id: "description" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.description && errors.description)}
-                                                id="description"
-                                                type="text"
-                                                value={values.description}
-                                                name="description"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "description" })}
-                                                inputProps={{ maxLength: 500 }}
-                                            />
-                                        </Stack>
-                                        {touched.description && errors.description && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.description}
-                                            </FormHelperText>
-                                        )}
                                     </Grid>
                                 </Grid>
-                                <FieldArray name="detail">
+                                <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="start_date">{intl.formatMessage({ id: "startDate" })}</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.start_date && errors.start_date)}
+                                                id="start_date"
+                                                type="date"
+                                                value={dayjs(values.start_date).format('YYYY-MM-DD')}
+                                                name="start_date"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "startDate" })}
+                                            //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
+                                            />
+                                        </Stack>
+                                        {touched.start_date && errors.start_date && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.start_date}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="end_date">{intl.formatMessage({ id: "endDate" })}</InputLabel>
+                                            <OutlinedInput
+                                                fullWidth
+                                                error={Boolean(touched.end_date && errors.end_date)}
+                                                id="end_date"
+                                                type="date"
+                                                value={dayjs(values.end_date).format('YYYY-MM-DD')}
+                                                name="end_date"
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "endDate" })}
+                                            //inputProps={{ max: dayjs().format('YYYY-MM-DD') }}
+                                            />
+                                        </Stack>
+                                        {touched.end_date && errors.end_date && (
+                                            <FormHelperText error id="helper-text-email-signup">
+                                                {errors.end_date}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+
+                                </Grid>
+                                {readDieticianDietTemplateLoading || readDieticianDietTemplateFetching ? <CustomScaleLoader /> : <FieldArray name="detail">
                                     {({ push, remove, form }) => (
                                         <div>
                                             {values.detail.map((dayDetail, dayIndex) => (
-                                                <MainCard sx={{ marginBottom: "40px" }} content={false} key={dayIndex} title={dayName(dayDetail.day)} button={(dayDetail.detail == null || dayDetail.detail.length == 0) && <Button onClick={() => {
+                                                <MainCard sx={{ marginBottom: "40px" }} content={false} key={dayIndex} title={dayCalculator(dayDetail.day)} button={(dayDetail.detail == null || dayDetail.detail.length == 0) && <Button onClick={() => {
                                                     setFieldValue(`detail.${dayIndex}.detail`, [{ meal_time_id: '', name: '', calorie: '', note: '', status: true }]);
                                                 }}>{"Yeni Ekle"}</Button>}>
                                                     <div key={dayIndex}>
@@ -377,11 +397,11 @@ const AddDietTemplateListModal = () => {
                                                                                 <tr key={mealIndex} style={{ marginBottom: 2 }}>
                                                                                     <td className="table-mobil">
                                                                                         <Stack direction="row" justifyContent={"center"} spacing={1}>
-                                                                                        <Button sx={{ minWidth: 40 }} type='button' variant="outlined" onClick={() => pushMeal({ meal_time_id: '', name: '', calorie: '', note: '', status: true })}>{"+"}</Button>
-                                                                                        <Button sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removeMeal(mealIndex)}>{"-"}</Button>
+                                                                                            <Button sx={{ minWidth: 40 }} type='button' variant="outlined" onClick={() => pushMeal({ meal_time_id: '', name: '', calorie: '', note: '', status: true })}>{"+"}</Button>
+                                                                                            <Button sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removeMeal(mealIndex)}>{"-"}</Button>
                                                                                         </Stack>
                                                                                     </td>
-                                                                                    <td><div className="mb-2">
+                                                                                    <td style={{width: "250px"}}><div className="mb-2">
                                                                                         <div className='mt-2 form-select-mobil'>
                                                                                             <CustomFormikSelect
                                                                                                 name={`detail.${dayIndex}.detail.${mealIndex}.meal_time_id`}
@@ -408,7 +428,7 @@ const AddDietTemplateListModal = () => {
                                                                                     <td>
                                                                                         <OutlinedInput
                                                                                             fullWidth
-                                                                                            error={touched.detail?.[dayIndex]?.detail?.[mealIndex]?.name && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.name}
+                                                                                            error={(touched.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.name && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.name}
                                                                                             id={`detail.${dayIndex}.detail.${mealIndex}.name`}
                                                                                             type="text"
                                                                                             value={meal.name}
@@ -422,7 +442,7 @@ const AddDietTemplateListModal = () => {
                                                                                     <td>
                                                                                         <OutlinedInput
                                                                                             fullWidth
-                                                                                            error={touched.detail?.[dayIndex]?.detail?.[mealIndex]?.calorie && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.calorie}
+                                                                                            error={(touched.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.calorie && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.calorie}
                                                                                             id={`detail.${dayIndex}.detail.${mealIndex}.calorie`}
                                                                                             type="text"
                                                                                             value={meal.calorie}
@@ -436,7 +456,7 @@ const AddDietTemplateListModal = () => {
                                                                                     <td>
                                                                                         <OutlinedInput
                                                                                             fullWidth
-                                                                                            error={touched.detail?.[dayIndex]?.detail?.[mealIndex]?.note && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.note}
+                                                                                            error={(touched.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.note && (errors.detail as any)?.[dayIndex]?.detail?.[mealIndex]?.note}
                                                                                             id={`detail.${dayIndex}.detail.${mealIndex}.note`}
                                                                                             type="text"
                                                                                             value={meal.note}
@@ -459,7 +479,7 @@ const AddDietTemplateListModal = () => {
                                             ))}
                                         </div>
                                     )}
-                                </FieldArray>
+                                </FieldArray>}
                                 <Grid item xs={12}>
                                     <FormControlLabel control={<Switch
                                         checked={values.status}
@@ -468,13 +488,13 @@ const AddDietTemplateListModal = () => {
                                         }} />} label={intl.formatMessage({ id: values.status ? "active" : "passive" })} />
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>
-                                    <Button color="info" onClick={handleClose}>
+                                    <Button color="info" onClick={toggle}>
                                         {intl.formatMessage({ id: "close" })}
                                     </Button>
                                     <AnimateButton>
-                                        <Button disableElevation disabled={createDieticianDietTemplateIsLoading || updateDieticianDietTemplateIsLoading} type="submit" variant="contained" color="primary">
-                                            {(createDieticianDietTemplateIsLoading || updateDieticianDietTemplateIsLoading) && <PuffLoader size={20} color='white' />}
-                                            {(createDieticianDietTemplateIsLoading == false || updateDieticianDietTemplateIsLoading == false) && intl.formatMessage({ id: "save" })}
+                                        <Button disableElevation disabled={createDieticianPatientDietTemplateIsLoading || updateDieticianPatientDietTemplateIsLoading} type="submit" variant="contained" color="primary">
+                                            {(createDieticianPatientDietTemplateIsLoading || updateDieticianPatientDietTemplateIsLoading) && <PuffLoader size={20} color='white' />}
+                                            {(createDieticianPatientDietTemplateIsLoading == false || updateDieticianPatientDietTemplateIsLoading == false) && intl.formatMessage({ id: "save" })}
                                         </Button>
                                     </AnimateButton>
                                 </DialogActions>
@@ -487,4 +507,4 @@ const AddDietTemplateListModal = () => {
     )
 }
 
-export default AddDietTemplateListModal
+export default CreateDieticianPatientDietTemplateModal

@@ -30,7 +30,7 @@ export default function Login() {
         </Grid>
         <Grid item xs={12} alignItems={'center'}>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-            <Typography component={Link} href={'/app/auth/register'} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
+            <Typography component={Link} href={'/auth/register'} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
               {"Hesabınız yok mu? Kayıt Olun"}
             </Typography>
           </Stack>

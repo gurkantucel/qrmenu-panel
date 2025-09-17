@@ -59,6 +59,9 @@ export enum ModalEnum {
     newMeasurement,
     deleteMeasurement,
     viewMeasurement,
+    newDieticianPatientDietTemplate,
+    deleteDieticianPatientDietTemplate,
+    viewDieticianPatientDietTemplate,
 }
 
 type Model = {

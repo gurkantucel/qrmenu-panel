@@ -7,7 +7,8 @@ export enum PatientTabEnum {
     dosyalar,
     odemeler,
     olcumler,
-    randevular
+    randevular,
+    diyetListesi
 }
 
 type Model = {

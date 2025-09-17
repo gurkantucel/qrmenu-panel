@@ -77,7 +77,7 @@ export default function ProfilePage() {
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");
     dispatch(resetMenuItemState());
-    router.push('/app/auth/login');
+    router.push('/auth/login');
   };
 
   const anchorRef = useRef<any>(null);

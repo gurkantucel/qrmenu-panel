@@ -59,7 +59,7 @@ export default function UserList() {
     deleteCookie("personAuthorizations");
     deleteCookie("membership");
     dispatch(resetMenuItemState());
-    router.push('/app/auth/login');
+    router.push('/auth/login');
   };*/
 
   //const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

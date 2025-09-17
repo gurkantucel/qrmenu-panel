@@ -43,7 +43,7 @@ const PayErrorView = (props: Props) => {
                     <Typography color="text.secondary" variant="body2" align="center" sx={{ width: { xs: '73%', sm: '70%' }, mt: 1 }}>
                         {props.content ?? "Ödeme alınamadı. Kredi kartı bilgilerinizi kontrol edebilir, bankanızla iletişime geçebilirsiniz."}
                     </Typography>
-                    <Button component={Link} href={props.btnHref ?? "/app/auth/login"} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
+                    <Button component={Link} href={props.btnHref ?? "/auth/login"} variant="contained" sx={{ textTransform: 'none', mt: 4 }}>
                         {props.btnTitle ?? "Üye Girişi"}
                     </Button>
                 </Stack>

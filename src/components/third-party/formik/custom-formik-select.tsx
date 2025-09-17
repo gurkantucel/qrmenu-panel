@@ -18,6 +18,7 @@ type Props = {
     onMenuOpen?: (() => void) | undefined
     onMenuClose?: (() => void) | undefined
     menuPosition?: MenuPosition
+    menuPortalTarget?: HTMLElement
 }
 
 const CustomFormikSelect = (props: Props) => {
@@ -37,7 +38,9 @@ const CustomFormikSelect = (props: Props) => {
                         onMenuOpen={props.onMenuOpen}
                         onMenuClose={props.onMenuClose}
                         menuPosition={props.menuPosition}
+                        menuPortalTarget={props.menuPortalTarget}
                         styles={props.styles ?? {
+                            menuPortal: base => ({ ...base, zIndex: 9999 }),
                             container: (baseStyles: any) => ({
                                 ...baseStyles,
                                 zIndex: props.zIndex ?? 998

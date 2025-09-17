@@ -30,4 +30,38 @@ const newDietTemplateValidationSchema = Yup.object({
     status: Yup.boolean().required('Durum zorunlu'),
 });
 
-export { newDietTemplateValidationSchema }
+const newDieticianPatientDietTemplateValidationSchema = Yup.object({
+    diet_template_id: Yup.string().uuid('Geçersiz UUID formatı').required('Diyetisyen ID zorunlu'),
+    start_date: Yup.date().typeError('Başlangıç tarihi geçerli bir tarih olmalıdır').required("Bu alan zorunlu"),
+    end_date: Yup.date()
+        .typeError('Bitiş tarihi geçerli bir tarih olmalıdır')
+        .required("Bu alan zorunlu")
+        .when(["start_date"], {
+            is: (start_date: any) => start_date && start_date !== '',
+            then: (schema) => Yup.date().min(Yup.ref('start_date'), 'Bitiş tarihi başlangıç tarihinden büyük olmalıdır').required("Bu alan zorunlu"),
+        }),
+    detail: Yup.array().nullable()
+        .of(
+            Yup.object({
+                day: Yup.number().required('Gün zorunlu'),
+                detail: Yup.array().nullable()
+                    .of(
+                        Yup.object({
+                            meal_time_id: Yup.string().uuid('Geçersiz UUID formatı').required('Öğün ID zorunlu'),
+                            name: Yup.string().when('meal_time_id', {
+                                is: (val: string) => val && val.length > 0,
+                                then: (schema) => Yup.string().required('Yemek ismi zorunlu').min(1, 'Yemek ismi en az 1 karakter olmalı').max(100, 'Yemek ismi en fazla 100 karakter olmalı'),
+                            }),
+                            calorie: Yup.string().when('meal_time_id', {
+                                is: (val: string) => val && val.length > 0,
+                                then: (schema) => Yup.string().required('Kalori zorunlu').min(1, 'Kalori en az 1 karakter olmalı').max(100, 'Kalori en fazla 100 karakter olmalı'),
+                            }),
+                            note: Yup.string().nullable().max(200, 'Not en fazla 200 karakter olmalı'),
+                            status: Yup.boolean().required('Durum zorunlu'),
+                        })
+                    )
+            })
+        ),
+})
+
+export { newDietTemplateValidationSchema, newDieticianPatientDietTemplateValidationSchema }

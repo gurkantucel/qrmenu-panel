@@ -102,7 +102,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         },)
         if (error.data.data) {
           setTimeout(() => {
-            router.push(`/app/auth/pay-form/${error.data.data[0]}`)
+            router.push(`/auth/pay-form/${error.data.data[0]}`)
           }, 200)
         }
         return;
@@ -189,7 +189,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
               </Grid>
               <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="end" alignItems="center" spacing={2}>
-                  <Typography component={Link} href={'/app/auth/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
+                  <Typography component={Link} href={'/auth/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
                     {"Şifremi unuttum?"}
                   </Typography>
                 </Stack>

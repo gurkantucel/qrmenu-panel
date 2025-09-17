@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 // project-imports
 import AuthWrapper from 'sections/auth/AuthWrapper';
-import { getPayForm } from 'app/app/auth/pay-form/[slug]/actions';
+import { getPayForm } from 'app/auth/pay-form/[slug]/actions';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams } from 'next/navigation';

@@ -221,6 +221,7 @@ export const {
     useGetAppointmentTypeDropdownQuery,
     useLazyGetAppointmentTypeDropdownQuery,
     useLazyGetMealTimeDropdownQuery,
+    useGetMealTimeDropdownQuery,
 } = definitionApi
 
 export default definitionApi;

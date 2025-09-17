@@ -210,7 +210,7 @@ export default function AuthRegister() {
       if (registerResponse?.status == true) {
         setTimeout(() => {
           deleteCookie("membership_package_id");
-          router.push(`/app/auth/pay-form/${registerResponse.data[0]}`)
+          router.push(`/auth/pay-form/${registerResponse.data[0]}`)
         }, 1000)
       }
     }

@@ -23,7 +23,7 @@ const PaySuccessPage = () => {
                 <AnimateButton>
                     <Button
                         component={Link}
-                        href={'/app/auth/login'}
+                        href={'/auth/login'}
                         disableElevation
                         fullWidth
                         size="large"

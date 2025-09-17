@@ -48,8 +48,8 @@ const dietTemplateApi = createApi({
             },
             invalidatesTags: (result) => result?.status ? ["dietTemplate"] : [],
         }),
-        readDieticianDietTemplate: builder.query<DieticianDietTemplateReadModel, { diet_template_id?: number | string, dietitian_id?: number | string }>({
-            query: (args?: { diet_template_id?: number | string, dietitian_id?: number | string }) => {
+        readDieticianDietTemplate: builder.query<DieticianDietTemplateReadModel, { diet_template_id?: number | string, person_id?: number | string }>({
+            query: (args?: { diet_template_id?: number | string, person_id?: number | string }) => {
                 return {
                     url: `dietitian/diet-template/read`,
                     params: args

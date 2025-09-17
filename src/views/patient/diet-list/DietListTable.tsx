@@ -22,43 +22,49 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Trash } from 'iconsax-react';
+import { Box, Button, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Add, Edit, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import Breadcrumbs from 'components/@extended/Breadcrumbs';
-import { APP_DEFAULT_PATH } from 'config';
-import AddDietTemplateListModal from './AddDietTemplateListModal';
 import DeleteDietTemplateModal from './DeleteDietTemplateModal';
-import { useGetDieticianDietTemplateListQuery } from 'reduxt/features/settings/diet-template-api';
-import { DieticianDietTemplateListData } from 'reduxt/features/settings/models/diet-template-list-model';
-import ViewDietTemplateListModal from './ViewDietTemplateListModal';
+import { useGetDieticianPatientDietTemplateListQuery } from 'reduxt/features/patient/dietician-patient-diet-template-api';
+import { DieticianPatientDietTemplateListData } from 'reduxt/features/patient/models/dietician-patient-diet-template-list-model';
+import dayjs from 'dayjs';
+import { useParams } from 'next/navigation';
+import CreateDieticianPatientDietTemplateModal from './CreateDieticianPatientDietTemplateModal';
+import ViewDieticianPatientDietTemplateModal from './ViewDieticianPatientDietTemplateModal';
 
-const columnHelper = createColumnHelper<DieticianDietTemplateListData>()
+const columnHelper = createColumnHelper<DieticianPatientDietTemplateListData>()
 
-const PersonTypeTable = () => {
+const DietListTable = () => {
 
+  const params = useParams<{ slug: string }>()
   const intl = useIntl()
-
-  let breadcrumbLinks = [
-    { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
-    { title: `${intl.formatMessage({ id: "settings" })}` },
-    { title: `${intl.formatMessage({ id: "dietTemplates" })}` },
-  ];
 
   const dispatch = useAppDispatch();
 
-  const columns = useMemo<ColumnDef<DieticianDietTemplateListData, any>[]>(() => [
-    columnHelper.accessor('code', {
-      header: intl.formatMessage({ id: "code" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('name', {
+  const columns = useMemo<ColumnDef<DieticianPatientDietTemplateListData, any>[]>(() => [
+    columnHelper.accessor('diet_template_name', {
       header: intl.formatMessage({ id: "name" }),
       cell: info => info.renderValue(),
       footer: info => info.column.id,
+    }),
+    columnHelper.accessor('start_date', {
+      header: intl.formatMessage({ id: "startDate" }),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
+    }),
+    columnHelper.accessor('end_date', {
+      header: intl.formatMessage({ id: "endDate" }),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
     }),
     columnHelper.accessor('created_by', {
       header: intl.formatMessage({ id: "createdBy" }),
@@ -85,10 +91,9 @@ const PersonTypeTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true,
-                  modalType: ModalEnum.viewDietTemplate,
-                  id: info.row.original.diet_template_id,
-                  title: `${info.row.original.code} - ${info.row.original.name}`,
+                  open: true, modalType: ModalEnum.viewDieticianPatientDietTemplate,
+                  id: info.row.original.patient_diet_template_id,
+                  title: info.row.original.diet_template_name,
                   data: info.row.original
                 }))
               }}
@@ -102,16 +107,10 @@ const PersonTypeTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.newDietTemplate,
-                  id: info.row.original.diet_template_id,
-                  title: `${info.row.original.code} - ${info.row.original.name}`,
-                  data: {
-                    person_type_id: info.row.original.diet_template_id,
-                    code: info.row.original.code,
-                    name: info.row.original.name,
-                    description: info.row.original.description,
-                    status: info.row.original.status
-                  }
+                  open: true, modalType: ModalEnum.newDieticianPatientDietTemplate,
+                  id: info.row.original.patient_diet_template_id,
+                  data: info.row.original,
+                  title: info.row.original.patient_full_name
                 }))
               }}
             >
@@ -124,9 +123,10 @@ const PersonTypeTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.deleteDietTemplate,
-                  id: info.row.original.diet_template_id,
-                  title: `${info.row.original.code} - ${info.row.original.name}`,
+                  open: true, modalType: ModalEnum.deleteDieticianPatientDietTemplate,
+                  id: info.row.original.patient_diet_template_id,
+                  title: info.row.original.diet_template_name,
+                  data: { patient_id: info.row.original.patient_id, person_id: info.row.original.person_id }
                 }))
               }}
             >
@@ -142,14 +142,14 @@ const PersonTypeTable = () => {
     }),
   ], [])
 
-  const [columnFilters, setColumnFilters] = useState<any[]>([]);
+  const [columnFilters, setColumnFilters] = useState<any[]>([{ "id": "patient_id", "value": params.slug }]);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   })
 
-  const { data: getDietTemplateListData, isLoading: isDietTemplateLoading, isFetching: isDietTemplateFetching } = useGetDieticianDietTemplateListQuery({
+  const { data: getDietTemplateListData, isLoading: isDietTemplateLoading, isFetching: isDietTemplateFetching } = useGetDieticianPatientDietTemplateListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
@@ -171,13 +171,25 @@ const PersonTypeTable = () => {
 
   return (
     <>
-      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "dietTemplates" })}`} links={breadcrumbLinks} />
-      <MainCard content={false}>
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-          <AddDietTemplateListModal />
-          <DeleteDietTemplateModal />
-          <ViewDietTemplateListModal />
-        </Stack>
+      <MainCard
+        sx={{ marginBottom: 3 }}
+        contentSX={{
+          padding: 0, '&:last-child': {
+            paddingBottom: 0
+          }
+        }}
+        title={intl.formatMessage({ id: "dietTemplate" })} secondary={
+          <Button variant="dashed" startIcon={<Add />} onClick={() => {
+            dispatch(setModal({
+              open: true,
+              modalType: ModalEnum.newDieticianPatientDietTemplate,
+              id: params.slug
+            }))
+          }}>{intl.formatMessage({ id: "add" })}</Button>
+        }>
+        <CreateDieticianPatientDietTemplateModal />
+        <DeleteDietTemplateModal />
+        <ViewDieticianPatientDietTemplateModal />
         <ScrollX>
           <TableContainer component={Paper}>
             <Table>
@@ -255,4 +267,4 @@ const PersonTypeTable = () => {
   )
 }
 
-export default PersonTypeTable
+export default DietListTable

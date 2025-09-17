@@ -3,7 +3,7 @@ import Constants from "utils/Constants"
 
 export async function getPaymentControl(orderNumber: string) {
     try {
-        const response = await fetch(`${Constants.URL()}/app/auth/payment-control/${orderNumber}`, {
+        const response = await fetch(`${Constants.URL()}/auth/payment-control/${orderNumber}`, {
             method: "POST"
         });
         const data = await response.json();

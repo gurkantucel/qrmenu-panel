@@ -103,7 +103,7 @@ export default function Header() {
                 <AnimateButton>
                   <Button
                     component={Links}
-                    href={"/app/auth/login"}
+                    href={"/auth/login"}
                     target="_blank"
                     disableElevation
                     startIcon={<ExportSquare />}

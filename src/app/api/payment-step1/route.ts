@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
             category1: model.product_id,
             category2: ""
         }
-        const callbackUrl = `${Constants.URL()}/app/auth/payment-control/${model.order_number}`
+        const callbackUrl = `${Constants.URL()}/auth/payment-control/${model.order_number}`
         const apiKey = Constants.IYZICOAPIKEY();
         const secretKey = Constants.IYZICOSECRETKEY();
 

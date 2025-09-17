@@ -32,6 +32,7 @@ import statisticApi from './features/statistic/statistic-api'
 import dietTemplateApi from './features/settings/diet-template-api'
 import patientMeasurementApi from './features/patient/patient-measurement-api'
 import smsIntegrationApi from './features/sms-integration/sms-integration-api'
+import dieticianPatientDietTemplateApi from './features/patient/dietician-patient-diet-template-api'
 
 export const store = configureStore({
   reducer: {
@@ -46,28 +47,29 @@ export const store = configureStore({
     [diseaseHistoryApi.reducerPath]: diseaseHistoryApi.reducer,
     [medicineHistoryApi.reducerPath]: medicineHistoryApi.reducer,
     [familyDiseaseHistoryApi.reducerPath]: familyDiseaseHistoryApi.reducer,
-    [surgeryHistoryApi.reducerPath] : surgeryHistoryApi.reducer,
-    [treatmentHistoryApi.reducerPath] : treatmentHistoryApi.reducer,
-    [injectionHistoryApi.reducerPath] : injectionHistoryApi.reducer,
-    [allergyHistoryApi.reducerPath] : allergyHistoryApi.reducer,
-    [healthInformationApi.reducerPath] : healthInformationApi.reducer,
-    [patientFileApi.reducerPath] : patientFileApi.reducer,
-    [tenantPaymentApi.reducerPath] : tenantPaymentApi.reducer,
-    [appointmentApi.reducerPath] : appointmentApi.reducer,
+    [surgeryHistoryApi.reducerPath]: surgeryHistoryApi.reducer,
+    [treatmentHistoryApi.reducerPath]: treatmentHistoryApi.reducer,
+    [injectionHistoryApi.reducerPath]: injectionHistoryApi.reducer,
+    [allergyHistoryApi.reducerPath]: allergyHistoryApi.reducer,
+    [healthInformationApi.reducerPath]: healthInformationApi.reducer,
+    [patientFileApi.reducerPath]: patientFileApi.reducer,
+    [tenantPaymentApi.reducerPath]: tenantPaymentApi.reducer,
+    [appointmentApi.reducerPath]: appointmentApi.reducer,
     [appointmentCalendarApi.reducerPath]: appointmentCalendarApi.reducer,
-    [appointmentProcessTypeApi.reducerPath] : appointmentProcessTypeApi.reducer,
-    [appointmentProcessApi.reducerPath] : appointmentProcessApi.reducer,
-    [smsTemplateApi.reducerPath] : smsTemplateApi.reducer,
-    [personTypeApi.reducerPath] : personTypeApi.reducer,
-    [makeAnOfferApi.reducerPath] : makeAnOfferApi.reducer,
-    [couponApi.reducerPath] : couponApi.reducer,
-    [staticPageApi.reducerPath] : staticPageApi.reducer,
+    [appointmentProcessTypeApi.reducerPath]: appointmentProcessTypeApi.reducer,
+    [appointmentProcessApi.reducerPath]: appointmentProcessApi.reducer,
+    [smsTemplateApi.reducerPath]: smsTemplateApi.reducer,
+    [personTypeApi.reducerPath]: personTypeApi.reducer,
+    [makeAnOfferApi.reducerPath]: makeAnOfferApi.reducer,
+    [couponApi.reducerPath]: couponApi.reducer,
+    [staticPageApi.reducerPath]: staticPageApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
     [currentAccountApi.reducerPath]: currentAccountApi.reducer,
     [statisticApi.reducerPath]: statisticApi.reducer,
     [dietTemplateApi.reducerPath]: dietTemplateApi.reducer,
     [patientMeasurementApi.reducerPath]: patientMeasurementApi.reducer,
-    [smsIntegrationApi.reducerPath]: smsIntegrationApi.reducer
+    [smsIntegrationApi.reducerPath]: smsIntegrationApi.reducer,
+    [dieticianPatientDietTemplateApi.reducerPath]: dieticianPatientDietTemplateApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -98,7 +100,8 @@ export const store = configureStore({
     statisticApi.middleware,
     dietTemplateApi.middleware,
     patientMeasurementApi.middleware,
-    smsIntegrationApi.middleware
+    smsIntegrationApi.middleware,
+    dieticianPatientDietTemplateApi.middleware
   ]),
 })
 

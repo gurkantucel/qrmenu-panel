@@ -85,7 +85,7 @@ td.table-mobil {
 
   /* Targets extra small and small devices (Bootstrap's 'sm' breakpoint) */
   .form-control-mobil {
-    min-width: 200px;
+    min-width: 175px;
   }
 
   .form-select-mobil {

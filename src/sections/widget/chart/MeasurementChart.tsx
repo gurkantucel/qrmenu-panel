@@ -14,7 +14,7 @@ import { useParams } from 'next/navigation';
 import { useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { PatientTabEnum } from 'reduxt/features/definition/patientTabSlice';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import MainCard from 'components/MainCard';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 
@@ -37,6 +37,7 @@ export default function MeasurementChart() {
   }
 
   const [basicLineChartOpts, setBasicLineChartOpts] = useState<ChartProps>(initLineChartOpts)
+  const [weightLineChartOpts, setWeightLineChartOpts] = useState<ChartProps>(initLineChartOpts)
 
   const params = useParams<{ slug: string }>()
 
@@ -48,30 +49,37 @@ export default function MeasurementChart() {
   )
 
   const [series, setSeries] = useState([{ name: "Boy", data: [0] }]);
+  const [weightSeries, setWeightSeries] = useState([{ name: "Kilo", data: [0] }]);
 
   useEffect(() => {
     if (getMeasurementData?.data != null) {
       const opts = basicLineChartOpts;
+
+      console.log("API DATA", getMeasurementData?.data);
+      
+      const filteredData = getMeasurementData.data.filter(item => item.label);
+
       setBasicLineChartOpts({
-        ...opts, xaxis: { categories: getMeasurementData.data?.map((item) => dayjs(item.label).format("DD.MM.YYYY")) ?? [] }, theme: {
-          mode: mode === ThemeMode.DARK ? 'dark' : 'light'
-        }
-      })
-      const newSeries = [
-        {
-          name: "Bel",
-          data: getMeasurementData?.data?.map((item) => Number(item.waist)) ?? []
-        },
-        {
-          name: "Kalça",
-          data: getMeasurementData?.data?.map((item) => Number(item.hip)) ?? []
-        },
-        {
-          name: "Göğüs",
-          data: getMeasurementData?.data?.map((item) => Number(item.chest)) ?? []
-        },
-      ]
-      setSeries(newSeries);
+        ...opts,
+        xaxis: { categories: filteredData.map(item => dayjs(item.label).format("DD.MM.YYYY")) },
+        theme: { mode: mode === ThemeMode.DARK ? 'dark' : 'light' }
+      });
+
+      setWeightLineChartOpts({
+        ...opts,
+        xaxis: { categories: filteredData.map(item => dayjs(item.label).format("DD.MM.YYYY")) },
+        theme: { mode: mode === ThemeMode.DARK ? 'dark' : 'light' }
+      });
+
+      setSeries([
+        { name: "Bel", data: filteredData.map(item => Number(item.waist)) },
+        { name: "Kalça", data: filteredData.map(item => Number(item.hip)) },
+        { name: "Göğüs", data: filteredData.map(item => Number(item.chest)) },
+      ]);
+
+      setWeightSeries([
+        { name: "Kilo", data: filteredData.map(item => Number(item.weight)) },
+      ]);
     }
   }, [getMeasurementData, theme])
 
@@ -83,5 +91,9 @@ export default function MeasurementChart() {
     )
   }
 
-  return <ReactApexChart options={basicLineChartOpts} series={series} type="line" height={260} />;
+  return <>
+    <ReactApexChart options={basicLineChartOpts} series={series} type="line" height={340} />
+    <Typography variant='h5'>{"Kilo"}</Typography>
+    <ReactApexChart options={weightLineChartOpts} series={weightSeries} type="line" height={340} />
+  </>;
 }
