@@ -76,7 +76,7 @@ const PriceLandingPage = async (props:Props) => {
                                                 <Grid item xs={12}>
                                                     <Button type='button' color={plan.featured ? 'primary' : 'secondary'} variant={plan.featured ? 'contained' : 'outlined'} fullWidth onClick={() => {
                                                         setCookie("membership_package_id", plan.membership_package_id);
-                                                        router.push("app/auth/register");
+                                                        router.push("auth/register");
                                                     }}>
                                                         Satın Al
                                                     </Button>
