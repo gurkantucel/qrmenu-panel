@@ -148,7 +148,14 @@ const AddMakeAnOfferModal = (props: Props) => {
                         if (values.quote_id != null) {
                             //updateAppointment(values);
                         } else {
-                            createMakeAnOffer(values);
+                            const model = values.detail.map(item => ({
+                                ...item,
+                                amount: item.amount?.replace(",", "."),
+                            }));
+                            createMakeAnOffer({
+                                ...values,
+                                detail: model
+                            });
                         }
                     }}
                 >

@@ -19,7 +19,7 @@ import { newPersonValidationSchema } from "utils/schemas/person-validation-schem
 import { enqueueSnackbar } from "notistack";
 import { PersonCreateBodyModel } from "reduxt/features/person/models/person-list-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
-import { useLazyGetPersonTypeDropdownQuery } from "reduxt/features/settings/person-type-api";
+import { useGetPersonTypeDropdownQuery } from "reduxt/features/settings/person-type-api";
 
 const AddPersonModal = () => {
 
@@ -46,7 +46,7 @@ const AddPersonModal = () => {
 
     //const [getPersonList] = useLazyGetPersonListQuery();
 
-    const [getPersonType, { data: getPersonTypeData, isLoading: getPersonTypeLoading }] = useLazyGetPersonTypeDropdownQuery();
+    const { data: getPersonTypeData, isLoading: getPersonTypeLoading } = useGetPersonTypeDropdownQuery({}, { skip: open == false && modalType != ModalEnum.newPerson });
 
     const [createPerson, { isLoading: createPersonIsLoading, data: createPersonResponse, error: createPersonError }] = useCreatePersonMutation();
 
@@ -60,7 +60,6 @@ const AddPersonModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPerson) {
-            getPersonType({});
             if (id != null) {
                 readPerson({ person_id: id })
             }

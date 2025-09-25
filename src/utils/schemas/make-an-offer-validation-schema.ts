@@ -31,7 +31,7 @@ const newMakeAnOfferSchema = Yup.object({
     expiration: Yup.string().required("Bu alan zorunlu"),
     detail: Yup.array(Yup.object({
         appointment_process_code: Yup.string().required("Bu alan zorunlu"),
-        amount: Yup.number().required("Bu alan zorunlu"),
+        amount: Yup.string().required("Bu alan zorunlu"),
         quantity: Yup.number().required("Bu alan zorunlu"),
         discount_percentage: Yup.number().required("Bu alan zorunlu"),
     }))

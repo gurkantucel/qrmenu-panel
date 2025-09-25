@@ -10,11 +10,10 @@ import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
 import { EventSourceInput } from '@fullcalendar/core';
 //import { Theme } from '@mui/material/styles';
 import { useIntl } from 'react-intl';
-import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
 import Toolbar from 'sections/apps/calendar/Toolbar';
 import Select from 'react-select'
 import MainCard from 'components/MainCard';
-import { useLazyAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
+import { useAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { getCookie } from 'cookies-next';
 import { Person } from 'reduxt/features/auth/models/auth-models';
@@ -23,6 +22,7 @@ import AddAppointmentModal from 'views/appointment/AddAppointmentModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useRouter } from 'next/navigation';
+import { useGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-api';
 
 const HomeAppointmentCalendarView = () => {
     //const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -37,10 +37,7 @@ const HomeAppointmentCalendarView = () => {
 
     const navigate = useRouter();
 
-    const [getAcceptingAppointmentDropDownList, {
-        data: getAcceptingAppointmentListData,
-        isLoading: getAcceptingAppointmentListLoading
-    }] = useLazyAcceptingAppointmentDropDownQuery();
+    const { isLoading: getAcceptingAppointmentListLoading, data: getAcceptingAppointmentListData } = useAcceptingAppointmentDropDownQuery({})
 
     const handleDateToday = () => {
         const calendarEl = calendarRef.current;
@@ -95,15 +92,14 @@ const HomeAppointmentCalendarView = () => {
         }
     }
 
-    const [getAppointmentCalendarList, {
+    const { isLoading: appointmentCalendarLoading, isFetching: appointmentCalendarFetching, data: appointmentCalendarData } = useGetAppointmentCalendarListQuery(
+        { person_id: personId }, { skip: !personId })
+
+    /*const [getAppointmentCalendarList, {
         data: appointmentCalendarData,
         isLoading: appointmentCalendarLoading,
         isFetching: appointmentCalendarFetching
-    }] = useLazyGetAppointmentCalendarListQuery();
-
-    useEffect(() => {
-        getAcceptingAppointmentDropDownList({})
-    }, [])
+    }] = useLazyGetAppointmentCalendarListQuery();*/
 
     useEffect(() => {
         if (getAcceptingAppointmentListData?.status && getAcceptingAppointmentListData.data != null) {
@@ -122,17 +118,9 @@ const HomeAppointmentCalendarView = () => {
         }
     }, [getAcceptingAppointmentListData])
 
-    useEffect(() => {
-        if (personId) {
-            getAppointmentCalendarList({ person_id: personId });
-        }
-    }, [personId])
-
     return (
         <>
-            <AddAppointmentModal page='home' requestCalendar={() => {
-                getAppointmentCalendarList({ person_id: personId ?? 0 })
-            }} />
+            <AddAppointmentModal page='home' />
             <MainCard
                 title={intl.formatMessage({ id: "appointments" })}
                 secondary={

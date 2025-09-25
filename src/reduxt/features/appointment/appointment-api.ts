@@ -3,12 +3,13 @@ import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 import { AppointmentCreateBodyModel, AppointmentHistoryListResultModel, AppointmentListResultModel, AppointmentReadResultModel, AppointmentUpdateNoteBodyModel, AppointmentUpdateStatusBodyModel } from './models/appointment-list-model';
+import { AppointmentCalendarListResultModel } from './models/appointment-calendar-model';
 
 const appointmentApi = createApi({
     reducerPath: "appointmentApi",
     tagTypes: ["appointment"],
     baseQuery: baseQueryWithReauth,
-    refetchOnMountOrArgChange: true,
+    //refetchOnMountOrArgChange: true,
     endpoints: (builder) => ({
         getAppointmentList: builder.query<AppointmentListResultModel, { filterSearch?: string, page?: number, pageSize?: number }>({
             query: (args?: { filterSearch?: string, page?: number, pageSize?: number }) => {
@@ -92,6 +93,14 @@ const appointmentApi = createApi({
                 }
             },
         }),
+        getAppointmentCalendarList: builder.query<AppointmentCalendarListResultModel, { person_id?: string | null }>({
+            query: (args?: { person_id?: string | null }) => {
+                return {
+                    url: `app/appointment/calendarView?person_id=${args?.person_id}`,
+                }
+            },
+            providesTags: ["appointment"]
+        }),
     })
 })
 
@@ -105,7 +114,8 @@ export const {
     useLazyGetAppointmentDropdownQuery,
     useAppointmentUpdateNoteMutation,
     useAppointmentUpdateStatusMutation,
-    useListAppointmentHistoryQuery
+    useListAppointmentHistoryQuery,
+    useGetAppointmentCalendarListQuery
 } = appointmentApi
 
 export default appointmentApi;

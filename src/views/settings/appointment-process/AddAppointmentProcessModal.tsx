@@ -10,7 +10,7 @@ import { Field, Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetAppointmentProcessTypeDropdownQuery, useLazyGetCurrencyDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetAppointmentProcessTypeDropdownQuery, useGetCurrencyDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import { DropdownListData } from "utils/models/dropdown-list-model";
 import IconButton from "components/@extended/IconButton";
@@ -35,11 +35,11 @@ const AddAppointmentProcessModal = () => {
 
     //const [getPersonList] = useLazyGetPersonListQuery();
 
-    const [getAppointmentProcessType, { data: getAppointmentProcessTypeData, isLoading: getAppointmentProcessTypeLoading }] = useLazyGetAppointmentProcessTypeDropdownQuery();
+    const { data: getAppointmentProcessTypeData, isLoading: getAppointmentProcessTypeLoading } = useGetAppointmentProcessTypeDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newAppointmentProcess });
 
     const [getAppointmentProcessDropdown, { data: getAppointmentProcessDropdownData, isLoading: getAppointmentProcessDropdownLoading }] = useLazyGetAppointmentProcessDropdownQuery();
 
-    const [getCurrency, { data: getCurrencyData, isLoading: isCurrencyLoading }] = useLazyGetCurrencyDropdownQuery();
+    const { data: getCurrencyData, isLoading: isCurrencyLoading } = useGetCurrencyDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newAppointmentProcess });
 
     const [createAppointmentProcess, { isLoading: createAppointmentProcessIsLoading, data: createAppointmentProcessResponse, error: createAppointmentProcessError }] = useCreateAppointmentProcessMutation();
 
@@ -47,19 +47,17 @@ const AddAppointmentProcessModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess) {
-            getAppointmentProcessType();
             if (id == null) {
                 //getAppointmentProcessDropdown({});
             }
-            getCurrency();
         }
     }, [open, id])
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newAppointmentProcess && data != null) {
-            if (data.appointment_process_type_id == "305ee410-8284-408e-99c7-9c2ee07f7297") {
+            if (data.appointment_process_type_id == "79861567-59c0-4e80-ac94-e0f3efe06cf4") {
                 getAppointmentProcessDropdown({
-                    include_packages: data.appointment_process_type_id == "305ee410-8284-408e-99c7-9c2ee07f7297" ? false : true,
+                    include_packages: data.appointment_process_type_id == "79861567-59c0-4e80-ac94-e0f3efe06cf4" ? false : true,
                     excluded_appointment_process_id: data.appointment_process_id
                 });
             }

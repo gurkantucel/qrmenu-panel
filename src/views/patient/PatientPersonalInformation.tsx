@@ -10,7 +10,7 @@ import CustomFormikSelect from 'components/third-party/formik/custom-formik-sele
 import CustomFormikPhone from 'components/third-party/formik/custom-formik-phone';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { PuffLoader } from 'react-spinners';
-import { useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetGenderDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useGetCountryDropdownQuery, useGetGenderDropdownQuery, useGetNationalityDropdownQuery, useGetPatientReferenceDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery } from 'reduxt/features/definition/definition-api';
 import { useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { PatientTabEnum } from 'reduxt/features/definition/patientTabSlice';
@@ -26,19 +26,11 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
 
     const [initialData, setInitialData] = useState<PatientCreateBodyModel>();
 
-    const [getNationalityList, {
-        data: getNationalityListData,
-        isLoading: getNationalityListLoading
-    }] = useLazyGetNationalityDropdownQuery();
+    const { data: getNationalityListData, isLoading: getNationalityListLoading } = useGetNationalityDropdownQuery(undefined, { skip: selectTab == PatientTabEnum.kisisel_bilgiler && !params.slug });
 
-    const [getGenderList, {
-        data: getGenderListData,
-        isLoading: getGenderListLoading
-    }] = useLazyGetGenderDropdownQuery();
+    const { data: getGenderListData, isLoading: getGenderListLoading } = useGetGenderDropdownQuery(undefined, { skip: selectTab == PatientTabEnum.kisisel_bilgiler && !params.slug });
 
-    const [getCountryList, { data: getCountryListData,
-        isLoading: getCountryLoading
-    }] = useLazyGetCountryDropdownQuery();
+    const { data: getCountryListData, isLoading: getCountryLoading } = useGetCountryDropdownQuery(undefined, { skip: selectTab == PatientTabEnum.kisisel_bilgiler && !params.slug });
 
     const [getCityList, {
         data: getCityListData,
@@ -50,10 +42,7 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
         isLoading: getDistrictListLoading
     }] = useLazyGetDistrictDropdownQuery();
 
-    const [getPatientReferenceList, {
-        data: getPatientReferenceListData,
-        isLoading: getPatientReferenceListLoading
-    }] = useLazyGetPatientReferenceDropdownQuery();
+    const { data: getPatientReferenceListData, isLoading: getPatientReferenceListLoading } = useGetPatientReferenceDropdownQuery(undefined, { skip: selectTab == PatientTabEnum.kisisel_bilgiler && !params.slug });
 
     const [readPatient, {
         data: readPatientData,
@@ -67,10 +56,6 @@ const PatientPersonalInformation = ({ params }: { params: { slug: string } }) =>
     useEffect(() => {
         if (selectTab == PatientTabEnum.kisisel_bilgiler && params.slug) {
             var patientId = params.slug
-            getNationalityList();
-            getGenderList();
-            getCountryList();
-            getPatientReferenceList();
             readPatient({ patient_id: patientId })
         }
     }, [params.slug])

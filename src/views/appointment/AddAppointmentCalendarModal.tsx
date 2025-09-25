@@ -14,12 +14,12 @@ import { EventSourceInput } from '@fullcalendar/core';
 import { useFormikContext } from 'formik';
 import dayjs from 'dayjs';
 import { CloseSquare } from 'iconsax-react';
-import { useLazyGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-calendar-api';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import Toolbar from 'sections/apps/calendar/Toolbar';
 import Select from 'react-select'
-import { DropdownListModel } from 'utils/models/dropdown-list-model';
 import { useIntl } from 'react-intl';
+import { useGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-api';
+import { useAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
 
 const durationCalc = (startStr: string, endStr: string) => {
     const startDate = dayjs(startStr);
@@ -32,14 +32,17 @@ const durationCalc = (startStr: string, endStr: string) => {
 const AddAppointmentCalendarModal = () => {
 
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
+    const { data: { open, modalType } } = useAppSelector((state: RootState) => state.appointmentCalendarModal);
     const intl = useIntl()
 
     const [calendarView, setCalendarView] = useState<string>("timeGridWeek");
     const [date, setDate] = useState(new Date());
+
     const calendarRef = useRef<FullCalendar>(null);
 
-    const acceptingAppointmentDropDown: DropdownListModel | undefined | any = useAppSelector((state) => state.personApi.queries["acceptingAppointmentDropDown({})"]?.data);
+    //const acceptingAppointmentDropDown: DropdownListModel | undefined | any = useAppSelector((state) => state.personApi.queries["acceptingAppointmentDropDown({})"]?.data);
+
+    const { data: getAcceptingAppointmentListData } = useAcceptingAppointmentDropDownQuery({},{ skip: open == false && modalType != AppointmentCalendarModalEnum.appointmentCalendar })
 
     const { values, setFieldValue } = useFormikContext<any>();
 
@@ -92,17 +95,9 @@ const AddAppointmentCalendarModal = () => {
         dispatch(closeCalendarModal())
     };
 
-    const [getAppointmentCalendarList, {
-        data: appointmentCalendarData,
-        isLoading: appointmentCalendarLoading,
-        isFetching: appointmentCalendarFetching
-    }] = useLazyGetAppointmentCalendarListQuery();
+    const { isLoading: appointmentCalendarLoading, isFetching: appointmentCalendarFetching, data: appointmentCalendarData } = useGetAppointmentCalendarListQuery(
+        { person_id: values.person_id }, { skip: !values.person_id && open == false && modalType != AppointmentCalendarModalEnum.appointmentCalendar })
 
-    useEffect(() => {
-        if (open == true && modalType == AppointmentCalendarModalEnum.appointmentCalendar) {
-            getAppointmentCalendarList({ person_id: id });
-        }
-    }, [open, id])
 
     useEffect(() => {
         return () => {
@@ -145,14 +140,14 @@ const AddAppointmentCalendarModal = () => {
                                     }),
                                 }}
                                 value={
-                                    values.person_id ? { label: acceptingAppointmentDropDown?.data?.find((item: any) => item.value == values.person_id)?.label ?? "", value: acceptingAppointmentDropDown?.data?.find((item: any) => item.value == values.person_id)?.value ?? 0 } : null}
-                                options={acceptingAppointmentDropDown?.data?.map((item: any) => ({
+                                    values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item: any) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item: any) => item.value == values.person_id)?.value ?? 0 } : null}
+                                options={getAcceptingAppointmentListData?.data?.map((item: any) => ({
                                     value: item.value,
                                     label: item.label
                                 }))}
                                 onChange={(val: any) => {
                                     setFieldValue("person_id", val?.value);
-                                    getAppointmentCalendarList({ person_id: val?.value })
+                                    //getAppointmentCalendarList({ person_id: val?.value })
                                 }}
                             />
                         </Typography>

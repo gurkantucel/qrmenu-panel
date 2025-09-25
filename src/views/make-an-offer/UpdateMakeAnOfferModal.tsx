@@ -177,7 +177,14 @@ const UpdateMakeAnOfferModal = (props: Props) => {
                     enableReinitialize
                     validationSchema={newMakeAnOfferSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        updateMakeAnOffer(values);
+                        const model = values.detail.map(item => ({
+                            ...item,
+                            amount: item.amount?.replace(",", "."),
+                        }));
+                        updateMakeAnOffer({
+                            ...values,
+                            detail: model
+                        });
                     }}
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (

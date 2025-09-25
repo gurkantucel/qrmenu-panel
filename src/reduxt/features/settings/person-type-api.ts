@@ -64,7 +64,8 @@ export const {
     useCreatePersonTypeMutation,
     useUpdatePersonTypeMutation,
     useDeletePersonTypeMutation,
-    useLazyGetPersonTypeDropdownQuery
+    useLazyGetPersonTypeDropdownQuery,
+    useGetPersonTypeDropdownQuery
 } = personTypeApi
 
 export default personTypeApi;

@@ -84,6 +84,14 @@ const MakeAnOfferTable = () => {
         filterVariant: 'date',
       },
     }),
+    columnHelper.accessor('created_at', {
+      header: intl.formatMessage({ id: "createdDate" }),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
+    }),
     columnHelper.accessor('total', {
       header: intl.formatMessage({ id: "total" }),
       enableColumnFilter: false,
@@ -118,7 +126,7 @@ const MakeAnOfferTable = () => {
               color="warning"
               onClick={(e: any) => {
                 e.stopPropagation();
-                printMakeAnOffer({quote_id: info.row.original.quote_id})
+                printMakeAnOffer({ quote_id: info.row.original.quote_id })
               }}
             >
               <Printer />
@@ -162,7 +170,7 @@ const MakeAnOfferTable = () => {
         filterVariant: 'select',
       },
     }),
-  ], [printMakeAnOfferFetching,printMakeAnOfferLoading])
+  ], [printMakeAnOfferFetching, printMakeAnOfferLoading])
 
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
 
@@ -250,7 +258,7 @@ const MakeAnOfferTable = () => {
               <TableBody>
                 {isAppointmentFetching || isAppointmentLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                   <TableRow key={item}>
-                    {[0, 1, 2, 3,4].map((col: number) => (
+                    {[0, 1, 2, 3, 4].map((col: number) => (
                       <TableCell key={col}>
                         <Skeleton animation="wave" />
                       </TableCell>

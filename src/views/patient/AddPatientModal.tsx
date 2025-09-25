@@ -10,7 +10,7 @@ import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useGetGenderDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetCountryDropdownQuery, useLazyGetDistrictDropdownQuery, useLazyGetNationalityDropdownQuery, useLazyGetPatientReferenceDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetCountryDropdownQuery, useGetGenderDropdownQuery, useGetNationalityDropdownQuery, useGetPatientReferenceDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
@@ -36,21 +36,16 @@ const AddPatientModal = () => {
 
     //const [getPatientList] = useLazyGetPatientListQuery();
 
-    const [getNationalityList, {
-        data: getNationalityListData,
-        isLoading: getNationalityListLoading
-    }] = useLazyGetNationalityDropdownQuery();
+    const { data: getNationalityListData, isLoading: getNationalityListLoading } = useGetNationalityDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatient });
 
     /*const [getGenderList, {
         data: getGenderListData,
         isLoading: getGenderListLoading
     }] = useLazyGetGenderDropdownQuery();*/
 
-    const { data: getGenderListData,isLoading: getGenderListLoading} = useGetGenderDropdownQuery();
+    const { data: getGenderListData, isLoading: getGenderListLoading } = useGetGenderDropdownQuery();
 
-    const [getCountryList, { data: getCountryListData,
-        isLoading: getCountryLoading
-    }] = useLazyGetCountryDropdownQuery();
+    const { data: getCountryListData, isLoading: getCountryLoading } = useGetCountryDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatient });
 
     const [getCityList, {
         data: getCityListData,
@@ -63,10 +58,7 @@ const AddPatientModal = () => {
     }] = useLazyGetDistrictDropdownQuery();
 
 
-    const [getPatientReferenceList, {
-        data: getPatientReferenceListData,
-        isLoading: getPatientReferenceListLoading
-    }] = useLazyGetPatientReferenceDropdownQuery();
+    const { data: getPatientReferenceListData, isLoading: getPatientReferenceListLoading } = useGetPatientReferenceDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatient });
 
     const [createPatient, { isLoading: createPatientIsLoading, data: createPatientResponse, error: createPatientError }] = useCreatePatientMutation();
 
@@ -80,10 +72,7 @@ const AddPatientModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatient) {
-            getNationalityList();
             //getGenderList();
-            getCountryList();
-            getPatientReferenceList();
             if (id != null) {
                 readPatient({ patient_id: id })
             }
@@ -91,7 +80,7 @@ const AddPatientModal = () => {
     }, [open, id])
 
     useEffect(() => {
-        if (id !=null && readPatientData?.data != null) {
+        if (id != null && readPatientData?.data != null) {
             const model: PatientCreateBodyModel = {
                 patient_id: readPatientData.data.patient_id,
                 gender_id: readPatientData.data.gender_id,
@@ -167,11 +156,11 @@ const AddPatientModal = () => {
         }
     }, [updatePatientResponse, updatePatientError])
 
-    useEffect(()=>{
+    useEffect(() => {
         return () => {
             handleClose()
         }
-    },[])
+    }, [])
 
     return (
         <>
@@ -489,8 +478,8 @@ const AddPatientModal = () => {
                                     <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="patient_reference_id">
-                                            <>{intl.formatMessage({ id: "reference" })}</>
-                                            <Tooltip title="Kliniği nereden duydun?"><InfoCircle size={14} /></Tooltip>
+                                                <>{intl.formatMessage({ id: "reference" })}</>
+                                                <Tooltip title="Kliniği nereden duydun?"><InfoCircle size={14} /></Tooltip>
                                             </InputLabel>
                                             <CustomFormikSelect
                                                 name='patient_reference_id'

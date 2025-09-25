@@ -37,12 +37,12 @@ const newAppointmentSchema = Yup.object({
 const newAppointmentProcessTypeSchema = Yup.object({
     data: Yup.array(Yup.object({
         appointment_process_id: Yup.string().min(36,"Seçim yapın.").required("Bu alan zorunlu"),
-        amount: Yup.number().required("Bu alan zorunlu")
+        amount: Yup.string().required("Bu alan zorunlu")
     }))
 })
 
 const updateAppointmentProcessTypeSchema = Yup.object({
-    amount: Yup.number().required("Bu alan zorunlu")
+    amount: Yup.string().required("Bu alan zorunlu")
 })
 
 const newAppointmentProcessSchema = Yup.object({

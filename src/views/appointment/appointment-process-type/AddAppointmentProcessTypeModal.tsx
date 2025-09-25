@@ -105,6 +105,7 @@ const AddAppointmentProcessTypeModal = () => {
                         const model = {
                             data: values.data.map(item => ({
                                 ...item,
+                                amount: item.amount?.replace(",","."),
                                 quantity: item.quantity.toFixed(2),
                                 currency_code: undefined
                             }))
@@ -114,6 +115,7 @@ const AddAppointmentProcessTypeModal = () => {
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                         <Form>
+                            <p>{JSON.stringify(errors)}</p>
                             <Box sx={{ px: 3, py: 3 }}>
                                 <Grid
                                     container

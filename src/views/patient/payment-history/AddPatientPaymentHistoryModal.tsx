@@ -17,7 +17,7 @@ import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateTenantPaymentMutation, useLazyReadTenantPaymentQuery, useUpdateTenantPaymentMutation } from "reduxt/features/patient/tenant-payment-api";
-import { useLazyGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
 import { newPatientPaymentHistorySchema } from "utils/schemas/patient-validation-schema";
 import { TenantPaymentCreateBodyModel } from "reduxt/features/patient/models/tenant-payment-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
@@ -46,10 +46,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
 
     const [getAppointmentProcessDropdown, { isLoading: getAppointmentProcessDropdownLoading, data: getAppointmentProcessDropdownData }] = useLazyGetAppointmentProcessDropdownQuery();
 
-    const [getPaymentMethodDropDownList, {
-        data: getPaymentMethodListData,
-        isLoading: getPaymentMethodListLoading
-    }] = useLazyGetPaymentMethodDropdownQuery();
+    const { data: getPaymentMethodListData, isLoading: getPaymentMethodListLoading } = useGetPaymentMethodDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatientPaymentHistory });
 
     const [getTenantPayment, {
         data: getTenantPaymentData,
@@ -65,7 +62,6 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newPatientPaymentHistory) {
             getAppointmentProcessDropdown();
-            getPaymentMethodDropDownList();
         }
     }, [open, id])
 
@@ -199,10 +195,20 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                     enableReinitialize
                     validationSchema={newPatientPaymentHistorySchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                        const model = values.detail.map(item => ({
+                            ...item,
+                            amount: item.amount?.replace(",", "."),
+                        }));
                         if (values.payment_id != null) {
-                            updateTenantPayment(values);
+                            updateTenantPayment({
+                                ...values,
+                                detail: model
+                            });
                         } else {
-                            createTenantPayment(values);
+                            createTenantPayment({
+                                ...values,
+                                detail: model
+                            });
                         }
                     }}
                 >

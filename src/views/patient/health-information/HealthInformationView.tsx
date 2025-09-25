@@ -8,7 +8,7 @@ import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { PuffLoader } from 'react-spinners';
-import { useLazyGetBloodTypeDropdownQuery } from 'reduxt/features/definition/definition-api';
+import { useGetBloodTypeDropdownQuery } from 'reduxt/features/definition/definition-api';
 import { PatientTabEnum } from 'reduxt/features/definition/patientTabSlice';
 import { useLazyGetPatientHealthInformationQuery, useUpdatePatientHealthInformationMutation } from 'reduxt/features/patient/health-information-api';
 import { PatientHealtInformationUpdateBodyModel } from 'reduxt/features/patient/models/patient-health-information-model';
@@ -29,18 +29,13 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
         isLoading: isPatientHealthInformationLoading
     }] = useLazyGetPatientHealthInformationQuery();
 
+    const { data: getBloodTypeListData, isLoading: getBloodTypeListIsLoading } = useGetBloodTypeDropdownQuery(undefined, { skip: selectTab == PatientTabEnum.saglik_bilgileri && !params.slug });
+
     useEffect(() => {
         if (selectTab == PatientTabEnum.saglik_bilgileri) {
             getPatientHealthInformation({ patient_id: params.slug })
-            getBloodTypeList();
         }
     }, [selectTab])
-
-
-    const [getBloodTypeList, {
-        data: getBloodTypeListData,
-        isLoading: getBloodTypeListIsLoading
-    }] = useLazyGetBloodTypeDropdownQuery();
 
     useEffect(() => {
         if (getPatientHealthInformationData?.data != null) {
@@ -117,7 +112,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                                         name='blood_type_id'
                                         placeholder="Seçim yapınız..."
                                         isLoading={getBloodTypeListIsLoading}
-                                        zIndex={9999}
+                                        zIndex={999}
                                         onMenuOpen={() => {
                                             setBoxHeight(520)
                                         }}
@@ -191,7 +186,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                                     <CustomFormikSelect
                                         name='smoke'
                                         placeholder="Seçim yapınız..."
-                                        zIndex={9998}
+                                        zIndex={998}
                                         onMenuOpen={() => {
                                             setBoxHeight(520)
                                         }}
@@ -218,7 +213,7 @@ const HealthInformationView = ({ params }: { params: { slug: string } }) => {
                                     <CustomFormikSelect
                                         name='alcohol'
                                         placeholder="Seçim yapınız..."
-                                        zIndex={9997}
+                                        zIndex={997}
                                         onMenuOpen={() => {
                                             setBoxHeight(520)
                                         }}

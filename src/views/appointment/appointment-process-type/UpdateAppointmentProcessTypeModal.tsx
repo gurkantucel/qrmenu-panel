@@ -77,8 +77,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                         const quantity = Number(values.quantity);
                         values.quantity = quantity.toFixed(2)
-                        const amount = Number(values.amount);
-                        values.amount = amount.toFixed(2)
+                        values.amount = values.amount.replace(",",".");
                         updateAppointmentProcessType(values);
                     }}
                 >
