@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   // Eğer zaten token varsa home'a yönlendir
   if (token) {
-    redirect("/app/home");
+    redirect("/home");
   }
 
   return (

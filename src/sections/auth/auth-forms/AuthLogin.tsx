@@ -87,7 +87,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         });
         dispatch(setMenuItem());
         setTimeout(() => {
-          router.push("/app/home")
+          router.push("/home")
         }, 200)
       }
     }

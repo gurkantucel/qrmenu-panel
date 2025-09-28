@@ -137,7 +137,7 @@ export default function Breadcrumbs({
   let CollapseIcon;
   let ItemIcon;
 
-  if (location == "/app/home") {
+  if (location == "/home") {
     return (<></>)
   }
 
@@ -173,7 +173,7 @@ export default function Breadcrumbs({
         >
           <Grid item>
             <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon} sx={{fontFamily: 'var(--font-poppins)'}}>
-              <NextLink href="/app/home" passHref legacyBehavior>
+              <NextLink href="/home" passHref legacyBehavior>
                 <Typography
                   variant="body1"
                   color="text.primary"
@@ -214,7 +214,7 @@ export default function Breadcrumbs({
 
     let tempContent = (
       <MuiBreadcrumbs aria-label="breadcrumb" maxItems={maxItems || 8} separator={separatorIcon}>
-        <NextLink href="/app/home" passHref legacyBehavior>
+        <NextLink href="/home" passHref legacyBehavior>
           <Typography
             color="text.secondary"
             variant="h6"

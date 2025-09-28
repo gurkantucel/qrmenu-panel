@@ -27,7 +27,7 @@ const permissionControlMenu = () => {
                 code: null,
                 title: "Ana Sayfa",
                 type: 'item',
-                url: '/app/home',
+                url: '/home',
                 icon: ""
             },
             {
@@ -35,7 +35,7 @@ const permissionControlMenu = () => {
                 code: "00001",
                 title: "Randevular",
                 type: 'item',
-                url: '/app/appointment',
+                url: '/appointment',
                 icon: ""
             },
             {
@@ -43,7 +43,7 @@ const permissionControlMenu = () => {
                 code: "00025",
                 title: "Danışanlar",
                 type: 'item',
-                url: '/app/patient',
+                url: '/patient',
                 icon: ""
             },
             {
@@ -51,7 +51,7 @@ const permissionControlMenu = () => {
                 code: "00038",
                 title: "Çalışanlar",
                 type: 'item',
-                url: '/app/person',
+                url: '/person',
                 icon: ""
             },
             {
@@ -59,7 +59,7 @@ const permissionControlMenu = () => {
                 code: "00029",
                 title: "Dosyalar",
                 type: 'item',
-                url: '/app/files',
+                url: '/files',
                 icon: ""
             },
             {
@@ -67,7 +67,7 @@ const permissionControlMenu = () => {
                 code: "00041",
                 title: "Teklif Ver",
                 type: 'item',
-                url: '/app/make-an-offer',
+                url: '/make-an-offer',
                 icon: ""
             },
             {
@@ -75,7 +75,7 @@ const permissionControlMenu = () => {
                 code: "00046",
                 title: "Ödemeler",
                 type: 'item',
-                url: '/app/payment',
+                url: '/payment',
                 icon: ""
             },
             /*{
@@ -91,7 +91,7 @@ const permissionControlMenu = () => {
                 code: "00049",
                 title: "İstatistikler",
                 type: 'item',
-                url: '/app/statistics',
+                url: '/statistics',
                 icon: ""
             },
             {
@@ -106,35 +106,35 @@ const permissionControlMenu = () => {
                         code: "00002",
                         title: "Randevu İşlemleri",
                         type: 'item',
-                        url: '/app/settings/appointment-process',
+                        url: '/settings/appointment-process',
                     },
                     {
                         id: 'diet-template',
                         code: "00052",
                         title: "Diyet Şablonları",
                         type: 'item',
-                        url: '/app/settings/diet-template',
+                        url: '/settings/diet-template',
                     },
                     {
                         id: 'sms-integration',
                         code: "00054",
                         title: "SMS Entegrasyonu",
                         type: 'item',
-                        url: '/app/settings/sms-integration',
+                        url: '/settings/sms-integration',
                     },
                     {
                         id: 'sms-template',
                         code: "00048",
                         title: "SMS Şablonları",
                         type: 'item',
-                        url: '/app/settings/sms-template',
+                        url: '/settings/sms-template',
                     },
                     {
                         id: 'person-type',
                         code: "00047",
                         title: "Çalışan Türleri",
                         type: 'item',
-                        url: '/app/settings/person-type',
+                        url: '/settings/person-type',
                     }
                 ]
             },
@@ -143,7 +143,7 @@ const permissionControlMenu = () => {
                 code: null,
                 title: "Sıkça Sorulan Sorular",
                 type: 'item',
-                url: '/app/faq',
+                url: '/faq',
                 icon: ""
             }
         ]
