@@ -22,12 +22,12 @@ import CustomFormikSelect from 'components/third-party/formik/custom-formik-sele
 import { useGetBranchDropdownQuery, useGetCountryDropdownQuery, useLazyGetCityDropdownQuery, useLazyGetDistrictDropdownQuery, useGetMembershipPackagesDetailQuery } from 'reduxt/features/definition/definition-api';
 import { registerValidationSchema } from 'utils/schemas/auth-validation-schema';
 import { useRegisterMutation } from 'reduxt/features/auth/auth-api';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { enqueueSnackbar } from 'notistack';
 import PuffLoader from 'react-spinners/PuffLoader';
 import CustomFormikPhone from 'components/third-party/formik/custom-formik-phone';
 import { useIntl } from 'react-intl';
-import { deleteCookie, getCookie } from 'cookies-next';
+import { deleteCookie } from 'cookies-next';
 import { MembershipPackagesListData, MembershipPackagesListModel } from 'reduxt/features/definition/models/membership-packages-model';
 import { useLazyGetCouponCheckValidityQuery } from 'reduxt/features/coupon/coupon-api';
 import AuthFormsAydinlatmaMetni from './auth-form-article/AydinlatmaMetni';
@@ -45,18 +45,22 @@ type CouponCheckProps = {
 
 const MemberShipControl = () => {
   const { setFieldValue } = useFormikContext();
-  const cookie = getCookie("membership_package_id");
+
+  const searchParams = useSearchParams()
+  const packageId = searchParams.get('package')
+
+  //const cookie = getCookie("membership_package_id");
   const getMembershipPackagesDetail: MembershipPackagesListModel | undefined | any = useAppSelector((state) => state.definitionApi.queries["getMembershipPackagesDetail(undefined)"]?.data);
 
   useEffect(() => {
-    if (cookie != null) {
-      setFieldValue("membership_package_id", cookie);
+    if (packageId != null) {
+      setFieldValue("membership_package_id", packageId);
     }
   }, [setFieldValue])
 
   useEffect(() => {
-    if (getMembershipPackagesDetail?.data && cookie) {
-      const filter: MembershipPackagesListData = getMembershipPackagesDetail?.data?.find((item: any) => item.membership_package_id == cookie);
+    if (getMembershipPackagesDetail?.data && packageId) {
+      const filter: MembershipPackagesListData = getMembershipPackagesDetail?.data?.find((item: any) => item.membership_package_id == packageId);
       setFieldValue("amount", filter?.amount);
       setFieldValue("total_amount", filter?.total);
       setFieldValue("vat", filter?.vat);
@@ -64,7 +68,7 @@ const MemberShipControl = () => {
       setFieldValue("discount_amount", "");
       setFieldValue("total", filter?.total);
     }
-  }, [getMembershipPackagesDetail, cookie])
+  }, [getMembershipPackagesDetail, packageId])
 
   return null;
 }
