@@ -6,14 +6,12 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { Form, Formik, useFormikContext } from 'formik';
+import { Form, Formik } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { useCreateStockMutation } from "reduxt/features/stock/stock-api";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
-import { useLazyGetModuleDropdownQuery } from "reduxt/features/definition/definition-api";
 import CustomFormikSelect from "components/third-party/formik/custom-formik-select";
-import { DropdownListData } from "utils/models/dropdown-list-model";
 import IconButton from "components/@extended/IconButton";
 import { newStockValidationSchema } from "utils/schemas/stock-validation-schema";
 import { enqueueSnackbar } from "notistack";
@@ -249,47 +247,3 @@ const AddStockModal = () => {
 }
 
 export default AddStockModal
-
-const AuthorizationsInput = () => {
-    const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
-    const { values, setFieldValue } = useFormikContext<any>();
-
-    const [getModule, { data: getModuleData, isLoading: getModuleLoading }] = useLazyGetModuleDropdownQuery();
-
-    useEffect(() => {
-        if (open == true && modalType == ModalEnum.newStock) {
-            getModule();
-        }
-    }, [open])
-
-    useEffect(() => {
-        if (getModuleData?.status && getModuleData.data != null && getModuleData.data.length > 0) {
-            if (id == null) {
-                setFieldValue("authorizations", getModuleData.data.map((item) => item.value));
-            }
-        }
-    }, [getModuleData])
-    return (
-        <Grid item xs={12}>
-            <Stack spacing={1}>
-                <InputLabel htmlFor="company-signup">Yetkiler</InputLabel>
-                <CustomFormikSelect
-                    name='authorizations'
-                    placeholder="Seçim yapınız..."
-                    isMulti={true}
-                    isLoading={getModuleLoading}
-                    zIndex={9998}
-                    value={getModuleData?.data.filter((item) => values.authorizations?.includes(item.value))}
-                    options={getModuleData?.data?.map((item) => ({
-                        value: item.value,
-                        label: item.label
-                    }))}
-                    onChange={(val: DropdownListData[]) => {
-                        //setSelectModules(val);
-                        setFieldValue("authorizations", val.map((item) => item.value));
-                    }}
-                />
-            </Stack>
-        </Grid>
-    )
-}

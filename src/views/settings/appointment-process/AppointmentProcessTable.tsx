@@ -24,7 +24,7 @@ import {
 } from '@tanstack/react-table'
 import { Fragment, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Chip, Divider, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
 import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash, Warning2 } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';

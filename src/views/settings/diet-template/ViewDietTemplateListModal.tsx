@@ -37,7 +37,7 @@ const ViewDietTemplateListModal = () => {
     const { data: { open, modalType, id, title } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
-    const { data: getmealTimeData, isLoading: ismealTimeLoading } = useGetMealTimeDropdownQuery(undefined, { skip: modalType != ModalEnum.viewDietTemplate })
+    const { data: getmealTimeData } = useGetMealTimeDropdownQuery(undefined, { skip: modalType != ModalEnum.viewDietTemplate })
 
     const [readDieticianDietTemplate, {
         data: readDieticianDietTemplateData,

@@ -25,7 +25,7 @@ import {
 import { useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Box, Button, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { ArrowDown, ArrowUp, ExportCircle, Eye, Link2, Link21, Trash } from 'iconsax-react';
+import { ArrowDown, ArrowUp, Eye, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import AddStockModal from './AddStockModal';
 import DeleteStockModal from './DeleteStockModal';

@@ -5,17 +5,16 @@ import { Form, Formik } from "formik";
 import { CloseSquare, Printer, TickSquare } from "iconsax-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useIntl } from "react-intl"
 import { PuffLoader } from "react-spinners";
 import { useAppointmentUpdateStatusMutation } from "reduxt/features/appointment/appointment-api";
 import { useLazyPrintAppointmentQuery } from "reduxt/features/appointment/appointment-process-type-api";
-import { AppointmentReadResultModel, AppointmentUpdateStatusBodyModel } from "reduxt/features/appointment/models/appointment-list-model";
+import { AppointmentReadResultModel } from "reduxt/features/appointment/models/appointment-list-model";
 import { useGetAppointmentStatusDropdownQuery, useGetPaymentMethodDropdownQuery, useGetPaymentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { DropdownListData } from "utils/models/dropdown-list-model";
 
 const AppointmentUpdateStatus = () => {
     const dispatch = useAppDispatch();
@@ -28,9 +27,7 @@ const AppointmentUpdateStatus = () => {
     const searchParams = useSearchParams()
     const patientId = searchParams.get('patient')
 
-    const [initialData, setInitialData] = useState<AppointmentUpdateStatusBodyModel>();
-
-    const [status, setStatus] = useState<DropdownListData | undefined>();
+    //const [initialData, setInitialData] = useState<AppointmentUpdateStatusBodyModel>();
 
     const appointmentApi: AppointmentReadResultModel | undefined | any = useAppSelector((state) => state.appointmentApi.queries[`readAppointment({\"appointment_id\":\"${params.slug}\",\"patient_id\":\"${patientId}\"})`]?.data);
 
@@ -49,21 +46,6 @@ const AppointmentUpdateStatus = () => {
         dispatch(closeModal())
     };
 
-    useEffect(() => {
-        if (appointmentApi && getAppointmentStatusData?.data != null) {
-            if (appointmentApi?.data?.appointment_status_code !== "00002") {
-                const filter = getAppointmentStatusData.data.find((item) => item.field === "00002")
-                if (filter) {
-                    setStatus(filter);
-                }
-            } else {
-                const filter = getAppointmentStatusData.data.find((item) => item.field === appointmentApi?.data?.appointment_status_code)
-                if (filter) {
-                    setStatus(filter);
-                }
-            }
-        }
-    }, [appointmentApi, getAppointmentStatusData])
 
     useEffect(() => {
         if (updateAppointmentStatusResponse) {
@@ -126,7 +108,7 @@ const AppointmentUpdateStatus = () => {
                         </Grid>
                     </Grid>
                     <Formik
-                        initialValues={initialData ?? {
+                        initialValues={{
                             appointment_id: null,
                             patient_id: null,
                             appointment_status_id: getAppointmentStatusData?.data?.find((item) => item.field == "00002")?.value ?? null,
