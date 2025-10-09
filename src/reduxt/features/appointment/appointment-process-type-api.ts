@@ -24,7 +24,7 @@ const appointmentProcessTypeApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointment-process-type"]
+            invalidatesTags: (result) => result?.status ? ["appointment-process-type"] : [],
         }),
         updateAppointmentProcessType: builder.mutation<CreateResultModel, AppointmentProcessTypeUpdateBodyModel>({
             query: (body) => {
@@ -34,7 +34,7 @@ const appointmentProcessTypeApi = createApi({
                     body: body
                 }
             },
-            invalidatesTags: ["appointment-process-type"]
+            invalidatesTags: (result) => result?.status ? ["appointment-process-type"] : [],
         }),
         deleteAppointmentProcessType: builder.mutation<CreateResultModel, { appointment_process_history_id: number | string, appointment_id: number | string }>({
             query: (args) => {
@@ -44,7 +44,7 @@ const appointmentProcessTypeApi = createApi({
                     params: args
                 }
             },
-            invalidatesTags: ["appointment-process-type"]
+            invalidatesTags: (result) => result?.status ? ["appointment-process-type"] : [],
         }),
         readAppointmentProcessType: builder.query<AppointmentProcessTypeReadModel, { appointment_id?: number | string, appointment_process_history_id?: number | string }>({
             query: (args?: { appointment_id?: number | string, appointment_process_history_id?: number | string }) => {
@@ -88,6 +88,7 @@ export const {
     useDeleteAppointmentProcessTypeMutation,
     useLazyReadAppointmentProcessTypeQuery,
     useLazyGetAppointmentProcessDropdownQuery,
+    useGetAppointmentProcessDropdownQuery,
     useLazyPrintAppointmentQuery
 } = appointmentProcessTypeApi
 

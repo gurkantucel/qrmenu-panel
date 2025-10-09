@@ -178,6 +178,7 @@ export default function AuthRegister() {
   const { data: getPackagesList, isLoading: getPackagesLoading } = useGetMembershipPackagesDetailQuery();
 
   const { data: getCountryList, isLoading: getCountryLoading } = useGetCountryDropdownQuery();
+  
   const [getCityList, { data: getCityListData,
     isLoading: getCityListLoading
   }] = useLazyGetCityDropdownQuery();

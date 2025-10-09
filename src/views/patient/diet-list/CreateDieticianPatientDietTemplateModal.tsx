@@ -97,7 +97,7 @@ const CreateDieticianPatientDietTemplateModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.newDieticianPatientDietTemplate && data != null) {
-            readDieticianPatientDietTemplate({ patient_diet_template_id: data?.patient_diet_template_id, patient_id: data?.patient_id, person_id: data?.person_id });
+            readDieticianPatientDietTemplate({ patient_diet_template_id: data?.patient_diet_template_id, patient_id: data?.patient_id});
         }
     }, [open, id, data])
 
@@ -106,7 +106,6 @@ const CreateDieticianPatientDietTemplateModal = () => {
             const model: CreateDieticianPatientDietTemplateBodyModel = {
                 patient_diet_template_id: data?.patient_diet_template_id,
                 diet_template_id: data?.diet_template_id,
-                person_id: data?.person_id,
                 patient_id: data?.patient_id,
                 start_date: data?.start_date,
                 end_date: data?.end_date,
@@ -154,7 +153,7 @@ const CreateDieticianPatientDietTemplateModal = () => {
                 {readDieticianPatientDietTemplateLoading || readDieticianPatientDietTemplateFetching ? <CustomScaleLoader /> : <Formik
                     initialValues={initialValues ?? {
                         diet_template_id: "",
-                        person_id: user ? user?.id : "",
+                        //person_id: user ? user?.id : "",
                         patient_id: params.slug,
                         start_date: null,
                         end_date: null,
@@ -248,6 +247,9 @@ const CreateDieticianPatientDietTemplateModal = () => {
                     }}
                     validationSchema={newDieticianPatientDietTemplateValidationSchema}
                     enableReinitialize
+                    validateOnChange={false}
+                    validateOnMount={false}
+                    validateOnBlur={false}
                     onSubmit={(values) => {
                         const processedData = { ...values };
                         values.detail = processedData.detail.map(dayEntry => {
@@ -383,6 +385,13 @@ const CreateDieticianPatientDietTemplateModal = () => {
                                                             {({ push: pushMeal, remove: removeMeal }) => (
                                                                 <div className="table-responsive">
                                                                     <table className="table table-bordered mb-0 table-centered">
+                                                                        <colgroup>
+                                                                            <col style={{ width: "10%" }} />
+                                                                            <col style={{ width: "10%" }} />
+                                                                            <col style={{ width: "40%" }} />
+                                                                            <col style={{ width: "20%" }} />
+                                                                            <col style={{ width: "20%" }} />
+                                                                        </colgroup>
                                                                         <thead>
                                                                             <tr>
                                                                                 <th></th>
@@ -401,7 +410,7 @@ const CreateDieticianPatientDietTemplateModal = () => {
                                                                                             <Button sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removeMeal(mealIndex)}>{"-"}</Button>
                                                                                         </Stack>
                                                                                     </td>
-                                                                                    <td style={{width: "250px"}}><div className="mb-2">
+                                                                                    <td><div className="mb-2">
                                                                                         <div className='mt-2 form-select-mobil'>
                                                                                             <CustomFormikSelect
                                                                                                 name={`detail.${dayIndex}.detail.${mealIndex}.meal_time_id`}

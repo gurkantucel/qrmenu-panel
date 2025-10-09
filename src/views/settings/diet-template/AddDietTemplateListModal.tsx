@@ -48,7 +48,7 @@ const AddDietTemplateListModal = () => {
 
     const user = useUser();
 
-    const { data: getmealTimeData, isLoading: ismealTimeLoading } = useGetMealTimeDropdownQuery(undefined,{ skip: modalType != ModalEnum.newDietTemplate })
+    const { data: getmealTimeData, isLoading: ismealTimeLoading } = useGetMealTimeDropdownQuery(undefined, { skip: modalType != ModalEnum.newDietTemplate })
 
     const [createDieticianDietTemplate, { isLoading: createDieticianDietTemplateIsLoading, data: createDieticianDietTemplateResponse, error: createDieticianDietTemplateError }] = useCreateDieticianDietTemplateMutation();
 
@@ -363,6 +363,13 @@ const AddDietTemplateListModal = () => {
                                                             {({ push: pushMeal, remove: removeMeal }) => (
                                                                 <div className="table-responsive">
                                                                     <table className="table table-bordered mb-0 table-centered">
+                                                                        <colgroup>
+                                                                            <col style={{ width: "10%" }} />
+                                                                            <col style={{ width: "10%" }} />
+                                                                            <col style={{ width: "40%" }} />
+                                                                            <col style={{ width: "20%" }} />
+                                                                             <col style={{ width: "20%" }} />
+                                                                        </colgroup>
                                                                         <thead>
                                                                             <tr>
                                                                                 <th></th>
@@ -377,8 +384,8 @@ const AddDietTemplateListModal = () => {
                                                                                 <tr key={mealIndex} style={{ marginBottom: 2 }}>
                                                                                     <td className="table-mobil">
                                                                                         <Stack direction="row" justifyContent={"center"} spacing={1}>
-                                                                                        <Button sx={{ minWidth: 40 }} type='button' variant="outlined" onClick={() => pushMeal({ meal_time_id: '', name: '', calorie: '', note: '', status: true })}>{"+"}</Button>
-                                                                                        <Button sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removeMeal(mealIndex)}>{"-"}</Button>
+                                                                                            <Button sx={{ minWidth: 40 }} type='button' variant="outlined" onClick={() => pushMeal({ meal_time_id: '', name: '', calorie: '', note: '', status: true })}>{"+"}</Button>
+                                                                                            <Button sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removeMeal(mealIndex)}>{"-"}</Button>
                                                                                         </Stack>
                                                                                     </td>
                                                                                     <td><div className="mb-2">

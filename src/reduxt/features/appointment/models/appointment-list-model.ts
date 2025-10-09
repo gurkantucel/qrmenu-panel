@@ -113,9 +113,12 @@ export interface AppointmentListResultModel {
   }
   
   export interface AppointmentUpdateStatusBodyModel {
-    appointment_id: number | null | string
-    patient_id: number | null | string
-    appointment_status_id?: number | null | string
+    appointment_id: string | null
+    patient_id: string | null
+    appointment_status_id: string | null
+    payment_method_id: string | null
+    payment_status_id: string | null
+    payment_note: string | null
     status: boolean
   }
   

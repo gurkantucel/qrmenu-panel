@@ -24,8 +24,8 @@ import {
 } from '@tanstack/react-table'
 import { Fragment, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Chip, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash } from 'iconsax-react';
+import { Box, Chip, Divider, Skeleton, Stack, Tooltip, Typography } from '@mui/material';
+import { ArrowDown2, ArrowRight2, Edit, Eye, MinusCirlce, Trash, Warning2 } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
@@ -109,13 +109,13 @@ const SubTable = (props: SubTableProps) => {
 const columnHelper = createColumnHelper<AppointmentProcessListData>()
 
 const AppointmentProcessTable = () => {
-  
+
   const intl = useIntl()
 
   let breadcrumbLinks = [
-    { title: `${intl.formatMessage({id: "home"})}`, to: APP_DEFAULT_PATH },
-    { title: `${intl.formatMessage({id: "settings"})}` },
-    { title: `${intl.formatMessage({id: "appointmentProcesses"})}` }
+    { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
+    { title: `${intl.formatMessage({ id: "settings" })}` },
+    { title: `${intl.formatMessage({ id: "appointmentProcesses" })}` }
   ];
 
   const dispatch = useAppDispatch();
@@ -159,6 +159,18 @@ const AppointmentProcessTable = () => {
     columnHelper.accessor('amount', {
       header: intl.formatMessage({ id: "amount" }),
       cell: info => <span>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? "TRY" }).format(Number(info.row.original.total))}`}</span>,
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('stock_summary', {
+      header: intl.formatMessage({ id: "stock" }),
+      cell: info => info.renderValue() == null ? "-" : <Chip color={
+        info.renderValue() != null && info.row.original.critical_stock != null &&
+          parseFloat(info.row.original.stock_summary) < parseFloat(info.row.original.critical_stock)
+          ? "error"
+          : "info"
+      } label={<Box display="flex" justifyContent="center" alignItems="center" gap={0.5}>{info.renderValue() != null && info.row.original.critical_stock != null &&
+        parseFloat(info.row.original.stock_summary) < parseFloat(info.row.original.critical_stock)
+        ? <Warning2 color='red' /> : <></>}<label>{parseFloat(info.renderValue())}</label></Box>} variant="light" />,
       footer: info => info.column.id,
     }),
     columnHelper.accessor('created_at', {
@@ -222,6 +234,9 @@ const AppointmentProcessTable = () => {
                     vat: info.row.original.vat,
                     vat_included: info.row.original.vat_included,
                     sub_appointment_process: info.row.original.detail?.map((item) => (item.appointment_process_id)),
+                    quantity: info.row.original.stock_summary,
+                    critical_stock: info.row.original.critical_stock,
+                    notify_critical_stock: info.row.original.notify_critical_stock,
                     status: info.row.original.status
                   }
                 }))
@@ -286,7 +301,7 @@ const AppointmentProcessTable = () => {
 
   return (
     <>
-      <Breadcrumbs custom heading={`${intl.formatMessage({id: "appointmentProcesses"})}`} links={breadcrumbLinks} />
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "appointmentProcesses" })}`} links={breadcrumbLinks} />
       <MainCard content={false}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
           <AddAppointmentProcessModal />
@@ -321,7 +336,7 @@ const AppointmentProcessTable = () => {
               <TableBody>
                 {isAppointmentProcessFetching || isAppointmentProcessLoading ? [0, 1, 2, 3, 4].map((item: number) => (
                   <TableRow key={item}>
-                    {[0, 1, 2, 3, 4, 5, 6].map((col: number) => (
+                    {[0, 1, 2, 3, 4, 5, 6,7].map((col: number) => (
                       <TableCell key={col}>
                         <Skeleton animation="wave" />
                       </TableCell>

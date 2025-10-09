@@ -23,81 +23,83 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
-import { PersonListData } from 'reduxt/features/person/models/person-list-model';
-import { useGetPersonListQuery } from 'reduxt/features/person/person-api';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Box, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Key, Trash } from 'iconsax-react';
+import { Box, Button, Divider, Skeleton, Stack, Tooltip } from '@mui/material';
+import { ArrowDown, ArrowUp, ExportCircle, Eye, Link2, Link21, Trash } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
-import AddPersonModal from './AddPersonModal';
-import DeletePersonModal from './DeletePersonModal';
+import AddStockModal from './AddStockModal';
+import DeleteStockModal from './DeleteStockModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
-import ViewPersonModal from './ViewPersonModal';
-import UpdatePersonPasswordModal from './UpdatePersonPasswordModal';
+import ViewStockModal from './ViewStockModal';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import { APP_DEFAULT_PATH } from 'config';
+import { StockData } from 'reduxt/features/stock/models/stock-list-model';
+import { useGetStockListQuery } from 'reduxt/features/stock/stock-api';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import ReadAppointmentProcessModal from 'views/settings/appointment-process/ReadAppointmentProcessModal';
 
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date' | 'number' | 'appointmentStatus'  | 'appointmentType' | 'personNameSurname' | "gender" | 'movementType'
+    filterVariant?: 'text' | 'range' | 'select' | 'select2' | 'date' | 'number' | 'appointmentStatus' | 'appointmentType' | 'personNameSurname' | "gender" | 'movementType'
   }
 }
 
-const columnHelper = createColumnHelper<PersonListData>()
+const columnHelper = createColumnHelper<StockData>()
 
-const PersonTable = () => {
+const StockTable = () => {
 
   const intl = useIntl()
 
   let breadcrumbLinks = [
     { title: `${intl.formatMessage({ id: "home" })}`, to: APP_DEFAULT_PATH },
-    { title: `${intl.formatMessage({ id: "persons" })}` },
+    { title: `${intl.formatMessage({ id: "stock" })}` },
   ];
 
   const dispatch = useAppDispatch();
 
-  /*const [getPersonList, {
-    data: getPersonListData,
-    isFetching: isPersonFetching,
-    isLoading: isPersonLoading
-  }] = useLazyGetPersonListQuery();*/
 
-  const columns = useMemo<ColumnDef<PersonListData, any>[]>(() => [
-    columnHelper.accessor('full_name', {
-      header: intl.formatMessage({ id: "nameSurname" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('person_type_name', {
-      header: intl.formatMessage({ id: "personType" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('email', {
-      header: intl.formatMessage({ id: "email" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('phone_number', {
-      header: intl.formatMessage({ id: "phoneNumber" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('accepting_appointment', {
-      header: intl.formatMessage({ id: "acceptAppointments" }),
-      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? <FormattedMessage id='active' /> : <FormattedMessage id='passive' />} size="small" variant="light" />,
+  const columns = useMemo<ColumnDef<StockData, any>[]>(() => [
+    columnHelper.accessor('movement_type', {
+      header: intl.formatMessage({ id: "type" }),
+      cell: info => info.renderValue() == true ? <Chip color="success" label={<><ArrowUp />{"Artış"}</>} size="small" variant="light" /> : <Chip color="error" label={<><ArrowDown />{"Azalış"}</>} size="small" variant="light" />,
       footer: info => info.column.id,
       meta: {
-        filterVariant: 'select',
+        filterVariant: 'movementType',
       },
     }),
-    columnHelper.accessor('status', {
-      header: intl.formatMessage({ id: "status" }),
-      cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
+    columnHelper.accessor('appointment_process_name', {
+      header: intl.formatMessage({ id: "name" }),
+      cell: info => info.renderValue() == null ? "-" : <Button color='inherit' sx={{textAlign: 'left'}} onClick={() => {
+        dispatch(setModal({
+          open: true, modalType: ModalEnum.readAppointmentProcess,
+          id: info.row.original.stock_id,
+          title: info.row.original.appointment_process_name,
+          data: { appointment_process_id: info.row.original.appointment_process_id }
+        }))
+      }}>{info.renderValue()}</Button>,
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('quantity', {
+      header: intl.formatMessage({ id: "stock" }),
+      cell: info => info.renderValue() == null ? "-" : parseFloat(info.renderValue()),
+      footer: info => info.column.id,
+    }),
+    columnHelper.accessor('appointment_start', {
+      header: intl.formatMessage({ id: "appointment" }),
+      cell: info => info.renderValue() == null ? "-" : <Link target='_blank' href={`appointment/${info.row.original.appointment_id}?${info.row.original.patient_id}`} className='custom-link'>{`${dayjs(info.renderValue()).format("DD.MM.YYYY")} (${info.row.original.patient_full_name})`}</Link>,
       footer: info => info.column.id,
       meta: {
-        filterVariant: 'select',
+        filterVariant: 'date',
+      },
+    }),
+    columnHelper.accessor('process_date', {
+      header: intl.formatMessage({ id: "date" }),
+      cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
       },
     }),
     columnHelper.accessor('islemler', {
@@ -112,41 +114,13 @@ const PersonTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.viewPerson,
-                  id: info.row.original.person_id,
+                  open: true, modalType: ModalEnum.viewStock,
+                  id: info.row.original.stock_id,
+                  data: info.row.original
                 }))
               }}
             >
               <Eye />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "edit" })}>
-            <IconButton
-              color="primary"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.newPerson,
-                  id: info.row.original.person_id,
-                  title: info.row.original.full_name
-                }))
-              }}
-            >
-              <Edit />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "changePassword" })}>
-            <IconButton
-              color="warning"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.updatePersonPassword,
-                  id: info.row.original.person_id,
-                }))
-              }}
-            >
-              <Key />
             </IconButton>
           </Tooltip>
           <Tooltip title={intl.formatMessage({ id: "delete" })}>
@@ -155,9 +129,10 @@ const PersonTable = () => {
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
-                  open: true, modalType: ModalEnum.deletePerson,
-                  id: info.row.original.person_id,
-                  title: info.row.original.full_name
+                  open: true, modalType: ModalEnum.deleteStock,
+                  id: info.row.original.stock_id,
+                  title: info.row.original.appointment_process_name,
+                  data: { stock_id: info.row.original.stock_id, appointment_process_id: info.row.original.appointment_process_id, movement_type: info.row.original.movement_type }
                 }))
               }}
             >
@@ -180,21 +155,21 @@ const PersonTable = () => {
     pageSize: 10,
   })
 
-  const { data: getPersonListData, isLoading: isPersonLoading, isFetching: isPersonFetching } = useGetPersonListQuery({
+  const { data: getStockListData, isLoading: isStockLoading, isFetching: isStockFetching } = useGetStockListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&'),
     filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
   })
 
-  const tableData = useMemo(() => getPersonListData?.data ?? [], [getPersonListData?.data]);
+  const tableData = useMemo(() => getStockListData?.data ?? [], [getStockListData?.data]);
 
   const table = useReactTable({
     data: tableData,
     columns,
     onPaginationChange: setPagination,
     state: { columnFilters, pagination },
-    rowCount: getPersonListData?.totalCount,
+    rowCount: getStockListData?.totalCount,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualFiltering: false,
@@ -203,13 +178,13 @@ const PersonTable = () => {
 
   return (
     <>
-      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "persons" })}`} links={breadcrumbLinks} />
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "stock" })}`} links={breadcrumbLinks} />
       <MainCard content={false}>
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-          <AddPersonModal />
-          <DeletePersonModal />
-          <ViewPersonModal />
-          <UpdatePersonPasswordModal />
+          <AddStockModal />
+          <DeleteStockModal />
+          <ViewStockModal />
+          <ReadAppointmentProcessModal />
         </Stack>
         <ScrollX>
           <TableContainer component={Paper}>
@@ -237,7 +212,7 @@ const PersonTable = () => {
                 ))}
               </TableHead>
               <TableBody>
-                {isPersonFetching || isPersonLoading ? [0, 1, 2].map((item: number) => (
+                {isStockFetching || isStockLoading ? [0, 1, 2].map((item: number) => (
                   <TableRow key={item}>
                     {[0, 1, 2, 3, 4, 5].map((col: number) => (
                       <TableCell key={col}>
@@ -259,7 +234,7 @@ const PersonTable = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={table.getAllColumns().length}>
-                        <EmptyTable msg={isPersonFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
+                        <EmptyTable msg={isStockFetching ? <FormattedMessage id='loadingDot' /> : <FormattedMessage id='noData' />} />
                       </TableCell>
                     </TableRow>
                   )
@@ -288,4 +263,4 @@ const PersonTable = () => {
   )
 }
 
-export default PersonTable
+export default StockTable

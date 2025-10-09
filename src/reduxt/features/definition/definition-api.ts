@@ -5,13 +5,13 @@ import { CityListResultModel } from './models/city-type-model';
 import { DistrictListResultModel } from './models/district-type-model';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
 import { QueryStringParamsType } from 'utils/models/query-string-params-type';
-import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { MembershipPackagesListModel } from './models/membership-packages-model';
+import { baseQueryWithReauth2 } from 'utils/base-query-with-reauth2';
 
 const definitionApi = createApi({
     reducerPath: "definitionApi",
     tagTypes: ["definitions"],
-    baseQuery: baseQueryWithReauth,
+    baseQuery: baseQueryWithReauth2,
     endpoints: (builder) => ({
         getPackagesDropdown: builder.query<DropdownListModel, void>({
             query: () => `definition/membership-packages/dropDown`,
@@ -157,6 +157,10 @@ const definitionApi = createApi({
             query: () => `definition/payment-method/dropDown`,
             providesTags: ["definitions"]
         }),
+        getPaymentStatusDropdown: builder.query<DropdownListModel, void>({
+            query: () => `definition/payment-status/dropDown`,
+            providesTags: ["definitions"]
+        }),
         getAppointmentStatusDropdown: builder.query<DropdownListModel, void>({
             query: () => `definition/appointment-status/dropDown`,
             providesTags: ["definitions"]
@@ -219,6 +223,7 @@ export const {
     useLazyGetPatientProcessTypeDropdownQuery,
     useLazyGetPaymentMethodDropdownQuery,
     useGetPaymentMethodDropdownQuery,
+    useGetPaymentStatusDropdownQuery,
     useGetAppointmentStatusDropdownQuery,
     useLazyGetAppointmentStatusDropdownQuery,
     useLazyGetAppointmentProcessTypeDropdownQuery,

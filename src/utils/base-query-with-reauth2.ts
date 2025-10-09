@@ -24,7 +24,7 @@ const baseQuery = fetchBaseQuery({
     },
 })
 
-export const baseQueryWithReauth: BaseQueryFn<
+export const baseQueryWithReauth2: BaseQueryFn<
     string | FetchArgs,
     unknown,
     FetchBaseQueryError,
@@ -33,11 +33,6 @@ export const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
     // wait until the mutex is available without locking it
     await mutex.waitForUnlock()
-    const hasToken = getCookie("token");
-    const hasRefresh = getCookie("refreshToken");
-    if (!hasToken && !hasRefresh) {
-        return { error: { status: 401, data: "Logged out" } } as any;
-    }
     let result = await baseQuery(args, api, extraOptions)
     if (result.error && result.error.status === 401) {
         // checking whether the mutex is locked

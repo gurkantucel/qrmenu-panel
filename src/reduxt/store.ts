@@ -33,6 +33,7 @@ import dietTemplateApi from './features/settings/diet-template-api'
 import patientMeasurementApi from './features/patient/patient-measurement-api'
 import smsIntegrationApi from './features/sms-integration/sms-integration-api'
 import dieticianPatientDietTemplateApi from './features/patient/dietician-patient-diet-template-api'
+import stockApi from './features/stock/stock-api'
 
 export const store = configureStore({
   reducer: {
@@ -70,6 +71,7 @@ export const store = configureStore({
     [patientMeasurementApi.reducerPath]: patientMeasurementApi.reducer,
     [smsIntegrationApi.reducerPath]: smsIntegrationApi.reducer,
     [dieticianPatientDietTemplateApi.reducerPath]: dieticianPatientDietTemplateApi.reducer,
+    [stockApi.reducerPath]: stockApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
     definitionApi.middleware,
@@ -101,7 +103,8 @@ export const store = configureStore({
     dietTemplateApi.middleware,
     patientMeasurementApi.middleware,
     smsIntegrationApi.middleware,
-    dieticianPatientDietTemplateApi.middleware
+    dieticianPatientDietTemplateApi.middleware,
+    stockApi.middleware
   ]),
 })
 

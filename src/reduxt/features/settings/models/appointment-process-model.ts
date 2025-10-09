@@ -34,6 +34,9 @@ export interface AppointmentProcessListData {
     updated_by: any
     updated_person: any
     status: boolean
+    stock_summary: string
+    critical_stock: string | null
+    notify_critical_stock: boolean
     islemler?: string
 }
 
@@ -59,6 +62,9 @@ export interface Detail {
     updated_by: string
     updated_person: any
     status: boolean
+    stock_summary: string
+    critical_stock: string
+    notify_critical_stock: boolean
     islemler?: string
 }
 
@@ -74,5 +80,45 @@ export interface CreateAppointmentProcessBodyModel {
     vat: number | null | string
     vat_included: boolean
     sub_appointment_process: string[] | null
+    quantity: string | null
+    critical_stock: string | null
+    notify_critical_stock: boolean
     status: boolean
+}
+
+export interface ReadAppointmentProcessModel {
+  requestId: string
+  status: boolean
+  messageCode: string
+  message: string
+  data: ReadAppointmentProcessData
+}
+
+export interface ReadAppointmentProcessData {
+  appointment_process_id: string
+  currency_id: string
+  currency_name: string
+  currency_code: string
+  appointment_process_type_id: string
+  appointment_process_type_code: string
+  appointment_process_type_name: string
+  code: string
+  name: string
+  description: any
+  amount: string
+  vat: number
+  stock_summary: string
+  critical_stock: string
+  notify_critical_stock: boolean
+  total: string
+  vat_included: boolean
+  detail: any
+  created_at: string
+  updated_at: string
+  deleted_at: any
+  created_by: string
+  created_person: string
+  updated_by: any
+  updated_person: any
+  status: boolean
 }

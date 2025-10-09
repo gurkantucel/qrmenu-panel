@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, Grid, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Chip, Dialog, DialogTitle, Grid, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { CloseSquare } from 'iconsax-react';
 import { useIntl } from 'react-intl';
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
@@ -44,13 +44,27 @@ const ViewAppointmentProcessModal = () => {
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "type" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.appointment_process_type_name ?? "-"}</Typography>} />
                 </ListItem>
                 <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "amount" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.total ?? "-"} {data?.currency_code ?? "-"}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body1' color={"black"}>{intl.formatMessage({ id: "amount" })}</Typography>} secondary={<Typography component="span" variant='body1'>{`${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: data?.currency_code ?? "TRY" }).format(Number(data?.total))}`}</Typography>} />
                 </ListItem>
                 <ListItem divider>
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "vat" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.vat ?? "-"}</Typography>} />
                 </ListItem>
+                <ListItem divider>
+                    <ListItemText primary={<Typography component="p" variant='body1' color={"black"}>{intl.formatMessage({ id: "stock" })}</Typography>} secondary={<Chip color={
+                        data?.stock_summary != null && data?.critical_stock != null &&
+                            parseFloat(data.stock_summary) < parseFloat(data.critical_stock)
+                            ? "error"
+                            : "info"
+                    } variant="light" label={data?.stock_summary != null ? `${parseFloat(data?.stock_summary)}` : "-"} />} />
+                </ListItem>
+                <ListItem divider>
+                    <ListItemText primary={<Typography component="p" variant='body1' color={"black"}>{intl.formatMessage({ id: "criticalStockLevel" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.critical_stock != null ? `${parseFloat(data?.critical_stock)}` : "-"}</Typography>} />
+                </ListItem>
+                <ListItem divider>
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "criticalStockNotification" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.notify_critical_stock == true ? "Aktif" : "Pasif"}</Typography>} />
+                </ListItem>
                 {data?.detail != null && <ListItem divider>
-                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "subProcesses" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.detail.map((item:any)=> item.name).join(', ')}</Typography>} />
+                    <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "subProcesses" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.detail.map((item: any) => item.name).join(', ')}</Typography>} />
                 </ListItem>}
                 <ListItem divider>
                     <ListItemText primary={<Typography component="p" variant='body2' color={"GrayText"}>{intl.formatMessage({ id: "createdBy" })}</Typography>} secondary={<Typography component="span" variant='body1'>{data?.created_person ?? "-"}</Typography>} />

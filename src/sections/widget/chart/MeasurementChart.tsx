@@ -38,6 +38,7 @@ export default function MeasurementChart() {
 
   const [basicLineChartOpts, setBasicLineChartOpts] = useState<ChartProps>(initLineChartOpts)
   const [weightLineChartOpts, setWeightLineChartOpts] = useState<ChartProps>(initLineChartOpts)
+  const [bmiLineChartOpts, setBmiLineChartOpts] = useState<ChartProps>(initLineChartOpts)
 
   const params = useParams<{ slug: string }>()
 
@@ -50,13 +51,13 @@ export default function MeasurementChart() {
 
   const [series, setSeries] = useState([{ name: "Boy", data: [0] }]);
   const [weightSeries, setWeightSeries] = useState([{ name: "Kilo", data: [0] }]);
+  const [bmiSeries, setBmiSeries] = useState([{ name: "BMI", data: [0] }]);
+
 
   useEffect(() => {
     if (getMeasurementData?.data != null) {
       const opts = basicLineChartOpts;
 
-      console.log("API DATA", getMeasurementData?.data);
-      
       const filteredData = getMeasurementData.data.filter(item => item.label);
 
       setBasicLineChartOpts({
@@ -71,6 +72,13 @@ export default function MeasurementChart() {
         theme: { mode: mode === ThemeMode.DARK ? 'dark' : 'light' }
       });
 
+      setBmiLineChartOpts({
+        ...opts,
+        series: [{ name: 'BMI', data: [30.2, 30, 28] }],
+        xaxis: { categories: filteredData.map(item => dayjs(item.label).format("DD.MM.YYYY")) },
+        theme: { mode: mode === ThemeMode.DARK ? 'dark' : 'light' }
+      });
+
       setSeries([
         { name: "Bel", data: filteredData.map(item => Number(item.waist)) },
         { name: "Kalça", data: filteredData.map(item => Number(item.hip)) },
@@ -80,6 +88,11 @@ export default function MeasurementChart() {
       setWeightSeries([
         { name: "Kilo", data: filteredData.map(item => Number(item.weight)) },
       ]);
+
+      setBmiSeries([
+        { name: "BMI", data: [30.2,29,28] },
+      ]);
+
     }
   }, [getMeasurementData, theme])
 
@@ -92,8 +105,11 @@ export default function MeasurementChart() {
   }
 
   return <>
+    <Typography variant='h5'>{"Bel/Kalça/Göğüs"}</Typography>
     <ReactApexChart options={basicLineChartOpts} series={series} type="line" height={340} />
     <Typography variant='h5'>{"Kilo"}</Typography>
     <ReactApexChart options={weightLineChartOpts} series={weightSeries} type="line" height={340} />
+    <Typography variant='h5'>{"Vücut Kitle İndeksi"}</Typography>
+    <ReactApexChart options={bmiLineChartOpts} series={bmiSeries} type="line" height={340} />
   </>;
 }

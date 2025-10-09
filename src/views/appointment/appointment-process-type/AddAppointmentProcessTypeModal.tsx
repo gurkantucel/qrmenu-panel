@@ -115,7 +115,6 @@ const AddAppointmentProcessTypeModal = () => {
                 >
                     {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                         <Form>
-                            <p>{JSON.stringify(errors)}</p>
                             <Box sx={{ px: 3, py: 3 }}>
                                 <Grid
                                     container
@@ -236,7 +235,7 @@ const AddAppointmentProcessTypeModal = () => {
                                                                     placeholder={intl.formatMessage({ id: "quantity" })}
                                                                     fullWidth
                                                                     error={Boolean((touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity))}
-                                                                    inputProps={{ min: 0, step: "0.5" }}
+                                                                    inputProps={{ min: 1, step: "1" }}
                                                                 />
                                                             </Stack>
                                                             {(touched.data && touched.data[index]?.quantity) && (errors.data && (errors.data as FormikErrors<ProcessType>[])[0]?.quantity) && (

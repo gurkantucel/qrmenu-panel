@@ -6,7 +6,7 @@ import { useIntl } from "react-intl";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useFormikContext } from 'formik';
 import AnimateButton from "components/@extended/AnimateButton";
 import { PuffLoader } from "react-spinners";
 import { useEffect, useState } from "react";
@@ -38,8 +38,6 @@ const AddAppointmentProcessModal = () => {
     const { data: getAppointmentProcessTypeData, isLoading: getAppointmentProcessTypeLoading } = useGetAppointmentProcessTypeDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newAppointmentProcess });
 
     const [getAppointmentProcessDropdown, { data: getAppointmentProcessDropdownData, isLoading: getAppointmentProcessDropdownLoading }] = useLazyGetAppointmentProcessDropdownQuery();
-
-    const { data: getCurrencyData, isLoading: isCurrencyLoading } = useGetCurrencyDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newAppointmentProcess });
 
     const [createAppointmentProcess, { isLoading: createAppointmentProcessIsLoading, data: createAppointmentProcessResponse, error: createAppointmentProcessError }] = useCreateAppointmentProcessMutation();
 
@@ -73,6 +71,9 @@ const AddAppointmentProcessModal = () => {
                 vat: data.vat,
                 vat_included: data.vat_included,
                 sub_appointment_process: data.sub_appointment_process,
+                quantity: data.quantity !=null ? String(parseFloat(data.quantity)) : null,
+                critical_stock:  data.critical_stock !=null ? String(parseFloat(data.critical_stock)) : null,
+                notify_critical_stock: data.notify_critical_stock,
                 status: data.status
             }
             setInitialData(model);
@@ -154,6 +155,9 @@ const AddAppointmentProcessModal = () => {
                         total: "0",
                         vat: 0,
                         sub_appointment_process: null,
+                        quantity: null,
+                        critical_stock: null,
+                        notify_critical_stock: false,
                         vat_included: false,
                         status: true
                     }}
@@ -163,6 +167,8 @@ const AddAppointmentProcessModal = () => {
                         if (values.total && typeof values.total == "number" && values.amount && typeof values.amount == "number") {
                             values.amount = values.total.toFixed(2);
                         }
+                        values.quantity = values.quantity?.toString()?.replace(",", ".") ?? null;
+                        values.critical_stock = values.critical_stock?.toString()?.replace(",", ".") ?? null;
                         if (values.appointment_process_id != null) {
                             values.amount = values.total?.toString();
                             updateAppointmentProcess(values);
@@ -171,8 +177,8 @@ const AddAppointmentProcessModal = () => {
                         }
                     }}
                 >
-                    {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                        <Form>
+                    {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => {
+                        return (<Form>
                             <Box sx={{ px: 3, py: 5 }}>
                                 <Grid
                                     container
@@ -288,28 +294,7 @@ const AddAppointmentProcessModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="currency">{intl.formatMessage({ id: "currencyType" })}{"*"}</InputLabel>
-                                            <CustomFormikSelect
-                                                name='currency_id'
-                                                placeholder="Döviz Türü Seçin"
-                                                isClearable={true}
-                                                isLoading={isCurrencyLoading}
-                                                zIndex={9998}
-                                                value={
-                                                    values.currency_id ? { label: getCurrencyData?.data?.find((item) => item.value == values.currency_id)?.label ?? "", value: getCurrencyData?.data?.find((item) => item.value == values.currency_id)?.value ?? 0 } : null}
-                                                onChange={(val: any) => {
-                                                    setFieldValue("currency_id", val?.value ?? 0);
-                                                }}
-
-                                                options={getCurrencyData?.data?.map((item) => ({
-                                                    value: item.value,
-                                                    label: item.label
-                                                }))}
-                                            />
-                                        </Stack>
-                                    </Grid>
+                                    <CurrencyValueInput />
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
                                             <InputLabel htmlFor="person_id">
@@ -400,6 +385,70 @@ const AddAppointmentProcessModal = () => {
                                             />
                                         </Stack>
                                     </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <InputLabel htmlFor="firstname-signup">{`${intl.formatMessage({ id: "stock" })}*`}</InputLabel>
+                                            <OutlinedInput
+                                                id="vat"
+                                                type="number"
+                                                value={values.quantity}
+                                                name={`quantity`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "stock" })}
+                                                fullWidth
+                                                inputProps={{ min: 0 }}
+                                                disabled={values.appointment_process_id !=null}
+                                                error={Boolean(touched.quantity && errors.quantity)}
+                                            />
+                                        </Stack>
+                                        {touched.quantity && errors.quantity && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {errors.quantity}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <Stack spacing={1}>
+                                            <Box display="flex" alignItems="center" justifyContent="space-between" sx={{ margin: 0 }}>
+                                                <InputLabel htmlFor="critical_stock">
+                                                    {`${intl.formatMessage({ id: "criticalStockLevel" })}*`}
+                                                </InputLabel>
+                                                <FormControlLabel
+                                                    sx={{
+                                                        margin: 0,
+                                                        "& .MuiFormControlLabel-label": {
+                                                            marginX: "5px !important",
+                                                            marginY: "0px !important"
+                                                        },
+                                                    }}
+                                                    control={<Switch
+                                                        checked={values.notify_critical_stock}
+                                                        size="small"
+                                                        sx={{ margin: 0 }}
+                                                        value={values.notify_critical_stock} onChange={(e, checked) => {
+                                                            setFieldValue("notify_critical_stock", checked);
+                                                        }} />} label={`Bildirim: ${intl.formatMessage({ id: values.notify_critical_stock ? "active" : "passive" })}`} />
+                                            </Box>
+                                            <OutlinedInput
+                                                id="vat"
+                                                type="number"
+                                                value={values.critical_stock}
+                                                name={`critical_stock`}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                placeholder={intl.formatMessage({ id: "criticalStockLevel" })}
+                                                fullWidth
+                                                inputProps={{ min: 0 }}
+                                                error={Boolean(touched.critical_stock && errors.critical_stock)}
+                                            />
+                                        </Stack>
+                                        {touched.critical_stock && errors.critical_stock && (
+                                            <FormHelperText error id="helper-text-firstname-signup">
+                                                {errors.critical_stock}
+                                            </FormHelperText>
+                                        )}
+                                    </Grid>
                                     <Grid item xs={12}>
                                         <FormControlLabel control={<Switch
                                             checked={values.status}
@@ -420,12 +469,58 @@ const AddAppointmentProcessModal = () => {
                                     </AnimateButton>
                                 </DialogActions>
                             </Box>
-                        </Form>
-                    )}
+                        </Form>)
+                    }
+                    }
                 </Formik >
             </Dialog>
         </>
     )
+}
+
+const CurrencyValueInput = () => {
+    const intl = useIntl()
+    const { values, setFieldValue } = useFormikContext<any>();
+    const { data: { open, modalType } } = useAppSelector((state: RootState) => state.modal);
+
+    const { data: getCurrencyData, isLoading: isCurrencyLoading } = useGetCurrencyDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newAppointmentProcess });
+
+    const selectedCurrency = getCurrencyData?.data.find(
+        (item) => item.value === values.currency_id
+    );
+
+    useEffect(() => {
+        if (getCurrencyData?.data != null) {
+            const filter = getCurrencyData.data.find((item) => item.label == "Türk Lirası");
+            setFieldValue("currency_id", filter?.value);
+        }
+    }, [getCurrencyData])
+
+    return (<Grid item xs={12} sm={6}>
+        <Stack spacing={1}>
+            <InputLabel htmlFor="currency">{intl.formatMessage({ id: "currencyType" })}{"*"}</InputLabel>
+            <CustomFormikSelect
+                name='currency_id'
+                placeholder="Döviz Türü Seçin"
+                isClearable={true}
+                isLoading={isCurrencyLoading}
+                zIndex={9998}
+                value={
+                    selectedCurrency
+                        ? { label: selectedCurrency.label, value: selectedCurrency.value }
+                        : null
+                }
+                onChange={(val: any) => {
+                    setFieldValue("currency_id", val?.value ?? 0);
+                }}
+
+                options={getCurrencyData?.data?.map((item) => ({
+                    value: item.value,
+                    label: item.label
+                }))}
+            />
+        </Stack>
+    </Grid>)
 }
 
 export default AddAppointmentProcessModal

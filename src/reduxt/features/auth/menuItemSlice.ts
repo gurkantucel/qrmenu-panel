@@ -78,6 +78,14 @@ const permissionControlMenu = () => {
                 url: '/payment',
                 icon: ""
             },
+            {
+                id: 'stock',
+                code: "00055",
+                title: "Stok",
+                type: 'item',
+                url: '/stock',
+                icon: ""
+            },
             /*{
                 id: 'sms-transactions',
                 code: "00042",

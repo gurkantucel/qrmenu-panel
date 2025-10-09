@@ -258,7 +258,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                             <Typography variant="subtitle1">Teklifler</Typography>
                                         </AuthDivider>
                                     </Grid>
-                                    <Grid container spacing={3} marginTop={1}>
+                                    <Grid container spacing={3} marginTop={1} marginX={0}>
                                         <FieldArray
                                             name="detail"
                                             render={arrayHelpers => (

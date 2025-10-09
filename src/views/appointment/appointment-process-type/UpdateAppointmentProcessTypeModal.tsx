@@ -62,7 +62,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                         currency_code: data?.currency_code,
                         currency_name: data?.currency_name,
                         amount: data?.amount,
-                        quantity: data?.quantity,
+                        quantity: data?.quantity != null ? String(parseFloat(data.quantity)) : "1",
                         discount_percentage: data?.discount_percentage,
                         discount_amount: data?.discount_amount,
                         vat: data?.vat,
@@ -75,9 +75,8 @@ const UpdateAppointmentProcessTypeModal = () => {
                     validateOnChange={false}
                     validationSchema={updateAppointmentProcessTypeSchema}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        const quantity = Number(values.quantity);
-                        values.quantity = quantity.toFixed(2)
-                        values.amount = values.amount.replace(",",".");
+                        values.amount = values.amount.replace(",", ".");
+                        values.quantity = String(values.quantity);
                         updateAppointmentProcessType(values);
                     }}
                 >
@@ -127,7 +126,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 placeholder={intl.formatMessage({ id: "quantity" })}
                                                 fullWidth
                                                 error={Boolean(touched.quantity && errors.quantity)}
-                                                inputProps={{ min: 0, step: "0.5" }}
+                                                inputProps={{ min: 1, step: "1" }}
                                             />
                                         </Stack>
                                         {touched.quantity && errors.quantity && (
@@ -201,7 +200,7 @@ const UpdateAppointmentProcessTypeModal = () => {
                                             <OutlinedInput
                                                 id="discount_amount"
                                                 type="number"
-                                                value={((values.quantity * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100).toFixed(2)}
+                                                value={((parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100).toFixed(2)}
                                                 disabled
                                                 name={`discount_amount`}
                                                 onBlur={handleBlur}
@@ -250,8 +249,8 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 id="vat_amount"
                                                 type="number"
                                                 value={
-                                                    (((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
-                                                        (values.quantity * parseFloat(values.amount?.replace(',', '.') ?? "0") * (values.discount_percentage ?? 0)) / 100) *
+                                                    ((parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                        (parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") * (values.discount_percentage ?? 0)) / 100) *
                                                         ((values.vat ?? 0) / 100)).toFixed(2)
                                                 }
                                                 disabled
@@ -279,10 +278,10 @@ const UpdateAppointmentProcessTypeModal = () => {
                                                 id="total"
                                                 type="number"
                                                 value={
-                                                    ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
-                                                        ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100 +
-                                                        ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") -
-                                                            ((values.quantity ?? 0) * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100) *
+                                                    (parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                        (parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100 +
+                                                        (parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") -
+                                                            (parseFloat(values.quantity ?? "0") * parseFloat(values.amount?.replace(',', '.') ?? "0") * values.discount_percentage) / 100) *
                                                         ((values.vat ?? 0) / 100)).toFixed(2)
                                                 }
                                                 disabled

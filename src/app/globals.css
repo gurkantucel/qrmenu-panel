@@ -58,14 +58,131 @@ main#blog {
   background-color: #F8F9FA;
 }
 
-.table-responsive {
-  overflow-x: auto;
+
+/** -- **/
+/* sets */
+/* table style */
+.table-responsive table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0 auto;
+  position: relative;
 }
 
+.table-responsive table td,
+.table-responsive table th {
+  position: relative;
+  padding-left: 8px;
+}
+
+.table-responsive table thead tr {
+  height: 50px;
+  background: #d1e8d99c;
+  font-size: 14px;
+  border: 1px dashed #60d99d;
+}
+
+.table-responsive table tbody tr {
+  height: 48px;
+  border-bottom: 1px solid #E3F1D5;
+}
+
+.table-responsive table tbody tr:last-child {
+  border: 0;
+}
+
+.table-responsive table td,
+.table-responsive table th {
+  text-align: left;
+}
+
+.table-responsive table td.l,
+.table-responsive table th.l {
+  text-align: right;
+}
+
+.table-responsive table td.c,
+.table-responsive table th.c {
+  text-align: center;
+}
+
+.table-responsive table td.r,
+.table-responsive table th.r {
+  text-align: center;
+}
+
+@media screen and (max-width: 35.5em) {
+  .table-responsive table {
+    display: block;
+  }
+
+  .table-responsive table>*,
+  .table-responsive table tr,
+  .table-responsive table td,
+  .table-responsive table th {
+    display: block;
+  }
+
+  .table-responsive table thead {
+    display: none;
+  }
+
+  .table-responsive table tbody tr {
+    height: auto;
+    padding: 8px 0;
+  }
+
+  .table-responsive table tbody tr td {
+    padding-left: 45%;
+    margin-bottom: 12px;
+  }
+
+  .table-responsive table tbody tr td:last-child {
+    margin-bottom: 0;
+  }
+
+  .table-responsive table tbody tr td:before {
+    position: absolute;
+    font-weight: 700;
+    width: 40%;
+    left: 10px;
+    top: 0;
+  }
+
+  .table-responsive table tbody tr td:nth-child(1):before {
+    content: "Öğün";
+  }
+
+  .table-responsive table tbody tr td:nth-child(2):before {
+    content: "Adı";
+  }
+
+  .table-responsive table tbody tr td:nth-child(3):before {
+    content: "Kalori";
+  }
+
+    .table-responsive table tbody tr td:nth-child(4):before {
+    content: "Açıklama";
+  }
+}
+
+/** -- **/
+
 .table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  /*max-width: 800px;*/
   width: 100%;
-  border-spacing: 2px;
-  border-color: #e2e7f1;
+  margin: 0 auto;
+  position: relative;
 }
 
 .mt-2 {

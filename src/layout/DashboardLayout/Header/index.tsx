@@ -38,7 +38,7 @@ export default function Header() {
 
   // common header
   const mainHeader: ReactNode = (
-    <Toolbar sx={{ px: { xs: 2, sm: 4.5, lg: 8 } }}>
+    <Toolbar sx={{ px: { xs: 2, sm: 4.5, lg: 5 } }}>
       {!isHorizontal ? (
         <IconButton
           aria-label="open drawer"

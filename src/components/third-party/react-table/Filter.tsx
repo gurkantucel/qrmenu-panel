@@ -156,6 +156,23 @@ export default function Filter<T extends RowData>({ column, table, getAppointmen
     {getGenderData?.map((item) => (
       <MenuItem key={item.value} value={item.label}>{item.label}</MenuItem>
     ))}
+  </Select> : meta == "movementType" ? <Select
+    sx={{
+      '& .MuiSelect-select': {
+        padding: "10px 10px 10px 12px",
+        textTransform: "none"
+      }
+    }}
+    MenuProps={{
+      style: { zIndex: 9999, },
+    }}
+    defaultValue={"-"}
+    onChange={(event) => {
+      column.setFilterValue(event.target.value);
+    }}>
+    <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
+    <MenuItem value="true">{intl.formatMessage({ id: "increase" })}</MenuItem>
+    <MenuItem value="false">{intl.formatMessage({ id: "decrease" })}</MenuItem>
   </Select> : meta == "date" ? (
     <TextInput
       type='date'

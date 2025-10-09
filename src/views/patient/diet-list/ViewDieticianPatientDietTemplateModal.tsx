@@ -73,7 +73,7 @@ const ViewDieticianPatientDietTemplateModal = () => {
 
     useEffect(() => {
         if (open == true && modalType == ModalEnum.viewDieticianPatientDietTemplate && data != null) {
-            readDieticianPatientDietTemplate({ patient_diet_template_id: data?.patient_diet_template_id, patient_id: data?.patient_id, person_id: data?.person_id });
+            readDieticianPatientDietTemplate({ patient_diet_template_id: data?.patient_diet_template_id, patient_id: data?.patient_id});
         }
     }, [open, id, data])
 
@@ -82,7 +82,6 @@ const ViewDieticianPatientDietTemplateModal = () => {
             const model: CreateDieticianPatientDietTemplateBodyModel = {
                 patient_diet_template_id: data?.patient_diet_template_id,
                 diet_template_id: data?.diet_template_id,
-                person_id: data?.person_id,
                 patient_id: data?.patient_id,
                 start_date: data?.start_date,
                 end_date: data?.end_date,

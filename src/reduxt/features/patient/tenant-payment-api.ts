@@ -2,6 +2,9 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
 import { TenantPaymentCreateBodyModel, TenantPaymentListResultModel, TenantPaymentReadResultModel } from './models/tenant-payment-model';
+import stockApi from '../stock/stock-api';
+import { withInvalidateTags } from 'reduxt/invalida-tags';
+import statisticApi from '../statistic/statistic-api';
 
 const tenantPaymentApi = createApi({
     reducerPath: "tenantPaymentApi",
@@ -33,6 +36,10 @@ const tenantPaymentApi = createApi({
                 }
             },
             invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
+            onQueryStarted: withInvalidateTags([
+                { api: stockApi, tags: ["stock"] },
+                { api: statisticApi, tags: ["statistic"] },
+            ]),
         }),
         updateTenantPayment: builder.mutation<CreateResultModel, TenantPaymentCreateBodyModel>({
             query: (body) => {
@@ -43,6 +50,10 @@ const tenantPaymentApi = createApi({
                 }
             },
             invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
+            onQueryStarted: withInvalidateTags([
+                { api: stockApi, tags: ["stock"] },
+                { api: statisticApi, tags: ["statistic"] },
+            ]),
         }),
         deleteTenantPayment: builder.mutation<CreateResultModel, { payment_id: number | string, patient_id: number | string }>({
             query: (args) => {
@@ -53,6 +64,10 @@ const tenantPaymentApi = createApi({
                 }
             },
             invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
+            onQueryStarted: withInvalidateTags([
+                { api: stockApi, tags: ["stock"] },
+                { api: statisticApi, tags: ["statistic"] },
+            ]),
         }),
         readTenantPayment: builder.query<TenantPaymentReadResultModel, { payment_id?: string, patient_id?: number | string }>({
             query: (args?: { patient_id?: number | string, payment_id?: string }) => {

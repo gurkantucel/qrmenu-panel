@@ -39,7 +39,7 @@ export interface DieticianPatientDietTemplateListData {
 export interface CreateDieticianPatientDietTemplateBodyModel {
   patient_diet_template_id?: string
   diet_template_id: string
-  person_id: string
+  //person_id: string
   patient_id: string
   start_date: string | null
   end_date: string | null

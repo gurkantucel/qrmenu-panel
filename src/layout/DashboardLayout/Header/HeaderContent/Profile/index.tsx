@@ -29,10 +29,13 @@ import { ThemeMode } from 'config';
 
 // assets
 import { Profile, Logout } from 'iconsax-react';
-import { deleteCookie} from 'cookies-next';
+import { deleteCookie } from 'cookies-next';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import NameAvatar from 'components/NameAvatar';
+import appointmentApi from 'reduxt/features/appointment/appointment-api';
+import personApi from 'reduxt/features/person/person-api';
+import patientApi from 'reduxt/features/patient/patient-api';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -73,11 +76,14 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
+    router.push('/auth/login');
+    dispatch(appointmentApi.util.resetApiState());
+    dispatch(personApi.util.resetApiState());
+    dispatch(patientApi.util.resetApiState());
     deleteCookie("token");
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");
     dispatch(resetMenuItemState());
-    router.push('/auth/login');
   };
 
   const anchorRef = useRef<any>(null);

@@ -108,7 +108,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                     modalType: ModalEnum.newMakeAnOffer
                 }))
             }}>{intl.formatMessage({ id: "new" })}</Button>}
-            <Dialog open={open && modalType == ModalEnum.newMakeAnOffer} onClose={handleClose} fullScreen>
+            <Dialog open={open && modalType == ModalEnum.newMakeAnOffer} onClose={handleClose} fullWidth fullScreen>
                 <Formik
                     initialValues={{
                         quote_id: null,
@@ -296,7 +296,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                 placeholder="Doktor/Çalışan Seçin"
                                                 isClearable={true}
                                                 isLoading={getAcceptingAppointmentListLoading}
-                                                zIndex={9998}
+                                                zIndex={997}
                                                 value={
                                                     values.person_id ? { label: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.label ?? "", value: getAcceptingAppointmentListData?.data?.find((item) => item.value == values.person_id)?.value ?? 0 } : null}
                                                 onChange={(val: any) => {
@@ -315,7 +315,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                             <Typography variant="subtitle1">Teklifler</Typography>
                                         </AuthDivider>
                                     </Grid>
-                                    <Grid container spacing={3} marginTop={1}>
+                                    <Grid container spacing={3} marginTop={1} marginX={0}>
                                         <FieldArray
                                             name="detail"
                                             render={arrayHelpers => (
@@ -370,7 +370,7 @@ const AddMakeAnOfferModal = (props: Props) => {
                                                                         placeholder={intl.formatMessage({ id: "selectAppointmentProcess" })}
                                                                         isClearable={true}
                                                                         isLoading={getAppointmentProcessDropdownLoading}
-                                                                        zIndex={999 - index}
+                                                                        zIndex={997 - index}
                                                                         value={
                                                                             values.detail[index].appointment_process_code ? { label: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.label ?? "", value: getAppointmentProcessDropdownData?.data?.find((item) => item.appointment_process_code == values.detail[index].appointment_process_code)?.value ?? 0 } : null}
                                                                         onChange={(val: any) => {
