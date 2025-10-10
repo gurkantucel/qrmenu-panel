@@ -56,6 +56,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                 appointment_id: getTenantPaymentData.data.appointment_id,
                 patient_id: getTenantPaymentData.data.patient_id,
                 payment_method_id: getTenantPaymentData.data.payment_method_id,
+                payment_status_id: getTenantPaymentData.data.payment_status_id,
                 payment_date: getTenantPaymentData.data.payment_date != null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
                 payment_note: getTenantPaymentData.data.payment_note,
                 detail: getTenantPaymentData.data.detail.map((item) => ({
@@ -99,6 +100,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                         appointment_id: null,
                         patient_id: null,
                         payment_method_id: null,
+                        payment_status_id: null,
                         payment_date: null,
                         payment_note: null,
                         status: true,
@@ -138,7 +140,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                     sx={{ borderBottom: '1px solid {theme.palette.divider}', marginBottom: 4 }}
                                 >
                                     <Grid item>
-                                        <Typography variant="h4">{id != null ? `${data?.patient_full_name} - ${intl.formatMessage({ id: "updatePayment" })}` : intl.formatMessage({ id: "newPayment" })}</Typography>
+                                        <Typography variant="h4">{id != null && data?.patient_full_name}</Typography>
                                     </Grid>
                                     <Grid item sx={{ mr: 1.5 }}>
                                         <IconButton color="secondary" onClick={handleClose}>
@@ -147,19 +149,28 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <CustomFormikSelect
                                             isDisabled
                                             name="patient_id"
                                             value={{ label: getTenantPaymentData?.data.patient_full_name }}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={4}>
                                         <Stack spacing={1}>
                                             <CustomFormikSelect
                                                 isDisabled
                                                 name="payment_method_id"
                                                 value={{ label: getTenantPaymentData?.data.payment_method_name }}
+                                            />
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4}>
+                                        <Stack spacing={1}>
+                                            <CustomFormikSelect
+                                                isDisabled
+                                                name="payment_status_name"
+                                                value={{ label: getTenantPaymentData?.data.payment_status_name }}
                                             />
                                         </Stack>
                                     </Grid>

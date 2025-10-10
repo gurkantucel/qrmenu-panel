@@ -58,6 +58,8 @@ export interface TenantPaymentReadData {
   patient_full_name: string
   payment_method_id: string
   payment_method_name: string
+  payment_status_id: string
+  payment_status_name: string
   payment_date: string
   payment_note: any
   currency_code: string
@@ -103,6 +105,7 @@ export interface TenantPaymentCreateBodyModel {
   appointment_id: string | null
   patient_id: string | null
   payment_method_id: string | null
+  payment_status_id: string | null
   payment_date: string | null
   payment_note: string | null
   detail: TenantPaymentCreateDetail[]
