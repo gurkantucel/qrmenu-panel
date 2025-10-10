@@ -17,7 +17,7 @@ import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateTenantPaymentMutation, useLazyReadTenantPaymentQuery, useUpdateTenantPaymentMutation } from "reduxt/features/patient/tenant-payment-api";
-import { useGetPaymentMethodDropdownQuery } from "reduxt/features/definition/definition-api";
+import { useGetPaymentMethodDropdownQuery, useGetPaymentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 import { newPatientPaymentHistorySchema } from "utils/schemas/patient-validation-schema";
 import { TenantPaymentCreateBodyModel } from "reduxt/features/patient/models/tenant-payment-model";
 import CustomScaleLoader from "components/CustomScaleLoader";
@@ -47,6 +47,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
     const [getAppointmentProcessDropdown, { isLoading: getAppointmentProcessDropdownLoading, data: getAppointmentProcessDropdownData }] = useLazyGetAppointmentProcessDropdownQuery();
 
     const { data: getPaymentMethodListData, isLoading: getPaymentMethodListLoading } = useGetPaymentMethodDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatientPaymentHistory });
+    const { data: getPaymentStatusData, isLoading: getPaymentStatusDropdownLoading, isFetching: getPaymentStatusDropdownFetching } = useGetPaymentStatusDropdownQuery(undefined, { skip: open == false && modalType != ModalEnum.newPatientPaymentHistory })
 
     const [getTenantPayment, {
         data: getTenantPaymentData,
@@ -78,6 +79,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                 appointment_id: getTenantPaymentData.data.appointment_id,
                 patient_id: getTenantPaymentData.data.patient_id,
                 payment_method_id: getTenantPaymentData.data.payment_method_id,
+                payment_status_id: getTenantPaymentData.data.payment_status_id,
                 payment_date: getTenantPaymentData.data.payment_date != null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
                 payment_note: getTenantPaymentData.data.payment_note,
                 detail: getTenantPaymentData.data.detail.map((item) => ({
@@ -169,6 +171,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                         appointment_id: null,
                         patient_id: params.slug,
                         payment_method_id: null,
+                        payment_status_id: null,
                         payment_date: dayjs().format('YYYY-MM-DD'),
                         payment_note: null,
                         status: true,
@@ -253,9 +256,31 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                                             />
                                         </Stack>
                                     </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Stack spacing={1}>
+                                            <CustomFormikSelect
+                                                name='payment_status_id'
+                                                placeholder="Ödeme Durumu Seçin"
+                                                isClearable={true}
+                                                isLoading={getPaymentStatusDropdownLoading || getPaymentStatusDropdownFetching}
+                                                zIndex={994}
+                                                menuPortalTarget={document.body}
+                                                value={
+                                                    values.payment_status_id ? { label: getPaymentStatusData?.data?.find((item) => item.value == values.payment_status_id)?.label ?? "", value: getPaymentStatusData?.data?.find((item) => item.value == values.payment_status_id)?.value ?? 0 } : null}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("payment_status_id", val?.value ?? 0);
+                                                }}
+
+                                                options={getPaymentStatusData?.data?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                            />
+                                        </Stack>
+                                    </Grid>
                                     <Grid item xs={12}>
                                         <AuthDivider>
-                                            <Typography variant="subtitle1">Teklifler</Typography>
+                                            <Typography variant="subtitle1">Ödemeler</Typography>
                                         </AuthDivider>
                                     </Grid>
                                     <Grid container spacing={3} marginTop={1} marginX={0}>

@@ -56,6 +56,7 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                 appointment_id: getTenantPaymentData.data.appointment_id,
                 patient_id: getTenantPaymentData.data.patient_id,
                 payment_method_id: getTenantPaymentData.data.payment_method_id,
+                payment_status_id: getTenantPaymentData.data.payment_status_id,
                 payment_date: getTenantPaymentData.data.payment_date != null ? dayjs(getTenantPaymentData.data.payment_date).format('YYYY-MM-DD') : getTenantPaymentData.data.payment_date,
                 payment_note: getTenantPaymentData.data.payment_note,
                 detail: getTenantPaymentData.data.detail.map((item) => ({
@@ -148,13 +149,6 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                 </Grid>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} sm={6}>
-                                        <CustomFormikSelect
-                                            isDisabled
-                                            name="patient_id"
-                                            value={{ label: getTenantPaymentData?.data.patient_full_name }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
                                         <Stack spacing={1}>
                                             <CustomFormikSelect
                                                 isDisabled
@@ -163,9 +157,18 @@ const ViewPatientPaymentHistoryModal = (props: Props) => {
                                             />
                                         </Stack>
                                     </Grid>
+                                    <Grid item xs={12} sm={4}>
+                                        <Stack spacing={1}>
+                                            <CustomFormikSelect
+                                                isDisabled
+                                                name="payment_status_name"
+                                                value={{ label: getTenantPaymentData?.data.payment_status_name }}
+                                            />
+                                        </Stack>
+                                    </Grid>
                                     <Grid item xs={12}>
                                         <AuthDivider>
-                                            <Typography variant="subtitle1">Teklifler</Typography>
+                                            <Typography variant="subtitle1">Ödemeler</Typography>
                                         </AuthDivider>
                                     </Grid>
                                     <Grid container spacing={3} marginTop={1}>
