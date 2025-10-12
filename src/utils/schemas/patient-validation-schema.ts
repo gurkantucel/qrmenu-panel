@@ -13,6 +13,7 @@ const newPatientValidationSchema = Yup.object({
         .required("Bu alan zorunlu"),
     phone_number: Yup.string().min(10, "Telefon numarası girin.").max(10, "Telefon numarası girin.")
         .matches(/^[0-9]+$/, { message: "Telefon numarası girin." }).required("Bu alan zorunlu"),
+    address: Yup.string().nullable().min(10, "Minimum 10 karakter bir adres girin.").max(500, "Maksimum 500 karakter bir adres girin.")
 })
 
 const newPatientDiseaseHistorySchema = Yup.object({
@@ -125,11 +126,18 @@ const newPatientPaymentHistorySchema = Yup.object({
 
 const newDieticianPatientMeasurementValidationSchema = Yup.object({
     weight: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
-    height: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
-    waist: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
-    hip: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
-    chest: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").required("Bu alan zorunlu"),
+    height: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").nullable(),
+    waist: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").nullable(),
+    hip: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").nullable(),
+    chest: Yup.number().min(0).max(250,"Gerçekçi veriler girin.").nullable(),
     measurement_date: Yup.string().trim().min(1).required("Bu alan zorunlu"),
 })
 
-export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema, newDieticianPatientMeasurementValidationSchema }
+const updatePaymentStatusSchema = Yup.object({
+    payment_method_id: Yup.string().uuid("Bu alan zorunlu").required("Bu alan zorunlu"),
+    payment_status_id: Yup.string().uuid("Bu alan zorunlu").required("Bu alan zorunlu"),
+    payment_date: Yup.string().trim().min(1).required("Bu alan zorunlu"),
+    payment_note: Yup.string().nullable().max(500,"Max 500")
+})
+
+export { newPatientValidationSchema, newPatientDiseaseHistorySchema, newPatientMedicineHistorySchema, newPatientFamilyDiseaseSchema, newPatientSurgeryHistorySchema, newPatientTreatmentHistorySchema, newPatientInjectionHistorySchema, newPatientPaymentHistorySchema, newPatientAllergyHistorySchema, newDieticianPatientMeasurementValidationSchema, updatePaymentStatusSchema }

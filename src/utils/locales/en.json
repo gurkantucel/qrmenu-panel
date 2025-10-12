@@ -256,5 +256,7 @@
   "measurementDate" : "Measurement Date",
   "smsIntegration" : "SMS Integration",
   "smsHeader" : "SMS Title",
-  "smsHeaderText" : "This is the integration page required for sending SMS. Please be careful when making changes as this is a highly technical topic. Enter the information received from NETGSM."
+  "smsHeaderText" : "This is the integration page required for sending SMS. Please be careful when making changes as this is a highly technical topic. Enter the information received from NETGSM.",
+  "paymentStatus" : "Payment Status",
+  "cannotBeDeletedAppointment" : "Payments made on an appointment cannot be deleted."
 }

@@ -26,6 +26,7 @@ export enum ModalEnum {
     newPatientFile,
     deletePatientFile,
     newPatientPaymentHistory,
+    updateStatusPatientPayment,
     deletePatientPaymentHistory,
     viewPatientPaymentHistory,
     newAppointment,
@@ -67,6 +68,8 @@ export enum ModalEnum {
     deleteStock,
     updateStock,
     viewStock,
+    newSendSms,
+    viewSendSms,
 }
 
 type Model = {

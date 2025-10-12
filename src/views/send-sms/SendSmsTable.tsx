@@ -22,26 +22,24 @@ import {
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, Divider, Stack, Tooltip } from '@mui/material';
-import { Edit, Eye, Trash } from 'iconsax-react';
+import { Box, Chip, Divider, Stack, Tooltip } from '@mui/material';
+import { Eye } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import dayjs from 'dayjs';
-import AddPatientPaymentHistoryModal from './AddPatientPaymentHistoryModal';
-import DeletePatientPaymentHistoryModal from './DeletePatientPaymentHistoryModal';
-import { useGetTenantPaymentList2Query } from 'reduxt/features/patient/tenant-payment-api';
-import { TenantPaymentListData } from 'reduxt/features/patient/models/tenant-payment-model';
-import ViewPatientPaymentHistoryModal from './ViewPatientPaymentHistoryModal';
 import { APP_DEFAULT_PATH } from 'config';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import Link from 'next/link';
-import PatientPaymentUpdateStatusModal from './PatientPaymentUpdateStatusModal';
+import { useSendSmsListQuery } from 'reduxt/features/sms-integration/sms-integration-api';
+import { SendSmsListData } from 'reduxt/features/sms-integration/models/sms-integration-model';
+import ViewSendSmsModal from './ViewSendSmsModal';
+import AddSendSmsModal from './AddSendSmsModal';
 
-const columnHelper = createColumnHelper<TenantPaymentListData>()
+const columnHelper = createColumnHelper<SendSmsListData>()
 
-const PaymentTable = () => {
+const SendSmsTable = () => {
 
   const intl = useIntl()
 
@@ -52,7 +50,7 @@ const PaymentTable = () => {
 
   const dispatch = useAppDispatch();
 
-  const columns = useMemo<ColumnDef<TenantPaymentListData, any>[]>(() => [
+  const columns = useMemo<ColumnDef<SendSmsListData, any>[]>(() => [
     columnHelper.accessor('patient_full_name', {
       header: intl.formatMessage({ id: "patientNameSurname" }),
       cell: info => info.renderValue() == null ? "-" : <Link href={`patient/${info.row.original.patient_id}`} className='custom-link'>
@@ -60,40 +58,17 @@ const PaymentTable = () => {
       </Link>,
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('payment_method_name', {
-      header: intl.formatMessage({ id: "paymentMethod" }),
-      cell: info => info.renderValue(),
+    columnHelper.accessor('sms_notification_type_name', {
+      header: intl.formatMessage({ id: "smsTemplate" }),
+      cell: info => info.renderValue() == null ? "-" : info.renderValue(),
       footer: info => info.column.id,
     }),
-    columnHelper.accessor('payment_status_name', {
-      header: intl.formatMessage({ id: "paymentStatus" }),
-      cell: info => info.renderValue(),
+    columnHelper.accessor('result_code', {
+      header: intl.formatMessage({ id: "status" }),
+      cell: (info) => <Chip color={info.renderValue() == "SUCCESS" ? "success" : "error"} label={info.renderValue() == "SUCCESS" ? intl.formatMessage({ id: "successful" }) : intl.formatMessage({ id: "unsuccessful" })} size="small" variant="light" />,
       footer: info => info.column.id,
     }),
-    /*columnHelper.accessor('quantity', {
-      header: intl.formatMessage({ id: "quantity" }),
-      cell: info => info.renderValue(),
-      footer: info => info.column.id,
-    }),*/
-    /*columnHelper.accessor('amount', {
-      header: intl.formatMessage({ id: "amount" }),
-      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.amount))}`,
-      footer: info => info.column.id,
-    }),*/
-    columnHelper.accessor('total', {
-      header: intl.formatMessage({ id: "total" }),
-      cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
-      footer: info => info.column.id,
-    }),
-    columnHelper.accessor('appointment_start', {
-      header: intl.formatMessage({ id: "appointment" }),
-      cell: info => info.renderValue() == null ? "-" : <Link target='_blank' href={`/appointment/${info.row.original.appointment_id}?${info.row.original.patient_id}`} className='custom-link'>{`${dayjs(info.renderValue()).format("DD.MM.YYYY")}`}</Link>,
-      footer: info => info.column.id,
-      meta: {
-        filterVariant: 'date',
-      },
-    }),
-    columnHelper.accessor('payment_date', {
+    columnHelper.accessor('created_at', {
       header: intl.formatMessage({ id: "date" }),
       cell: info => info.renderValue() == null ? "-" : dayjs(info.renderValue()).format("DD.MM.YYYY"),
       footer: info => info.column.id,
@@ -106,7 +81,7 @@ const PaymentTable = () => {
       size: 10,
       enableColumnFilter: false,
       cell: (info) => {
-        return <Stack direction="row" alignItems="center" justifyContent="center" spacing={0}>
+        return <Stack direction="row" alignItems="start" justifyContent="start" spacing={0}>
           <Tooltip title={intl.formatMessage({ id: "view" })}>
             <IconButton
               color="secondary"
@@ -114,56 +89,14 @@ const PaymentTable = () => {
                 e.stopPropagation();
                 dispatch(setModal({
                   open: true,
-                  modalType: ModalEnum.viewPatientPaymentHistory,
-                  id: info.row.original.payment_id,
-                  title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`,
+                  modalType: ModalEnum.viewSendSms,
+                  id: info.row.original.sms_id,
+                  title: `${info.row.original.patient_full_name}`,
                   data: info.row.original
                 }))
               }}
             >
               <Eye />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "edit" })}>
-            <IconButton
-              color="primary"
-              onClick={(e: any) => {
-                e.stopPropagation();
-                if (info.row.original.appointment_id) {
-                  dispatch(setModal({
-                    open: true, modalType: ModalEnum.updateStatusPatientPayment,
-                    id: info.row.original.payment_id,
-                    data: info.row.original,
-                    title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
-                  }))
-                } else {
-                  dispatch(setModal({
-                    open: true, modalType: ModalEnum.newPatientPaymentHistory,
-                    id: info.row.original.payment_id,
-                    data: info.row.original,
-                    title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
-                  }))
-                }
-              }}
-            >
-              <Edit />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={intl.formatMessage({ id: "delete" })}>
-            <IconButton
-              color="error"
-              disabled={info.row.original.appointment_id}
-              onClick={(e: any) => {
-                e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.deletePatientPaymentHistory,
-                  id: info.row.original.patient_id,
-                  title: `${info.row.original.patient_full_name} - ${info.row.original.payment_method_name} - ${info.row.original.amount} ${info.row.original.currency_name}`,
-                  data: info.row.original
-                }))
-              }}
-            >
-              <Trash />
             </IconButton>
           </Tooltip>
         </Stack>
@@ -183,17 +116,17 @@ const PaymentTable = () => {
   })
 
   const {
-    data: getPatientPaymentHistoryListData,
+    data: getSendSmsListData,
     isFetching: isPatientPaymentHistoryFetching,
     isLoading: isPatientPaymentHistoryLoading
-  } = useGetTenantPaymentList2Query({
+  } = useSendSmsListQuery({
     page: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
     //filterSearch: columnFilters?.map((item) => `${item.id}=${item.value}`).join('&')
     filterSearch: columnFilters?.filter((item) => item.value != "-").map((item) => `${item.id}=${item.value}`).join('&')
   });
 
-  const tableData = useMemo(() => getPatientPaymentHistoryListData?.data ?? [], [getPatientPaymentHistoryListData?.data]);
+  const tableData = useMemo(() => getSendSmsListData?.data ?? [], [getSendSmsListData?.data]);
 
 
   const table = useReactTable({
@@ -201,7 +134,7 @@ const PaymentTable = () => {
     columns,
     onPaginationChange: setPagination,
     state: { columnFilters, pagination },
-    rowCount: getPatientPaymentHistoryListData?.totalCount,
+    rowCount: getSendSmsListData?.totalCount,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     manualFiltering: false,
@@ -210,13 +143,15 @@ const PaymentTable = () => {
 
   return (
     <>
-      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "payments" })}`} links={breadcrumbLinks} />
+      <Breadcrumbs custom heading={`${intl.formatMessage({ id: "sendSMS" })}`} links={breadcrumbLinks} />
       <MainCard content={false} >
         <Stack direction="row" spacing={2} alignItems="center" justifyContent="end" sx={{ padding: 2 }}>
-          <AddPatientPaymentHistoryModal />
+          {/*<AddPatientPaymentHistoryModal />
           <DeletePatientPaymentHistoryModal />
           <ViewPatientPaymentHistoryModal />
-          <PatientPaymentUpdateStatusModal />
+          <PatientPaymentUpdateStatusModal />*/}
+          <AddSendSmsModal />
+          <ViewSendSmsModal />
         </Stack>
         <ScrollX>
           <TableContainer component={Paper}>
@@ -289,4 +224,4 @@ const PaymentTable = () => {
   )
 }
 
-export default PaymentTable
+export default SendSmsTable

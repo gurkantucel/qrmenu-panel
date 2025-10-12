@@ -12,7 +12,6 @@ import Box from '@mui/material/Box';
 // project-imports
 import Search from './Search';
 import Profile from './Profile';
-import Localization from './Localization';
 import IconButton from 'components/@extended/IconButton';
 import Transitions from 'components/@extended/Transitions';
 import { ThemeMode } from 'config';
@@ -95,7 +94,7 @@ export default function MobileSection() {
                 <AppBar color="inherit">
                   <Toolbar>
                     <Search />
-                    <Localization />
+                    {/*<Localization />*/}
                     <Profile />
                   </Toolbar>
                 </AppBar>

@@ -188,7 +188,7 @@ const AddPatientPaymentHistoryModal = (props: Props) => {
                         patient_id: null,
                         payment_method_id: null,
                         payment_status_id: null,
-                        payment_date: null,
+                        payment_date: dayjs().format('YYYY-MM-DD'),
                         payment_note: null,
                         status: true,
                         detail: [{

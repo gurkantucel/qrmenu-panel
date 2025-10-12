@@ -71,7 +71,7 @@ const permissionControlMenu = () => {
                 icon: ""
             },
             {
-                id: 'payment',
+                id: 'payments',
                 code: "00046",
                 title: "Ödemeler",
                 type: 'item',
@@ -86,14 +86,14 @@ const permissionControlMenu = () => {
                 url: '/stock',
                 icon: ""
             },
-            /*{
+            {
                 id: 'sms-transactions',
                 code: "00042",
-                title: "SMS İşlemleri",
+                title: "SMS Gönder",
                 type: 'item',
-                url: '/app/sms-transactions',
+                url: '/send-sms',
                 icon: ""
-            },*/
+            },
             {
                 id: 'statistics',
                 code: "00049",

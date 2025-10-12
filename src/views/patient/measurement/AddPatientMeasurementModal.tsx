@@ -118,13 +118,13 @@ const AddPatientMeasurementModal = () => {
                         appointment_id: null,
                         person_id: user ? user?.id : null,
                         patient_id: params.slug,
-                        weight: 0,
-                        height: 0,
+                        weight: "0",
+                        height: null,
                         bmi: 0,
-                        waist: 0,
-                        hip: 0,
-                        chest: 0,
-                        whr: 0,
+                        waist: null,
+                        hip: null,
+                        chest: null,
+                        whr: null,
                         measurement_date: dayjs().format("YYYY-MM-DD"),
                         status: true
                     }}
@@ -133,11 +133,14 @@ const AddPatientMeasurementModal = () => {
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                         const model: CreateDieticianPatientMeasurementBodyModel = {
                             ...values,
-                            weight: values.weight && typeof values.weight == "number" ? values.weight.toFixed(2) : values.weight.toString(),
-                            height: values.height && typeof values.height == "number" ? values.height.toFixed(2) : values.height.toString(),
-                            waist: values.waist && typeof values.waist == "number" ? values.waist.toFixed(2) : values.waist.toString(),
-                            hip: values.hip && typeof values.hip == "number" ? values.hip.toFixed(2) : values.hip.toString(),
-                            chest: values.chest && typeof values.chest == "number" ? values.chest.toFixed(2) : values.chest.toString(),
+                            weight: values.weight != null ? values.weight.toString() : null,
+                            height: values.height != null ? values.height.toString() : null,
+                            //waist: values.waist && typeof values.waist == "number" ? values.waist.toFixed(2) : values.waist.toString(),
+                            waist: values.waist != null ? values.waist.toString() : null,
+                            //hip: values.hip && typeof values.hip == "number" ? values.hip.toFixed(2) : values.hip.toString(),
+                            hip: values.hip != null ? values.hip.toString() : null,
+                            //chest: values.chest && typeof values.chest == "number" ? values.chest.toFixed(2) : values.chest.toString(),
+                            chest: values.chest != null ? values.chest.toString() : null,
                             whr: "0",
                             bmi: "0",
                         }
@@ -272,7 +275,7 @@ const AddPatientMeasurementModal = () => {
                                                 placeholder={intl.formatMessage({ id: "chest" })}
                                                 fullWidth
                                                 error={Boolean(touched.chest && errors.chest)}
-                                                inputProps={{ min: 0}}
+                                                inputProps={{ min: 0 }}
                                             />
                                         </Stack>
                                         {touched.chest && errors.chest && (

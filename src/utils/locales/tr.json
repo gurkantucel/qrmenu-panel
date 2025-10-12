@@ -176,6 +176,7 @@
     "acceptAppointments": "Randevu Kabul",
     "appointmentDetail": "Randevu Detay",
     "smsTemplates": "SMS Şablonları",
+    "smsTemplate": "SMS Şablonu",
     "persons": "Çalışanlar",
     "statistics": "İstatistikler",
     "pageNotFound": "Sayfa Bulunamadı",
@@ -270,5 +271,13 @@
     "criticalStock": "Kritik Stok Seviyesi",
     "increase": "Artış",
     "decrease": "Azalış",
-    "stockDetail" : "Stok Detay"
+    "stockDetail" : "Stok Detay",
+    "paymentStatus" : "Ödeme Durumu",
+    "cannotBeDeletedAppointment" : "Randevu üzerindeki ödemeler silinemez.",
+    "successful" : "Başarılı",
+    "unsuccessful" : "Başarısız",
+    "sendSMS" : "SMS Gönder",
+    "message" : "Mesaj",
+    "detail" : "Detay",
+    "sendAllPatient" : "Tüm Danışanlara Gönder"
 }

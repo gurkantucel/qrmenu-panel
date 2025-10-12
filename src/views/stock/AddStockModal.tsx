@@ -17,7 +17,7 @@ import { newStockValidationSchema } from "utils/schemas/stock-validation-schema"
 import { enqueueSnackbar } from "notistack";
 import { StockCreateBodyModel } from "reduxt/features/stock/models/stock-list-model";
 import dayjs from "dayjs";
-import { useGetAppointmentProcessDropdownQuery } from "reduxt/features/settings/appointment-process-api";
+import appointmentProcessApi, { useGetAppointmentProcessDropdownQuery } from "reduxt/features/settings/appointment-process-api";
 
 const AddStockModal = () => {
 
@@ -64,6 +64,7 @@ const AddStockModal = () => {
             },)
             if (createStockResponse?.status == true) {
                 handleClose();
+                dispatch(appointmentProcessApi.util.resetApiState());
                 //getStockList({});
             }
         }

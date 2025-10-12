@@ -35,6 +35,8 @@ import { useGetTenantPaymentListQuery } from 'reduxt/features/patient/tenant-pay
 import { TenantPaymentListData } from 'reduxt/features/patient/models/tenant-payment-model';
 import ViewPatientPaymentHistoryModal from './ViewPatientPaymentHistoryModal';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import PatientPaymentUpdateStatusModal from 'views/payment/PatientPaymentUpdateStatusModal';
 
 const columnHelper = createColumnHelper<TenantPaymentListData>()
 
@@ -52,6 +54,11 @@ const PatientPaymentHistoryTable = () => {
       cell: info => info.renderValue(),
       footer: info => info.column.id,
     }),
+    columnHelper.accessor('payment_status_name', {
+      header: intl.formatMessage({ id: "paymentStatus" }),
+      cell: info => info.renderValue(),
+      footer: info => info.column.id,
+    }),
     /*columnHelper.accessor('quantity', {
       header: intl.formatMessage({ id: "quantity" }),
       cell: info => info.renderValue(),
@@ -66,6 +73,14 @@ const PatientPaymentHistoryTable = () => {
       header: intl.formatMessage({ id: "amountToBePaid" }),
       cell: info => info.renderValue() == null ? "-" : `${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: info.row.original.currency_code ?? 'TRY' }).format(Number(info.row.original.total))}`,
       footer: info => info.column.id,
+    }),
+    columnHelper.accessor('appointment_start', {
+      header: intl.formatMessage({ id: "appointment" }),
+      cell: info => info.renderValue() == null ? "-" : <Link target='_blank' href={`/appointment/${info.row.original.appointment_id}?${info.row.original.patient_id}`} className='custom-link'>{`${dayjs(info.renderValue()).format("DD.MM.YYYY")}`}</Link>,
+      footer: info => info.column.id,
+      meta: {
+        filterVariant: 'date',
+      },
     }),
     columnHelper.accessor('payment_date', {
       header: intl.formatMessage({ id: "date" }),
@@ -103,12 +118,21 @@ const PatientPaymentHistoryTable = () => {
               color="primary"
               onClick={(e: any) => {
                 e.stopPropagation();
-                dispatch(setModal({
-                  open: true, modalType: ModalEnum.newPatientPaymentHistory,
-                  id: info.row.original.payment_id,
-                  data: info.row.original,
-                  title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
-                }))
+                if (info.row.original.appointment_id) {
+                  dispatch(setModal({
+                    open: true, modalType: ModalEnum.updateStatusPatientPayment,
+                    id: info.row.original.payment_id,
+                    data: info.row.original,
+                    title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
+                  }))
+                } else {
+                  dispatch(setModal({
+                    open: true, modalType: ModalEnum.newPatientPaymentHistory,
+                    id: info.row.original.payment_id,
+                    data: info.row.original,
+                    title: `${info.row.original.payment_method_name} ${info.row.original.amount} ${info.row.original.currency_name}`
+                  }))
+                }
               }}
             >
               <Edit />
@@ -117,6 +141,7 @@ const PatientPaymentHistoryTable = () => {
           <Tooltip title={intl.formatMessage({ id: "delete" })}>
             <IconButton
               color="error"
+              disabled={info.row.original.appointment_id}
               onClick={(e: any) => {
                 e.stopPropagation();
                 dispatch(setModal({
@@ -186,13 +211,14 @@ const PatientPaymentHistoryTable = () => {
       }
       contentSX={{
         padding: 0, '&:last-child': {
-            paddingBottom: 0
+          paddingBottom: 0
         }
-    }}
+      }}
     >
       <AddPatientPaymentHistoryModal />
       <DeletePatientPaymentHistoryModal />
       <ViewPatientPaymentHistoryModal />
+      <PatientPaymentUpdateStatusModal />
       <ScrollX>
         <TableContainer component={Paper}>
           <Table size='small'>

@@ -13,8 +13,12 @@ import { useLazyPrintAppointmentQuery } from "reduxt/features/appointment/appoin
 import { AppointmentReadResultModel } from "reduxt/features/appointment/models/appointment-list-model";
 import { useGetAppointmentStatusDropdownQuery, useGetPaymentMethodDropdownQuery, useGetPaymentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
+import tenantPaymentApi from "reduxt/features/patient/tenant-payment-api";
+import appointmentProcessApi from "reduxt/features/settings/appointment-process-api";
+import stockApi from "reduxt/features/stock/stock-api";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
+import { updateAppointmentStatusSchema } from "utils/schemas/appointment-validation-schema";
 
 const AppointmentUpdateStatus = () => {
     const dispatch = useAppDispatch();
@@ -57,7 +61,10 @@ const AppointmentUpdateStatus = () => {
             },)
             if (updateAppointmentStatusResponse?.status == true) {
                 handleClose();
-                router.push("/app/appointment")
+                dispatch(stockApi.util.resetApiState());
+                dispatch(tenantPaymentApi.util.resetApiState());
+                dispatch(appointmentProcessApi.util.resetApiState());
+                router.push("/appointment")
             }
         }
         if (updateAppointmentStatusError) {
@@ -109,22 +116,18 @@ const AppointmentUpdateStatus = () => {
                     </Grid>
                     <Formik
                         initialValues={{
-                            appointment_id: null,
-                            patient_id: null,
+                            appointment_id: params.slug,
+                            patient_id: patientId,
                             appointment_status_id: getAppointmentStatusData?.data?.find((item) => item.field == "00002")?.value ?? null,
-                            payment_method_id: null,
-                            payment_status_id: null,
+                            payment_method_id: getPaymentMethodListData?.data?.find((item) => item.field == "00001")?.value ?? null,
+                            payment_status_id: getPaymentStatusData?.data?.find((item) => item.field == "00003")?.value ?? null,
                             payment_note: null,
                             status: true
                         }}
                         enableReinitialize
-                        //validationSchema={newAppointmentSchema}
+                        validationSchema={updateAppointmentStatusSchema}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                            if (values.appointment_id != null) {
-                                //updateAppointment(values);
-                            } else {
-                                updateAppointmentStatus(values);
-                            }
+                            updateAppointmentStatus(values);
                         }}
                     >
                         {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (

@@ -20,6 +20,9 @@ export interface TenantPaymentListData {
   patient_full_name: string
   payment_method_id: string
   payment_method_name: string
+  payment_status_id: string
+  payment_status_code: string
+  payment_status_name: string
   payment_date: string
   payment_note: any
   currency_code: string
@@ -129,5 +132,15 @@ export interface TenantPaymentCreateDetail {
   vat_included: boolean
   vat_amount: any
   total: any
+  status: boolean
+}
+
+export interface TenantPaymentUpdateStatusBodyModel {
+  payment_id: string | null
+  patient_id: string | null
+  payment_method_id: string | null
+  payment_status_id: string | null
+  payment_date: string | null
+  payment_note: string | null
   status: boolean
 }

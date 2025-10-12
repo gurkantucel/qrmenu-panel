@@ -1,4 +1,4 @@
-import { Book1, Building, CalendarTick, DocumentDownload, HomeHashtag, Information, Layer, MoneySend, PresentionChart, Setting2, ShoppingBag, SmsTracking, UserTag } from 'iconsax-react';
+import { Book1, Building, CalendarTick, DocumentDownload, HomeHashtag, Information, Layer, Moneys, MoneySend, PresentionChart, Setting2, SmsTracking, UserTag } from 'iconsax-react';
 
 export const selectIcon = (id: string) => {
   switch (id) {
@@ -15,7 +15,7 @@ export const selectIcon = (id: string) => {
     case "files":
       return DocumentDownload;
     case "payments":
-      return ShoppingBag;
+      return Moneys;
     case "make-an-offer":
       return MoneySend;
     case "sms-transactions":

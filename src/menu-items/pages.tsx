@@ -2,7 +2,7 @@
 import { FormattedMessage } from 'react-intl';
 
 // assets
-import { Book1, Building, CalendarTick, DocumentCode2, DocumentDownload, HomeHashtag, I24Support, Information, MessageProgramming, Setting2, ShoppingBag, SmsTracking, UserTag } from 'iconsax-react';
+import { Book1, Building, CalendarTick, DocumentCode2, DocumentDownload, HomeHashtag, I24Support, Information, MessageProgramming, Moneys, Setting2, SmsTracking, UserTag } from 'iconsax-react';
 
 // types
 import { NavItemType } from 'types/menu';
@@ -18,7 +18,7 @@ const icons = {
   person: Building,
   appointment: CalendarTick,
   file: DocumentDownload,
-  payment: ShoppingBag,
+  payment: Moneys,
   sms: SmsTracking,
   setting: Setting2,
   faq: Information

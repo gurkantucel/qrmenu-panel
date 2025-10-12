@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
-import { TenantPaymentCreateBodyModel, TenantPaymentListResultModel, TenantPaymentReadResultModel } from './models/tenant-payment-model';
+import { TenantPaymentCreateBodyModel, TenantPaymentListResultModel, TenantPaymentReadResultModel, TenantPaymentUpdateStatusBodyModel } from './models/tenant-payment-model';
 import stockApi from '../stock/stock-api';
 import { withInvalidateTags } from 'reduxt/invalida-tags';
 import statisticApi from '../statistic/statistic-api';
@@ -55,6 +55,20 @@ const tenantPaymentApi = createApi({
                 { api: statisticApi, tags: ["statistic"] },
             ]),
         }),
+        updateTenantPaymentStatus: builder.mutation<CreateResultModel, TenantPaymentUpdateStatusBodyModel>({
+            query: (body) => {
+                return {
+                    url: `app/tenant-payment/updateStatus`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+            invalidatesTags: (result) => result?.status ? ["tenant-payment"] : [],
+            onQueryStarted: withInvalidateTags([
+                { api: stockApi, tags: ["stock"] },
+                { api: statisticApi, tags: ["statistic"] },
+            ]),
+        }),
         deleteTenantPayment: builder.mutation<CreateResultModel, { payment_id: number | string, patient_id: number | string }>({
             query: (args) => {
                 return {
@@ -87,6 +101,7 @@ export const {
     useGetTenantPaymentList2Query,
     useCreateTenantPaymentMutation,
     useUpdateTenantPaymentMutation,
+    useUpdateTenantPaymentStatusMutation,
     useDeleteTenantPaymentMutation,
     useLazyReadTenantPaymentQuery,
 } = tenantPaymentApi

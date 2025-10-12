@@ -3,13 +3,13 @@ export interface CreateDieticianPatientMeasurementBodyModel {
   appointment_id: string | null
   person_id: any
   patient_id: string
-  weight: string
-  height: string
+  weight: string | null
+  height: string | null
   bmi: string | null
-  waist: string
-  hip: string
+  waist: string | null
+  hip: string | null
   whr: string | null
-  chest: string
+  chest: string | null
   measurement_date: string
   status: boolean
 }
