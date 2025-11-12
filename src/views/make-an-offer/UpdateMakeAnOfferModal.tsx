@@ -15,7 +15,7 @@ import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyAcceptingAppointmentDropDownQuery } from "reduxt/features/person/person-api";
-import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
+import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/branch/appointment-process-type-api";
 import { MakeAnOfferCreateBodyModel, MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useLazyReadMakeAnOfferQuery, useUpdateMakeAnOfferMutation } from "reduxt/features/make-an-offer/make-an-offer-api";
 import { newMakeAnOfferSchema } from "utils/schemas/make-an-offer-validation-schema";

@@ -3,7 +3,7 @@ import { useSearchParams, useParams, useRouter } from 'next/navigation'
 import { Grid, List, Link, ListItem, Stack, Typography } from '@mui/material'
 import MainCard from 'components/MainCard'
 import { useEffect } from 'react'
-import { useLazyReadAppointmentQuery } from 'reduxt/features/appointment/appointment-api';
+import { useLazyReadAppointmentQuery } from 'reduxt/features/branch/appointment-api';
 import CustomScaleLoader from 'components/CustomScaleLoader'
 import dayjs from 'dayjs'
 import { useLazyGetPatientHealthInformationQuery } from 'reduxt/features/patient/health-information-api'

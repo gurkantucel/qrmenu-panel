@@ -14,7 +14,7 @@ import CustomFormikSelect from "components/third-party/formik/custom-formik-sele
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import AuthDivider from "sections/auth/AuthDivider";
-import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
+import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/branch/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateTenantPaymentMutation, useLazyReadTenantPaymentQuery, useUpdateTenantPaymentMutation } from "reduxt/features/patient/tenant-payment-api";
 import { useGetPaymentMethodDropdownQuery, useGetPaymentStatusDropdownQuery } from "reduxt/features/definition/definition-api";

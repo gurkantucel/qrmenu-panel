@@ -53,6 +53,7 @@
   "additionalNearbyContactInformation": "Close Additional Contact Information",
   "birthdate": "Date of birth",
   "add": "Add",
+  "create" : "Create",
   "diseaseHistory": "Disease History",
   "addDiseaseHistory": "Add Disease History",
   "updateDiseaseHistory": "Edit Disease History",

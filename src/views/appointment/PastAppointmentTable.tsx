@@ -27,8 +27,8 @@ import { Box, Chip, Divider, Grid, Skeleton} from '@mui/material';
 import { ArrowDown2, ArrowRight2, MinusCirlce, } from 'iconsax-react';
 import IconButton from 'components/@extended/IconButton';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useListAppointmentHistoryQuery } from 'reduxt/features/appointment/appointment-api';
-import { AppointmentHistoryData, AppointmentProcess } from 'reduxt/features/appointment/models/appointment-list-model';
+import { useListAppointmentHistoryQuery } from 'reduxt/features/branch/appointment-api';
+import { AppointmentHistoryData, AppointmentProcess } from 'reduxt/features/branch/models/branch-model';
 import dayjs from 'dayjs';
 import ViewAppointmentModal from './ViewAppointmentModal';
 

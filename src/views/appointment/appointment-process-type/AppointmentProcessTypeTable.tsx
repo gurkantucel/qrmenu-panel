@@ -26,8 +26,8 @@ import {
 } from '@tanstack/react-table'
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { EmptyTable, Filter } from 'components/third-party/react-table';
-import { useLazyGetAppointmentProcessTypeListQuery } from 'reduxt/features/appointment/appointment-process-type-api';
-import { AppointmentProcessTypeData, SubAppointmentProcess } from 'reduxt/features/appointment/models/appointment-process-type-model';
+import { useLazyGetAppointmentProcessTypeListQuery } from 'reduxt/features/branch/appointment-process-type-api';
+import { AppointmentProcessTypeData, SubAppointmentProcess } from 'reduxt/features/branch/models/appointment-process-type-model';
 import AddAppointmentProcessTypeModal from './AddAppointmentProcessTypeModal';
 import UpdateAppointmentProcessTypeModal from './UpdateAppointmentProcessTypeModal';
 import DeleteAppointmentProcessTypeModal from './DeleteAppointmentProcessTypeModal';

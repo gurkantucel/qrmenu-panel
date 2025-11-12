@@ -3,7 +3,7 @@ import CustomLoadingButton from "components/CustomLoadingButton";
 import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useDeleteAppointmentProcessTypeMutation } from "reduxt/features/appointment/appointment-process-type-api";
+import { useDeleteAppointmentProcessTypeMutation } from "reduxt/features/branch/appointment-process-type-api";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";

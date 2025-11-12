@@ -39,7 +39,7 @@ const registerValidationSchema = Yup.object({
 })
 
 const loginValidationSchema = Yup.object({
-    username: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
+    email: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
     password: Yup.string()
         .matches(/^\S+(?: \S+)*$/, { message: "Boşluklar içermemelidir." })
         .min(5, "Çok Kısa")

@@ -15,10 +15,9 @@ import injectionHistoryApi from './features/patient/injection-history-api'
 import healthInformationApi from './features/patient/health-information-api'
 import patientFileApi from './features/patient/patient-file-api'
 import tenantPaymentApi from './features/patient/tenant-payment-api'
-import appointmentCalendarModalSlice from './features/appointment/appointmentCalendarModalSlice'
-import appointmentCalendarApi from './features/appointment/appointment-calendar-api'
-import appointmentApi from './features/appointment/appointment-api'
-import appointmentProcessTypeApi from './features/appointment/appointment-process-type-api'
+import appointmentCalendarModalSlice from './features/branch/appointmentCalendarModalSlice'
+import appointmentCalendarApi from './features/branch/appointment-calendar-api'
+import appointmentProcessTypeApi from './features/branch/appointment-process-type-api'
 import appointmentProcessApi from './features/settings/appointment-process-api'
 import smsTemplateApi from './features/sms-template/sms-template-api'
 import personTypeApi from './features/settings/person-type-api'
@@ -34,6 +33,13 @@ import patientMeasurementApi from './features/patient/patient-measurement-api'
 import smsIntegrationApi from './features/sms-integration/sms-integration-api'
 import dieticianPatientDietTemplateApi from './features/patient/dietician-patient-diet-template-api'
 import stockApi from './features/stock/stock-api'
+import branchApi from './features/branch/branch-api'
+import categoryApi from './features/category/category-api'
+import menuApi from './features/menu/menu-api'
+import commonApi from './features/common/common-api'
+import imageGalleryApi from './features/image-gallery/image-gallery-api'
+import selectedFoodApi from './features/selected-food/selected-food-api'
+import qrCodeApi from './features/qr-code/qr-code-api'
 
 export const store = configureStore({
   reducer: {
@@ -41,6 +47,14 @@ export const store = configureStore({
     patientTab: patientTabSlice,
     appointmentCalendarModal: appointmentCalendarModalSlice,
     menuItem: menuItemSlice,
+    [branchApi.reducerPath]: branchApi.reducer,
+    [categoryApi.reducerPath]: categoryApi.reducer,
+    [menuApi.reducerPath]: menuApi.reducer,
+    [commonApi.reducerPath]: commonApi.reducer,
+    [imageGalleryApi.reducerPath]: imageGalleryApi.reducer,
+    [selectedFoodApi.reducerPath]: selectedFoodApi.reducer,
+    [qrCodeApi.reducerPath]: qrCodeApi.reducer,
+    //
     [definitionApi.reducerPath]: definitionApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [personApi.reducerPath]: personApi.reducer,
@@ -55,7 +69,6 @@ export const store = configureStore({
     [healthInformationApi.reducerPath]: healthInformationApi.reducer,
     [patientFileApi.reducerPath]: patientFileApi.reducer,
     [tenantPaymentApi.reducerPath]: tenantPaymentApi.reducer,
-    [appointmentApi.reducerPath]: appointmentApi.reducer,
     [appointmentCalendarApi.reducerPath]: appointmentCalendarApi.reducer,
     [appointmentProcessTypeApi.reducerPath]: appointmentProcessTypeApi.reducer,
     [appointmentProcessApi.reducerPath]: appointmentProcessApi.reducer,
@@ -74,6 +87,14 @@ export const store = configureStore({
     [stockApi.reducerPath]: stockApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
+    branchApi.middleware,
+    categoryApi.middleware,
+    menuApi.middleware,
+    commonApi.middleware,
+    imageGalleryApi.middleware,
+    selectedFoodApi.middleware,
+    qrCodeApi.middleware,
+    //
     definitionApi.middleware,
     authApi.middleware,
     personApi.middleware,
@@ -88,7 +109,6 @@ export const store = configureStore({
     healthInformationApi.middleware,
     patientFileApi.middleware,
     tenantPaymentApi.middleware,
-    appointmentApi.middleware,
     appointmentCalendarApi.middleware,
     appointmentProcessTypeApi.middleware,
     appointmentProcessApi.middleware,

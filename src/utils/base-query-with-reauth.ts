@@ -14,7 +14,7 @@ import Constants from './Constants';
 const mutex = new Mutex()
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: `${Constants.APIURL()}/api`,
+    baseUrl: `${Constants.APIURL}`,
     prepareHeaders(headers) {
         const token = getCookie("token");
         if (token) {
@@ -47,8 +47,8 @@ export const baseQueryWithReauth: BaseQueryFn<
             try {
                 var refreshToken = getCookie("refreshToken");
                 const refreshResult = await baseQuery({
-                    url: 'token/refresh',
-                    body: JSON.stringify({ "refresh_token": refreshToken }),
+                    url: 'auth/refreshToken',
+                    body: JSON.stringify({ "refreshToken": refreshToken }),
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json"
@@ -58,11 +58,10 @@ export const baseQueryWithReauth: BaseQueryFn<
                     extraOptions
                 )
                 if (refreshResult.data) {
-                    console.log(refreshResult.data);
                     var refreshModel = refreshResult.data as RefreshTokenResultModel;
-                    setCookie("token", refreshModel.token)
-                    setCookie("refreshToken", refreshModel.refresh_token)
-                    api.dispatch(setToken({ token: refreshModel.token }))
+                    setCookie("token", refreshModel.data.token)
+                    setCookie("refreshToken", refreshModel.data.refresh_token)
+                    api.dispatch(setToken({ token: refreshModel.data.token }))
                     // retry the initial query
                     result = await baseQuery(args, api, extraOptions)
                 } else {

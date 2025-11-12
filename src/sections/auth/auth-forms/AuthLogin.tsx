@@ -27,7 +27,6 @@ import { loginValidationSchema } from 'utils/schemas/auth-validation-schema';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch } from 'reduxt/hooks';
-import { setMenuItem } from 'reduxt/features/auth/menuItemSlice';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 // ============================|| JWT - LOGIN ||============================ //
@@ -52,7 +51,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
   };
 
   const submitLogin = useCallback(async (values: {
-    username: string;
+    email: string;
     password: string;
   }) => {
     if (!executeRecaptcha) {
@@ -71,21 +70,14 @@ export default function AuthLogin({ providers, csrfToken }: any) {
   useEffect(() => {
     if (loginResponse) {
       enqueueSnackbar(loginResponse.message, {
-        variant: loginResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        variant: loginResponse?.success == true ? 'success' : 'error', anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'right'
         }
       },)
-      if (loginResponse?.status == true) {
-        setCookie("token", loginResponse.data.token)
-        setCookie("refreshToken", loginResponse.data.refresh_token)
-        setCookie("person", loginResponse.data.person)
-        setCookie("personAuthorizations", loginResponse.data.personAuthorizations);
-        setCookie("membership", {
-          membership_package_name: loginResponse.data.currentAccount.membership_package_name,
-          membership_end_date: loginResponse.data.currentAccount.membership_end_date,
-        });
-        dispatch(setMenuItem());
+      if (loginResponse?.success == true) {
+        setCookie("token", loginResponse.data.idToken)
+        setCookie("refreshToken", loginResponse.data.refreshToken)
         setTimeout(() => {
           router.push("/home")
         }, 200)
@@ -93,7 +85,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
     }
     if (loginError) {
       var error = loginError as any;
-      if (error.data?.messageCode == "LOGIN_REQUIRED_PAYMENT") {
+      if (error.data?.message == "LOGIN_REQUIRED_PAYMENT") {
         enqueueSnackbar(error?.data?.message ?? "Hata", {
           variant: 'error', anchorOrigin: {
             vertical: 'bottom',
@@ -120,7 +112,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
     <>
       <Formik
         initialValues={{
-          username: '',
+          email: '',
           password: '',
         }}
         validationSchema={loginValidationSchema}
@@ -138,18 +130,18 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                   <OutlinedInput
                     id="email-login"
                     type="email"
-                    value={values.username}
-                    name="username"
+                    value={values.email}
+                    name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     placeholder="E-Posta"
                     fullWidth
-                    error={Boolean(touched.username && errors.username)}
+                    error={Boolean(touched.email && errors.email)}
                   />
                 </Stack>
-                {touched.username && errors.username && (
+                {touched.email && errors.email && (
                   <FormHelperText error id="standard-weight-helper-text-email-login">
-                    {errors.username}
+                    {errors.email}
                   </FormHelperText>
                 )}
               </Grid>

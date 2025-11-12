@@ -1,5 +1,10 @@
 export interface RefreshTokenResultModel {
-    token: string
-    refresh_token: string
-  }
-  
+  data: RefreshTokenData
+  message: string
+  success: boolean
+}
+
+export interface RefreshTokenData {
+  refresh_token: string
+  token: string
+}

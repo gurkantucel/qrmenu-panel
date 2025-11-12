@@ -14,7 +14,7 @@ import CustomFormikSelect from "components/third-party/formik/custom-formik-sele
 import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import { updateAppointmentProcessTypeSchema } from "utils/schemas/appointment-validation-schema";
-import { useUpdateAppointmentProcessTypeMutation } from "reduxt/features/appointment/appointment-process-type-api";
+import { useUpdateAppointmentProcessTypeMutation } from "reduxt/features/branch/appointment-process-type-api";
 import CurrencyInput from "react-currency-input-field";
 
 const UpdateAppointmentProcessTypeModal = () => {

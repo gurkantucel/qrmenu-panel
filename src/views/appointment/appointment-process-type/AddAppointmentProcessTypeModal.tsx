@@ -15,7 +15,7 @@ import IconButton from "components/@extended/IconButton";
 import { enqueueSnackbar } from "notistack";
 import CustomScaleLoader from "components/CustomScaleLoader";
 import { newAppointmentProcessTypeSchema } from "utils/schemas/appointment-validation-schema";
-import { useCreateAppointmentProcessTypeMutation, useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
+import { useCreateAppointmentProcessTypeMutation, useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/branch/appointment-process-type-api";
 import CurrencyInput from "react-currency-input-field";
 
 type ProcessType = {

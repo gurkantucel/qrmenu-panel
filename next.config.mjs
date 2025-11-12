@@ -4,18 +4,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.klinikease.com.tr',
-      },
-      {
-        protocol: 'https',
-        hostname: 'klinikease.com.tr',
-      },
-      {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com',
-        port: '',
-        pathname: '/klinik_ease/**',
-      },
+        hostname: '**.r2.dev',
+      }
     ],
   }
 };

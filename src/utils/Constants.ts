@@ -6,14 +6,8 @@ const URL = (): string | undefined => {
             return process.env.NEXT_PUBLIC_URL_PROD;
     }
 }
-const APIURL = (): string | undefined => {
-    switch (process.env.NEXT_PUBLIC_APP_ENV) {
-        case "DEV":
-            return process.env.NEXT_PUBLIC_API_URL_DEV;
-        default:
-            return process.env.NEXT_PUBLIC_API_URL_PROD;
-    }
-}
+const APIURL = process.env.NEXT_PUBLIC_API_URL;
+
 const AUTHURL = (): string | undefined => {
     switch (process.env.NEXT_PUBLIC_APP_ENV) {
         case "DEV":

@@ -8,9 +8,9 @@ import { enqueueSnackbar } from "notistack";
 import React, { useEffect } from 'react'
 import { useIntl } from "react-intl"
 import { PuffLoader } from "react-spinners";
-import { useAppointmentUpdateStatusMutation } from "reduxt/features/appointment/appointment-api";
-import { useLazyPrintAppointmentQuery } from "reduxt/features/appointment/appointment-process-type-api";
-import { AppointmentReadResultModel } from "reduxt/features/appointment/models/appointment-list-model";
+import { useAppointmentUpdateStatusMutation } from "reduxt/features/branch/appointment-api";
+import { useLazyPrintAppointmentQuery } from "reduxt/features/branch/appointment-process-type-api";
+import { AppointmentReadResultModel } from "reduxt/features/branch/models/branch-model";
 import { useGetAppointmentStatusDropdownQuery, useGetPaymentMethodDropdownQuery, useGetPaymentStatusDropdownQuery } from "reduxt/features/definition/definition-api";
 import { closeModal, ModalEnum, setModal } from "reduxt/features/definition/modalSlice";
 import tenantPaymentApi from "reduxt/features/patient/tenant-payment-api";

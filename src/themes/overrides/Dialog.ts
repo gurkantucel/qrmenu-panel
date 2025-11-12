@@ -13,7 +13,10 @@ export default function Dialog() {
           }
         },
         paper: {
-          backgroundImage: 'none'
+          backgroundImage: 'none',
+          '@media (max-width:600px)': {
+            margin: '8px',
+          },
         }
       }
     }

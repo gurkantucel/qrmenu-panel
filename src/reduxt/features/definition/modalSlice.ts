@@ -1,6 +1,23 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 export enum ModalEnum {
+    addCategory,
+    updateCategory,
+    updateCategoryOrder,
+    deleteCategory,
+    addFood,
+    deleteFood,
+    updateFood,
+    updateFoodPrice,
+    addSelectedFood,
+    deleteSelectedFood,
+    updateStatusSelectedFood,
+    updateSelectedFoodOrder,
+    updateBranch,
+    addImageGallery,
+    deleteImageGallery,
+    updateImageGalleryOrder,
+    createQrCode,
     newPerson,
     deletePerson,
     updatePerson,

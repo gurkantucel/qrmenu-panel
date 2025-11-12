@@ -19,19 +19,20 @@ export interface RegisterBodyModel {
 
 //LOGIN
 export interface LoginResultModel {
-  status: boolean
-  messageCode: string
-  message: string
   data: LoginData
+  success: boolean
+  message: string
 }
 
 export interface LoginData {
-  user: User
-  person: Person
-  personAuthorizations: PersonAuthorization[]
-  currentAccount: CurrentAccount
-  token: string
-  refresh_token: string
+  kind: string
+  localId: string
+  email: string
+  displayName: string
+  idToken: string
+  registered: boolean
+  refreshToken: string
+  expiresIn: string
 }
 
 export interface User {
@@ -84,7 +85,7 @@ export interface CurrentAccount {
 }
 
 export interface LoginBodyModel {
-  username: string
+  email: string
   password: string
   recaptcha?:string
 }

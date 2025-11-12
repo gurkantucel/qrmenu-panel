@@ -7,10 +7,10 @@ const authApi = createApi({
     reducerPath: "authApi",
     tagTypes: ["auth_api"],
     baseQuery: fetchBaseQuery({ 
-        baseUrl: `${Constants.APIURL()}/api/app`,
-        headers:{
+        baseUrl: `${Constants.APIURL}/auth`,
+        /*headers:{
             "Access-Control-Allow-Origin" : "*"
-        }
+        }*/
 }),
     endpoints: (builder) => ({
         register: builder.mutation<CreateResultModel, RegisterBodyModel>({

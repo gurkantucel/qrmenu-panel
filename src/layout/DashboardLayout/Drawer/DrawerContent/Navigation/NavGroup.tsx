@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
 // third-party
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 // project-imports
 import NavItem from './NavItem';
@@ -98,6 +98,9 @@ export default function NavGroup({
 
   const { menuOrientation, menuCaption } = useConfig();
   const { menuMaster } = useGetMenuMaster();
+
+  const intl = useIntl();
+
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
@@ -201,7 +204,7 @@ export default function NavGroup({
       ) : (
         itemRem.title && (
           <Typography variant="caption" sx={{ pl: 2 }}>
-            {itemRem.title} {itemRem.url}
+            {intl.formatMessage({id: `${itemRem.id}`})} {itemRem.url}
           </Typography>
         )
       )}

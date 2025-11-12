@@ -33,9 +33,9 @@ import { deleteCookie } from 'cookies-next';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import NameAvatar from 'components/NameAvatar';
-import appointmentApi from 'reduxt/features/appointment/appointment-api';
 import personApi from 'reduxt/features/person/person-api';
 import patientApi from 'reduxt/features/patient/patient-api';
+import branchApi from 'reduxt/features/branch/branch-api';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -77,7 +77,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     router.push('/auth/login');
-    dispatch(appointmentApi.util.resetApiState());
+    dispatch(branchApi.util.resetApiState());
     dispatch(personApi.util.resetApiState());
     dispatch(patientApi.util.resetApiState());
     deleteCookie("token");

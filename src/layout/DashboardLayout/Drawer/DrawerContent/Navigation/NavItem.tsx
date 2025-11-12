@@ -25,6 +25,7 @@ import { NavActionType, MenuOrientation, ThemeMode } from 'config';
 // types
 import { LinkTarget, NavItemType } from 'types/menu';
 import { selectIcon } from 'menu-items/select-icon';
+import { useIntl } from 'react-intl';
 
 // ==============================|| NAVIGATION - ITEM ||============================== //
 
@@ -38,6 +39,8 @@ interface Props {
 export default function NavItem({ item, level, isParents = false, setSelectedID }: Props) {
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
+
+  const intl = useIntl();
 
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
@@ -158,7 +161,7 @@ export default function NavItem({ item, level, isParents = false, setSelectedID 
               <ListItemText
                 primary={
                   <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor, fontWeight: isSelected ? 500 : 400 }}>
-                    {item.title}
+                    {intl.formatMessage({id: `${item.id}`})}
                   </Typography>
                 }
               />

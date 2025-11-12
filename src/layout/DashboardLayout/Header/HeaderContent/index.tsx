@@ -15,16 +15,18 @@ import MobileSection from './MobileSection';
 import useConfig from 'hooks/useConfig';
 import DrawerHeader from 'layout/DashboardLayout/Drawer/DrawerHeader';
 import { MenuOrientation } from 'config';
+import { useMemo } from 'react';
+import Localization from './Localization';
 
 // ==============================|| HEADER - CONTENT ||============================== //
 
 export default function HeaderContent() {
-  const { menuOrientation } = useConfig();
+  const { i18n, menuOrientation } = useConfig();
 
   const downLG = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //const localization = useMemo(() => <Localization />, [i18n]);
+  const localization = useMemo(() => <Localization />, [i18n]);
 
   //const megaMenu = useMemo(() => <MegaMenuSection />, []);
 
@@ -33,7 +35,7 @@ export default function HeaderContent() {
       {menuOrientation === MenuOrientation.HORIZONTAL && !downLG && <DrawerHeader open={true} />}
       {!downLG && <Search />}
       {/*!downLG && megaMenu*/}
-      {/*!downLG && localization*/}
+      {!downLG && localization}
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
 
       {/*<Notification />*/}

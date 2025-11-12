@@ -6,7 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import timelinePlugin from '@fullcalendar/timeline';
 import { Box, Dialog, Grid, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
-import { AppointmentCalendarModalEnum, closeCalendarModal } from 'reduxt/features/appointment/appointmentCalendarModalSlice';
+import { AppointmentCalendarModalEnum, closeCalendarModal } from 'reduxt/features/branch/appointmentCalendarModalSlice';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import CalendarStyled from 'sections/apps/calendar/CalendarStyled';
@@ -18,7 +18,7 @@ import CustomScaleLoader from 'components/CustomScaleLoader';
 import Toolbar from 'sections/apps/calendar/Toolbar';
 import Select from 'react-select'
 import { useIntl } from 'react-intl';
-import { useGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-api';
+import { useGetAppointmentCalendarListQuery } from 'reduxt/features/branch/appointment-api';
 import { useAcceptingAppointmentDropDownQuery } from 'reduxt/features/person/person-api';
 
 const durationCalc = (startStr: string, endStr: string) => {

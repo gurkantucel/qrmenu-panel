@@ -1,6 +1,6 @@
 import { FormHelperText } from '@mui/material'
 import { Field } from 'formik'
-import Select, { ActionMeta, GroupBase, MenuPosition, OptionsOrGroups, StylesConfig } from 'react-select'
+import Select, { ActionMeta, GetOptionLabel, GetOptionValue, GroupBase, MenuPosition, OptionsOrGroups, StylesConfig } from 'react-select'
 
 type Props = {
     name: string
@@ -19,6 +19,8 @@ type Props = {
     onMenuClose?: (() => void) | undefined
     menuPosition?: MenuPosition
     menuPortalTarget?: HTMLElement
+    getOptionValue?: GetOptionValue<any> | undefined
+    getOptionLabel?: GetOptionLabel<any> | undefined
 }
 
 const CustomFormikSelect = (props: Props) => {
@@ -39,6 +41,8 @@ const CustomFormikSelect = (props: Props) => {
                         onMenuClose={props.onMenuClose}
                         menuPosition={props.menuPosition}
                         menuPortalTarget={props.menuPortalTarget}
+                        getOptionValue={props.getOptionValue}
+                        getOptionLabel={props.getOptionLabel}
                         styles={props.styles ?? {
                             menuPortal: base => ({ ...base, zIndex: 9999 }),
                             container: (baseStyles: any) => ({

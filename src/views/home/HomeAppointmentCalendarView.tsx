@@ -22,7 +22,7 @@ import AddAppointmentModal from 'views/appointment/AddAppointmentModal';
 import { useAppDispatch } from 'reduxt/hooks';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useRouter } from 'next/navigation';
-import { useGetAppointmentCalendarListQuery } from 'reduxt/features/appointment/appointment-api';
+import { useGetAppointmentCalendarListQuery } from 'reduxt/features/branch/appointment-api';
 
 const HomeAppointmentCalendarView = () => {
     //const matchDownSM = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));

@@ -5,10 +5,10 @@ import { useIntl } from 'react-intl'
 import { Form, Formik } from 'formik';
 import { updateAppointmentNoteSchema } from "utils/schemas/appointment-validation-schema";
 import { useAppSelector } from 'reduxt/hooks';
-import { AppointmentReadResultModel, AppointmentUpdateNoteBodyModel } from 'reduxt/features/appointment/models/appointment-list-model';
+import { AppointmentReadResultModel, AppointmentUpdateNoteBodyModel } from 'reduxt/features/branch/models/branch-model';
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useAppointmentUpdateNoteMutation } from 'reduxt/features/appointment/appointment-api';
+import { useAppointmentUpdateNoteMutation } from 'reduxt/features/branch/appointment-api';
 import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 

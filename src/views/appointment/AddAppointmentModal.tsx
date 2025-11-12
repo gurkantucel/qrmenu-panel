@@ -20,9 +20,9 @@ import CustomFormikAsyncSelect from "components/third-party/formik/custom-formik
 import AuthDivider from "sections/auth/AuthDivider";
 import { useAcceptingAppointmentDropDownQuery } from "reduxt/features/person/person-api";
 import AddAppointmentCalendarModal from "./AddAppointmentCalendarModal";
-import { AppointmentCalendarModalEnum, setCalendarModal } from "reduxt/features/appointment/appointmentCalendarModalSlice";
-import { AppointmentCreateBodyModel } from "reduxt/features/appointment/models/appointment-list-model";
-import { useCreateAppointmentMutation } from "reduxt/features/appointment/appointment-api";
+import { AppointmentCalendarModalEnum, setCalendarModal } from "reduxt/features/branch/appointmentCalendarModalSlice";
+import { AppointmentCreateBodyModel } from "reduxt/features/branch/models/branch-model";
+import { useCreateAppointmentMutation } from "reduxt/features/branch/appointment-api";
 import { newAppointmentSchema } from "utils/schemas/appointment-validation-schema";
 import { useGetAppointmentStatusDropdownQuery, useGetAppointmentTypeDropdownQuery } from "reduxt/features/definition/definition-api";
 import { getCookie } from "cookies-next";

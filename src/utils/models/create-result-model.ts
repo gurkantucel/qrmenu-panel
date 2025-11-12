@@ -1,7 +1,5 @@
 export interface CreateResultModel {
-    requestId: string
-    status: boolean
-    messageCode: string
+    success: boolean
     message: string
     data: any
   }

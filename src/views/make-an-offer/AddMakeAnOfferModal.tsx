@@ -18,7 +18,7 @@ import { useLazyGetPatientDropdownQuery } from "reduxt/features/patient/patient-
 import CustomFormikAsyncSelect from "components/third-party/formik/custom-formik-asyncselect";
 import AuthDivider from "sections/auth/AuthDivider";
 import { useLazyAcceptingAppointmentDropDownQuery } from "reduxt/features/person/person-api";
-import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/appointment/appointment-process-type-api";
+import { useLazyGetAppointmentProcessDropdownQuery } from "reduxt/features/branch/appointment-process-type-api";
 import { MakeAnOfferDetail } from "reduxt/features/make-an-offer/models/make-an-offer-model";
 import { useCreateMakeAnOfferMutation } from "reduxt/features/make-an-offer/make-an-offer-api";
 import { newMakeAnOfferSchema } from "utils/schemas/make-an-offer-validation-schema";
