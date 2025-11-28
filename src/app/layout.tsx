@@ -3,8 +3,8 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Klinik Ease',
-  description: 'Klinik Ease',
+  title: 'QRChefs',
+  description: 'QRChefs',
   robots: {
     index: false,
     follow: false,

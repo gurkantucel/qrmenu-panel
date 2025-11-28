@@ -91,7 +91,7 @@ export interface LoginBodyModel {
 }
 
 export interface UsernameBodyModel {
-  username: string
+  email: string
 }
 
 //RESET-PASSWORD
@@ -105,4 +105,21 @@ export interface Membership {
   membership_start_date:string
   membership_end_date: string
   membership_package_name: string
+}
+
+//UPDATE-PASSWORD
+export interface UpdatePasswordBodyModel {
+  oldPassword: string
+  password: string
+}
+
+export interface ChangePasswordResultModel {
+  data: ChangePasswordData
+  message: string
+  success: boolean
+}
+
+export interface ChangePasswordData {
+  refresh_token: string
+  token: string
 }

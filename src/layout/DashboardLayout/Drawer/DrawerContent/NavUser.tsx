@@ -101,22 +101,7 @@ export default function UserList() {
           <ListItemAvatar>
             <NameAvatar fullName={user ? user.name : ""} />
           </ListItemAvatar>
-          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} secondary={user ? <>
-            <Chip size='small' variant="combined"
-              color="primary" sx={{ paddingLeft: 1,
-                "&.MuiChip-root": {
-                  justifyContent: "space-between",
-                  width: "100%",
-                  paddingLeft: "5px",
-                },
-                "& .MuiChip-label": {
-                  fontSize: "11px",
-                  padding: 0,
-                }
-              }} label={<Chip size='small' color="secondary" sx={{paddingLeft: 1, paddingRight: 1}} label={diffInDays(user.membership.membership_end_date)} />} avatar={
-                <>{user.membership.membership_package_name}</>
-              } />
-          </> : <>{'-'}</>} />
+          <ListItemText primary={user ? user?.name : ''} sx={{ ...(!drawerOpen && { display: 'none' }) }} />
         </ListItem>
       </List>
       {/*<Menu

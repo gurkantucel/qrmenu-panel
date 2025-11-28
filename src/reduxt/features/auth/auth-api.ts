@@ -6,12 +6,12 @@ import Constants from 'utils/Constants';
 const authApi = createApi({
     reducerPath: "authApi",
     tagTypes: ["auth_api"],
-    baseQuery: fetchBaseQuery({ 
+    baseQuery: fetchBaseQuery({
         baseUrl: `${Constants.APIURL}/auth`,
         /*headers:{
             "Access-Control-Allow-Origin" : "*"
         }*/
-}),
+    }),
     endpoints: (builder) => ({
         register: builder.mutation<CreateResultModel, RegisterBodyModel>({
             query: (body) => {
@@ -34,7 +34,7 @@ const authApi = createApi({
         forgetPassword: builder.mutation<CreateResultModel, UsernameBodyModel>({
             query: (body) => {
                 return {
-                    url: `forgetPassword`,
+                    url: `forgotPassword`,
                     method: "POST",
                     body: body
                 }
@@ -48,7 +48,7 @@ const authApi = createApi({
                     body: body
                 }
             },
-        })
+        }),
     })
 })
 
@@ -56,7 +56,7 @@ export const {
     useRegisterMutation,
     useLoginMutation,
     useForgetPasswordMutation,
-    useResetPasswordMutation
+    useResetPasswordMutation,
 } = authApi;
 
 export default authApi;

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
-import { Badge, Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
-import { CloseSquare, DocumentUpload } from "iconsax-react"
+import { Badge, Box, Button, Collapse, Dialog, DialogActions, Divider, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
+import { ArrowDown2, ArrowUp2, CloseSquare, DocumentUpload } from "iconsax-react"
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
 import { useFormik } from 'formik';
 import Dropzone from 'react-dropzone';
@@ -13,6 +13,17 @@ import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
 import Image from 'next/image'
+import { updateCategoryValidationSchema } from 'utils/schemas/category-validation-schema';
+import { useAutoTranslate } from 'hooks/useAutoTranslate';
+
+interface FormValues {
+    categoryId: string;
+    title_tr: string;
+    title_en: string;
+    title_es: string | null;
+    title_fr: string | null;
+    status: boolean;
+}
 
 const UpdateCategoryModal = () => {
 
@@ -20,7 +31,15 @@ const UpdateCategoryModal = () => {
     const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
+    const { autoTranslate, translateIsLoading } = useAutoTranslate();
+
     const [selectedFiles, setselectedFiles] = useState([]);
+
+    const [acik, setAcik] = useState(false);
+
+    const handleToggle = () => {
+        setAcik((prev) => !prev);
+    };
 
     function formatBytes(bytes: any, decimals = 2) {
         if (bytes === 0) return "0 Bytes";
@@ -50,6 +69,8 @@ const UpdateCategoryModal = () => {
                 categoryId: data?.id,
                 title_en: data?.title?.en,
                 title_tr: data?.title?.tr,
+                title_es: data?.title?.es,
+                title_fr: data?.title?.fr,
                 status: data?.status
             })
         }
@@ -57,13 +78,16 @@ const UpdateCategoryModal = () => {
 
     const [updateCategory, { isLoading: updateCategoryIsLoading, data: updateCategoryResponse, error: updateCategoryError }] = useUpdateCategoryMutation();
 
-    const formik = useFormik({
+    const formik = useFormik<FormValues>({
         initialValues: {
             categoryId: "",
             title_tr: "",
             title_en: "",
+            title_es: null,
+            title_fr: null,
             status: true
         },
+        validationSchema: updateCategoryValidationSchema(intl),
         onSubmit: (values) => {
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
@@ -174,6 +198,73 @@ const UpdateCategoryModal = () => {
                                 </FormHelperText>
                             )}
                         </Grid>
+                    </Grid>
+                    <Stack alignContent={"center"} alignItems={"center"} justifyContent={"center"} marginTop={1}>
+                        <Button
+                            variant="text"
+                            size='small'
+                            onClick={handleToggle}
+                            sx={{ width: 'fit-content' }}
+                            startIcon={acik ? <ArrowUp2 /> : <ArrowDown2 />}
+                        >
+                            {acik ? intl.formatMessage({ id: "hideOtherLanguages" }) : intl.formatMessage({ id: "showOtherLanguages" })}
+                        </Button>
+                    </Stack>
+                    <Collapse in={acik}>
+                        <Divider sx={{ marginBottom: 0.5 }} />
+                        <Grid container spacing={3} sx={{ marginTop: "1px", marginBottom: 2 }}>
+                            <Grid item xs={12} md={6}>
+                                <Stack spacing={1}>
+                                    <Stack direction={"row"} justifyContent={"space-between"}>
+                                        <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (ES)`}</InputLabel>
+                                        <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!formik.values.title_es || formik.values.title_es.length === 0} onClick={() => autoTranslate({ text: formik.values.title_es, currentLang: "ES", setFieldValue: formik.setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                    </Stack>
+                                    <OutlinedInput
+                                        fullWidth
+                                        error={Boolean(formik.touched.title_es && formik.errors.title_es)}
+                                        id="title_es"
+                                        type="text"
+                                        value={formik.values.title_es}
+                                        name="title_es"
+                                        onBlur={formik.handleBlur}
+                                        onChange={formik.handleChange}
+                                        placeholder={`${intl.formatMessage({ id: "title" })} (ES)`}
+                                    />
+                                </Stack>
+                                {formik.touched.title_es && formik.errors.title_es && (
+                                    <FormHelperText error id="helper-text-lastname-signup">
+                                        {formik.errors.title_es}
+                                    </FormHelperText>
+                                )}
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Stack spacing={1}>
+                                    <Stack direction={"row"} justifyContent={"space-between"}>
+                                        <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (FR)`}</InputLabel>
+                                        <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!formik.values.title_fr || formik.values.title_fr.length === 0} onClick={() => autoTranslate({ text: formik.values.title_fr, currentLang: "FR", setFieldValue: formik.setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                    </Stack>
+                                    <OutlinedInput
+                                        fullWidth
+                                        error={Boolean(formik.touched.title_fr && formik.errors.title_fr)}
+                                        id="title_fr"
+                                        type="text"
+                                        value={formik.values.title_fr}
+                                        name="title_fr"
+                                        onBlur={formik.handleBlur}
+                                        onChange={formik.handleChange}
+                                        placeholder={`${intl.formatMessage({ id: "title" })} (FR)`}
+                                    />
+                                </Stack>
+                                {formik.touched.title_fr && formik.errors.title_fr && (
+                                    <FormHelperText error id="helper-text-lastname-signup">
+                                        {formik.errors.title_fr}
+                                    </FormHelperText>
+                                )}
+                            </Grid>
+                        </Grid>
+                        <Divider sx={{ marginBottom: 2 }} />
+                    </Collapse>
+                    <Grid container spacing={3}>
                         {data?.imageUrl && <Grid item xs={12}>
                             <InputLabel htmlFor="image" sx={{ marginBottom: 2 }}>{intl.formatMessage({ id: "previouslyUploadedImage" })}</InputLabel>
                             <Image src={data?.imageUrl} alt={data?.title?.tr} width={128} height={128} />
@@ -272,7 +363,7 @@ const UpdateCategoryModal = () => {
                     </DialogActions>
                 </form>
             </Box>
-        </Dialog>
+        </Dialog >
     )
 }
 

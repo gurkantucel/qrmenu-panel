@@ -128,7 +128,7 @@ const UpdateCategoryOrderModal = ({ branchSlug }: { branchSlug?: string | null }
                     </Grid>
                 </DialogTitle>
                 <DialogContent>
-                    <Typography variant="body1" marginBottom={3}>{"Kategorilerin sırasını sürükleyerek belirleyebilirsiniz. İşlem sonrası kaydetmeyi unutmayın."}</Typography>
+                    <Typography variant="body1" marginBottom={3}>{intl.formatMessage({id: "updateCategoryOrderText"})}</Typography>
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                         <SortableContext items={categories.map((c) => c.id)} strategy={verticalListSortingStrategy}>
                             {categories.map((cat) => (

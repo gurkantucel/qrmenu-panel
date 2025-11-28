@@ -42,8 +42,12 @@ export interface UpdateMenuOrderBodyModel {
 export interface CreateFoodBodyModel {
   title_tr: string
   title_en: string
+  title_es: string | null
+  title_fr: string | null 
   description_tr: string
   description_en: string
+  description_es: string | null
+  description_fr: string | null
   branches: Branch[]
   allergens: string[]
   property_gr: string | null
@@ -58,8 +62,12 @@ export interface UpdateFoodBodyModel {
   food_id: string
   title_tr: string
   title_en: string
+  title_es: string | null
+  title_fr: string | null 
   description_tr: string
   description_en: string
+  description_es: string | null
+  description_fr: string | null
   allergens: string[]
   property_gr: string | null
   property_kcal: string | null
@@ -106,5 +114,10 @@ export interface GetBranchFoodData {
   currencyCode: string
   price: string
   createdAt: string
+  status: boolean
+}
+
+export interface UpdateStatusBranchFoodBodyModel {
+  branchFoodId: string
   status: boolean
 }

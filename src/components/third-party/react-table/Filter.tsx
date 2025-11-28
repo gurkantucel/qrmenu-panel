@@ -71,11 +71,31 @@ export default function Filter<T extends RowData>({ column, table, getAppointmen
     }}
     defaultValue={"-"}
     onChange={(event) => {
-      column.setFilterValue(event.target.value);
+      const value = event.target.value;
+      column.setFilterValue(value === "-" ? undefined : value);
     }}>
     <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
     <MenuItem value="true">{intl.formatMessage({ id: "active" })}</MenuItem>
     <MenuItem value="false">{intl.formatMessage({ id: "passive" })}</MenuItem>
+  </Select> : meta == "orderStatus" ? <Select
+    sx={{
+      '& .MuiSelect-select': {
+        padding: "10px 10px 10px 12px",
+        textTransform: "none"
+      }
+    }}
+    MenuProps={{
+      style: { zIndex: 9999, },
+    }}
+    defaultValue={"-"}
+    onChange={(event) => {
+      const value = event.target.value;
+      column.setFilterValue(value === "-" ? undefined : value);
+    }}>
+    <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
+    <MenuItem value="PAYMENT_PENDING">{intl.formatMessage({ id: "PAYMENT_PENDING" })}</MenuItem>
+    <MenuItem value="PAYMENT_SUCCESSFUL">{intl.formatMessage({ id: "PAYMENT_SUCCESSFUL" })}</MenuItem>
+    <MenuItem value="PAYMENT_ERROR">{intl.formatMessage({ id: "PAYMENT_ERROR" })}</MenuItem>
   </Select> : meta == "appointmentStatus" ? <Select
     sx={{
       width: '100%',
@@ -168,7 +188,9 @@ export default function Filter<T extends RowData>({ column, table, getAppointmen
     }}
     defaultValue={"-"}
     onChange={(event) => {
-      column.setFilterValue(event.target.value);
+      //column.setFilterValue(event.target.value);
+      const value = event.target.value;
+      column.setFilterValue(value === "-" ? undefined : value);
     }}>
     <MenuItem value="-">{intl.formatMessage({ id: "all" })}</MenuItem>
     <MenuItem value="true">{intl.formatMessage({ id: "increase" })}</MenuItem>

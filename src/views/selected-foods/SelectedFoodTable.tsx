@@ -168,10 +168,10 @@ const SelectedFoodTable = () => {
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 0 }} justifyContent={"space-between"} alignItems={{ xs: "normal", sm: "center" }} sx={{ padding: 2 }}>
                     <Stack direction={"column"}>
                         <Stack direction={"column"}>
-                            <InputLabel sx={{ marginBottom: 1 }}>Şube</InputLabel>
+                            <InputLabel sx={{ marginBottom: 1 }}>{intl.formatMessage({id: "branch"})}</InputLabel>
                             <Select
-                                placeholder={"Seçim yapınız..."}
-                                noOptionsMessage={(label) => "Bulunamadı."}
+                                placeholder={intl.formatMessage({id: "makeYourChoice"})}
+                                noOptionsMessage={(label) => intl.formatMessage({id: "notFound"})}
                                 styles={{
                                     container: (baseStyles: any) => ({
                                         ...baseStyles,

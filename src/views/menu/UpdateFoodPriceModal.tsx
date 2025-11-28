@@ -127,7 +127,7 @@ const UpdateFoodPriceModal = () => {
                             }] as FoodPriceBranch[],
                         }}
                             enableReinitialize
-                            validationSchema={addFoodValidationSchema}
+                            validationSchema={addFoodValidationSchema(intl)}
                             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                                 updateBranchFood(values);
                             }}>
@@ -162,16 +162,16 @@ const UpdateFoodPriceModal = () => {
                                                                             categoryId: "",
                                                                             currencyCode: "",
                                                                             price: "",
-                                                                        })}>{"Ekle"}</Button>
+                                                                        })}>{intl.formatMessage({ id: "add" })}</Button>
                                                                     <Button
                                                                         disabled={values.branches.length === 1}
                                                                         sx={{ padding: "0 6px", minWidth: "25px" }}
-                                                                        type='button' variant="text" color="error" onClick={() => remove(branchIndex)}>{"Sil"}</Button>
+                                                                        type='button' variant="text" color="error" onClick={() => remove(branchIndex)}>{intl.formatMessage({ id: "delete" })}</Button>
                                                                 </Stack>
                                                             </Stack>
                                                             <CustomFormikSelect
                                                                 name={`branches.${branchIndex}.id`}
-                                                                placeholder="Şube Seçin"
+                                                                placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "branch" })})}
                                                                 isClearable={true}
                                                                 menuPosition={"fixed"}
                                                                 isLoading={getBranchDropdownLoading}
@@ -207,7 +207,7 @@ const UpdateFoodPriceModal = () => {
                                                             <InputLabel htmlFor="currencyCode" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "currencyCode" })}</InputLabel>
                                                             <CustomFormikSelect
                                                                 name={`branches[${branchIndex}].currencyCode`}
-                                                                placeholder="Para Birimi Seçin"
+                                                                placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "currency" })})}
                                                                 isClearable={true}
                                                                 menuPosition={"fixed"}
                                                                 isLoading={getCurrencyDropdownLoading}
@@ -315,7 +315,7 @@ const FoodRow = ({ branchIndex, setFieldValue, branch }: { branchIndex: number, 
                 <InputLabel htmlFor="branchId" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "category" })}</InputLabel>
                 <CustomFormikSelect
                     name={`branches.${branchIndex}.categoryId`}
-                    placeholder="Kategori Seçin"
+                    placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "currency" })})}
                     isClearable={true}
                     menuPosition={"fixed"}
                     isLoading={getCategoryDropdownLoading}

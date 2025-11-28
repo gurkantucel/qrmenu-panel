@@ -6,7 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
 // assets
-import { Card, Logout } from 'iconsax-react';
+import { Logout, PasswordCheck } from 'iconsax-react';
 import { useRouter } from 'next/navigation';
 import { useIntl } from 'react-intl';
 
@@ -32,17 +32,17 @@ export default function ProfileTab({ handleLogout }: Props) {
         </ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>*/}
-      <ListItemButton onClick={()=>{router.push("/app/order-list")}}>
+      <ListItemButton onClick={()=>{router.push("/user/update-password")}}>
         <ListItemIcon>
-          <Card variant="Bulk" size={18} />
+          <PasswordCheck variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary={intl.formatMessage({ id: "myOrders" })} />
+        <ListItemText primary={intl.formatMessage({ id: "changePassword" })} />
       </ListItemButton>
       <ListItemButton onClick={handleLogout}>
         <ListItemIcon>
           <Logout variant="Bulk" size={18} />
         </ListItemIcon>
-        <ListItemText primary="Çıkış Yap" />
+        <ListItemText primary={intl.formatMessage({ id: "logout" })} />
       </ListItemButton>
     </List>
   );

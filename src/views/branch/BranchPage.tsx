@@ -5,10 +5,10 @@ import { useIntl } from 'react-intl';
 import { useAppDispatch } from 'reduxt/hooks';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import MainCard from 'components/MainCard';
-import { Box, Button, Divider, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar, InputLabel, List, ListItem, ListItemIcon, Stack, Typography } from '@mui/material';
-import { Add, ArrowSwapVertical, CallCalling, Facebook, Gps, Instagram, ShopAdd, Sms, Trash, Whatsapp, Youtube } from 'iconsax-react';
+import { Box, Button, Divider, FormControlLabel, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar, InputLabel, List, ListItem, ListItemIcon, Radio, RadioGroup, Stack, Typography } from '@mui/material';
+import { Add, ArrowSwapVertical, CallCalling, Facebook, Gps, InfoCircle, Instagram, Save2, ShopAdd, Sms, Trash, Whatsapp, Youtube } from 'iconsax-react';
 import Select from 'react-select'
-import { useGetBranchDropdownQuery, useGetBranchQuery } from 'reduxt/features/branch/branch-api';
+import { useGetBranchDropdownQuery, useGetBranchQuery, useUpdateBranchThemeMutation } from 'reduxt/features/branch/branch-api';
 import { useEffect, useState } from 'react';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { useGetImageGalleryListQuery } from 'reduxt/features/image-gallery/image-gallery-api';
@@ -18,12 +18,16 @@ import DeleteImageGalleryModal from './DeleteImageGalleryModal';
 import AddImageGalleryModal from './AddImageGalleryModal';
 import UpdateImageGalleryOrderModal from './UpdateImageGalleryOrderModal';
 import CreateBranchLogoComponent from './CreateBranchLogoComponent';
+import CreateBranchModal from './CreateBranchModal';
+import { useAppSnackbar } from 'hooks/useAppSnackbar';
 
 const BranchView = () => {
 
     const intl = useIntl()
 
     const t = useLocalizedField()
+
+    const { showMessage } = useAppSnackbar();
 
     const dispatch = useAppDispatch();
 
@@ -34,11 +38,15 @@ const BranchView = () => {
 
     const [branchSlug, setBranchSlug] = useState<string | null>()
 
+    const [selectedThemeValue, setSelectedThemeValue] = useState('theme1');
+
     const { isLoading: getBranchDropdownLoading, isFetching: getBranchDropdownFetching, data: getBranchDropdownData } = useGetBranchDropdownQuery()
 
     const { isLoading: getBranchLoading, isFetching: getBranchFetching, data: getBranchData } = useGetBranchQuery({ slug: `${branchSlug}` }, { skip: !branchSlug })
 
     const { isLoading: getImageGalleryLoading, isFetching: getImageGalleryFetching, data: getImageGalleryData } = useGetImageGalleryListQuery({ branchSlug: `${branchSlug}` }, { skip: !branchSlug })
+
+    const [updateBranchTheme, { isLoading: updateBranchThemeIsLoading, data: updateBranchThemeResponse, error: updateBranchThemeError }] = useUpdateBranchThemeMutation();
 
     const branchData = getBranchData?.data;
 
@@ -52,19 +60,36 @@ const BranchView = () => {
         }
     }, [getBranchDropdownData])
 
+    useEffect(() => {
+        if (getBranchData?.data != null && getBranchData.data?.theme != null) {
+            setSelectedThemeValue(getBranchData.data.theme)
+        }
+    }, [getBranchData])
+
+    useEffect(() => {
+        if (updateBranchThemeResponse) {
+            showMessage(updateBranchThemeResponse.message, updateBranchThemeResponse.success);
+        }
+        if (updateBranchThemeError) {
+            var error = updateBranchThemeError as any;
+            showMessage(error?.data?.message, false);
+        }
+    }, [updateBranchThemeResponse, updateBranchThemeError])
+
     return (
         <>
             <Breadcrumbs custom heading={`${intl.formatMessage({ id: "branches" })}`} links={breadcrumbLinks} />
+            <CreateBranchModal />
             <UpdateBranchModal />
             <MainCard border={false}>
                 <Box sx={{ mt: 2.5 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Stack direction={"column"} marginBottom={2}>
-                                <InputLabel sx={{ marginBottom: 1 }}>Şube</InputLabel>
+                                <InputLabel sx={{ marginBottom: 1 }}>{intl.formatMessage({ id: "branch" })}</InputLabel>
                                 <Select
-                                    placeholder={"Seçim yapınız..."}
-                                    noOptionsMessage={(label) => "Bulunamadı."}
+                                    placeholder={intl.formatMessage({ id: "makeYourChoice" })}
+                                    noOptionsMessage={(label) => intl.formatMessage({ id: "notFound" })}
                                     styles={{
                                         container: (baseStyles: any) => ({
                                             ...baseStyles,
@@ -104,7 +129,12 @@ const BranchView = () => {
                                                 <Box display="flex" justifyContent="center" py={1.5}>
                                                     <Button
                                                         variant="text"
-                                                        //</>onClick={handleAddBranch}
+                                                        onClick={() => {
+                                                            dispatch(setModal({
+                                                                open: true,
+                                                                modalType: ModalEnum.addBranch
+                                                            }))
+                                                        }}
                                                         startIcon={<ShopAdd size="18" />}
                                                         sx={{
                                                             textTransform: "none",
@@ -132,12 +162,12 @@ const BranchView = () => {
                                         <Grid container spacing={3}>
                                             <Grid item xs={12}>
                                                 <Stack direction="row" justifyContent="flex-end">
-                                                    <Button title='Profil Düzenle' color='primary' variant="contained" onClick={() => {
+                                                    <Button title={intl.formatMessage({ id: "editProfile" })} color='primary' variant="contained" onClick={() => {
                                                         dispatch(setModal({
                                                             open: true, modalType: ModalEnum.updateBranch,
                                                             data: getBranchData?.data
                                                         }))
-                                                    }}>Düzenle</Button>
+                                                    }}>{intl.formatMessage({ id: "edit" })}</Button>
                                                 </Stack>
                                                 <Stack spacing={2.5} alignItems="center">
                                                     <CreateBranchLogoComponent branchId={selectedBranch?.value ?? ""} logoUrl={branchData?.logo} />
@@ -204,7 +234,7 @@ const BranchView = () => {
                                     </MainCard>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <MainCard title="Hakkımızda">
+                                    <MainCard title={intl.formatMessage({ id: "aboutUs" })}>
                                         {branchData?.description && <div
                                             dangerouslySetInnerHTML={{ __html: branchData?.description }}
                                         />}
@@ -214,7 +244,7 @@ const BranchView = () => {
                                     <DeleteImageGalleryModal />
                                     <AddImageGalleryModal />
                                     <UpdateImageGalleryOrderModal branchSlug={branchSlug} />
-                                    <MainCard title="Resim Galerisi" secondary={<Stack direction={"row"} spacing={2}>
+                                    <MainCard title={intl.formatMessage({ id: "pictureGallery" })} secondary={<Stack direction={"row"} spacing={2}>
                                         <Button variant="dashed" startIcon={<Add />} onClick={() => {
                                             dispatch(setModal({
                                                 open: true,
@@ -268,6 +298,48 @@ const BranchView = () => {
                                         </ImageList>}
                                     </MainCard>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <MainCard title={updateBranchThemeIsLoading ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "themeSelection" })} secondary={<Button variant="dashed" startIcon={<Save2 />} 
+                                        disabled={branchData?.theme == selectedThemeValue || updateBranchThemeIsLoading}
+                                        onClick={() => {
+                                        updateBranchTheme({branchId: selectedBranch?.value ?? "0", theme: selectedThemeValue})
+                                    }}>{intl.formatMessage({ id: "save" })}</Button>}>
+                                        <RadioGroup>
+                                            <ImageList cols={6}>
+                                                {itemData.map((item) => (
+                                                    <ImageListItem key={item.img}>
+                                                        <img
+                                                            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                                            src={`${item.img}?w=248&fit=crop&auto=format`}
+                                                            alt={item.title}
+                                                            loading="lazy"
+                                                        />
+                                                        <ImageListItemBar
+                                                            title={item.title}
+                                                            actionIcon={
+                                                                <Radio
+                                                                    checked={selectedThemeValue === item.title}
+                                                                    onChange={(event) => {
+                                                                        setSelectedThemeValue(event.target.value);
+                                                                    }}
+                                                                    value={item.title}
+                                                                    name="radio-buttons"
+                                                                    inputProps={{ 'aria-label': item.title }}
+                                                                    sx={{
+                                                                        color: "white",
+                                                                        '&.Mui-checked': {
+                                                                            color: "white",
+                                                                        },
+                                                                    }}
+                                                                />
+                                                            }
+                                                        />
+                                                    </ImageListItem>
+                                                ))}
+                                            </ImageList>
+                                        </RadioGroup>
+                                    </MainCard>
+                                </Grid>
                             </Grid>}
                         </Grid>
                     </Grid>
@@ -278,3 +350,30 @@ const BranchView = () => {
 }
 
 export default BranchView
+
+const itemData = [
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-1.png',
+        title: 'theme1',
+    },
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-2.png',
+        title: 'theme2',
+    },
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-3.png',
+        title: 'theme3',
+    },
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-4.png',
+        title: 'theme4',
+    },
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-5.png',
+        title: 'theme5',
+    },
+    {
+        img: 'https://pub-b174b305229b424ab32237bcdf53f76a.r2.dev/common/theme/theme-6.png',
+        title: 'theme6',
+    }
+]

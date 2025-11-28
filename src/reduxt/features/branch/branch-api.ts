@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { DropdownListModel } from 'utils/models/dropdown-list-model';
-import { BranchListModel, GetBranchModel, UpdateBranchBodyModel } from './models/branch-model';
+import { BranchListModel, CreateBranchBodyModel, GetBranchModel, UpdateBranchBodyModel, UpdateBranchThemeBodyModel } from './models/branch-model';
 import { CreateResultModel } from 'utils/models/create-result-model';
 
 const branchApi = createApi({
@@ -10,10 +10,11 @@ const branchApi = createApi({
     baseQuery: baseQueryWithReauth,
     //refetchOnMountOrArgChange: true,
     endpoints: (builder) => ({
-        getBranchList: builder.query<BranchListModel, void>({
-            query: () => {
+        getBranchList: builder.query<BranchListModel, { simple?: boolean }>({
+            query: (args) => {
                 return {
-                    url: `app/branch/list`,
+                    url: `branch/list`,
+                    params: args
                 }
             },
             providesTags: ["branch"]
@@ -35,10 +36,30 @@ const branchApi = createApi({
             },
             providesTags: ["branch"]
         }),
+        createBranch: builder.mutation<CreateResultModel, CreateBranchBodyModel>({
+            query: (body) => {
+                return {
+                    url: `branch/create`,
+                    method: "POST",
+                    body: body
+                }
+            },
+            invalidatesTags: (result) => result?.success ? ["branch"] : [],
+        }),
         updateBranch: builder.mutation<CreateResultModel, UpdateBranchBodyModel>({
             query: (body) => {
                 return {
                     url: `branch/update`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+            invalidatesTags: (result) => result?.success ? ["branch"] : [],
+        }),
+        updateBranchTheme: builder.mutation<CreateResultModel, UpdateBranchThemeBodyModel>({
+            query: (body) => {
+                return {
+                    url: `branch/updateTheme`,
                     method: "PUT",
                     body: body
                 }
@@ -62,8 +83,10 @@ export const {
     useGetBranchListQuery,
     useGetBranchDropdownQuery,
     useGetBranchQuery,
+    useCreateBranchMutation,
     useUpdateBranchMutation,
-    useCreateBranchLogoMutation
+    useCreateBranchLogoMutation,
+    useUpdateBranchThemeMutation
 } = branchApi
 
 export default branchApi;

@@ -1,3 +1,4 @@
+import { IntlShape } from 'react-intl';
 import * as Yup from 'yup';
 
 const registerValidationSchema = Yup.object({
@@ -38,14 +39,34 @@ const registerValidationSchema = Yup.object({
     kvkk: Yup.bool().oneOf([true], 'Onaylayın.')
 })
 
-const loginValidationSchema = Yup.object({
-    email: Yup.string().email("E-posta girin.").required("Bu alan zorunlu"),
+const loginValidationSchema = (intl: IntlShape) => Yup.object({
+    email: Yup.string().email(intl.formatMessage({ id: "fieldRequired" })).required(intl.formatMessage({ id: "fieldRequired" })),
     password: Yup.string()
-        .matches(/^\S+(?: \S+)*$/, { message: "Boşluklar içermemelidir." })
+        .matches(/^\S+(?: \S+)*$/, { message: intl.formatMessage({ id: "mustNotContainSpaces" }) })
+        .min(5, intl.formatMessage({ id: "tooShort" }))
+        .max(500, intl.formatMessage({ id: "tooLong" }))
+        .required(intl.formatMessage({ id: "fieldRequired" })),
+})
+
+const forgotPasswordValidationSchema = (intl: IntlShape) => Yup.object({
+    email: Yup.string().email(intl.formatMessage({ id: "fieldRequired" })).required(intl.formatMessage({ id: "fieldRequired" })),
+})
+
+const updatePasswordValidationSchema = (intl: IntlShape) => Yup.object({
+    oldPassword: Yup.string()
+        .matches(/^\S+(?: \S+)*$/, { message: intl.formatMessage({ id: "mustNotContainSpaces" }) })
         .min(5, "Çok Kısa")
-        .max(500, "Çok Uzun")
-        .required("Bu alan zorunlu"),
+        .max(255, "Çok Uzun")
+        .required(intl.formatMessage({ id: "fieldRequired" })),
+    password: Yup.string()
+        .matches(/^\S+(?: \S+)*$/, { message: intl.formatMessage({ id: "mustNotContainSpaces" }) })
+        .min(5, "Çok Kısa")
+        .max(255, "Çok Uzun")
+        .required(intl.formatMessage({ id: "fieldRequired" })),
+    confirmPassword: Yup.string()
+        .required(intl.formatMessage({ id: "fieldRequired" }))
+        .test('confirmPassword', intl.formatMessage({ id: "passwordDoNotMatch" }), (confirmPassword, yup) => yup.parent.password === confirmPassword)
 })
 
 
-export { registerValidationSchema, loginValidationSchema }
+export { registerValidationSchema, loginValidationSchema, updatePasswordValidationSchema, forgotPasswordValidationSchema }

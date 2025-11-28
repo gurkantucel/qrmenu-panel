@@ -108,7 +108,7 @@ const AddSelectedFoodModal = ({ branch }: { branch?: DropdownListData | null }) 
                                         <InputLabel htmlFor="allergens">{intl.formatMessage({ id: "foods" })}</InputLabel>
                                         <CustomFormikSelect
                                             name='branchFoods'
-                                            placeholder="Seçim yapınız..."
+                                            placeholder={intl.formatMessage({id: "makeYourChoice"})}
                                             menuPortalTarget={document.body}
                                             isMulti={true}
                                             isLoading={getSelectedFoodDropdownLoading}

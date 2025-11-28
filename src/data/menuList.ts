@@ -57,53 +57,9 @@ export const menuList = [
                 code: "00049",
                 title: "Paketim",
                 type: 'item',
-                url: '/statistics',
+                url: '/orders',
                 icon: ""
-            },
-            {
-                id: 'settings',
-                code: null,
-                title: "Ayarlar",
-                type: 'collapse',
-                icon: "",
-                children: [
-                    {
-                        id: 'appointment-process',
-                        code: "00002",
-                        title: "Randevu İşlemleri",
-                        type: 'item',
-                        url: '/settings/appointment-process',
-                    },
-                    {
-                        id: 'diet-template',
-                        code: "00052",
-                        title: "Diyet Şablonları",
-                        type: 'item',
-                        url: '/settings/diet-template',
-                    },
-                    {
-                        id: 'sms-integration',
-                        code: "00054",
-                        title: "SMS Entegrasyonu",
-                        type: 'item',
-                        url: '/settings/sms-integration',
-                    },
-                    {
-                        id: 'sms-template',
-                        code: "00048",
-                        title: "SMS Şablonları",
-                        type: 'item',
-                        url: '/settings/sms-template',
-                    },
-                    {
-                        id: 'person-type',
-                        code: "00047",
-                        title: "Çalışan Türleri",
-                        type: 'item',
-                        url: '/settings/person-type',
-                    }
-                ]
-            },
+            }
         ]
     }
 ];

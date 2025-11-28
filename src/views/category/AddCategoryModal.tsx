@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
-import { Badge, Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
-import { Add, CloseSquare, DocumentUpload } from "iconsax-react"
+import { Badge, Box, Button, Collapse, Dialog, DialogActions, Divider, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Paper, Stack, Switch, Typography } from "@mui/material"
+import { Add, ArrowDown2, ArrowUp2, CloseSquare, DocumentUpload } from "iconsax-react"
 import { closeModal, ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { Form, Formik } from 'formik';
 import { Branches } from 'reduxt/features/category/models/category-model';
@@ -15,6 +15,17 @@ import { useCreateCategoryMutation } from 'reduxt/features/category/category-api
 import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
+import { useAutoTranslate } from 'hooks/useAutoTranslate';
+import { categoryValidationSchema } from 'utils/schemas/category-validation-schema';
+
+interface FormValues {
+    title_tr: string;
+    title_en: string;
+    title_es: string | null;
+    title_fr: string | null;
+    branches: Branches[];
+    status: boolean;
+}
 
 const AddCategoryModal = () => {
 
@@ -22,7 +33,15 @@ const AddCategoryModal = () => {
     const { data: { open, modalType, id } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
+    const { autoTranslate, translateIsLoading } = useAutoTranslate();
+
     const [selectedFiles, setselectedFiles] = useState([]);
+
+    const [acik, setAcik] = useState(false);
+
+    const handleToggle = () => {
+        setAcik((prev) => !prev);
+    };
 
     function formatBytes(bytes: any, decimals = 2) {
         if (bytes === 0) return "0 Bytes";
@@ -104,34 +123,40 @@ const AddCategoryModal = () => {
                             </IconButton>
                         </Grid>
                     </Grid>
-                    <Formik initialValues={{
+                    <Formik<FormValues> initialValues={{
                         title_tr: "",
                         title_en: "",
-                        branches: [] as Branches[],
+                        title_es: null,
+                        title_fr: null,
+                        branches: [],
                         status: true
-
-                    }} onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        const formData = new FormData();
-                        Object.entries(values).forEach(([key, value]) => {
-                            if (Array.isArray(value)) {
-                                if (value.length > 0) {
-                                    formData.append(key, JSON.stringify(value));
+                    }}
+                        validationSchema={categoryValidationSchema(intl)}
+                        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                            const formData = new FormData();
+                            Object.entries(values).forEach(([key, value]) => {
+                                if (Array.isArray(value)) {
+                                    if (value.length > 0) {
+                                        formData.append(key, JSON.stringify(value));
+                                    }
+                                } else if (value !== undefined && value !== null) {
+                                    formData.append(key, String(value));
                                 }
-                            } else if (value !== undefined && value !== null) {
-                                formData.append(key, String(value));
+                            });
+                            if (selectedFiles) {
+                                formData.append('image', selectedFiles[0]);
                             }
-                        });
-                        if (selectedFiles) {
-                            formData.append('image', selectedFiles[0]);
-                        }
-                        createCategory(formData);
-                    }}>
+                            createCategory(formData);
+                        }}>
                         {({ errors, setFieldValue, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                             <Form>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="title_tr">{intl.formatMessage({ id: "titleTr" })}</InputLabel>
+                                            <Stack direction={"row"} justifyContent={"space-between"}>
+                                                <InputLabel htmlFor="title_tr">{intl.formatMessage({ id: "titleTr" })}</InputLabel>
+                                                <Button variant="text" size='small' sx={{ padding: 0 }} disabled={values.title_tr.length == 0} onClick={() => autoTranslate({ text: values.title_tr, currentLang: "TR", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                            </Stack>
                                             <OutlinedInput
                                                 fullWidth
                                                 error={Boolean(touched.title_tr && errors.title_tr)}
@@ -152,7 +177,10 @@ const AddCategoryModal = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
-                                            <InputLabel htmlFor="title_en">{intl.formatMessage({ id: "titleEn" })}</InputLabel>
+                                            <Stack direction={"row"} justifyContent={"space-between"}>
+                                                <InputLabel htmlFor="title_en">{intl.formatMessage({ id: "titleEn" })}</InputLabel>
+                                                <Button variant="text" size='small' sx={{ padding: 0 }} disabled={values.title_en.length == 0} onClick={() => autoTranslate({ text: values.title_en, currentLang: "EN", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                            </Stack>
                                             <OutlinedInput
                                                 fullWidth
                                                 error={Boolean(touched.title_en && errors.title_en)}
@@ -171,6 +199,73 @@ const AddCategoryModal = () => {
                                             </FormHelperText>
                                         )}
                                     </Grid>
+                                </Grid>
+                                <Stack alignContent={"center"} alignItems={"center"} justifyContent={"center"} marginTop={1}>
+                                    <Button
+                                        variant="text"
+                                        size='small'
+                                        onClick={handleToggle}
+                                        sx={{ width: 'fit-content' }}
+                                        startIcon={acik ? <ArrowUp2 /> : <ArrowDown2 />}
+                                    >
+                                        {acik ? intl.formatMessage({ id: "hideOtherLanguages" }) : intl.formatMessage({ id: "showOtherLanguages" })}
+                                    </Button>
+                                </Stack>
+                                <Collapse in={acik}>
+                                    <Divider sx={{ marginBottom: 0.5 }} />
+                                    <Grid container spacing={3} sx={{ marginTop: "1px", marginBottom: 2 }}>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (ES)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.title_es || values.title_es.length === 0} onClick={() => autoTranslate({ text: values.title_es, currentLang: "ES", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.title_es && errors.title_es)}
+                                                    id="title_es"
+                                                    type="text"
+                                                    value={values.title_es}
+                                                    name="title_es"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "title" })} (ES)`}
+                                                />
+                                            </Stack>
+                                            {touched.title_es && errors.title_es && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.title_es}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (FR)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.title_fr || values.title_fr.length === 0} onClick={() => autoTranslate({ text: values.title_fr, currentLang: "FR", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translate" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.title_fr && errors.title_fr)}
+                                                    id="title_fr"
+                                                    type="text"
+                                                    value={values.title_fr}
+                                                    name="title_fr"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "title" })} (FR)`}
+                                                />
+                                            </Stack>
+                                            {touched.title_fr && errors.title_fr && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.title_fr}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                    </Grid>
+                                    <Divider sx={{ marginBottom: 2 }} />
+                                </Collapse>
+                                <Grid container spacing={3}>
                                     <Grid item xs={12} md={12}>
                                         <InputLabel htmlFor="title_en">{intl.formatMessage({ id: "branches" })}</InputLabel>
                                         <CustomFormikSelect
@@ -294,7 +389,7 @@ const AddCategoryModal = () => {
                         )}
                     </Formik>
                 </Box>
-            </Dialog>
+            </Dialog >
         </>
     )
 }

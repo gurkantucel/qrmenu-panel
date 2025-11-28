@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
-import { GetBranchFoodResultModel, MenuListModel, UpdateBranchFoodBodyModel, UpdateMenuOrderBodyModel } from './models/menu-model';
+import { GetBranchFoodResultModel, MenuListModel, UpdateBranchFoodBodyModel, UpdateMenuOrderBodyModel, UpdateStatusBranchFoodBodyModel } from './models/menu-model';
 
 const menuApi = createApi({
     reducerPath: "menuApi",
@@ -12,7 +12,7 @@ const menuApi = createApi({
         getMenuList: builder.query<MenuListModel, { branchSlug?: string | null, categoryId?: string | null }>({
             query: (args?: { branchSlug?: string | null, categoryId?: string | null }) => {
                 return {
-                    url: `food/list`,
+                    url: `food/panel/list`,
                     params: args
                 }
             },
@@ -77,6 +77,16 @@ const menuApi = createApi({
             },
             invalidatesTags: (result) => result?.success ? ["menu"] : [],
         }),
+        updateStatusBranchFood: builder.mutation<CreateResultModel, UpdateStatusBranchFoodBodyModel>({
+            query: (body) => {
+                return {
+                    url: `food/updateStatusBranchFood`,
+                    method: "PUT",
+                    body: body
+                }
+            },
+            invalidatesTags: (result) => result?.success ? ["menu"] : [],
+        }),
     })
 })
 
@@ -87,7 +97,8 @@ export const {
     useGetBranchFoodListQuery,
     useUpdateBranchFoodMutation,
     useUpdateCategoryOrderMutation,
-    useDeleteFoodMutation
+    useDeleteFoodMutation,
+    useUpdateStatusBranchFoodMutation
 } = menuApi
 
 export default menuApi;

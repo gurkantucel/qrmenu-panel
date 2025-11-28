@@ -6,7 +6,7 @@ import { useAppDispatch } from 'reduxt/hooks';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import MainCard from 'components/MainCard';
 import { Box, Button, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar, InputLabel, Stack, Typography } from '@mui/material';
-import { Add, DocumentDownload, Trash } from 'iconsax-react';
+import { Add, DocumentDownload } from 'iconsax-react';
 import Select from 'react-select'
 import { useGetBranchDropdownQuery } from 'reduxt/features/branch/branch-api';
 import { useEffect, useState } from 'react';
@@ -62,10 +62,10 @@ const QrCodeView = () => {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Stack direction={"column"} marginBottom={2}>
-                                <InputLabel sx={{ marginBottom: 1 }}>Şube</InputLabel>
+                                <InputLabel sx={{ marginBottom: 1 }}>{intl.formatMessage({ id: "branch" })}</InputLabel>
                                 <Select
-                                    placeholder={"Seçim yapınız..."}
-                                    noOptionsMessage={(label) => "Bulunamadı."}
+                                    placeholder={intl.formatMessage({id: "makeYourChoice"})}
+                                    noOptionsMessage={(label) => intl.formatMessage({id: "notFound"})}
                                     styles={{
                                         container: (baseStyles: any) => ({
                                             ...baseStyles,
@@ -105,12 +105,12 @@ const QrCodeView = () => {
                             </Stack>
                             {getBranchDropdownLoading || getBranchDropdownFetching ? <CustomScaleLoader /> : <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <MainCard title="QR Kodları" secondary={<Stack direction={"row"} spacing={2}>
+                                    <MainCard title={intl.formatMessage({ id: "qrCodes" })} secondary={<Stack direction={"row"} spacing={2}>
                                         {qrCodeListData?.data.length == 0 && <Button variant="dashed" startIcon={<Add />} onClick={() => {
                                             dispatch(setModal({
                                                 open: true,
                                                 modalType: ModalEnum.createQrCode,
-                                                title: "QR Oluştur",
+                                                title: intl.formatMessage({id: "createQR"}),
                                                 data: { branchId: selectedBranch?.value, branchSlug: selectedBranch?.field }
                                             }))
                                         }}>{intl.formatMessage({ id: "create" })}</Button>}

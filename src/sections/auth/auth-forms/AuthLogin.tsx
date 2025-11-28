@@ -21,25 +21,27 @@ import AnimateButton from 'components/@extended/AnimateButton';
 // assets
 import { Eye, EyeSlash } from 'iconsax-react';
 import { useLoginMutation } from 'reduxt/features/auth/auth-api';
-import { enqueueSnackbar } from 'notistack';
 import { useRouter } from 'next/navigation';
 import { loginValidationSchema } from 'utils/schemas/auth-validation-schema';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
-import { useAppDispatch } from 'reduxt/hooks';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { useAppSnackbar } from 'hooks/useAppSnackbar';
+import { useIntl } from 'react-intl';
 
 // ============================|| JWT - LOGIN ||============================ //
 
-export default function AuthLogin({ providers, csrfToken }: any) {
+export default function AuthLogin({ providers }: any) {
 
   const [login, { isLoading: loginIsLoading, data: loginResponse, error: loginError }] = useLoginMutation();
 
-  const dispatch = useAppDispatch();
+  const intl = useIntl()
 
   const router = useRouter();
 
   const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const { showMessage } = useAppSnackbar();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -69,15 +71,11 @@ export default function AuthLogin({ providers, csrfToken }: any) {
 
   useEffect(() => {
     if (loginResponse) {
-      enqueueSnackbar(loginResponse.message, {
-        variant: loginResponse?.success == true ? 'success' : 'error', anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right'
-        }
-      },)
+      showMessage(loginResponse.message, loginResponse.success);
       if (loginResponse?.success == true) {
         setCookie("token", loginResponse.data.idToken)
         setCookie("refreshToken", loginResponse.data.refreshToken)
+        setCookie("displayName", loginResponse.data.displayName)
         setTimeout(() => {
           router.push("/home")
         }, 200)
@@ -86,12 +84,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
     if (loginError) {
       var error = loginError as any;
       if (error.data?.message == "LOGIN_REQUIRED_PAYMENT") {
-        enqueueSnackbar(error?.data?.message ?? "Hata", {
-          variant: 'error', anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'right'
-          }
-        },)
+        showMessage(error?.data?.message, false);
         if (error.data.data) {
           setTimeout(() => {
             router.push(`/auth/pay-form/${error.data.data[0]}`)
@@ -99,12 +92,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
         }
         return;
       }
-      enqueueSnackbar(error.data?.message ?? "Hata", {
-        variant: 'error', anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right'
-        }
-      },)
+      showMessage(error?.data?.message, false);
     }
   }, [loginResponse, loginError])
 
@@ -115,18 +103,17 @@ export default function AuthLogin({ providers, csrfToken }: any) {
           email: '',
           password: '',
         }}
-        validationSchema={loginValidationSchema}
+        validationSchema={loginValidationSchema(intl)}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           submitLogin(values);
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">E-Posta</InputLabel>
+                  <InputLabel htmlFor="email-login">{intl.formatMessage({id: "email"})}</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -134,7 +121,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="E-Posta"
+                    placeholder={intl.formatMessage({id: "email"})}
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
@@ -147,7 +134,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">Şifre</InputLabel>
+                  <InputLabel htmlFor="password-login">{intl.formatMessage({id: "password"})}</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -170,7 +157,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder="Şifre"
+                    placeholder={intl.formatMessage({id: "password"})}
                   />
                 </Stack>
                 {touched.password && errors.password && (
@@ -182,7 +169,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
               <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="end" alignItems="center" spacing={2}>
                   <Typography component={Link} href={'/auth/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
-                    {"Şifremi unuttum?"}
+                    {intl.formatMessage({id: "forgotMyPassword"})}
                   </Typography>
                 </Stack>
               </Grid>
@@ -193,7 +180,7 @@ export default function AuthLogin({ providers, csrfToken }: any) {
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting || loginIsLoading} fullWidth size="large" type="submit" variant="contained" color="primary">
                     {loginIsLoading && <PuffLoader size={20} color='white' />}
-                    {loginIsLoading == false && "Giriş Yap"}
+                    {loginIsLoading == false && intl.formatMessage({id: "signIn"})}
                   </Button>
                 </AnimateButton>
               </Grid>

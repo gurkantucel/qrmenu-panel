@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
-import { Badge, Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
-import { CloseSquare, DocumentUpload } from "iconsax-react"
+import { Badge, Box, Button, Collapse, Dialog, DialogActions, Divider, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
+import { ArrowDown2, ArrowUp2, CloseSquare, DocumentUpload } from "iconsax-react"
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
 import { Form, Formik } from 'formik';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
@@ -14,9 +14,10 @@ import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { useLocalizedField } from 'hooks/useLocalizedField';
 import { UpdateFoodBodyModel } from 'reduxt/features/menu/models/menu-model';
-import {useUpdateFoodMutation } from 'reduxt/features/menu/menu-api';
+import { useUpdateFoodMutation } from 'reduxt/features/menu/menu-api';
 import { addFoodValidationSchema } from 'utils/schemas/food-validation-schema';
 import Image from 'next/image'
+import { useAutoTranslate } from 'hooks/useAutoTranslate';
 
 const UpdateFoodModal = () => {
 
@@ -26,29 +27,41 @@ const UpdateFoodModal = () => {
 
     const t = useLocalizedField()
 
+    const { autoTranslate, translateIsLoading } = useAutoTranslate();
+
     const [selectedFiles, setselectedFiles] = useState([]);
 
+    const [acik, setAcik] = useState(false);
+
+    const handleToggle = () => {
+        setAcik((prev) => !prev);
+    };
+
     const [allergens] = useState([
-        { "value": "milk", "label": { "tr": "Süt Ürünleri", "en": "Dairy Products" } },
-        { "value": "egg", "label": { "tr": "Yumurta", "en": "Egg" } },
-        { "value": "gluten", "label": { "tr": "Gluten", "en": "Gluten" } },
-        { "value": "peanut", "label": { "tr": "Yer Fıstığı", "en": "Peanuts" } },
-        { "value": "nuts", "label": { "tr": "Kabuklu Ağaç Yemişleri", "en": "Tree nuts" } },
-        { "value": "fish", "label": { "tr": "Balık", "en": "Fish" } },
-        { "value": "shellfish", "label": { "tr": "Kabuklu deniz ürünleri", "en": "Shellfish" } },
-        { "value": "soy", "label": { "tr": "Soya", "en": "Soy" } },
-        { "value": "sesame", "label": { "tr": "Susam", "en": "Sesame" } },
-        { "value": "mustard", "label": { "tr": "Hardal", "en": "Mustard" } },
-        { "value": "celery", "label": { "tr": "Kereviz", "en": "Celery" } },
-        { "value": "lupin", "label": { "tr": "Lupin", "en": "Lupin" } }
+        { "value": "milk", "label": intl.formatMessage({ id: "allergens.milk" }) },
+        { "value": "egg", "label": intl.formatMessage({ id: "allergens.egg" }) },
+        { "value": "gluten", "label": intl.formatMessage({ id: "allergens.gluten" }) },
+        { "value": "peanut", "label": intl.formatMessage({ id: "allergens.peanut" }) },
+        { "value": "nuts", "label": intl.formatMessage({ id: "allergens.nuts" }) },
+        { "value": "fish", "label": intl.formatMessage({ id: "allergens.fish" }) },
+        { "value": "shellfish", "label": intl.formatMessage({ id: "allergens.shellfish" }) },
+        { "value": "soy", "label": intl.formatMessage({ id: "allergens.soy" }) },
+        { "value": "sesame", "label": intl.formatMessage({ id: "allergens.sesame" }) },
+        { "value": "mustard", "label": intl.formatMessage({ id: "allergens.mustard" }) },
+        { "value": "celery", "label": intl.formatMessage({ id: "allergens.celery" }) },
+        { "value": "lupin", "label": intl.formatMessage({ id: "allergens.lupin" }) }
     ])
 
     const [initialValues, setInitialValues] = useState<UpdateFoodBodyModel | null>({
         food_id: "",
         title_tr: "",
         title_en: "",
+        title_es: null,
+        title_fr: null,
         description_tr: "",
         description_en: "",
+        description_es: null,
+        description_fr: null,
         allergens: [] as string[],
         property_gr: null,
         property_kcal: null,
@@ -88,8 +101,12 @@ const UpdateFoodModal = () => {
                 food_id: data?.foodId,
                 title_tr: data?.title?.tr,
                 title_en: data?.title?.en,
+                title_es: data?.title?.es,
+                title_fr: data?.title?.fr,
                 description_tr: data?.description?.tr,
                 description_en: data?.description?.en,
+                description_es: data?.description?.es,
+                description_fr: data?.description?.fr,
                 property_kcal: data?.properties?.kcal,
                 property_gr: data?.properties?.gr,
                 property_carbohydrate: data?.properties?.carbohydrate,
@@ -155,8 +172,12 @@ const UpdateFoodModal = () => {
                         food_id: "",
                         title_tr: "",
                         title_en: "",
+                        title_es: null,
+                        title_fr: null,
                         description_tr: "",
                         description_en: "",
+                        description_es: null,
+                        description_fr: null,
                         allergens: [] as string[],
                         property_gr: null,
                         property_kcal: null,
@@ -166,7 +187,7 @@ const UpdateFoodModal = () => {
                         status: true
                     }}
                         enableReinitialize
-                        validationSchema={addFoodValidationSchema}
+                        validationSchema={addFoodValidationSchema(intl)}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                             const formData = new FormData();
                             Object.entries(values).forEach(([key, value]) => {
@@ -271,7 +292,120 @@ const UpdateFoodModal = () => {
                                         )}
                                     </Grid>
                                 </Grid>
-                                <Typography variant="h5" marginY={3}>{"Besin Özellikleri"}</Typography>
+                                <Stack alignContent={"center"} alignItems={"center"} justifyContent={"center"} marginTop={1}>
+                                    <Button
+                                        variant="text"
+                                        size='small'
+                                        onClick={handleToggle}
+                                        sx={{ width: 'fit-content' }}
+                                        startIcon={acik ? <ArrowUp2 /> : <ArrowDown2 />}
+                                    >
+                                        {acik ? intl.formatMessage({ id: "hideOtherLanguages" }) : intl.formatMessage({ id: "showOtherLanguages" })}
+                                    </Button>
+                                </Stack>
+                                <Collapse in={acik}>
+                                    <Divider sx={{ marginBottom: 0.5 }} />
+                                    <Grid container spacing={3} sx={{ marginTop: "1px", marginBottom: 2 }}>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (ES)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.title_es || values.title_es.length === 0} onClick={() => autoTranslate({ text: values.title_es, currentLang: "ES", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translateTitles" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.title_es && errors.title_es)}
+                                                    id="title_es"
+                                                    type="text"
+                                                    value={values.title_es}
+                                                    name="title_es"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "title" })} (ES)`}
+                                                />
+                                            </Stack>
+                                            {touched.title_es && errors.title_es && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.title_es}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="title_es">{`${intl.formatMessage({ id: "title" })} (FR)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.title_fr || values.title_fr.length === 0} onClick={() => autoTranslate({ text: values.title_fr, currentLang: "FR", setFieldValue, prefix: "title" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translateTitles" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.title_fr && errors.title_fr)}
+                                                    id="title_fr"
+                                                    type="text"
+                                                    value={values.title_fr}
+                                                    name="title_fr"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "title" })} (FR)`}
+                                                />
+                                            </Stack>
+                                            {touched.title_fr && errors.title_fr && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.title_fr}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="description_es">{`${intl.formatMessage({ id: "description" })} (ES)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.description_es || values.description_es.length === 0} onClick={() => autoTranslate({ text: values.description_es, currentLang: "ES", setFieldValue, prefix: "description" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translateDescriptions" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.description_es && errors.description_es)}
+                                                    id="description_es"
+                                                    type="text"
+                                                    value={values.description_es}
+                                                    name="description_es"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "description" })} (ES)`}
+                                                />
+                                            </Stack>
+                                            {touched.description_es && errors.description_es && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.description_es}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <Stack direction={"row"} justifyContent={"space-between"}>
+                                                    <InputLabel htmlFor="description_fr">{`${intl.formatMessage({ id: "description" })} (FR)`}</InputLabel>
+                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!values.description_fr || values.description_fr.length === 0} onClick={() => autoTranslate({ text: values.description_fr, currentLang: "FR", setFieldValue, prefix: "description" })}>{translateIsLoading ? intl.formatMessage({ id: "loading" }) : intl.formatMessage({ id: "translateDescriptions" })}</Button>
+                                                </Stack>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.description_fr && errors.description_fr)}
+                                                    id="description_fr"
+                                                    type="text"
+                                                    value={values.description_fr}
+                                                    name="description_fr"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={`${intl.formatMessage({ id: "description" })} (FR)`}
+                                                />
+                                            </Stack>
+                                            {touched.description_fr && errors.description_fr && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.description_fr}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                    </Grid>
+                                    <Divider sx={{ marginBottom: 2 }} />
+                                </Collapse>
+                                <Typography variant="h5" marginY={3}>{intl.formatMessage({ id: "nutritionalProperties" })}</Typography>
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} md={6}>
                                         <Stack spacing={1}>
@@ -391,11 +525,11 @@ const UpdateFoodModal = () => {
                                                 )
                                                 .map((item2) => ({
                                                     value: item2.value,
-                                                    label: t(item2.label),
+                                                    label: item2.label,
                                                 }))}
                                             options={allergens?.map((item) => ({
                                                 value: item.value,
-                                                label: t(item.label)
+                                                label: item.label
                                             }))}
                                             //getOptionValue={(option: any) => option.value.id.toString()}
                                             //getOptionLabel={(option: any) => option.label}

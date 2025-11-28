@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
-import { Badge, Box, Button, Dialog, DialogActions, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
-import { CloseSquare, DocumentUpload, Facebook, Instagram, Whatsapp } from "iconsax-react"
+import { Box, Button, Dialog, DialogActions, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Typography } from "@mui/material"
+import { CloseSquare, Facebook, Instagram, Whatsapp } from "iconsax-react"
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
 import { Form, Formik } from 'formik';
 import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { useLocalizedField } from 'hooks/useLocalizedField';
-import { addFoodValidationSchema } from 'utils/schemas/food-validation-schema';
 import { UpdateBranchBodyModel } from 'reduxt/features/branch/models/branch-model';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import { useGetCountryDropdownQuery } from 'reduxt/features/common/common-api';
@@ -19,6 +18,7 @@ import XIcon from 'components/XIcon';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'
 import { useUpdateBranchMutation } from 'reduxt/features/branch/branch-api';
+import { updateBranchValidationSchema } from 'utils/schemas/branch-validation-schema';
 
 const UpdateBranchModal = () => {
 
@@ -59,12 +59,15 @@ const UpdateBranchModal = () => {
                 phone: data?.phone,
                 email: data?.email,
                 description: data?.description,
-                social: {
-                    whatsapp: data?.social?.whatsapp,
-                    facebook: data?.social?.facebook,
-                    instagram: data?.social?.instagram,
-                    x: data?.social?.x
-                }
+                social: !data?.social ||
+                    Object.values(data.social).every((v) => v == null || v === undefined)
+                    ? null
+                    : {
+                        whatsapp: data?.social?.whatsapp,
+                        facebook: data?.social?.facebook,
+                        instagram: data?.social?.instagram,
+                        x: data?.social?.x,
+                    }
             }
             setInitialValues(newModel);
         }
@@ -133,12 +136,13 @@ const UpdateBranchModal = () => {
                             "instagram": "",
                             "facebook": "",
                             "x": "",
-                            "whatsapp": ""
+                            "whatsapp": "",
+                            "youtube": ""
                         },
                         "status": true
                     }}
                         enableReinitialize
-                        validationSchema={addFoodValidationSchema}
+                        validationSchema={updateBranchValidationSchema(intl)}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                             updateBranch(values);
                         }}>
@@ -306,7 +310,7 @@ const UpdateBranchModal = () => {
                                                 id="social.whatsapp"
                                                 type="phone"
                                                 value={values.social?.whatsapp}
-                                                name="social.facebook"
+                                                name="social.whatsapp"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
                                                 placeholder={"WhatsApp"}
@@ -381,7 +385,7 @@ const UpdateBranchModal = () => {
                                                 name="social.x"
                                                 onBlur={handleBlur}
                                                 onChange={handleChange}
-                                               placeholder={"https://x.com/...."}
+                                                placeholder={"https://x.com/...."}
                                             />
                                         </Stack>
                                         {(touched.social as any)?.x && (errors.social as any)?.x && (
@@ -392,15 +396,17 @@ const UpdateBranchModal = () => {
                                     </Grid>
                                     <Grid item xs={12} md={12}>
                                         <InputLabel htmlFor="description">{intl.formatMessage({ id: "aboutUs" })}</InputLabel>
-                                        <ReactQuill theme="snow" value={values.description} 
-                                            modules={{toolbar: [
-                                                ['bold', 'italic', 'underline', 'strike'],
-                                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                                                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-                                            ]}}
+                                        <ReactQuill theme="snow" value={values.description}
+                                            modules={{
+                                                toolbar: [
+                                                    ['bold', 'italic', 'underline', 'strike'],
+                                                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+                                                ]
+                                            }}
                                             onChange={(value, delta, source, editor) => {
-                                            setFieldValue("description", editor.getHTML());
-                                        }} />
+                                                setFieldValue("description", editor.getHTML());
+                                            }} />
                                     </Grid>
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>

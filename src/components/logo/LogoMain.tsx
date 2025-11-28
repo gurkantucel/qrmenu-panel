@@ -19,6 +19,6 @@ export default function LogoMain({ reverse }: { reverse?: boolean }) {
      * <img src={theme.palette.mode === ThemeMode.DARK ? logoDark : logo} alt="icon logo" width="100" />
      *
      */
-    <Image src={"/assets/images/logo_new_28.png"} width={250} height={50} alt='Klinik Ease' quality={100} />
+    <Image src={"/assets/images/qrchefs-logo-sm.png"} width={250} height={50} alt='Klinik Ease' quality={100} />
   );
 }

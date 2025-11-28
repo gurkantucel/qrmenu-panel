@@ -54,7 +54,7 @@ const AddImageGalleryModal = () => {
 
     const onSubmit = () => {
         if (selectedFiles.length > 0) {
-            const MAX_SIZE_MB = 6
+            const MAX_SIZE_MB = 3
             let totalSize = 0;
             selectedFiles.forEach(file => {
                 totalSize += file.size; // Dosya boyutu byte cinsindendir

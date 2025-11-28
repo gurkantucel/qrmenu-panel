@@ -7,10 +7,10 @@ import DashboardLayout from 'layout/DashboardLayout';
 
 export const metadata: Metadata = {
   title: {
-    default: "Klinik Ease - Dijital Klinik Çözümleri",
-    template: "%s | Klinik Ease"
+    default: "QRChefs - QR Menü",
+    template: "%s | QRChefs"
   },
-  description: "Klinik işleriniz için dijital çözüm.",
+  description: "QR Menü için dijital çözüm.",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

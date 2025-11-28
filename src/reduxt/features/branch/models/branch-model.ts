@@ -5,6 +5,7 @@ export interface BranchListModel {
 }
 
 export interface BranchListData {
+  select?: string
   id: string
   companyId: string
   title: string
@@ -14,6 +15,7 @@ export interface BranchListData {
   address: string
   phoneCode: string
   phone: string
+  packages: BranchPackages
   social: Social
   logo: string
   slug: string
@@ -22,13 +24,23 @@ export interface BranchListData {
   status: boolean
   description: string
   email: string
+  islemler?: string
+}
+
+export interface BranchPackages {
+  id: string
+  type: string
+  active: boolean
+  startDate: string
+  endDate: string
+  remainingDays: number
 }
 
 export interface Social {
   whatsapp: string | null
   instagram: string | null
   facebook: string | null
-  x: string | null
+  x: string | null
 }
 
 export interface GetBranchModel {
@@ -53,7 +65,20 @@ export interface GetBranchData {
   status: boolean
   description: string
   email: string
+  theme: string
 }
+
+export interface CreateBranchBodyModel {
+  branches: CreateBranch[]
+}
+
+export interface CreateBranch {
+  branchName: string
+  country: string
+  province: string
+  district: string
+}
+
 
 export interface UpdateBranchBodyModel {
   branchId: string
@@ -66,5 +91,10 @@ export interface UpdateBranchBodyModel {
   phone: string
   email: string
   description: string
-  social?: Social
+  social?: Social | null
+}
+
+export interface UpdateBranchThemeBodyModel {
+  branchId: string
+  theme: string
 }

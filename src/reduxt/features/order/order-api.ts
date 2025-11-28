@@ -1,16 +1,27 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
-import { OrderListModel } from './model/order-model';
+import { CreateOrderBodyModel, OrderListModel } from './model/order-model';
+import { CreateResultModel } from 'utils/models/create-result-model';
 
 const orderApi = createApi({
     reducerPath: "orderApi",
     tagTypes: ["order"],
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
-        getOrderList: builder.query<OrderListModel, { filterSearch?: string, page?: number, pageSize?: number }>({
-            query: (args?: { filterSearch?: string, page?: number, pageSize?: number }) => {
+        createOrder: builder.mutation<CreateResultModel, CreateOrderBodyModel>({
+            query: (body) => {
                 return {
-                    url: `app/tenant-order/list?page=${args?.page ?? 1}&pageSize=${args?.pageSize ?? 10}${args?.filterSearch != null ? `&${args.filterSearch}` : ''}`,
+                    url: `order/create`,
+                    method: "POST",
+                    body: body
+                }
+            },
+            invalidatesTags: (result) => result?.success ? ["order"] : [],
+        }),
+        getOrderList: builder.query<OrderListModel, void>({
+            query: () => {
+                return {
+                    url: `order/list`,
                 }
             },
             providesTags: ["order"]
@@ -19,6 +30,7 @@ const orderApi = createApi({
 })
 
 export const {
+    useCreateOrderMutation,
     useGetOrderListQuery,
     useLazyGetOrderListQuery,
 } = orderApi

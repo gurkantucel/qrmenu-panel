@@ -10,7 +10,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { EmptyTable, Filter, TablePagination } from 'components/third-party/react-table';
-import { Box, Chip, Divider, IconButton, InputLabel, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Box, Button, Chip, Divider, IconButton, InputLabel, Skeleton, Stack, Tooltip } from '@mui/material';
 import {
     ColumnDef,
     createColumnHelper,
@@ -27,7 +27,7 @@ import Select from 'react-select'
 import { useGetBranchDropdownQuery } from 'reduxt/features/branch/branch-api';
 import Image from "next/image"
 import dayjs from 'dayjs';
-import { Edit, MoneySend, Trash } from 'iconsax-react';
+import { Add, CloseCircle, Edit, MoneySend, TickCircle, Trash } from 'iconsax-react';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useAppDispatch } from 'reduxt/hooks';
 import { useGetMenuListQuery } from 'reduxt/features/menu/menu-api';
@@ -38,6 +38,8 @@ import AddFoodModal from './AddFoodModal';
 import UpdateFoodPriceModal from './UpdateFoodPriceModal';
 import UpdateFoodModal from './UpdateFoodModal';
 import DeleteFoodModal from './DeleteFoodModal';
+import { useAppSnackbar } from 'hooks/useAppSnackbar';
+import UpdateStatusBranchFoodModal from './UpdateStatusBranchFoodModal';
 
 const columnHelper = createColumnHelper<MenuListData>()
 
@@ -46,6 +48,8 @@ const MenuTable = () => {
     const intl = useIntl()
 
     const t = useLocalizedField()
+
+    const { showMessage } = useAppSnackbar();
 
     const dispatch = useAppDispatch();
 
@@ -134,6 +138,22 @@ const MenuTable = () => {
                             <MoneySend />
                         </IconButton>
                     </Tooltip>
+                    <Tooltip title={intl.formatMessage({ id: info.row.original.status == true ? "makePassive" : "makeActive" })}>
+                        <IconButton
+                            color={info.row.original.status == true ? "error" : "success"}
+                            onClick={(e: any) => {
+                                e.stopPropagation();
+                                dispatch(setModal({
+                                    open: true, modalType: ModalEnum.updateStatusBranchFood,
+                                    id: info.row.original.id,
+                                    title: info.row.original.title.tr,
+                                    data: { title: info.row.original.title, branchFoodId: info.row.original.id, status: info.row.original.status }
+                                }))
+                            }}
+                        >
+                            {info.row.original.status == true ? <CloseCircle /> : <TickCircle />}
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title={intl.formatMessage({ id: "delete" })}>
                         <IconButton
                             color="error"
@@ -143,7 +163,7 @@ const MenuTable = () => {
                                     open: true, modalType: ModalEnum.deleteFood,
                                     id: info.row.original.id,
                                     title: info.row.original.title.tr,
-                                    data: {title: info.row.original.title,foodId: info.row.original.foodId, branchFoodId: info.row.original.id}
+                                    data: { title: info.row.original.title, foodId: info.row.original.foodId, branchFoodId: info.row.original.id }
                                 }))
                             }}
                         >
@@ -205,13 +225,13 @@ const MenuTable = () => {
         <>
             <Breadcrumbs custom heading={`${intl.formatMessage({ id: "menus" })}`} links={breadcrumbLinks} />
             <MainCard content={false}>
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={{xs: 2, sm: 0}} justifyContent={"space-between"} alignItems={{xs: "normal", sm: "center"}} sx={{ padding: 2 }}>
-                    <Stack direction={{ xs: "column", sm: "row" }}  spacing={2}>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 0 }} justifyContent={"space-between"} alignItems={{ xs: "normal", sm: "center" }} sx={{ padding: 2 }}>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                         <Stack direction={"column"}>
-                            <InputLabel sx={{ marginBottom: 1 }}>Şube</InputLabel>
+                            <InputLabel sx={{ marginBottom: 1 }}>{intl.formatMessage({ id: "branch" })}</InputLabel>
                             <Select
-                                placeholder={"Seçim yapınız..."}
-                                noOptionsMessage={(label) => "Bulunamadı."}
+                                placeholder={intl.formatMessage({ id: "makeYourChoice" })}
+                                noOptionsMessage={(label) => intl.formatMessage({ id: "notFound" })}
                                 styles={{
                                     container: (baseStyles: any) => ({
                                         ...baseStyles,
@@ -250,10 +270,10 @@ const MenuTable = () => {
                             />
                         </Stack>
                         <Stack direction={"column"}>
-                            <InputLabel sx={{ marginBottom: 1 }}>Kategori</InputLabel>
+                            <InputLabel sx={{ marginBottom: 1 }}>{intl.formatMessage({ id: "category" })}</InputLabel>
                             <Select
-                                placeholder={"Seçim yapınız..."}
-                                noOptionsMessage={(label) => "Bulunamadı."}
+                                placeholder={intl.formatMessage({ id: "makeYourChoice" })}
+                                noOptionsMessage={(label) => intl.formatMessage({ id: "notFound" })}
                                 styles={{
                                     container: (baseStyles: any) => ({
                                         ...baseStyles,
@@ -293,10 +313,23 @@ const MenuTable = () => {
                         </Stack>
                     </Stack>
                     <Stack direction={"row"} spacing={2}>
+                        <Button variant="dashed" startIcon={<Add />}
+                            sx={{ width: "100%" }}
+                            onClick={() => {
+                                if ((getCategoryDropdownData?.data?.length ?? 0) == 0) {
+                                    showMessage("firstAddCategorySection");
+                                    return;
+                                }
+                                dispatch(setModal({
+                                    open: true,
+                                    modalType: ModalEnum.addFood
+                                }))
+                            }}>{intl.formatMessage({ id: "add" })}</Button>
                         <AddFoodModal />
                         <UpdateFoodModal />
                         <DeleteFoodModal />
                         <UpdateFoodPriceModal />
+                        <UpdateStatusBranchFoodModal />
                         {/*<UpdateCategoryOrderModal branchSlug={branchSlug} />
                         <UpdateCategoryModal />
                         <AddCategoryModal />

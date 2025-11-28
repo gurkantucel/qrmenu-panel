@@ -1,15 +1,13 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 import CustomLoadingButton from "components/CustomLoadingButton";
 import { enqueueSnackbar } from "notistack";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useDeleteCategoryMutation } from "reduxt/features/category/category-api";
 import { closeModal, ModalEnum } from "reduxt/features/definition/modalSlice";
 import { useAppDispatch, useAppSelector } from "reduxt/hooks";
 import { RootState } from "reduxt/store";
 import QRCode from "qrcode";
 import { useCreateQrCodeMutation } from "reduxt/features/qr-code/qr-code-api";
-import Constants from "utils/Constants";
 
 const CreateQrCodeModal = () => {
     const dispatch = useAppDispatch();
@@ -30,7 +28,7 @@ const CreateQrCodeModal = () => {
     };
 
     const generate = async () => {
-        const valid = validateUrl(`https://hgtucel.com/${data?.branchSlug}`);
+        const valid = validateUrl(`https://qrchefs.com/${data?.branchSlug}`);
         if (!valid) {
             enqueueSnackbar("Hata", {
                 variant: 'error', anchorOrigin: {

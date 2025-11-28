@@ -34,8 +34,8 @@ import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import NameAvatar from 'components/NameAvatar';
 import personApi from 'reduxt/features/person/person-api';
-import patientApi from 'reduxt/features/patient/patient-api';
 import branchApi from 'reduxt/features/branch/branch-api';
+import { useIntl } from 'react-intl';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -75,11 +75,12 @@ export default function ProfilePage() {
   const user = useUser();
   const dispatch = useAppDispatch();
 
+  const intl = useIntl()
+
   const handleLogout = () => {
     router.push('/auth/login');
     dispatch(branchApi.util.resetApiState());
     dispatch(personApi.util.resetApiState());
-    dispatch(patientApi.util.resetApiState());
     deleteCookie("token");
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");
@@ -123,7 +124,7 @@ export default function ProfilePage() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <NameAvatar fullName={user ? user.name : ""} />
+        <NameAvatar fullName={user ? user.name : "ASD"} />
       </ButtonBase>
       <Popper
         placement="bottom-end"
@@ -166,9 +167,6 @@ export default function ProfilePage() {
                           <NameAvatar fullName={user ? user.name : ""} />
                           <Stack>
                             <Typography variant="subtitle1">{user ? user?.name : ''}</Typography>
-                            <Typography variant="body2" color="secondary">
-                              {user ? user.role : '-'}
-                            </Typography>
                           </Stack>
                         </Stack>
                       </Grid>
@@ -193,7 +191,7 @@ export default function ProfilePage() {
                           textTransform: 'capitalize'
                         }}
                         icon={<Profile size={18} style={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Profil"
+                        label={intl.formatMessage({ id: "profile" })}
                         {...a11yProps(0)}
                       />
                       {/*<Tab
