@@ -9,7 +9,6 @@ import { Form, Formik } from 'formik';
 import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
-import { useLocalizedField } from 'hooks/useLocalizedField';
 import { UpdateBranchBodyModel } from 'reduxt/features/branch/models/branch-model';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import { useGetCountryDropdownQuery } from 'reduxt/features/common/common-api';
@@ -25,8 +24,6 @@ const UpdateBranchModal = () => {
     const dispatch = useAppDispatch();
     const { data: { open, modalType, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
-
-    const t = useLocalizedField()
 
     const [initialValues, setInitialValues] = useState<UpdateBranchBodyModel | null>({
         branchId: "",
