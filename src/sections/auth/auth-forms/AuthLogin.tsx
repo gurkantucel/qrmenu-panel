@@ -76,6 +76,12 @@ export default function AuthLogin({ providers }: any) {
         setCookie("token", loginResponse.data.idToken)
         setCookie("refreshToken", loginResponse.data.refreshToken)
         setCookie("displayName", loginResponse.data.displayName)
+        if (loginResponse.message == "PACKAGE_NOT_ACTIVE") {
+          setTimeout(() => {
+            router.push("/orders")
+          }, 200)
+          return;
+        }
         setTimeout(() => {
           router.push("/home")
         }, 200)
@@ -83,7 +89,7 @@ export default function AuthLogin({ providers }: any) {
     }
     if (loginError) {
       var error = loginError as any;
-      if (error.data?.message == "LOGIN_REQUIRED_PAYMENT") {
+      if (error.data?.message == "PACKAGE_NOT_ACTIVE") {
         showMessage(error?.data?.message, false);
         if (error.data.data) {
           setTimeout(() => {
@@ -113,7 +119,7 @@ export default function AuthLogin({ providers }: any) {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">{intl.formatMessage({id: "email"})}</InputLabel>
+                  <InputLabel htmlFor="email-login">{intl.formatMessage({ id: "email" })}</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -121,7 +127,7 @@ export default function AuthLogin({ providers }: any) {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder={intl.formatMessage({id: "email"})}
+                    placeholder={intl.formatMessage({ id: "email" })}
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />
@@ -134,7 +140,7 @@ export default function AuthLogin({ providers }: any) {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="password-login">{intl.formatMessage({id: "password"})}</InputLabel>
+                  <InputLabel htmlFor="password-login">{intl.formatMessage({ id: "password" })}</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -157,7 +163,7 @@ export default function AuthLogin({ providers }: any) {
                         </IconButton>
                       </InputAdornment>
                     }
-                    placeholder={intl.formatMessage({id: "password"})}
+                    placeholder={intl.formatMessage({ id: "password" })}
                   />
                 </Stack>
                 {touched.password && errors.password && (
@@ -169,7 +175,7 @@ export default function AuthLogin({ providers }: any) {
               <Grid item xs={12} sx={{ mt: -1 }}>
                 <Stack direction="row" justifyContent="end" alignItems="center" spacing={2}>
                   <Typography component={Link} href={'/auth/forgot-password'} variant="body1" sx={{ textDecoration: 'none' }} color="InfoText">
-                    {intl.formatMessage({id: "forgotMyPassword"})}
+                    {intl.formatMessage({ id: "forgotMyPassword" })}
                   </Typography>
                 </Stack>
               </Grid>
@@ -180,7 +186,7 @@ export default function AuthLogin({ providers }: any) {
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting || loginIsLoading} fullWidth size="large" type="submit" variant="contained" color="primary">
                     {loginIsLoading && <PuffLoader size={20} color='white' />}
-                    {loginIsLoading == false && intl.formatMessage({id: "signIn"})}
+                    {loginIsLoading == false && intl.formatMessage({ id: "signIn" })}
                   </Button>
                 </AnimateButton>
               </Grid>

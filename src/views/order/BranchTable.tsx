@@ -97,7 +97,7 @@ const BranchTable = () => {
         }),
         columnHelper.accessor('title', {
             header: intl.formatMessage({ id: "title" }),
-            cell: info => info.getValue(),
+            cell: info => <div style={{color: info.row.original.packages.active == false ? "gray" : "inherit"}}>{info.getValue()}</div>,
             footer: info => info.column.id,
         }),
         columnHelper.accessor(row => row.packages?.startDate ?? "-", {
@@ -118,7 +118,7 @@ const BranchTable = () => {
         }),
         columnHelper.accessor(row => row.packages?.remainingDays ?? "-", {
             header: intl.formatMessage({ id: "remainingDays" }),
-            cell: (info) => <Chip color={"info"} label={`${info.renderValue()}`} size="small" variant="light" />,
+            cell: (info) => <Chip color={(info.row.original.packages?.remainingDays ?? 0) > 0 ? "info" : "error"} label={`${info.renderValue()}`} size="small" variant="light" />,
             footer: info => info.column.id,
         }),
     ], [])

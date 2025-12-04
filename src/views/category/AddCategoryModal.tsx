@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
-import { Badge, Box, Button, Collapse, Dialog, DialogActions, Divider, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Paper, Stack, Switch, Typography } from "@mui/material"
+import { Badge, Box, Button, Collapse, Dialog, DialogActions, Divider, FormControlLabel, FormHelperText, Grid, IconButton, InputLabel, OutlinedInput, Stack, Switch, Typography } from "@mui/material"
 import { Add, ArrowDown2, ArrowUp2, CloseSquare, DocumentUpload } from "iconsax-react"
 import { closeModal, ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { Form, Formik } from 'formik';
@@ -17,12 +17,15 @@ import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { useAutoTranslate } from 'hooks/useAutoTranslate';
 import { categoryValidationSchema } from 'utils/schemas/category-validation-schema';
+import { Modal2Enum, setModal2 } from 'reduxt/features/definition/modalSlice2';
+import Image from 'next/image'
 
 interface FormValues {
     title_tr: string;
     title_en: string;
     title_es: string | null;
     title_fr: string | null;
+    image_url: string | null;
     branches: Branches[];
     status: boolean;
 }
@@ -105,7 +108,7 @@ const AddCategoryModal = () => {
                     modalType: ModalEnum.addCategory
                 }))
             }}>{intl.formatMessage({ id: "add" })}</Button>
-            <Dialog open={open && modalType == ModalEnum.addCategory} onClose={handleClose}>
+            <Dialog open={open && modalType == ModalEnum.addCategory} onClose={handleClose} fullWidth>
                 <Box sx={{ px: 3, py: 3 }}>
                     <Grid
                         container
@@ -129,6 +132,7 @@ const AddCategoryModal = () => {
                         title_es: null,
                         title_fr: null,
                         branches: [],
+                        image_url: null,
                         status: true
                     }}
                         validationSchema={categoryValidationSchema(intl)}
@@ -295,7 +299,12 @@ const AddCategoryModal = () => {
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <InputLabel htmlFor="image">{intl.formatMessage({ id: "image" })}</InputLabel>
+                                        <Stack direction={"row"} justifyContent={"space-between"}>
+                                            <InputLabel htmlFor="description_es">{`${intl.formatMessage({ id: "image" })}`}</InputLabel>
+                                            <Button variant="text" size='small' sx={{ padding: 0 }} onClick={() => {
+                                                dispatch(setModal2({ open: true, modalType: Modal2Enum.imageSelect, data: { setFieldValue } }))
+                                            }}>{intl.formatMessage({ id: "chooseFromStockImageGallery" })}</Button>
+                                        </Stack>
                                         <Dropzone
                                             //maxSize={5242880}
                                             multiple={false}
@@ -335,6 +344,23 @@ const AddCategoryModal = () => {
                                             )}
                                         </Dropzone>
                                     </Grid>
+                                    {values.image_url && <Grid item xs={12}>
+                                        <Box sx={{
+                                            border: "1px solid #eff2f7",
+                                            borderRadius: "6px",
+                                            padding: "4px",
+                                            marginTop: 2
+                                        }}>
+                                            <InputLabel htmlFor="stockImage" sx={{ fontWeight: 500 }}>{`${intl.formatMessage({ id: "stockImage" })}`}</InputLabel>
+                                            <Grid item>
+                                                <Button onClick={() => {
+                                                    setFieldValue("image_url", null)
+                                                }}><Badge badgeContent={"x"} color="error" overlap="circular">
+                                                        <Image src={values.image_url} alt={"selectedStockImage"} width={128} height={128} />
+                                                    </Badge></Button>
+                                            </Grid>
+                                        </Box>
+                                    </Grid>}
                                     <Grid item xs={12}>
                                         {selectedFiles.map((f: any, i: number) => {
                                             return (

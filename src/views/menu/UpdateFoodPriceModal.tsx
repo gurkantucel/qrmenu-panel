@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useAppDispatch, useAppSelector } from 'reduxt/hooks';
 import { RootState } from 'reduxt/store';
 import { Box, Button, Dialog, DialogActions, Grid, IconButton, InputLabel, Stack, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
-import { Field, FieldArray, Form, Formik, FormikErrors } from 'formik';
+import { Field, FieldArray, Form, Formik } from 'formik';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import { useGetBranchDropdownQuery } from 'reduxt/features/branch/branch-api';
 import { useGetCategoryDropdownQuery } from 'reduxt/features/category/category-api';
@@ -28,6 +28,24 @@ const UpdateFoodPriceModal = () => {
 
     const t = useLocalizedField()
 
+    const [portions] = useState([
+        { "value": "MAIN_PRICE", "label": intl.formatMessage({ id: "mainPrice" }) },
+        { "value": "1/2_PRICE", "label": intl.formatMessage({ id: "halfPortion" }) },
+        { "value": "1_5_PRICE", "label": intl.formatMessage({ id: "1.5Servings" }) },
+        { "value": "DOUBLE_PRICE", "label": intl.formatMessage({ id: "double" }) },
+        { "value": "2PERSONS_PRICE", "label": intl.formatMessage({ id: "twoPersons" }) },
+        { "value": "3PERSONS_PRICE", "label": intl.formatMessage({ id: "threePersons" }) },
+        { "value": "OVERSIZED_PRICE", "label": intl.formatMessage({ id: "oversized" }) },
+        { "value": "SMALLSIZE_PRICE", "label": intl.formatMessage({ id: "smallSize" }) },
+        { "value": "20CL_PRICE", "label": "20CL" },
+        { "value": "35CL_PRICE", "label": "35CL" },
+        { "value": "37_5CL_PRICE", "label": "37,5CL" },
+        { "value": "50CL_PRICE", "label": "50CL" },
+        { "value": "70CL_PRICE", "label": "70CL" },
+        { "value": "75CL_PRICE", "label": "75CL" },
+        { "value": "100CL_PRICE", "label": "100CL" },
+    ])
+
     const [initialValues, setInitialValues] = useState<UpdateBranchFoodBodyModel>({
         foodId: "",
         branches: [{
@@ -35,8 +53,11 @@ const UpdateFoodPriceModal = () => {
             branchId: "",
             branchSlug: "",
             categoryId: "",
-            currencyCode: "",
-            price: "",
+            prices: [{
+                type: "",
+                currencyCode: "",
+                price: "",
+            }]
         }] as FoodPriceBranch[],
     })
 
@@ -59,8 +80,7 @@ const UpdateFoodPriceModal = () => {
                     branchId: item.branchId,
                     branchSlug: item.branchSlug,
                     categoryId: item.categoryId,
-                    currencyCode: item.currencyCode,
-                    price: item.price
+                    prices: item.prices
                 }))
                 setInitialValues({ foodId: data?.foodId, branches: newModel });
             }
@@ -122,8 +142,11 @@ const UpdateFoodPriceModal = () => {
                                 branchId: "",
                                 branchSlug: "",
                                 categoryId: "",
-                                currencyCode: "",
-                                price: "",
+                                prices: [{
+                                    type: "",
+                                    currencyCode: "",
+                                    price: "",
+                                }]
                             }] as FoodPriceBranch[],
                         }}
                             enableReinitialize
@@ -147,31 +170,18 @@ const UpdateFoodPriceModal = () => {
                                                     );
                                                     const canAdd = values.branches.length < allBranches.length;
 
-                                                    return (<Box sx={{ borderBottom: "1px solid #dedede", pb: 3, mb:2 }}><Grid container spacing={3} key={branchIndex}>
-                                                        <Grid item xs={12} md={4}>
-                                                            <Stack direction="row" justifyContent={"space-between"} spacing={1}>
-                                                                <InputLabel htmlFor="branchId" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "branch" })}</InputLabel>
-                                                                <Stack direction={"row"} spacing={2}>
-                                                                    <Button
-                                                                        disabled={!canAdd}
-                                                                        sx={{ padding: "0 6px", minWidth: "25px" }}
-                                                                        type='button' variant="text" onClick={() => push({
-                                                                            branchFoodId: null,
-                                                                            branchId: "",
-                                                                            branchSlug: "",
-                                                                            categoryId: "",
-                                                                            currencyCode: "",
-                                                                            price: "",
-                                                                        })}>{intl.formatMessage({ id: "add" })}</Button>
-                                                                    <Button
-                                                                        disabled={values.branches.length === 1}
-                                                                        sx={{ padding: "0 6px", minWidth: "25px" }}
-                                                                        type='button' variant="text" color="error" onClick={() => remove(branchIndex)}>{intl.formatMessage({ id: "delete" })}</Button>
+                                                    return (<Box key={`branches-${branchIndex}`} sx={{ px: 1, py: 2, backgroundColor: "grey.50", border: `1px dashed ${branchIndex % 2 == 0 ? '#F1EDEE' : '#efc3ce'}`, borderRadius: 0.5, mb: 2 }}><Grid container spacing={3} key={branchIndex}>
+                                                        <Grid item xs={12} md={12}>
+                                                            <Stack direction={"row"} justifyContent={"space-between"}>
+                                                                <InputLabel htmlFor={`branches-${branchIndex}-branch`} sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "branch" })}</InputLabel>
+                                                                <Stack direction={"row"} spacing={2} sx={{ marginBottom: 1 }}>
+                                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={!canAdd} onClick={() => push({ id: '', slug: '', currencyCode: '', prices: [{ type: "", currencyCode: "", price: "" }] })}>{intl.formatMessage({ id: "addBranch" })}</Button>
+                                                                    <Button variant="text" size='small' sx={{ padding: 0 }} disabled={values.branches.length == 1} onClick={() => remove(branchIndex)}>{intl.formatMessage({ id: "deleteBranch" })}</Button>
                                                                 </Stack>
                                                             </Stack>
                                                             <CustomFormikSelect
                                                                 name={`branches.${branchIndex}.id`}
-                                                                placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "branch" })})}
+                                                                placeholder={intl.formatMessage({ id: "selectX" }, { "x": intl.formatMessage({ id: "branch" }) })}
                                                                 isClearable={true}
                                                                 menuPosition={"fixed"}
                                                                 isLoading={getBranchDropdownLoading}
@@ -203,68 +213,132 @@ const UpdateFoodPriceModal = () => {
                                                             />
                                                         </Grid>
                                                         <FoodRow branchIndex={branchIndex} branch={branch} setFieldValue={setFieldValue} />
-                                                        <Grid item xs={12} md={3}>
-                                                            <InputLabel htmlFor="currencyCode" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "currencyCode" })}</InputLabel>
-                                                            <CustomFormikSelect
-                                                                name={`branches[${branchIndex}].currencyCode`}
-                                                                placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "currency" })})}
-                                                                isClearable={true}
-                                                                menuPosition={"fixed"}
-                                                                isLoading={getCurrencyDropdownLoading}
-                                                                zIndex={9999 - branchIndex}
-                                                                menuPortalTarget={document.body}
-                                                                //size='sm'
-                                                                value={
-                                                                    branch.currencyCode
-                                                                        ? (() => {
-                                                                            const currency = getCurrencyDropdownData?.data?.find(
-                                                                                (item) => item.value === branch.currencyCode
-                                                                            );
-                                                                            return {
-                                                                                label: t(currency?.label) ?? "",
-                                                                                value: currency?.value ?? "0",
-                                                                            };
-                                                                        })()
-                                                                        : null
-                                                                }
-                                                                onChange={(val: any, actionMeta) => {
-                                                                    setFieldValue(`branches[${branchIndex}].currencyCode`, val?.value ?? "");
-                                                                }}
+                                                        <FieldArray name={`branches[${branchIndex}].prices`}>
+                                                            {({ push: pushPrice, remove: removePrice }) => (
+                                                                <>
+                                                                    {branch.prices?.map((priceItem, priceIndex) => {
+                                                                        // ✅ zaten seçilmiş branchId'leri bul
+                                                                        const selectedPriceType = branch.prices
+                                                                            .map((b) => b.type)
+                                                                            .filter(Boolean);
+                                                                        // ✅ select için kullanılabilir seçenekleri filtrele
+                                                                        const availablePortionsOptions = portions.filter(
+                                                                            (item) => !selectedPriceType.includes(item.value) || item.value === priceItem.type
+                                                                        );
+                                                                        return (<Fragment key={`price-${priceIndex}`}>
+                                                                            <Grid item xs={12} md={1}>
+                                                                                <InputLabel htmlFor={`prices-${priceIndex}-addPrice`} sx={{ fontWeight: 500, marginBottom: 2 }}>{intl.formatMessage({ id: "price" })}</InputLabel>
+                                                                                <Stack direction="row" spacing={1}>
+                                                                                    <Button sx={{ minWidth: 40 }} type='button' variant="outlined" onClick={() => pushPrice({ currencyCode: '', price: '' })}>{"+"}</Button>
+                                                                                    <Button disabled={priceIndex == 0 || values.branches[branchIndex].prices.length === 1} sx={{ minWidth: 40 }} type='button' variant="outlined" color="error" onClick={() => removePrice(priceIndex)}>{"-"}</Button>
+                                                                                </Stack>
+                                                                            </Grid>
+                                                                            <Grid item xs={12} md={4}>
+                                                                                <InputLabel htmlFor={`prices-${priceIndex}-portion`} sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "portion" })}</InputLabel>
+                                                                                <CustomFormikSelect
+                                                                                    name={`branches[${branchIndex}].prices[${priceIndex}].type`}
+                                                                                    placeholder={intl.formatMessage({ id: "selectX" }, { "x": intl.formatMessage({ id: "portion" }) })}
+                                                                                    isDisabled={priceIndex == 0}
+                                                                                    isClearable={true}
+                                                                                    menuPosition={"fixed"}
+                                                                                    zIndex={999 - priceIndex}
+                                                                                    menuPortalTarget={document.body}
+                                                                                    //size='sm'
+                                                                                    value={
+                                                                                        priceItem.type
+                                                                                            ? (() => {
+                                                                                                const portion = portions?.find(
+                                                                                                    (item) => item.value === priceItem.type
+                                                                                                );
+                                                                                                return {
+                                                                                                    label: intl.formatMessage({ id: portion?.label }),
+                                                                                                    value: portion?.value ?? "0",
+                                                                                                };
+                                                                                            })()
+                                                                                            : null
+                                                                                    }
+                                                                                    onChange={(val: any, actionMeta) => {
+                                                                                        setFieldValue(`branches[${branchIndex}].prices[${priceIndex}].type`, val?.value ?? "");
+                                                                                    }}
 
-                                                                options={getCurrencyDropdownData?.data?.map((item) => ({
-                                                                    value: item.value,
-                                                                    label: t(item.label)
-                                                                }))}
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={12} md={2}>
-                                                            <InputLabel htmlFor="price" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "price" })}</InputLabel>
-                                                            <Field name={`price`}>
-                                                                {({ field, form, meta }: any) => (
-                                                                    <CurrencyInput
-                                                                        id="price"
-                                                                        name={`branches[${branchIndex}].price`}
-                                                                        placeholder={intl.formatMessage({ id: "amount" })}
-                                                                        value={values.branches[branchIndex].price}
-                                                                        //decimalsLimit={2}
-                                                                        onValueChange={(value, name, values2) => {
-                                                                            setFieldValue(`branches[${branchIndex}].price`, values2?.value)
-                                                                        }}
-                                                                        style={{
-                                                                            width: "-webkit-fill-available",
-                                                                            padding: 14,
-                                                                            border: `1px solid ${(touched.branches && touched.branches[branchIndex]?.price) && (errors.branches && (errors.branches as FormikErrors<any>[])[0]?.price) ? "#F04134" : "#BEC8D0"}`,
-                                                                            borderRadius: 8,
-                                                                            color: "#1D2630",
-                                                                            fontSize: "0.875rem",
-                                                                            boxSizing: "content-box",
-                                                                            height: "1.4375em",
-                                                                            font: "inherit"
-                                                                        }}
-                                                                    />
-                                                                )}
-                                                            </Field>
-                                                        </Grid>
+                                                                                    options={availablePortionsOptions}
+                                                                                />
+                                                                            </Grid>
+                                                                            <Grid item xs={12} md={4}>
+                                                                                <InputLabel htmlFor={`prices-${priceIndex}-currencyCode`} sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "currencyCode" })}</InputLabel>
+                                                                                <CustomFormikSelect
+                                                                                    name={`branches[${branchIndex}].prices[${priceIndex}].currencyCode`}
+                                                                                    placeholder={intl.formatMessage({ id: "selectX" }, { "x": intl.formatMessage({ id: "currencyType" }) })}
+                                                                                    isClearable={true}
+                                                                                    menuPosition={"fixed"}
+                                                                                    isLoading={getCurrencyDropdownLoading}
+                                                                                    zIndex={9999 - branchIndex}
+                                                                                    menuPortalTarget={document.body}
+                                                                                    //size='sm'
+                                                                                    value={
+                                                                                        priceItem.currencyCode
+                                                                                            ? (() => {
+                                                                                                const currency = getCurrencyDropdownData?.data?.find(
+                                                                                                    (item) => item.value === priceItem.currencyCode
+                                                                                                );
+                                                                                                return {
+                                                                                                    label: t(currency?.label) ?? "",
+                                                                                                    value: currency?.value ?? "0",
+                                                                                                };
+                                                                                            })()
+                                                                                            : null
+                                                                                    }
+                                                                                    onChange={(val: any, actionMeta) => {
+                                                                                        setFieldValue(`branches[${branchIndex}].prices[${priceIndex}].currencyCode`, val?.value ?? "");
+                                                                                    }}
+
+                                                                                    options={getCurrencyDropdownData?.data?.map((item) => ({
+                                                                                        value: item.value,
+                                                                                        label: t(item.label)
+                                                                                    }))}
+                                                                                />
+                                                                            </Grid>
+                                                                            <Grid item xs={12} md={3}>
+                                                                                <InputLabel htmlFor={`prices-${priceIndex}-price`} sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "price" })}</InputLabel>
+                                                                                <Field name={`branches[${branchIndex}].prices[${priceIndex}].price`}>
+                                                                                    {({ field, form }: any) => {
+                                                                                        const isTouched =
+                                                                                            form.touched?.branches?.[branchIndex]?.prices?.[priceIndex]?.price;
+
+                                                                                        const hasError =
+                                                                                            form.errors?.branches?.[branchIndex]?.prices?.[priceIndex]?.price;
+
+                                                                                        return (
+                                                                                            <CurrencyInput
+                                                                                                id="price"
+                                                                                                name={`branches[${branchIndex}].prices[${priceIndex}].price`}
+                                                                                                value={form.values.branches[branchIndex].prices[priceIndex].price}
+                                                                                                placeholder={intl.formatMessage({ id: "amount" })}
+                                                                                                onValueChange={(value, name, values2) => {
+                                                                                                    form.setFieldValue(
+                                                                                                        `branches[${branchIndex}].prices[${priceIndex}].price`,
+                                                                                                        values2?.value
+                                                                                                    );
+                                                                                                }}
+                                                                                                style={{
+                                                                                                    width: "-webkit-fill-available",
+                                                                                                    padding: 14,
+                                                                                                    border: `1px solid ${isTouched && hasError ? "#F04134" : "#BEC8D0"}`,
+                                                                                                    borderRadius: 8,
+                                                                                                    color: "#1D2630",
+                                                                                                    fontSize: "0.875rem",
+                                                                                                    boxSizing: "content-box",
+                                                                                                    height: "1.4375em",
+                                                                                                    font: "inherit"
+                                                                                                }}
+                                                                                            />
+                                                                                        );
+                                                                                    }}
+                                                                                </Field>
+                                                                            </Grid></Fragment>)
+                                                                    })}
+                                                                </>)}
+                                                        </FieldArray>
                                                     </Grid>
                                                     </Box>
                                                     )
@@ -311,11 +385,11 @@ const FoodRow = ({ branchIndex, setFieldValue, branch }: { branchIndex: number, 
 
     return (
         <>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} md={12}>
                 <InputLabel htmlFor="branchId" sx={{ fontWeight: 500, marginBottom: 1 }}>{intl.formatMessage({ id: "category" })}</InputLabel>
                 <CustomFormikSelect
                     name={`branches.${branchIndex}.categoryId`}
-                    placeholder={intl.formatMessage({ id: "selectX" },{"x" : intl.formatMessage({ id: "currency" })})}
+                    placeholder={intl.formatMessage({ id: "selectX" }, { "x": intl.formatMessage({ id: "currency" }) })}
                     isClearable={true}
                     menuPosition={"fixed"}
                     isLoading={getCategoryDropdownLoading}

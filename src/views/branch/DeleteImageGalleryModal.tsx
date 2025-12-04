@@ -45,7 +45,7 @@ const DeleteImageGalleryModal = () => {
     return (
         <Dialog open={open && modalType == ModalEnum.deleteImageGallery} onClose={handleClose} fullWidth maxWidth="sm" aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
             <Box sx={{ p: 1, py: 1.5 }}>
-                <DialogTitle id="alert-dialog-title">{"Resim Sil"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{intl.formatMessage({"id" : "deleteImage"})}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {intl.formatMessage({ id: "deleteText" })}

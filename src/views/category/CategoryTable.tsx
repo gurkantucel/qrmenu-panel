@@ -36,6 +36,7 @@ import UpdateCategoryModal from './UpdateCategoryModal';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useAppDispatch } from 'reduxt/hooks';
 import DeleteCategoryModal from './DeleteCategoryModal';
+import ImageSelectModal from 'views/menu/ImageSelectModal';
 const columnHelper = createColumnHelper<CategoryListData>()
 
 const CategoryTable = () => {
@@ -158,6 +159,7 @@ const CategoryTable = () => {
     return (
         <>
             <Breadcrumbs custom heading={`${intl.formatMessage({ id: "categories" })}`} links={breadcrumbLinks} />
+            <ImageSelectModal />
             <MainCard content={false}>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={{xs: 2, sm: 0}} justifyContent={"space-between"} alignItems={{xs: "normal", sm: "center"}} sx={{ padding: 2 }}>
                     <Stack direction={"column"}>

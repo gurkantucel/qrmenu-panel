@@ -66,6 +66,15 @@ export interface GetBranchData {
   description: string
   email: string
   theme: string
+  packages: BranchPackages
+}
+
+export interface BranchPackages {
+  id: string
+  type: string
+  startDate: string
+  endDate: string
+  active: boolean
 }
 
 export interface CreateBranchBodyModel {

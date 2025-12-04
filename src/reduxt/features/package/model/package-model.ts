@@ -47,11 +47,13 @@ export interface CalculatePackageData {
 }
 
 export interface CalculatePackage {
-  id: string
-  type: string
+  branchId: string
+  branchName: string
+  packageId: string
+  packageType: string
   vat: number
   currencyCode: string
-  basePrice: number
+  price: number
   calculatedPrice: number
 }
 

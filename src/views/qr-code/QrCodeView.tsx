@@ -106,7 +106,7 @@ const QrCodeView = () => {
                             {getBranchDropdownLoading || getBranchDropdownFetching ? <CustomScaleLoader /> : <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <MainCard title={intl.formatMessage({ id: "qrCodes" })} secondary={<Stack direction={"row"} spacing={2}>
-                                        {qrCodeListData?.data.length == 0 && <Button variant="dashed" startIcon={<Add />} onClick={() => {
+                                        {qrCodeListData?.data?.length == 0 && <Button variant="dashed" startIcon={<Add />} onClick={() => {
                                             dispatch(setModal({
                                                 open: true,
                                                 modalType: ModalEnum.createQrCode,

@@ -23,19 +23,20 @@ export interface MenuListData {
   currencyCode: string
   price: string
   categoryTitle: Title
-  islemler?:string
+  islemler?: string
 }
 
 export interface Properties {
   gr: string | null
   kcal: string | null
-  protein: string | null
-  carbohydrate: string | null
+  protein: string | null
+  carbohydrate: string | null
   fat: string | null
 }
 
-export interface UpdateMenuOrderBodyModel {
-  branchSlug?: string | null
+export interface UpdateFoodOrderBodyModel {
+  branchId?: string | null
+  categoryId: string | null
   newFoodList: string[]
 }
 
@@ -43,18 +44,19 @@ export interface CreateFoodBodyModel {
   title_tr: string
   title_en: string
   title_es: string | null
-  title_fr: string | null 
+  title_fr: string | null
   description_tr: string
   description_en: string
   description_es: string | null
   description_fr: string | null
-  branches: Branch[]
+  branches: CreateFoodBranch[]
   allergens: string[]
   property_gr: string | null
   property_kcal: string | null
   property_protein: string | null
   property_carbohydrate: string | null
-  property_fat: string | null
+  property_fat: string | null
+  image_url: string | null
   status: boolean
 }
 
@@ -63,7 +65,7 @@ export interface UpdateFoodBodyModel {
   title_tr: string
   title_en: string
   title_es: string | null
-  title_fr: string | null 
+  title_fr: string | null
   description_tr: string
   description_en: string
   description_es: string | null
@@ -73,8 +75,22 @@ export interface UpdateFoodBodyModel {
   property_kcal: string | null
   property_protein: string | null
   property_carbohydrate: string | null
-  property_fat: string | null
+  property_fat: string | null
+  image_url: string | null
   status: boolean
+}
+
+export interface CreateFoodBranch {
+  id: string
+  slug: string
+  categoryId: string
+  prices: BranchPrice[]
+}
+
+export interface BranchPrice {
+  type: string
+  currencyCode: string
+  price: string
 }
 
 export interface Branch {
@@ -90,8 +106,7 @@ export interface FoodPriceBranch {
   branchId: string
   branchSlug: string
   categoryId: string
-  currencyCode: string
-  price: string
+  prices: BranchPrice[]
 }
 
 export interface UpdateBranchFoodBodyModel {
@@ -111,8 +126,7 @@ export interface GetBranchFoodData {
   branchSlug: string
   categoryId: string
   foodId: string
-  currencyCode: string
-  price: string
+  prices: BranchPrice[]
   createdAt: string
   status: boolean
 }

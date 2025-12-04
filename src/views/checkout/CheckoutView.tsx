@@ -22,7 +22,7 @@ const CheckoutView = () => {
   const params = useParams<{ slug: string }>()
 
   const [result, setResult] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const socialAnnexRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter();
@@ -54,8 +54,8 @@ const CheckoutView = () => {
       <Breadcrumbs custom heading={`${intl.formatMessage({ id: "payment" })}`} links={breadcrumbLinks} />
       {(result == null && error == null) && <Stack direction={"column"} justifyContent={'center'} alignContent={'center'} alignItems={'center'} spacing={3}>
         <Alert severity="warning">
-          <AlertTitle>{"Lütfen bekleyin."}</AlertTitle>
-          {"Bankayla iletişime geçiliyor. Bir işlem yapmayın."}
+          <AlertTitle>{intl.formatMessage({id: "pleaseWait"})}</AlertTitle>
+          {intl.formatMessage({id: "contactingBank"})}
         </Alert>
         <PropagateLoader />
         
@@ -78,7 +78,7 @@ const CheckoutView = () => {
                       <TableCell />
                     </TableRow>
                     {result.packageData?.branches?.map((item: any, index: number) => (<TableRow key={`summary-${index}`}>
-                      <TableCell sx={{ borderBottom: 'none' }}>{item.packageType}</TableCell>
+                      <TableCell sx={{ borderBottom: 'none' }}>{intl.formatMessage({id: item.packageType})}</TableCell>
                       <TableCell align="right" sx={{ borderBottom: 'none' }}>
                         <Typography variant="subtitle1">{currency(item.calculatedPrice)}</Typography>
                       </TableCell>

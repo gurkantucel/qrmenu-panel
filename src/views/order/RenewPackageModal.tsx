@@ -5,16 +5,15 @@ import { RootState } from 'reduxt/store';
 import { Alert, AlertTitle, Box, Button, Dialog, DialogActions, Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { CloseSquare } from "iconsax-react"
 import { closeModal, ModalEnum } from 'reduxt/features/definition/modalSlice';
-import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
-import { useLocalizedField } from 'hooks/useLocalizedField';
 import currency from 'utils/currency';
 import CustomScaleLoader from 'components/CustomScaleLoader';
 import { useRouter } from 'next/navigation';
 import { useCalculatePackageMutation } from 'reduxt/features/package/package-api';
 import dayjs from 'dayjs';
 import { useCreateOrderMutation } from 'reduxt/features/order/order-api';
+import { useAppSnackbar } from 'hooks/useAppSnackbar';
 
 const RenewPackageModal = () => {
 
@@ -25,11 +24,11 @@ const RenewPackageModal = () => {
 
     const intl = useIntl()
 
-    const t = useLocalizedField()
+    const { showMessage } = useAppSnackbar();
 
     const [calculatePackage, { isLoading: calculatePackageIsLoading, data: calculatePackageResponse, error: calculatePackageError }] = useCalculatePackageMutation();
 
-    const [creatOrder, { isLoading: creatOrderIsLoading, data: creatOrderPackageResponse, error: creatOrderPackageError }] = useCreateOrderMutation();
+    const [createOrder, { isLoading: createOrderIsLoading, data: createOrderPackageResponse, error: createOrderPackageError }] = useCreateOrderMutation();
 
     useEffect(() => {
         if (open && data && modalType == ModalEnum.renewPackage) {
@@ -38,39 +37,24 @@ const RenewPackageModal = () => {
     }, [open, data, modalType])
 
     useEffect(() => {
-        if (creatOrderPackageResponse) {
-            enqueueSnackbar(creatOrderPackageResponse.message, {
-                variant: creatOrderPackageResponse?.success == true ? 'success' : 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
-            if (creatOrderPackageResponse?.success == true && creatOrderPackageResponse.data?.orderId != null) {
+        if (createOrderPackageResponse) {
+            showMessage(createOrderPackageResponse.message, createOrderPackageResponse?.success);
+            if (createOrderPackageResponse?.success == true && createOrderPackageResponse.data?.orderId != null) {
                 handleClose();
-                router.push(`checkout/${creatOrderPackageResponse.data?.orderId}`)
+                router.push(`checkout/${createOrderPackageResponse.data?.orderId}`)
             }
         }
-        if (creatOrderPackageError) {
-            const error = creatOrderPackageError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
+        if (createOrderPackageError) {
+            const error = createOrderPackageError as any;
+            showMessage(error?.data?.message, false);
         }
-    }, [creatOrderPackageResponse, creatOrderPackageError])
+    }, [createOrderPackageResponse, createOrderPackageError])
 
     useEffect(() => {
         if (calculatePackageError) {
             dispatch(closeModal())
             const error = calculatePackageError as any;
-            enqueueSnackbar(error.data?.message ?? "Hata", {
-                variant: 'error', anchorOrigin: {
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                }
-            },)
+            showMessage(error?.data?.message, false);
         }
     }, [calculatePackageError])
 
@@ -142,12 +126,12 @@ const RenewPackageModal = () => {
                             </Button>
                             <AnimateButton>
                                 <Button disableElevation
-                                    disabled={creatOrderIsLoading}
+                                    disabled={createOrderIsLoading}
                                     type="button" variant="contained" color="primary" onClick={() => {
-                                        creatOrder({ branchIds: data?.branchIds })
+                                        createOrder({ branchIds: data?.branchIds })
                                     }}>
-                                    {(creatOrderIsLoading) && <PuffLoader size={20} color='white' />}
-                                    {(creatOrderIsLoading == false) && intl.formatMessage({ id: "makePayment" })}
+                                    {(createOrderIsLoading) && <PuffLoader size={20} color='white' />}
+                                    {(createOrderIsLoading == false) && intl.formatMessage({ id: "makePayment" })}
                                 </Button>
                             </AnimateButton>
                         </DialogActions>

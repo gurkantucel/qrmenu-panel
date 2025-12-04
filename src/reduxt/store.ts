@@ -3,6 +3,7 @@ import definitionApi from './features/definition/definition-api'
 import authApi from './features/auth/auth-api'
 import personApi from './features/person/person-api'
 import modalSlice from './features/definition/modalSlice'
+import modal2Slice from './features/definition/modalSlice2'
 import menuItemSlice from './features/auth/menuItemSlice'
 import patientTabSlice from './features/definition/patientTabSlice'
 import appointmentCalendarModalSlice from './features/branch/appointmentCalendarModalSlice'
@@ -25,10 +26,12 @@ import qrCodeApi from './features/qr-code/qr-code-api'
 import packageApi from './features/package/package-api'
 import userApi from './features/user/user-api'
 import translateApi from './features/translate/translate-api'
+import stockImageGalleryApi from './features/stock-image-gallery/stock-image-gallery-api'
 
 export const store = configureStore({
   reducer: {
     modal: modalSlice,
+    modal2: modal2Slice,
     patientTab: patientTabSlice,
     appointmentCalendarModal: appointmentCalendarModalSlice,
     menuItem: menuItemSlice,
@@ -43,6 +46,7 @@ export const store = configureStore({
     [packageApi.reducerPath]: packageApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [translateApi.reducerPath]: translateApi.reducer,
+    [stockImageGalleryApi.reducerPath]: stockImageGalleryApi.reducer,
     //
     [definitionApi.reducerPath]: definitionApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
@@ -68,6 +72,7 @@ export const store = configureStore({
     packageApi.middleware,
     userApi.middleware,
     translateApi.middleware,
+    stockImageGalleryApi.middleware,
     //
     definitionApi.middleware,
     authApi.middleware,

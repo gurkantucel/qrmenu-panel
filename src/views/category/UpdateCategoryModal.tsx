@@ -15,6 +15,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import Image from 'next/image'
 import { updateCategoryValidationSchema } from 'utils/schemas/category-validation-schema';
 import { useAutoTranslate } from 'hooks/useAutoTranslate';
+import { Modal2Enum, setModal2 } from 'reduxt/features/definition/modalSlice2';
 
 interface FormValues {
     categoryId: string;
@@ -22,6 +23,7 @@ interface FormValues {
     title_en: string;
     title_es: string | null;
     title_fr: string | null;
+    image_url: string | null
     status: boolean;
 }
 
@@ -71,6 +73,7 @@ const UpdateCategoryModal = () => {
                 title_tr: data?.title?.tr,
                 title_es: data?.title?.es,
                 title_fr: data?.title?.fr,
+                image_url: null, //BURASI NULL KALACAK
                 status: data?.status
             })
         }
@@ -85,10 +88,14 @@ const UpdateCategoryModal = () => {
             title_en: "",
             title_es: null,
             title_fr: null,
+            image_url: null,
             status: true
         },
         validationSchema: updateCategoryValidationSchema(intl),
         onSubmit: (values) => {
+            if (!selectedFiles && values.image_url == null && data?.imageUrl) {
+                values.image_url = data.imageUrl;
+            }
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
@@ -136,7 +143,7 @@ const UpdateCategoryModal = () => {
     };
 
     return (
-        <Dialog open={open && modalType == ModalEnum.updateCategory} onClose={handleClose}>
+        <Dialog open={open && modalType == ModalEnum.updateCategory} onClose={handleClose} fullWidth>
             <Box sx={{ px: 3, py: 3 }}>
                 <Grid
                     container
@@ -263,15 +270,25 @@ const UpdateCategoryModal = () => {
                             </Grid>
                         </Grid>
                         <Divider sx={{ marginBottom: 2 }} />
-                    </Collapse>
-                    <Grid container spacing={3}>
-                        {data?.imageUrl && <Grid item xs={12}>
-                            <InputLabel htmlFor="image" sx={{ marginBottom: 2 }}>{intl.formatMessage({ id: "previouslyUploadedImage" })}</InputLabel>
+                    </Collapse>         
+                    {data?.imageUrl && <Box sx={{
+                        border: "1px solid #eff2f7",
+                        borderRadius: "6px",
+                        px: 2,
+                        py: 0.5,
+                        my: 2,
+                    }}><Grid item xs={12}>
+                            <InputLabel htmlFor="image" sx={{ marginBottom: 2, fontWeight: 500 }}>{intl.formatMessage({ id: "previouslyUploadedImage" })}</InputLabel>
                             <Image src={data?.imageUrl} alt={data?.title?.tr} width={128} height={128} />
-                        </Grid>}
+                        </Grid></Box>}
+                    <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <InputLabel htmlFor="image">{intl.formatMessage({ id: "newImage" })}</InputLabel>
-                            <Typography>{intl.formatMessage({ id: "newImage" })}</Typography>
+                            <Stack direction={"row"} justifyContent={"space-between"}>
+                                <InputLabel htmlFor="description_es">{`${intl.formatMessage({ id: "newImage" })}`}</InputLabel>
+                                <Button variant="text" size='small' sx={{ padding: 0 }} onClick={() => {
+                                    dispatch(setModal2({ open: true, modalType: Modal2Enum.imageSelect, data: { setFieldValue: formik.setFieldValue } }))
+                                }}>{intl.formatMessage({ id: "chooseFromStockImageGallery" })}</Button>
+                            </Stack>
                             <Dropzone
                                 //maxSize={5242880}
                                 multiple={false}
@@ -311,6 +328,26 @@ const UpdateCategoryModal = () => {
                                 )}
                             </Dropzone>
                         </Grid>
+                        {formik.values.image_url && <Grid item xs={12}>
+                            <Box sx={{
+                                border: "1px solid #eff2f7",
+                                borderRadius: "6px",
+                                px: 2,
+                                py: 0.5,
+                                my: 0.5,
+                            }}>
+                                <InputLabel htmlFor="stockImage" sx={{ marginBottom: 2, fontWeight: 500 }}>{`${intl.formatMessage({ id: "stockImage" })}`}</InputLabel>
+                                <Grid item>
+                                    <Button
+                                        sx={{ padding: 0 }}
+                                        onClick={() => {
+                                            formik.setFieldValue("image_url", null)
+                                        }}><Badge badgeContent={"x"} color="error" overlap="circular">
+                                            <Image src={formik.values.image_url} alt={"selectedStockImage"} width={128} height={128} />
+                                        </Badge></Button>
+                                </Grid>
+                            </Box>
+                        </Grid>}
                         <Grid item xs={12}>
                             {selectedFiles.map((f: any, i: number) => {
                                 return (

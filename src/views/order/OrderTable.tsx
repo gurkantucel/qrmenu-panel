@@ -32,12 +32,15 @@ import { useGetOrderListQuery } from 'reduxt/features/order/order-api';
 import currency from 'utils/currency';
 import ViewOrderModal from './ViewOrderModal';
 import BranchTable from './BranchTable';
+import { useRouter } from 'next/navigation';
 
 const columnHelper = createColumnHelper<OrderListData>()
 
 const OrderTable = () => {
 
     const intl = useIntl()
+
+    const router = useRouter();
 
     const dispatch = useAppDispatch();
 
@@ -100,13 +103,7 @@ const OrderTable = () => {
                             color="primary"
                             disabled={info.row.original.status == "PAYMENT_SUCCESSFUL"}
                             onClick={(e: any) => {
-                                dispatch(setModal({
-                                    open: true,
-                                    //modalType: ModalEnum.updateOrder,
-                                    id: info.row.original.id,
-                                    //title: info.row.original.title.tr,
-                                    data: info.row.original
-                                }))
+                                router.push(`checkout/${info.row.original.id}`)
                             }}
                         >
                             <BagTick />

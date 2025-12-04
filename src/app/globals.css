@@ -218,3 +218,22 @@ td.table-mobil {
     text-align: center;
   }
 }
+
+/* Mobile */
+.responsive-image-item {
+  height: 120px !important;
+}
+
+/* Tablet */
+@media (min-width: 600px) {
+  .responsive-image-item {
+    height: 150px !important;
+  }
+}
+
+/* Laptop */
+@media (min-width: 900px) {
+  .responsive-image-item {
+    height: 200px !important;
+  }
+}

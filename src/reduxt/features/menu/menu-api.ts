@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { baseQueryWithReauth } from 'utils/base-query-with-reauth';
 import { CreateResultModel } from 'utils/models/create-result-model';
-import { GetBranchFoodResultModel, MenuListModel, UpdateBranchFoodBodyModel, UpdateMenuOrderBodyModel, UpdateStatusBranchFoodBodyModel } from './models/menu-model';
+import { GetBranchFoodResultModel, MenuListModel, UpdateBranchFoodBodyModel, UpdateFoodOrderBodyModel, UpdateStatusBranchFoodBodyModel } from './models/menu-model';
 
 const menuApi = createApi({
     reducerPath: "menuApi",
@@ -57,10 +57,10 @@ const menuApi = createApi({
             },
             invalidatesTags: (result) => result?.success ? ["menu"] : [],
         }),
-        updateCategoryOrder: builder.mutation<CreateResultModel, UpdateMenuOrderBodyModel>({
+        updateBranchFoodOrder: builder.mutation<CreateResultModel, UpdateFoodOrderBodyModel>({
             query: (body) => {
                 return {
-                    url: `menu/updateOrder`,
+                    url: `food/updateBranchFoodOrder`,
                     method: "PUT",
                     body: body
                 }
@@ -96,7 +96,7 @@ export const {
     useUpdateFoodMutation,
     useGetBranchFoodListQuery,
     useUpdateBranchFoodMutation,
-    useUpdateCategoryOrderMutation,
+    useUpdateBranchFoodOrderMutation,
     useDeleteFoodMutation,
     useUpdateStatusBranchFoodMutation
 } = menuApi

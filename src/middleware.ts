@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
 
   // Dashboard (ör. /home, /dashboard, /profile vs.) → token yoksa auth'a
   if (pathname.startsWith("/home") && !token) {
-    return NextResponse.redirect(new URL("/auth", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   return NextResponse.next();

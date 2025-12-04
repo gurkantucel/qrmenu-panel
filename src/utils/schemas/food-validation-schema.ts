@@ -6,8 +6,13 @@ const addFoodValidationSchema = (intl: IntlShape) => Yup.object({
     title_en: Yup.string().required(intl.formatMessage({ id: "fieldRequired" })),
     branches: Yup.array().of(Yup.object({
         categoryId: Yup.string().required(intl.formatMessage({ id: "required" })),
-        currencyCode: Yup.string().required(intl.formatMessage({ id: "required" })),
-        price: Yup.string().trim().required(intl.formatMessage({ id: "required" })),
+        //currencyCode: Yup.string().required(intl.formatMessage({ id: "required" })),
+        //price: Yup.string().trim().required(intl.formatMessage({ id: "required" })),
+        prices: Yup.array(Yup.object({
+            type: Yup.string().required(intl.formatMessage({ id: "required" })),
+            currencyCode: Yup.string().required(intl.formatMessage({ id: "required" })),
+            price: Yup.string().trim().required(intl.formatMessage({ id: "required" })),
+        })).min(1, intl.formatMessage({ id: "required" })).required(intl.formatMessage({ id: "required" }))
     }))
 })
 

@@ -18,6 +18,7 @@ import { useUpdateFoodMutation } from 'reduxt/features/menu/menu-api';
 import { addFoodValidationSchema } from 'utils/schemas/food-validation-schema';
 import Image from 'next/image'
 import { useAutoTranslate } from 'hooks/useAutoTranslate';
+import { Modal2Enum, setModal2 } from 'reduxt/features/definition/modalSlice2';
 
 const UpdateFoodModal = () => {
 
@@ -33,8 +34,14 @@ const UpdateFoodModal = () => {
 
     const [acik, setAcik] = useState(false);
 
+    const [benefitsShow, setBenefitsShow] = useState(false);
+
     const handleToggle = () => {
         setAcik((prev) => !prev);
+    };
+
+    const handleBenefistToggle = () => {
+        setBenefitsShow((prev) => !prev);
     };
 
     const [allergens] = useState([
@@ -68,6 +75,7 @@ const UpdateFoodModal = () => {
         property_protein: null,
         property_carbohydrate: null,
         property_fat: null,
+        image_url: null,
         status: true
     })
 
@@ -113,6 +121,7 @@ const UpdateFoodModal = () => {
                 property_protein: data?.properties?.protein,
                 property_fat: data?.properties?.fat,
                 allergens: data?.allergens,
+                image_url: null, //BURA NULL KALACAK    
                 status: data?.status
             }
             setInitialValues(newModel);
@@ -184,11 +193,15 @@ const UpdateFoodModal = () => {
                         property_protein: null,
                         property_carbohydrate: null,
                         property_fat: null,
+                        image_url: null,
                         status: true
                     }}
                         enableReinitialize
                         validationSchema={addFoodValidationSchema(intl)}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                            if(!selectedFiles && values.image_url == null && data?.imageUrl){
+                                values.image_url = data.imageUrl;
+                            }
                             const formData = new FormData();
                             Object.entries(values).forEach(([key, value]) => {
                                 if (Array.isArray(value)) {
@@ -405,220 +418,268 @@ const UpdateFoodModal = () => {
                                     </Grid>
                                     <Divider sx={{ marginBottom: 2 }} />
                                 </Collapse>
-                                <Typography variant="h5" marginY={3}>{intl.formatMessage({ id: "nutritionalProperties" })}</Typography>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="title_tr">{intl.formatMessage({ id: "gr" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.property_gr && errors.property_gr)}
-                                                id="property_gr"
-                                                type="text"
-                                                value={values.property_gr}
-                                                name="property_gr"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "gr" })}
-                                            />
-                                        </Stack>
-                                        {touched.property_gr && errors.property_gr && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.property_gr}
-                                            </FormHelperText>
-                                        )}
+                                <Stack alignContent={"center"} alignItems={"center"} justifyContent={"center"} marginTop={1}>
+                                    <Button
+                                        variant="text"
+                                        size="medium"
+                                        color="secondary"
+                                        onClick={handleBenefistToggle}
+                                        sx={{ width: 'fit-content', fontWeight: "500" }}
+                                        startIcon={benefitsShow ? <ArrowUp2 /> : <ArrowDown2 />}
+                                    >
+                                        {intl.formatMessage({ id: "addNutritionFactsText" })}
+                                    </Button>
+                                </Stack>
+                                <Collapse in={benefitsShow}>
+                                    <Grid item xs={12} sx={{ paddingTop: "0 !important", paddingBottom: 0 }}>
+                                        <Typography variant="h5" marginTop={3}>{intl.formatMessage({ id: "nutritionalProperties" })}</Typography>
                                     </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="property_kcal">{intl.formatMessage({ id: "kcal" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.property_kcal && errors.property_kcal)}
-                                                id="property_kcal"
-                                                type="text"
-                                                value={values.property_kcal}
-                                                name="property_kcal"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "kcal" })}
-                                            />
-                                        </Stack>
-                                        {touched.property_kcal && errors.property_kcal && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.property_kcal}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="property_protein">{intl.formatMessage({ id: "protein" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.property_protein && errors.property_protein)}
-                                                id="property_protein"
-                                                type="text"
-                                                value={values.property_protein}
-                                                name="property_protein"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "protein" })}
-                                            />
-                                        </Stack>
-                                        {touched.property_protein && errors.property_protein && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.property_protein}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="property_carbohydrate">{intl.formatMessage({ id: "carbohydrate" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.property_carbohydrate && errors.property_carbohydrate)}
-                                                id="property_carbohydrate"
-                                                type="text"
-                                                value={values.property_carbohydrate}
-                                                name="property_carbohydrate"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "carbohydrate" })}
-                                            />
-                                        </Stack>
-                                        {touched.property_carbohydrate && errors.property_carbohydrate && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.property_carbohydrate}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <Stack spacing={1}>
-                                            <InputLabel htmlFor="property_fat">{intl.formatMessage({ id: "fat" })}</InputLabel>
-                                            <OutlinedInput
-                                                fullWidth
-                                                error={Boolean(touched.property_fat && errors.property_fat)}
-                                                id="property_fat"
-                                                type="text"
-                                                value={values.property_fat}
-                                                name="property_fat"
-                                                onBlur={handleBlur}
-                                                onChange={handleChange}
-                                                placeholder={intl.formatMessage({ id: "fat" })}
-                                            />
-                                        </Stack>
-                                        {touched.property_fat && errors.property_fat && (
-                                            <FormHelperText error id="helper-text-lastname-signup">
-                                                {errors.property_fat}
-                                            </FormHelperText>
-                                        )}
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                        <InputLabel htmlFor="allergens">{intl.formatMessage({ id: "allergens" })}</InputLabel>
-                                        <CustomFormikSelect
-                                            name='allergens'
-                                            placeholder="Seçim yapınız..."
-                                            isMulti={true}
-                                            zIndex={989}
-                                            value={allergens
-                                                ?.filter((item) =>
-                                                    values.allergens?.some((b) => b === item.value)
-                                                )
-                                                .map((item2) => ({
-                                                    value: item2.value,
-                                                    label: item2.label,
-                                                }))}
-                                            options={allergens?.map((item) => ({
-                                                value: item.value,
-                                                label: item.label
-                                            }))}
-                                            //getOptionValue={(option: any) => option.value.id.toString()}
-                                            //getOptionLabel={(option: any) => option.label}
-                                            onChange={(val: any) => {
-                                                setFieldValue("allergens", val.map((item: any) => (item.value)));
-                                            }}
-                                        />
-                                    </Grid>
-                                    {data?.imageUrl && <Grid item xs={12}>
-                                        <InputLabel htmlFor="image" sx={{ marginBottom: 2 }}>{intl.formatMessage({ id: "previouslyUploadedImage" })}</InputLabel>
-                                        <Image src={data?.imageUrl} alt={data?.title?.tr} width={128} height={128} />
-                                    </Grid>}
-                                    <Grid item xs={12}>
-                                        <InputLabel htmlFor="image">{intl.formatMessage({ id: "newImage" })}</InputLabel>
-                                        <Dropzone
-                                            //maxSize={5242880}
-                                            multiple={false}
-                                            accept={{ "image/*": [] }}
-                                            validator={(file) => {
-                                                if (file.size > 31457280) {
-                                                    return {
-                                                        code: "file-too-large",
-                                                        message: intl.formatMessage({ id: "largerFile" })
-                                                    }
-                                                }
-                                                return null;
-                                            }}
-                                            onDrop={acceptedFiles => {
-                                                handleAcceptedFiles(acceptedFiles);
-                                            }}
-                                        >
-                                            {({ getRootProps, getInputProps, fileRejections }) => (
-                                                <Box
-                                                    sx={{
-                                                        border: "2px dashed #eff2f7",
-                                                        borderRadius: "6px",
-                                                        padding: "18px"
-                                                    }}>
-                                                    <Stack
-                                                        flexDirection="column"
-                                                        justifyContent="center"
-                                                        alignItems="center"
-                                                        {...getRootProps()}
-                                                    >
-                                                        <DocumentUpload size={36} />
-                                                        <input {...getInputProps()} />
-                                                        <Typography variant='h6' marginTop={2}>{intl.formatMessage({ id: "selectFileDragginFile" })}</Typography>
-                                                    </Stack>
-                                                    {fileRejections.map(({ file, errors }, index) => <Typography key={index} variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
-                                                </Box>
+                                    <Grid container spacing={3} sx={{ marginTop: "1px", marginBottom: 2 }}>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="title_tr">{intl.formatMessage({ id: "gr" })}</InputLabel>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.property_gr && errors.property_gr)}
+                                                    id="property_gr"
+                                                    type="text"
+                                                    value={values.property_gr}
+                                                    name="property_gr"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={intl.formatMessage({ id: "gr" })}
+                                                />
+                                            </Stack>
+                                            {touched.property_gr && errors.property_gr && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.property_gr}
+                                                </FormHelperText>
                                             )}
-                                        </Dropzone>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        {selectedFiles.map((f: any, i: number) => {
-                                            return (
-                                                <Box sx={{
-                                                    border: "1px solid #eff2f7",
-                                                    borderRadius: "6px",
-                                                    padding: "4px"
-
+                                        </Grid>
+                                        <Grid item xs={12} md={6}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="property_kcal">{intl.formatMessage({ id: "kcal" })}</InputLabel>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.property_kcal && errors.property_kcal)}
+                                                    id="property_kcal"
+                                                    type="text"
+                                                    value={values.property_kcal}
+                                                    name="property_kcal"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={intl.formatMessage({ id: "kcal" })}
+                                                />
+                                            </Stack>
+                                            {touched.property_kcal && errors.property_kcal && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.property_kcal}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="property_protein">{intl.formatMessage({ id: "protein" })}</InputLabel>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.property_protein && errors.property_protein)}
+                                                    id="property_protein"
+                                                    type="text"
+                                                    value={values.property_protein}
+                                                    name="property_protein"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={intl.formatMessage({ id: "protein" })}
+                                                />
+                                            </Stack>
+                                            {touched.property_protein && errors.property_protein && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.property_protein}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="property_carbohydrate">{intl.formatMessage({ id: "carbohydrate" })}</InputLabel>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.property_carbohydrate && errors.property_carbohydrate)}
+                                                    id="property_carbohydrate"
+                                                    type="text"
+                                                    value={values.property_carbohydrate}
+                                                    name="property_carbohydrate"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={intl.formatMessage({ id: "carbohydrate" })}
+                                                />
+                                            </Stack>
+                                            {touched.property_carbohydrate && errors.property_carbohydrate && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.property_carbohydrate}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                            <Stack spacing={1}>
+                                                <InputLabel htmlFor="property_fat">{intl.formatMessage({ id: "fat" })}</InputLabel>
+                                                <OutlinedInput
+                                                    fullWidth
+                                                    error={Boolean(touched.property_fat && errors.property_fat)}
+                                                    id="property_fat"
+                                                    type="text"
+                                                    value={values.property_fat}
+                                                    name="property_fat"
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    placeholder={intl.formatMessage({ id: "fat" })}
+                                                />
+                                            </Stack>
+                                            {touched.property_fat && errors.property_fat && (
+                                                <FormHelperText error id="helper-text-lastname-signup">
+                                                    {errors.property_fat}
+                                                </FormHelperText>
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <InputLabel htmlFor="allergens">{intl.formatMessage({ id: "allergens" })}</InputLabel>
+                                            <CustomFormikSelect
+                                                name='allergens'
+                                                placeholder="Seçim yapınız..."
+                                                isMulti={true}
+                                                zIndex={989}
+                                                value={allergens
+                                                    ?.filter((item) =>
+                                                        values.allergens?.some((b) => b === item.value)
+                                                    )
+                                                    .map((item2) => ({
+                                                        value: item2.value,
+                                                        label: item2.label,
+                                                    }))}
+                                                options={allergens?.map((item) => ({
+                                                    value: item.value,
+                                                    label: item.label
+                                                }))}
+                                                //getOptionValue={(option: any) => option.value.id.toString()}
+                                                //getOptionLabel={(option: any) => option.label}
+                                                onChange={(val: any) => {
+                                                    setFieldValue("allergens", val.map((item: any) => (item.value)));
                                                 }}
-                                                    key={i}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Collapse>
+                                {data?.imageUrl && <Box sx={{
+                                    border: "1px solid #eff2f7",
+                                    borderRadius: "6px",
+                                    px: 2,
+                                    py: 0.5,
+                                    my: 2,
+                                }}><Grid item xs={12}>
+                                        <InputLabel htmlFor="image" sx={{ marginBottom: 2, fontWeight: 500 }}>{intl.formatMessage({ id: "previouslyUploadedImage" })}</InputLabel>
+                                        <Image src={data?.imageUrl} alt={data?.title?.tr} width={128} height={128} />
+                                    </Grid></Box>}
+                                <Grid item xs={12}>
+                                    <Stack direction={"row"} justifyContent={"space-between"}>
+                                        <InputLabel htmlFor="description_es">{`${intl.formatMessage({ id: "newImage" })}`}</InputLabel>
+                                        <Button variant="text" size='small' sx={{ padding: 0 }} onClick={() => {
+                                            dispatch(setModal2({ open: true, modalType: Modal2Enum.imageSelect, data: { setFieldValue } }))
+                                        }}>{intl.formatMessage({ id: "chooseFromStockImageGallery" })}</Button>
+                                    </Stack>
+                                    <Dropzone
+                                        //maxSize={5242880}
+                                        multiple={false}
+                                        accept={{ "image/*": [] }}
+                                        validator={(file) => {
+                                            if (file.size > 31457280) {
+                                                return {
+                                                    code: "file-too-large",
+                                                    message: intl.formatMessage({ id: "largerFile" })
+                                                }
+                                            }
+                                            return null;
+                                        }}
+                                        onDrop={acceptedFiles => {
+                                            handleAcceptedFiles(acceptedFiles);
+                                            setFieldValue("image_url", null);
+                                        }}
+                                    >
+                                        {({ getRootProps, getInputProps, fileRejections }) => (
+                                            <Box
+                                                sx={{
+                                                    border: "2px dashed #eff2f7",
+                                                    borderRadius: "6px",
+                                                    padding: "18px"
+                                                }}>
+                                                <Stack
+                                                    flexDirection="column"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    {...getRootProps()}
                                                 >
-                                                    <Stack direction="row" spacing={2}>
-                                                        <Grid item>
-                                                            <Button onClick={() => {
-                                                                setselectedFiles(selectedFiles.filter((item: any) => item.name != f.name))
-                                                            }}><Badge badgeContent={"x"} color="error" overlap="circular">
-                                                                    <Avatar size='lg' src={f.preview} alt={f.name} />
-                                                                </Badge></Button>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Typography variant='subtitle1'>{f.name}</Typography>
-                                                            <Typography>{f.formattedSize}</Typography>
-                                                        </Grid>
-                                                    </Stack>
-                                                </Box>
-                                            )
-                                        })}
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <InputLabel htmlFor="status">{intl.formatMessage({ id: "status" })}</InputLabel>
-                                        <FormControlLabel control={<Switch
-                                            checked={values.status}
-                                            value={values.status} onChange={(e, checked) => {
-                                                setFieldValue("status", checked);
-                                            }} />} label={intl.formatMessage({ id: values.status ? "active" : "passive" })} />
-                                    </Grid>
+                                                    <DocumentUpload size={36} />
+                                                    <input {...getInputProps()} />
+                                                    <Typography variant='h6' marginTop={2}>{intl.formatMessage({ id: "selectFileDragginFile" })}</Typography>
+                                                </Stack>
+                                                {fileRejections.map(({ file, errors }, index) => <Typography key={index} variant="h6" color="error"> {file.name} - {errors[0].message}</Typography>)}
+                                            </Box>
+                                        )}
+                                    </Dropzone>
+                                </Grid>
+                                {values.image_url?.includes("stockImageGallery") && <Grid item xs={12}>
+                                    <Box sx={{
+                                        border: "1px solid #eff2f7",
+                                        borderRadius: "6px",
+                                        px: 2,
+                                        py: 0.5,
+                                        my: 2,
+                                    }}>
+                                        <InputLabel htmlFor="stockImage" sx={{ fontWeight: 500, marginBottom: 1 }}>{`${intl.formatMessage({ id: "stockImage" })}`}</InputLabel>
+                                        <Grid item>
+                                            <Button 
+                                                sx={{padding: 0}}
+                                            onClick={() => {
+                                                setFieldValue("image_url", null)
+                                            }}><Badge badgeContent={"x"} color="error" overlap="circular">
+                                                    <Image src={values.image_url} alt={"selectedStockImage"} width={128} height={128} />
+                                                </Badge></Button>
+                                        </Grid>
+                                    </Box>
+                                </Grid>}
+                                <Grid item xs={12}>
+                                    {selectedFiles.map((f: any, i: number) => {
+                                        return (
+                                            <Box sx={{
+                                                border: "1px solid #eff2f7",
+                                                borderRadius: "6px",
+                                                padding: "4px"
+
+                                            }}
+                                                key={i}
+                                            >
+                                                <Stack direction="row" spacing={2}>
+                                                    <Grid item>
+                                                        <Button onClick={() => {
+                                                            setselectedFiles(selectedFiles.filter((item: any) => item.name != f.name))
+                                                        }}><Badge badgeContent={"x"} color="error" overlap="circular">
+                                                                <Avatar size='lg' src={f.preview} alt={f.name} />
+                                                            </Badge></Button>
+                                                    </Grid>
+                                                    <Grid item>
+                                                        <Typography variant='subtitle1'>{f.name}</Typography>
+                                                        <Typography>{f.formattedSize}</Typography>
+                                                    </Grid>
+                                                </Stack>
+                                            </Box>
+                                        )
+                                    })}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <InputLabel htmlFor="status">{intl.formatMessage({ id: "status" })}</InputLabel>
+                                    <FormControlLabel control={<Switch
+                                        checked={values.status}
+                                        value={values.status} onChange={(e, checked) => {
+                                            setFieldValue("status", checked);
+                                        }} />} label={intl.formatMessage({ id: values.status ? "active" : "passive" })} />
                                 </Grid>
                                 <DialogActions sx={{ marginTop: 5 }}>
                                     <Button color="info" onClick={handleClose}>

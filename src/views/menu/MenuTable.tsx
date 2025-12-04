@@ -27,7 +27,7 @@ import Select from 'react-select'
 import { useGetBranchDropdownQuery } from 'reduxt/features/branch/branch-api';
 import Image from "next/image"
 import dayjs from 'dayjs';
-import { Add, CloseCircle, Edit, MoneySend, TickCircle, Trash } from 'iconsax-react';
+import { Add, ArrowSwapVertical, CloseCircle, Edit, MoneySend, TickCircle, Trash } from 'iconsax-react';
 import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useAppDispatch } from 'reduxt/hooks';
 import { useGetMenuListQuery } from 'reduxt/features/menu/menu-api';
@@ -40,6 +40,8 @@ import UpdateFoodModal from './UpdateFoodModal';
 import DeleteFoodModal from './DeleteFoodModal';
 import { useAppSnackbar } from 'hooks/useAppSnackbar';
 import UpdateStatusBranchFoodModal from './UpdateStatusBranchFoodModal';
+import ImageSelectModal from './ImageSelectModal';
+import UpdateFoodOrderModal from './UpdateFoodOrderModal';
 
 const columnHelper = createColumnHelper<MenuListData>()
 
@@ -224,6 +226,8 @@ const MenuTable = () => {
     return (
         <>
             <Breadcrumbs custom heading={`${intl.formatMessage({ id: "menus" })}`} links={breadcrumbLinks} />
+            <ImageSelectModal />
+            <UpdateFoodOrderModal />
             <MainCard content={false}>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 0 }} justifyContent={"space-between"} alignItems={{ xs: "normal", sm: "center" }} sx={{ padding: 2 }}>
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
@@ -312,9 +316,17 @@ const MenuTable = () => {
                             />
                         </Stack>
                     </Stack>
-                    <Stack direction={"row"} spacing={2}>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                        <Button variant="dashed" 
+                            disabled={(getMenuListData?.data?.length ?? 0) == 0}
+                            startIcon={<ArrowSwapVertical />} onClick={() => {
+                            dispatch(setModal({
+                                open: true,
+                                modalType: ModalEnum.updateFoodOrder,
+                                data: { branchId: selectedBranch?.value, branchSlug: branchSlug, categoryId: categoryId }
+                            }))
+                        }}>{intl.formatMessage({ id: "updateOrder" })}</Button>
                         <Button variant="dashed" startIcon={<Add />}
-                            sx={{ width: "100%" }}
                             onClick={() => {
                                 if ((getCategoryDropdownData?.data?.length ?? 0) == 0) {
                                     showMessage("firstAddCategorySection");

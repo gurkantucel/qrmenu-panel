@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl';
 import { useAppDispatch } from 'reduxt/hooks';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 import MainCard from 'components/MainCard';
-import { Box, Button, Divider, FormControlLabel, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar, InputLabel, List, ListItem, ListItemIcon, Radio, RadioGroup, Stack, Typography } from '@mui/material';
-import { Add, ArrowSwapVertical, CallCalling, Facebook, Gps, InfoCircle, Instagram, Save2, ShopAdd, Sms, Trash, Whatsapp, Youtube } from 'iconsax-react';
+import { Box, Button, Divider, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar, InputLabel, List, ListItem, ListItemIcon, Radio, RadioGroup, Stack, Typography } from '@mui/material';
+import { Add, ArrowSwapVertical, CallCalling, Facebook, Gps, Instagram, Save2, ShopAdd, Sms, Trash, Whatsapp, Youtube } from 'iconsax-react';
 import Select from 'react-select'
 import { useGetBranchDropdownQuery, useGetBranchQuery, useUpdateBranchThemeMutation } from 'reduxt/features/branch/branch-api';
 import { useEffect, useState } from 'react';
@@ -20,12 +20,12 @@ import UpdateImageGalleryOrderModal from './UpdateImageGalleryOrderModal';
 import CreateBranchLogoComponent from './CreateBranchLogoComponent';
 import CreateBranchModal from './CreateBranchModal';
 import { useAppSnackbar } from 'hooks/useAppSnackbar';
+import Image from 'next/image'
+import PassiveBranchModal from './PassiveBranchModal';
 
 const BranchView = () => {
 
     const intl = useIntl()
-
-    const t = useLocalizedField()
 
     const { showMessage } = useAppSnackbar();
 
@@ -61,8 +61,13 @@ const BranchView = () => {
     }, [getBranchDropdownData])
 
     useEffect(() => {
-        if (getBranchData?.data != null && getBranchData.data?.theme != null) {
-            setSelectedThemeValue(getBranchData.data.theme)
+        if (getBranchData?.data != null) {
+            if (getBranchData.data?.theme != null) {
+                setSelectedThemeValue(getBranchData.data.theme)
+            }
+            if(getBranchData.data?.packages?.active == false){
+                dispatch(setModal({open: true, modalType: ModalEnum.passiveBranch, title: getBranchData?.data?.title ?? "-"}))
+            }
         }
     }, [getBranchData])
 
@@ -76,11 +81,13 @@ const BranchView = () => {
         }
     }, [updateBranchThemeResponse, updateBranchThemeError])
 
+
     return (
         <>
             <Breadcrumbs custom heading={`${intl.formatMessage({ id: "branches" })}`} links={breadcrumbLinks} />
             <CreateBranchModal />
             <UpdateBranchModal />
+            <PassiveBranchModal />
             <MainCard border={false}>
                 <Box sx={{ mt: 2.5 }}>
                     <Grid container spacing={3}>
@@ -220,13 +227,13 @@ const BranchView = () => {
                                                         <ListItemIcon>
                                                             <Facebook size={18} />
                                                         </ListItemIcon>
-                                                        <Typography align="right">{branchData?.social?.facebook ?? "-"}</Typography>
+                                                        <Typography align="left">{branchData?.social?.facebook ?? "-"}</Typography>
                                                     </ListItem>
                                                     <ListItem>
                                                         <ListItemIcon>
                                                             <Youtube size={18} />
                                                         </ListItemIcon>
-                                                        <Typography align="right">{branchData?.social?.x ?? "-"}</Typography>
+                                                        <Typography align="left">{branchData?.social?.x ?? "-"}</Typography>
                                                     </ListItem>
                                                 </List>
                                             </Grid>
@@ -244,7 +251,7 @@ const BranchView = () => {
                                     <DeleteImageGalleryModal />
                                     <AddImageGalleryModal />
                                     <UpdateImageGalleryOrderModal branchSlug={branchSlug} />
-                                    <MainCard title={intl.formatMessage({ id: "pictureGallery" })} secondary={<Stack direction={"row"} spacing={2}>
+                                    <MainCard title={intl.formatMessage({ id: "pictureGallery" })} secondary={<Stack direction={{ xs: "column", sm: "row" }} spacing={{ xs: 2, sm: 2 }} justifyContent={"space-between"} alignItems={{ xs: "normal", sm: "center" }} sx={{ padding: 2 }}>
                                         <Button variant="dashed" startIcon={<Add />} onClick={() => {
                                             dispatch(setModal({
                                                 open: true,
@@ -259,14 +266,24 @@ const BranchView = () => {
                                             }))
                                         }}>{intl.formatMessage({ id: "updateOrder" })}</Button>
                                     </Stack>}>
-                                        {getImageGalleryLoading || getImageGalleryFetching ? <CustomScaleLoader /> : getImageGalleryData?.data == null || getImageGalleryData?.data?.length == 0 ? <Typography>{intl.formatMessage({ id: "notUploadedImage" })}</Typography> : <ImageList variant="masonry" cols={3} gap={8}>
+                                        {getImageGalleryLoading || getImageGalleryFetching ? <CustomScaleLoader /> : getImageGalleryData?.data == null || getImageGalleryData?.data?.length == 0 ? <Typography>{intl.formatMessage({ id: "notUploadedImage" })}</Typography> : <ImageList gap={8} sx={{
+                                            display: "grid !important",
+                                            gridTemplateColumns: {
+                                                xs: "repeat(2, 1fr) !important",
+                                                sm: "repeat(4, 1fr) !important",
+                                                md: "repeat(4, 1fr) !important",
+                                            },
+                                        }}>
                                             {getImageGalleryData?.data?.map((item) => (
-                                                <ImageListItem key={item.id}>
-                                                    <img
-                                                        srcSet={`${item.imageUrl}?w=328&h=328&fit=crop&auto=format&dpr=2 2x`}
-                                                        src={`${item.imageUrl}?w=328&h=328&fit=crop&auto=format`}
+                                                <ImageListItem key={item.imageUrl} style={{ position: "relative", height: 200 }} className="responsive-image-item">
+                                                    <Image
+                                                        src={`${item.imageUrl}`}
                                                         alt={item.id}
-                                                        loading="lazy"
+                                                        fill
+                                                        style={{
+                                                            objectFit: "cover",
+                                                        }}
+                                                        sizes="(max-width: 600px) 100vw, 33vw"
                                                     />
                                                     <ImageListItemBar
                                                         sx={{
@@ -299,13 +316,21 @@ const BranchView = () => {
                                     </MainCard>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <MainCard title={updateBranchThemeIsLoading ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "themeSelection" })} secondary={<Button variant="dashed" startIcon={<Save2 />} 
-                                        disabled={branchData?.theme == selectedThemeValue || updateBranchThemeIsLoading}
+                                    <MainCard title={updateBranchThemeIsLoading ? intl.formatMessage({ id: "loadingDot" }) : intl.formatMessage({ id: "themeSelection" })} secondary={<Button variant="dashed" startIcon={<Save2 />}
+                                        disabled={branchData?.theme == selectedThemeValue || updateBranchThemeIsLoading}
                                         onClick={() => {
-                                        updateBranchTheme({branchId: selectedBranch?.value ?? "0", theme: selectedThemeValue})
-                                    }}>{intl.formatMessage({ id: "save" })}</Button>}>
+                                            updateBranchTheme({ branchId: selectedBranch?.value ?? "0", theme: selectedThemeValue })
+                                        }}>{intl.formatMessage({ id: "save" })}</Button>}>
                                         <RadioGroup>
-                                            <ImageList cols={6}>
+                                            <ImageList gap={8}
+                                                sx={{
+                                                    display: "grid !important",
+                                                    gridTemplateColumns: {
+                                                        xs: "repeat(2, 1fr) !important",
+                                                        sm: "repeat(4, 1fr) !important",
+                                                        md: "repeat(6, 1fr) !important",
+                                                    },
+                                                }}>
                                                 {itemData.map((item) => (
                                                     <ImageListItem key={item.img}>
                                                         <img
