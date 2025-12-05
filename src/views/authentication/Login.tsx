@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import AuthWrapper from 'sections/auth/AuthWrapper';
 import LoginForm from 'sections/auth/auth-forms/AuthLogin';
 import { useIntl } from 'react-intl';
+import Constants from 'utils/Constants';
 
 // ================================|| LOGIN ||================================ //
 
@@ -35,7 +36,7 @@ export default function Login() {
         </Grid>
         <Grid item xs={12} alignItems={'center'}>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-            <Typography component={Link} href={'/auth/register'} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
+            <Typography component={Link} href={`${Constants.HOMEURL}/auth/register`} variant="body1" sx={{ textDecoration: 'none' }} color="primary" passHref>
               {intl.formatMessage({id: "dontHaveAnAccount"})}
             </Typography>
           </Stack>
