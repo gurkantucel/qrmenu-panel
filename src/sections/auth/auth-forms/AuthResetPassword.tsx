@@ -37,12 +37,12 @@ export default function AuthResetPassword() {
   useEffect(() => {
     if (resetPasswordResponse) {
       enqueueSnackbar(resetPasswordResponse.message, {
-        variant: resetPasswordResponse?.status == true ? 'success' : 'error', anchorOrigin: {
+        variant: resetPasswordResponse?.success == true ? 'success' : 'error', anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'right'
         }
       },)
-      if (resetPasswordResponse?.status == true) {
+      if (resetPasswordResponse?.success == true) {
         setTimeout(() => {
           router.push("/auth/login")
         }, 1000)

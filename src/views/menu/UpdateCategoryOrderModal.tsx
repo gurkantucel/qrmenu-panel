@@ -1,5 +1,5 @@
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemAvatar, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { Add, ArrowSwapVertical, CloseSquare, HambergerMenu } from 'iconsax-react';
+import {  Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import {  ArrowSwapVertical, CloseSquare, HambergerMenu } from 'iconsax-react';
 import React, { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl';
 import { useGetCategoryListQuery, useUpdateCategoryOrderMutation } from 'reduxt/features/category/category-api';
@@ -29,12 +29,12 @@ const UpdateCategoryOrderModal = ({ branchSlug }: { branchSlug?: string | null }
 
     const dispatch = useAppDispatch();
 
-    const { data: { open, modalType, data } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const [categories, setCategories] = useState<CategoryListData[]>([]);
 
-    const { data: getCategoryListData, isLoading: isCategoryLoading, isFetching: isCategoryFetching } = useGetCategoryListQuery({
+    const { data: getCategoryListData } = useGetCategoryListQuery({
         branchSlug: branchSlug,
     },
         { skip: !branchSlug }
@@ -84,7 +84,7 @@ const UpdateCategoryOrderModal = ({ branchSlug }: { branchSlug?: string | null }
         setCategories(newCategories);
 
         // Backend’e yeni sıralamayı gönder
-        const orderArray = newCategories.map((c) => c.id);
+        //const orderArray = newCategories.map((c) => c.id);
         //setLoading(true);
         try {
         } finally {

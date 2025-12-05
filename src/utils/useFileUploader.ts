@@ -1,5 +1,5 @@
+import { FileType } from 'components/FileUploader'
 import { useState } from 'react'
-import { FileType } from './index'
 
 export default function useFileUploader(showPreview: boolean = true) {
   const [selectedFiles, setSelectedFiles] = useState<FileType[]>([])

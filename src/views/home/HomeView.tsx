@@ -71,7 +71,7 @@ const HomeView = () => {
             </MainCard>
             {isBranchLoading || isBranchFetching ? <CustomScaleLoader /> :
                 <Grid container spacing={3} marginTop={1}>
-                    {getBranchListData?.data?.map((item) => (<Grid item xs={12} sm={6} lg={6}>
+                    {getBranchListData?.data?.map((item,index) => (<Grid item xs={12} sm={6} lg={6} key={`branchList-${index}`}>
                         <MainCard sx={{ height: 1, '& .MuiCardContent-root': { height: 1, display: 'flex', flexDirection: 'column' } }}>
                             <Grid id="print" container spacing={2.25}>
                                 <Grid item xs={12}>

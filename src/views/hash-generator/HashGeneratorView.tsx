@@ -30,7 +30,7 @@ const HashGeneratorView = () => {
                 const decryptedKeyText = encryptData(values.key, keyStr);
                 const decryptedOrderIdText = encryptData(values.paymentConversationId, keyStr);
 
-                const response = await fetch(`${Constants.APIURL()}/middleware/manuelHook`, {
+                const response = await fetch(`${Constants.APIURL}/middleware/manuelHook`, {
                     method: "POST",
                     body: JSON.stringify({
                         "key": decryptedKeyText,

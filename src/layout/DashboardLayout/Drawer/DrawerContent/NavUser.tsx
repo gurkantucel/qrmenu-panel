@@ -10,21 +10,12 @@ import useUser from 'hooks/useUser';
 import { useGetMenuMaster } from 'api/menu';
 
 // assets
-import dayjs from 'dayjs';
-import { Chip } from '@mui/material';
 import NameAvatar from 'components/NameAvatar';
 
 /*interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
   drawerOpen: boolean;
 }*/
-
-const diffInDays = (endDate: string) => {
-  const today = dayjs();
-  const expiryDate = dayjs(endDate);
-  const diffInDays = expiryDate.diff(today, 'day');
-  return `${diffInDays.toString()} Gün`;
-}
 
 /*const ExpandMore = styled(({ expand, drawerOpen, ...other }: ExpandMoreProps) => {
   return <IconButton size="small" {...other} />;

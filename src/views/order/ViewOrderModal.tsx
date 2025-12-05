@@ -11,7 +11,7 @@ import MainCard from 'components/MainCard';
 
 const ViewOrderModal = () => {
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, id, data } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
 

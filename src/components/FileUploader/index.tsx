@@ -41,7 +41,7 @@ const FileUploader = ({ showPreview = true, onFileUpload, icon, extraText, text 
       {/* {showPreview && selectedFiles.length > 0 && ( */}
       <div className="dropzone-previews mt-3">
         {(selectedFiles || []).map((file, idx) => {
-          const ext = file.name.substr(file.name.lastIndexOf('.') + 1)
+          //const ext = file.name.substr(file.name.lastIndexOf('.') + 1)
           return (
             <Box sx={{
               border: "1px solid #eff2f7",

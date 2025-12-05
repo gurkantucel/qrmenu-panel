@@ -11,7 +11,7 @@ import { useCreateQrCodeMutation } from "reduxt/features/qr-code/qr-code-api";
 
 const CreateQrCodeModal = () => {
     const dispatch = useAppDispatch();
-    const { data: { open, modalType, title, id, data } } = useAppSelector((state: RootState) => state.modal);
+    const { data: { open, modalType, title, data } } = useAppSelector((state: RootState) => state.modal);
     const intl = useIntl()
 
     const [createQrCode, { isLoading: createQrCodeIsLoading, data: createQrCodeResponse, error: createQrCodeError }] = useCreateQrCodeMutation();
@@ -28,7 +28,7 @@ const CreateQrCodeModal = () => {
     };
 
     const generate = async () => {
-        const valid = validateUrl(`https://qrchefs.com/${data?.branchSlug}`);
+        const valid = validateUrl(`https://menu.qrchefs.com/${data?.branchSlug}`);
         if (!valid) {
             enqueueSnackbar("Hata", {
                 variant: 'error', anchorOrigin: {

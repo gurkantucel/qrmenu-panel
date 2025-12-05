@@ -37,6 +37,7 @@ import { ModalEnum, setModal } from 'reduxt/features/definition/modalSlice';
 import { useAppDispatch } from 'reduxt/hooks';
 import DeleteCategoryModal from './DeleteCategoryModal';
 import ImageSelectModal from 'views/menu/ImageSelectModal';
+
 const columnHelper = createColumnHelper<CategoryListData>()
 
 const CategoryTable = () => {
@@ -80,8 +81,8 @@ const CategoryTable = () => {
             cell: (info) => <Chip color={info.renderValue() == true ? "success" : "error"} label={info.renderValue() == true ? intl.formatMessage({ id: "active" }) : intl.formatMessage({ id: "passive" })} size="small" variant="light" />,
             footer: info => info.column.id,
             meta: {
-                filterVariant: 'select',
-            },
+                
+            }
         }),
         columnHelper.accessor('islemler', {
             header: intl.formatMessage({ id: "actions" }),

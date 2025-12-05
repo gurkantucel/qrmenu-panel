@@ -9,7 +9,6 @@ import { Form, Formik } from 'formik';
 import { enqueueSnackbar } from 'notistack';
 import { PuffLoader } from 'react-spinners';
 import AnimateButton from 'components/@extended/AnimateButton';
-import { useLocalizedField } from 'hooks/useLocalizedField';
 import CustomFormikSelect from 'components/third-party/formik/custom-formik-select';
 import { useGetCountryDropdownQuery } from 'reduxt/features/common/common-api';
 import { useCreateBranchMutation } from 'reduxt/features/branch/branch-api';
@@ -29,8 +28,6 @@ const CreateBranchModal = () => {
     const router = useRouter();
 
     const intl = useIntl()
-
-    const t = useLocalizedField()
 
     const { isLoading: getCountryDropdownLoading, data: getCountryDropdownData } = useGetCountryDropdownQuery(undefined, { skip: modalType != ModalEnum.addBranch })
 

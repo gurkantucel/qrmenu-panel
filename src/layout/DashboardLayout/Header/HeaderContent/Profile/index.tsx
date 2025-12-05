@@ -33,7 +33,6 @@ import { deleteCookie } from 'cookies-next';
 import { useAppDispatch } from 'reduxt/hooks';
 import { resetMenuItemState } from 'reduxt/features/auth/menuItemSlice';
 import NameAvatar from 'components/NameAvatar';
-import personApi from 'reduxt/features/person/person-api';
 import branchApi from 'reduxt/features/branch/branch-api';
 import { useIntl } from 'react-intl';
 
@@ -80,7 +79,6 @@ export default function ProfilePage() {
   const handleLogout = () => {
     router.push('/auth/login');
     dispatch(branchApi.util.resetApiState());
-    dispatch(personApi.util.resetApiState());
     deleteCookie("token");
     deleteCookie("refreshToken");
     deleteCookie("personAuthorizations");

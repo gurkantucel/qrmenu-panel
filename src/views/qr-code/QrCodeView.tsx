@@ -1,6 +1,5 @@
 "use client"
 import { APP_DEFAULT_PATH } from 'config';
-import { useLocalizedField } from 'hooks/useLocalizedField';
 import { useIntl } from 'react-intl';
 import { useAppDispatch } from 'reduxt/hooks';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
@@ -18,8 +17,6 @@ import { useGetQrCodeListQuery } from 'reduxt/features/qr-code/qr-code-api';
 const QrCodeView = () => {
 
     const intl = useIntl()
-
-    const t = useLocalizedField()
 
     const dispatch = useAppDispatch();
 

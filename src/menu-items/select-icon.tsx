@@ -1,4 +1,4 @@
-import { Book1, Building, CalendarTick, Category2, DocumentDownload, HomeHashtag, Information, Layer, MagicStar, Moneys, MoneySend, PresentionChart, Reserve, ScanBarcode, Setting2, Shop, SmsTracking, UserOctagon, UserTag } from 'iconsax-react';
+import { Book1, Category2, HomeHashtag, Information, Layer, MagicStar, MoneySend, PresentionChart, Reserve, ScanBarcode, Setting2, Shop, SmsTracking, UserOctagon } from 'iconsax-react';
 
 export const selectIcon = (id: string) => {
   switch (id) {

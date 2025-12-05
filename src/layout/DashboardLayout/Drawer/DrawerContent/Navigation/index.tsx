@@ -1,4 +1,4 @@
-import { Fragment, useLayoutEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';

@@ -1,6 +1,5 @@
 "use client"
 import { APP_DEFAULT_PATH } from 'config';
-import { useLocalizedField } from 'hooks/useLocalizedField';
 import { useIntl } from 'react-intl';
 import { useAppDispatch } from 'reduxt/hooks';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
